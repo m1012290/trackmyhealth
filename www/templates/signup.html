@@ -1,0 +1,88 @@
+<ion-view view-title="Sign Up" >
+     <ion-content class="padding" >
+<form name="signup" class="simple-form" ng-submit="save(formData)" required>
+    <div class="list">    
+	<br>
+	<ion-item class="item-input">
+		<input type="text" ng-model="formData.firstname" placeholder= "First Name"  required> <input type="text" ng-model="formData.lastname" placeholder="  Last Name"  required>  
+		
+    </ion-item>
+    
+	<ion-item class="item-input">
+		<input type="number" ng-model="formData.mobnum" placeholder= "Mobile Number"  required>
+    </ion-item>
+    
+	<ion-item class="item-input">      
+		<input type="email" ng-model="formData.emailadd" placeholder= "Email-address"  required>
+	</ion-item>   
+    
+	<ion-item class="item-input">
+		<input type="password" ng-model="formData.password" placeholder="Password" required><input type="password" ng-model="formData.confirmpassword" placeholder= "Confirm Password" required>
+    </ion-item>
+    
+	<ion-item class="item-input">
+		<input type="number" ng-model="formData.age" placeholder="Age" required>	
+		<input type="text" ng-model="formData.dob" placeholder= "Date of Birth">
+		 <i class="ion-ios-calendar-outline" ng-click="openDatePicker()"></i> 
+	</ion-item>
+    
+	<ion-item class="item-input">
+		<ion-checkbox ng-model="formData.male"><i class="icon ion-man" ></i></ion-checkbox>
+		<ion-checkbox ng-model="formData.female"><i class="icon ion-woman"></i></ion-checkbox>
+	</ion-item>
+		
+	<ion-item class="item-input">
+		<input type="text" ng-model="formData.address1" placeholder="Address">
+	</ion-item>
+		
+	<ion-item class="item-input">
+		<input type="text" ng-model="formData.city" placeholder="City">		
+		<input type="text" ng-model="formData.pincode" placeholder="Pincode">	
+	</ion-item >
+		
+	<ion-item class="item-input">
+		<input type="text" ng-model="formData.state" placeholder="State">	
+		<input type="text" ng-model="formData.country" placeholder="Country">
+	</ion-item>
+		
+	<ion-item>
+		<ion-checkbox ng-model="formData.doctor" ng-value="false"> I am a doctor.</ion-checkbox>
+		<div ng-if="formData.doctor">
+		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
+		</div>
+		<ion-checkbox ng-model="formData.termsyes"><br>I accept the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a> </ion-checkbox>
+	</ion-item>
+		
+	</div>
+	<button class="button button-block button-positive" href="">SignUp</button>
+    </form>
+    </ion-content>
+	
+	<script id="my-modal2.html" type="text/ng-template">
+     <ion-modal-view>
+
+    <ion-header-bar class="bar-positive">
+		  <h1 class="title">Email and Sms OTP</h1>
+        <button class="button button-clear button-primary" ng-click="closeModal2()"><i class="icon ion-android-close"></i></button>
+    </ion-header-bar>
+
+			<ion-content class="padding">
+		<form name="otp">
+		<ion-list>
+		<ion-item class="item item-input item-floating-label">
+            <span class="input-label">Sms OTP</span>
+            <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="security.otpsms" required/>
+		</ion-item>
+		<ion-item class="item item-input item-floating-label">
+        	<span class="input-label">Email OTP</span>
+            <input name="otppin" type="number" placeholder="OTP recieved as email" ng-model="security.otpemail" required/>
+		</ion-item>
+		</ion-list>
+		<br/>
+		<div class="pull-center">  
+			<button class="button button-outline button-assertive" ng-click="securitydets(security) ">Submit</button>
+		</div>
+		</form>	
+	</ion-content>
+		</ion-modal-view>
+</ion-view>

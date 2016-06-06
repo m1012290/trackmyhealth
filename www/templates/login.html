@@ -1,0 +1,61 @@
+<ion-view view-title="Please Login" name="login-view">
+<ion-content style="margin-top:40%;"   scroll="false">
+	 <form name="signin" ng-submit="login(logindata)" required>
+         <ion-list>
+            <ion-item class="item-input">
+             <label class="item item-input item-floating-label">
+             <span class="input-label"><i class="ion-person"></i>  User Email-id/Mobile </span> 
+		  	<input type="text" ng-model="logindata.email" placeholder="User Email-id/Mobile" required>
+                </label>
+			</ion-item>
+            <ion-item class="item-input">
+                <label class="item item-input item-floating-label">
+                    <span class="input-label"><i class="ion-locked"></i>  Password</span>
+                  	<input type="password" name="passcode" ng-model="logindata.passcode" placeholder="Password" required>
+                </label>
+            </ion-item>
+         </ion-list>   
+		 <br/>
+         
+		 <div>
+            <button class="button button-block button-raised button-positive" type="submit">LOGIN</button>
+         </div>
+		 </form>
+	     
+         <div class="pull-left">
+            <button class="button button-clear button-flat button-assertive " href="" ng-click="signup()">Sign up</button>
+         </div>         
+         <div class="pull-right">        
+             <a class="button button-clear button-flat button-assertive" href="" ng-click="openModal4()">Forgot password</a>
+         </div>
+	
+</ion-content>        
+	
+<script id="my-modal4.html" type="text/ng-template">
+ <ion-modal-view>
+    <ion-header-bar class="bar-positive">
+      <h1 class="title"> Forgot password</h1>
+      <button class="button button-clear button-primary" ng-click="closeModal4()"><i class="icon ion-android-close"></i></button>
+    </ion-header-bar>
+
+    <ion-content class="padding">
+		<br>
+		<form name="frgotpassword"> 
+			<ion-list> 
+ 				<ion-item class="item-input item-floating-label">
+                <input name="email" type="email" placeholder="Enter email-id" ng-modal="forgot.em" required>
+				</ion-item>
+                <ion-item class="item-input item-floating-label">
+                <input name="mobnum" type="number" placeholder="Enter mobile number" ng-modal="forgot.mn" required> 
+				</ion-item>
+            </ion-list>
+			<br>
+          	<div class="pull-center">  
+				<button class="button button-outline button-assertive" ng-click="save(forgot)">OK</button>
+			</div>
+        </form>
+    </ion-content>
+ </ion-modal-view>
+</script>
+
+</ion-view>
