@@ -222,21 +222,34 @@ angular.module('bnotifiedappctrls', [])
     };	
     $scope.signup=function(){
         $state.go('signup');
+        
     };
 	$scope.login =function(logindata){
+        
 		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
-		
+        
+		$rootScope.showLoader();
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
-			var alertpopup = $ionicPopup.alert({
+            if(data.status === 'SUCCESS'){
+                $rootScope.hideLoader();
+                $state.go('main.listedentities');
+            }else{
+                $rootScope.showPopup({title:'Invalid Login', template:'Invalid login details, please try again'},  function(res){
+                
+      });
+                
+            }
+			/*var alertpopup = $ionicPopup.alert({
 				title: "Login Successful!"
 			}).then(function(res){
 				$state.go('main.listedentities');
-			})
+			});*/
 		}).catch(function(error){
+            $rootScope.hideLoader();
 			var alertPopup = $ionicPopup.alert({
-				title: "Login failed.. please try again"
+				title: "Couldn't login right now, Please try again !!"
 			}).then(function(res){
-				$state.go('login');
+				//$state.go('login');
 			})
 		})
 	}
@@ -1755,7 +1768,8 @@ $scope.shouldShowReorder = false;
 	$scope.visitinfo=[];
 	//$scope.visitdets = function(){
     console.log('$stateparams hospital id -->['+ $stateParams.hospitalid + ']');
-    if($stateParams.hospitalid === 123){
+    if($stateParams.hospitalid === '123'){
+        
             visitservice.getVisits($scope.patientId).then(function(data){
             console.log("obtaining visit info" + data );
             $scope.visitinfo = data.data;

@@ -223,6 +223,11 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
 }])
 .config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider', function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
   $stateProvider
+  .state('testfooter', {
+    url: '/testfooter',
+    templateUrl: 'templates/testfooter.html',
+    controller: 'LoginCtrl'
+  })
   .state('landing', {
     url: '/landing',
     templateUrl: 'templates/landing.html',
