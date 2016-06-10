@@ -43,16 +43,40 @@
 		<form name="frgotpassword"> 
 			<ion-list> 
  				<ion-item class="item-input item-floating-label">
-                <input name="email" type="email" placeholder="Enter email-id" ng-modal="forgot.em" required>
+					<span class="input-label">Email Id</span>
+                <input name="email" type="email" placeholder="Enter email-id" ng-model="forgot.emailId" required>
 				</ion-item>
                 <ion-item class="item-input item-floating-label">
-                <input name="mobnum" type="number" placeholder="Enter mobile number" ng-modal="forgot.mn" required> 
+					<span class="input-label">Mobile Number</span>
+                <input name="mobnum" type="number" placeholder="Enter mobile number" ng-model="forgot.mobNo" required> 
 				</ion-item>
+				<div ng-if="pass">
+					<ion-item class="item-input item-floating-label">
+						<span class="input-label">Password</span>
+						<input  name="password" type="text" placeholder="Enter new password" ng-model= "forgot.password" required>
+					</ion-item>
+					<ion-item class="item-input item-floating-label">
+						<span class="input-label">Confirm password</span>
+						<input name="confirmpwd" type="text" placeholder="Confirm new password" ng-model="forgot.confirmpwd" required>
+					</ion-item>
+					<ion-item class="item item-input item-floating-label">
+            <span class="input-label">Sms OTP</span>
+            <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="forgot.smsotp" required/>
+		</ion-item>
+		<ion-item class="item item-input item-floating-label">
+        	<span class="input-label">Email OTP</span>
+            <input name="otppin" type="number" placeholder="OTP recieved as email" ng-model="forgot.emailotp" required/>
+		</ion-item>
+				</div>
             </ion-list>
 			<br>
-          	<div class="pull-center">  
+          	<div class="pull-center" ng-hide="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">  
 				<button class="button button-outline button-assertive" ng-click="save(forgot)">OK</button>
 			</div>
+			<div class="pull-center" ng-if="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">  
+				<button class="button button-outline button-assertive" ng-click="newpassword(forgot)">Save New Password</button>
+			</div>
+			
         </form>
     </ion-content>
  </ion-modal-view>

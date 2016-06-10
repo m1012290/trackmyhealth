@@ -770,6 +770,37 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 	}
 	
 }])
+.service('patientprflservice',['$q','$resource', function($q, $resource){
+    return{
+        getpatientinfo: function(patientId){
+            var deferred = $q.defer();
+            var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/patients/:patientid");
+            resource.get({patientid :patientId}, function(data){
+            console.log("registered patient profile details based on patientid is successfull [" + JSON.stringify(data) + "]");
+                deferred.resolve(data);
+            },function(error){
+                console.log("registered patient profile details based on patientid is failed to save [" + JSON.stringify(error)+ "]");
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+         changedpatientinfo : function(emailadd,mobnum,dob,doctor,licenceNo,patientId){
+            var deferred=$q.defer();
+         var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/patients/:patientid", {patientid : patientId}, {'update': { method:'PUT' }});
+             
+              resource.update({emailid:emailadd,mobilenumber:mobnum,dateofbirth:dob,isdoctor:doctor,doctorlicenseno:licenceNo}, function(data){
+            console.log('update all details call was successful with response['+ JSON.stringify(data)+']');
+            deferred.resolve(data);
+        }, function(error){
+            console.log('update all details call failed ['+ error + ']');
+            deferred.reject(error);
+        });
+        return deferred.promise;
+             
+         }
+    }
+       
+}])
 .factory('feedbackform', ['$q', '$resource', function($q, $resource){
 	var self = this;
 	var feedbacks;
@@ -797,4 +828,37 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 		]
 		return feedbacks;}
 	return self;
+}])
+.factory('forgotpwdservice', ['$q','$resource',function($q,$resource){
+    return{
+        forgotpwd : function(emailId, mobNo, password ){
+				var mobnum = mobNo.toString();
+        var deferred=$q.defer();
+        var resource= $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/:emailid/:mobilenumber?forgotpwd=:password");
+        resource.get({ emailid: emailId, mobilenumber: mobnum, password : password}, function(data){
+          console.log("forgotpassword service call successful [" + JSON.stringify(data) + "]");
+            deferred.resolve(data);
+        },function(error){
+            console.log("forgotpassword service call failed ["  + JSON.stringify(error) + "]");
+            deferred.reject(error);
+        });
+    return deferred.promise;
+		},
+		
+		changedpwd : function(emailid, mobNo, password, smsotp, emailotp, pass){
+			var mobnum = mobNo.toString();
+            var deferred=$q.defer();
+            var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/patient?forgotpwd=:pass" , {pass: pass}, {'update': { method:'PUT' } } );
+			
+            resource.update({emailid: emailid, mobilenumber:mobnum, password : password, smsotp: smsotp, emailotp: emailotp},function(data){
+                console.log("forgotpwd otp service call successful [" + JSON.stringify(data) + "]");
+                deferred.resolve(data);
+            },function(error){
+                console.log("forgotpwd otp service call failed [" +JSON.stringify(error) + "]");
+                deferred.reject(error);
+            })
+            return deferred.promise;
+            }
+    }
 }]);
+

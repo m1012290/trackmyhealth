@@ -81,7 +81,7 @@ angular.module('bnotifiedappctrls', [])
       });
   });
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style="    top: 45px;    left: 190px;    margin-left: 10px;    opacity: 1;    height: 15%;    width: 30%;"><ion-content><div class="list"><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>', 
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style="    top: 45px;    left: 190px;    margin-left: 10px;    opacity: 1;    height: 20%;    width: 20%;"><ion-content><div class="list"><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl">Patient Profile</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>', 
   {
     scope: $scope
   });
@@ -190,14 +190,10 @@ angular.module('bnotifiedappctrls', [])
     };
     
 }]) 
-
-.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','registrationdetsdb','DBA', '$ionicModal', 'loginservice', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, registrationdetsdb, DBA, $ionicModal, loginservice) {
+.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice',  function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice) {
 		
     $scope.logindata=[];
-    $scope.forgot={
-        em : "",
-        mn : ""
-    };
+	$scope.forgot=[];
 
 	$ionicModal.fromTemplateUrl('my-modal4.html',{
         scope: $scope,
@@ -214,16 +210,64 @@ angular.module('bnotifiedappctrls', [])
   	$scope.closeModal4 = function() {
     	$scope.modal.hide();  
 	};
-	 
-	$scope.save=function(){
-        console.log($scope.forgot);
-       $scope.frmod.push($scope.forgot);
-       
+	
+	$scope.save=function(dets){
+        console.log("calling the forgot password service");
+		$scope.forgotpass = true;
+	
+	
+forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
+		console.log( data);
+		if(data.status === "SUCCESS"){
+			console.log("mobile no exists generate otp now");
+			$scope.pass=true;
+			var mobnum= $scope.forgot.mobNo.toString();
+			signupservice.generateOtp($scope.forgot.emailId, mobnum ).then(function(data){
+						if(data.status === "SUCCESS"){
+							console.log("The otp is generated");
+						}
+					}).catch(function(error){
+				console.log("The Otp is not generated");
+			})
+		}
+		}).catch(function(error){
+		if(error.status === 404){
+			console.log("mobile no doesn't please register ")
+		$scope.closeModal4();
+		}
+	})
     };	
+	
+	$scope.newpassword= function(chg){
+		console.log("changing the pasword");
+$scope.forgot.push({emailId : chg.emailId, mobNo : chg.mobNo, password: chg.password, confirmpwd: chg.confirmpwd, smsotp: chg.smsotp, emailotp: chg.emailotp});
+			console.log($scope.forgot);
+		if($scope.forgot.password === $scope.forgot.confirmpwd){
+			console.log("CHECKING passwords");
+forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.forgot.password, $scope.forgot.smsotp, $scope.forgot.emailotp,$scope.forgotpass).then(function(data){
+				console.log(data);
+				if(data.status === "SUCCESS"){
+					console.log("password saved successfully");
+					$scope.closeModal4();
+					$state.go('main.listedentities');
+				}
+			}).catch(function(error){
+				console.log(error);
+				var popupalert= $ionicPopup.alert({
+					template:"Sorry unable to save the new password"
+				}).then(function(res){
+					console.log("error to save");
+				})
+			});
+		}
+		
+	}
+	
     $scope.signup=function(){
         $state.go('signup');
         
     };
+	
 	$scope.login =function(logindata){
         
 		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
@@ -234,16 +278,13 @@ angular.module('bnotifiedappctrls', [])
                 $rootScope.hideLoader();
                 $state.go('main.listedentities');
             }else{
-                $rootScope.showPopup({title:'Invalid Login', template:'Invalid login details, please try again'},  function(res){
-                
-      });
+                $rootScope.showPopup({
+					title:'Invalid Login',
+					template:'Invalid login details, please try again'
+				},function(res){
+                	});
                 
             }
-			/*var alertpopup = $ionicPopup.alert({
-				title: "Login Successful!"
-			}).then(function(res){
-				$state.go('main.listedentities');
-			});*/
 		}).catch(function(error){
             $rootScope.hideLoader();
 			var alertPopup = $ionicPopup.alert({
@@ -253,8 +294,7 @@ angular.module('bnotifiedappctrls', [])
 			})
 		})
 	}
-   }])
-
+}])
 .controller('SignUpCtrl',['$scope', '$state', 'ionicDatePicker', '$filter', 'signupservice', '$ionicModal', '$ionicPopup', function($scope, $state, ionicDatePicker, $filter, signupservice, $ionicModal, $ionicPopup){
                           
 	$scope.formData = [];
@@ -1143,6 +1183,31 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
          "allergies" : "",
          "patientId" : "5751377e4f09030255c59a8b"
      };
+	$scope.tracker1= function(){
+	$scope.val = "allergy";
+		console.log($scope.val);	
+	}
+	
+	$scope.tracker2= function(){
+	$scope.val ="medication";
+		console.log($scope.val);
+	}
+		
+	$scope.tracker3= function(){
+	$scope.val ="weight";
+		console.log($scope.val);
+	}
+		
+	$scope.tracker4= function(){
+	$scope.val ="bloodpressure" ;
+		console.log($scope.val);
+	}
+		
+	$scope.tracker5= function(){
+	$scope.val ="bloodsugar";
+		console.log($scope.val);
+	}
+			
   $ionicModal.fromTemplateUrl('my-modal1.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
@@ -1150,10 +1215,10 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     	$scope.modal = modal;
   	});
 	
-  	$scope.openModal1 = function() {
-    	$scope.modal.show();  
+  	$scope.openModal1 = function(){
+		
+		$scope.modal.show();  
     }
-
     $rootScope.showLoader();
     //Invoke retrieve medicalprofile service in order to display history data if any available
     medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
@@ -1185,53 +1250,46 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
   // console.log($scope.data); 
          var details =[];
 
-       $rootScope.showLoader(); medicalprofileservice.savedetails($scope.data.weight,$scope.data.bloodsugar,$scope.data.medication,$scope.data.allergies,$scope.data.patientId).then(function(data){
+       $rootScope.showLoader(); medicalprofileservice.savedetails($scope.data.weight,$scope.data.bloodsugar,$scope.data.allergies,$scope.data.medication,$scope.data.patientId).then(function(data){
             console.log(data);
              if(data.status == 'SUCCESS'){
-                 $rootScope.hideLoader();
+                $rootScope.hideLoader();
                 $rootScope.showToast('Medical profile data saved successfully',null,'top'); 
 			    console.log(" records saved successfully");
                 medicalprofileservice.getdetails('5751377e4f09030255c59a8b').then(function(data){
-                console.log("obtaining medical details" + data);
-                  //$scope.details=data;
-                  if(data.status === 'SUCCESS'){
-                    console.log('data obtained['+ JSON.stringify(data) + ']');
-                    $scope.healthdetails = [];
-
-                    angular.forEach(data.data.medicalprofiledetails, function(value, key){
+                	if(data.status === 'SUCCESS'){
+                    	console.log('data obtained['+ JSON.stringify(data) + ']');
+                    	$scope.healthdetails = [];
+						angular.forEach(data.data.medicalprofiledetails, function(value, key){
                             for(var i=0; i< value.medicalprofile.length; i++ ){
                               this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
                             }
                         }, $scope.healthdetails);
-
-                      console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
-                  }
+						console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
+                  	}
                 }).catch(function(error){
                     $rootScope.hideLoader();
                     console.log('pritning error reason ['+ JSON.stringify(error) + ']');
                     /*var alertPopUp = $ionicPopup.alert({
                         title:"Failed to save details"
                     });*/
-                });
-                $scope.closeModal1();
-             }
-             }).catch(function(error){
-            $rootScope.hideLoader();
-            console.log("error received " + error);
-                        
-            if(error.status === 404){
-                console.log(" patientid passed is invalid");
-        }
-            else if(error.status ===500)
-                {
-                    console.log("internal server processing error at server side");
-                }
+					});
+                	$scope.closeModal1();
+             }}).catch(function(error){
+		   		$rootScope.hideLoader();
+            	console.log("error received " + error);
+		   			if(error.status === 404){
+                		console.log(" patientid passed is invalid");
+        			}
+            		else if(error.status ===500)
+					{
+                    	console.log("internal server processing error at server side");
+					}
                 });
         
 		$scope.data="";
 		$scope.timeLineForm.$setPristine();
-        
-        
+              
      /*medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
             console.log("obtaining medical details" + data);
         $scope.details=data;
@@ -1248,10 +1306,9 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
        
     }
    console.log($scope.data);
-  $scope.tDate = new Date();
-    
-    }])
-    .controller('FeedbackCtrl', ['$scope', '$state', '$ionicPopup', '$ionicSlideBoxDelegate', 'feedbackform', function($scope, $state, $ionicPopup, $ionicSlideBoxDelegate, feedbackform){
+  $scope.tdate= new Date();
+}])
+.controller('FeedbackCtrl', ['$scope', '$state', '$ionicPopup', '$ionicSlideBoxDelegate', 'feedbackform', function($scope, $state, $ionicPopup, $ionicSlideBoxDelegate, feedbackform){
 	
 	$scope.temp = [];
 	//feedback questions 
@@ -2057,4 +2114,72 @@ $scope.shouldShowReorder = false;
         $scope.closePopover();
         $rootScope.showToast('Logout failed, Please try again later !!', null, 'bottom');
     });
+}])
+.controller('PatientprofileCtrl',['$scope','$rootScope','$state','ionicDatePicker','$filter','patientprflservice','$ionicHistory',function($scope,$rootScope,$state,ionicDatePicker,$filter, patientprflservice,$ionicHistory){
+   
+	$scope.formData = [];
+    $scope.patientId="5751377e4f09030255c59a8b";
+	$scope.backButtonAction = function(){
+     $scope.shouldShowDelete = false;
+     $ionicHistory.goBack();
+      };
+	// DatePicker object with callbcak to obtain the date
+	var ipObj1 = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+		$scope.formData.dob = $filter('date')(val, "dd MMM yyyy");
+      },
+      from: new Date(1980 , 1, 1), //Optional
+      to: new Date(2016, 10, 30), //Optional
+      inputDate: new Date(),      //Optional
+      mondayFirst: true,          //Optional
+//      disableWeekdays: [0],       //Optional
+      closeOnSelect: false,       //Optional
+      templateType: 'popup'       //Optional
+    };
+     $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(ipObj1);
+    };
+   
+	patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+        $scope.list= data.data;
+        console.log("Obtaining patient profile" + data);
+        
+         /*if(data.status === 'SUCCESS'){
+            console.log('data obtained['+ JSON.stringify(data) + ']');
+                angular.forEach($scope.list, function(value, key){
+                    $scope.formData.push(key +":" + value);
+                   
+                })
+                 console.log($scope.formData);*/
+             console.log($scope.list);
+    }).catch(function(error){
+         $rootScope.hideLoader();
+    console.log('Failed to retrieve the data['+ error + ']');
+    });
+   
+   /* $scope.formData ={
+         "dob" : "",
+         "address1" : "",
+          "city" : "",
+         "pincode" : "",
+         "state" : "",
+        "country" :""
+     }; 
+    console.log($scope.formData);*/
+     $scope.save = function(fdata){
+    	console.log("saving");
+		$scope.formData.push({
+ mobnum:fdata.mobnum,emailadd:fdata.emailadd,dob:fdata.dob,address1: fdata.address1,doctor:fdata.doctor,licenceNo:fdata.licenceNo});
+		console.log($scope.formData);
+         var mobnum = $scope.formData.mobnum.toString();
+         patientprflservice.changedpatientinfo($scope.formData.emailadd,mobnum,$scope.formData.dob,$scope.formData.doctor,$scope.formData.licenceNo,
+            $scope.patientId).then(function(data){
+             console.log("patient profile detalis" + data);
+         }).catch(function(error){
+             $rootScope.hideLoader();
+               console.log('Failed to retrieve patient details['+ error + ']');
+         });     
+     }
+   
 }]);

@@ -382,6 +382,11 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
   .state('aboutus', {
     url: '/aboutus',
     controller: 'AboutusCtrl'
+  })
+  .state('patientprfl',{
+      url:'/patientprfl',
+      templateUrl : 'templates/patientprofile.html',
+      controller : 'PatientprofileCtrl'
   });
   $urlRouterProvider.otherwise('/landing');
     

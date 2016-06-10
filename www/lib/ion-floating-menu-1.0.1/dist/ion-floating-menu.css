@@ -112,8 +112,8 @@
 
 #floating-menu li span.label{
     margin-right: 2px;
-    color: gray;
-    background-color: white;
+    color: white;
+    background-color: #d14836;
     padding: 6px;
     border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -131,7 +131,7 @@
     right: 75px;
     width: 100px;
     text-align: right;
-    font-size: 15px;
+    font-size: 12px;
 }
 
 #floating-menu.active span.label-container{
