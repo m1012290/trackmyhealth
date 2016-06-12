@@ -81,7 +81,7 @@ angular.module('bnotifiedappctrls', [])
       });
   });
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style="    top: 45px;    left: 190px;    margin-left: 10px;    opacity: 1;    height: 20%;    width: 20%;"><ion-content><div class="list"><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl">Patient Profile</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>', 
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>', 
   {
     scope: $scope
   });
@@ -1207,6 +1207,11 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 	$scope.val ="bloodsugar";
 		console.log($scope.val);
 	}
+	$scope.tracker6= function(){
+	$scope.val ="notes";
+		console.log($scope.val);
+	}
+	
 			
   $ionicModal.fromTemplateUrl('my-modal1.html', {
     	scope: $scope,
@@ -1289,6 +1294,19 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
         
 		$scope.data="";
 		$scope.timeLineForm.$setPristine();
+		
+		//new timeline data
+		 $scope.events = [{
+    badgeClass: 'info',
+    badgeIconClass: 'glyphicon-check',
+    title: 'First heading',
+    content: 'Some awesome content.'
+  }, {
+    badgeClass: 'warning',
+    badgeIconClass: 'glyphicon-credit-card',
+    title: 'Second heading',
+    content: 'More awesome content.'
+  }];
               
      /*medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
             console.log("obtaining medical details" + data);

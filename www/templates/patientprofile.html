@@ -5,36 +5,38 @@
             </button>
         </ion-nav-buttons>
     <ion-content  class="padding" >
+       
+      
      <!--div class="item item-body"-->  
  <div class="list card" style="background-color: #D14836">
       <div class="item item-avatar">
         <span class="circle-span direct-chat-timestamp" 
  style="padding-top: 12px; padding-left: 5px;font-weight: bold; font-size: 20px; left:5px; background-color:#000;opacity:1">{{list.firstname|limitTo:1}}</span>
           <ion-item style="color:#FFF">
-              <h2><strong>{{list.firstname}} {{list.lastname}}</strong></h2> <hr>
-               {{list.gender}}<br>
-              {{list.emailid}}<br>
+            <h2><strong>{{list.firstname}} {{list.lastname}}</strong></h2> <hr>
+              {{list.gender}}<br>
+               {{list.emailid}}<br>
               {{list.mobilenumber}}</ion-item>
         </div>
         </div>
 <form name="patienprfl" class="simple-form" required>
       <div class="list">  
     <label class="item item-input item-floating-label">
-             <span class="input-label"><strong>Mobile Number</strong></span>
+             <span class="input-label">Mobile Number</span>
     <input type="number" ng-model="formData.mobnum" placeholder="Alternative Mobile Number" required>
   </label>  
      <label class="item item-input item-floating-label">
-             <span class="input-label"><strong>Email Address</strong></span>
+             <span class="input-label">Email Address</span>
     <input type="email" ng-model="formData.emailadd" placeholder= "Alternative Email address" required>
   </label> 
 
         <label class="item item-input item-floating-label">
-             <span class="input-label"><strong>Date Of Birth</strong></span>
+             <span class="input-label">Date Of Birth</span>
     <input type="text" ng-model="formData.dob" placeholder="Date of Birth" ng-click="openDatePicker()" >
   </label>	
 		 <!--i class="ion-ios-calendar-outline" ></i--> 
 		<label class="item item-input item-floating-label">
-        <span class="input-label"><strong>Address</strong> </span>
+        <span class="input-label">Address</span>
     <input type="text" ng-model="formData.address1" placeholder="Enter your Address">
   </label>
 	<!--ion-item class="item-input">
@@ -61,18 +63,22 @@
           <ion-item>
 		<ion-checkbox ng-model="formData.doctor" ng-value="false"> I am a doctor.</ion-checkbox>
 		<div ng-if="formData.doctor">
-		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
-		</div>
-		</ion-checkbox>
-	</ion-item>
-		
+            <label class="item item-input item-floating-label">
+        <span class="input-label">Licence Number</span>
+   		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
+  </label>
 
-   
-    </div>
-      <div class="pull-center">  
+		</div>
+		</ion-item>
+	</div>
+    <div class="pull-center">  
 			<button class="button button-outline button-assertive" ng-click="save(formData) " ng-if="formData.mobnum ||formData.emailadd || formData.dob || formData.address1|| formData.doctor">Submit</button>
 		</div>
   </form>
-       
-    </ion-content>
+       <ion-scroll zooming="true" direction="xy" style="width: 500px; height: 500px">
+        <div style="width: 5000px; height: 5000px; repeat"></div>
+      </ion-scroll>  
+</ion-content>
+   
+   
     </ion-view>

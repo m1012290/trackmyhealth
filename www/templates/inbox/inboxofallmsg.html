@@ -20,7 +20,7 @@
     </ion-nav-buttons>
 	<ion-content>
 		
-<div class="list card" ng-repeat=" visit in visitinfo ">
+<div class="list card" ng-repeat=" visit in visitinfo track by $index">
 
   <div class="item item-avatar">
 	  <img src="img/icon.png">
@@ -74,7 +74,7 @@
         <button class="button button-clear button-primary" ng-click="closeModal5()"><i class="icon ion-android-close"></i></button>
     </ion-header-bar>
     	<ion-content class="padding">
-				<div class="list card primary-bg" ng-repeat="note in notinfo">
+				<div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
 			<div class="item item-avatar">
 				<img src="img/icon.png">
 				<h2>{{note.notificationdate | date: "dd MMM yyyy" }}</h2>

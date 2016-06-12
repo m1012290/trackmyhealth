@@ -47,26 +47,28 @@
             <div class="padding">
                 </div>
                   <div class="visits-block text-muted">
-                <h5 align="center">Tracker</h5>
+                
                 <div class="visits" >
                     <div class="timeline">
-                        
-                        <div class="row" responsive-sm ng-repeat="details in healthdetails">
-                            <div class="left">
-                                <div class="circle">
-                                    <div class="day">{{details.recorddate|date:"dd"}}</div>
-                                    <div class="month"><small>{{details.recorddate|date:"MMM"}}</small></div>
-                                </div>
-                            </div>
-                            <div class="right" >
+                      <div class="row"  ng-repeat="details in healthdetails track by $index">
+                        <div class="left" ng-if="details.weight || details.bloodsugar || details.bloodpressure || details.allergies || details.medication">
+                           <div class="circle">
+                               <div class="day">{{details.recorddate|date:"dd"}}</div>
+                               <div class="month"><small>{{details.recorddate|date:"MMM"}}</small></div>
+                           </div>
+                        </div>
+                     <div class="right" ng-if="details.weight || details.bloodsugar || details.bloodpressure || details.allergies || details.medication">
                                 <div class="notification">
                                     <div class="message" >
  <p ng-show="details.weight !== null && details.weight !== ''"><strong>Weight : {{details.weight}} Kg </strong></p>
  <p ng-show="details.bloodsugar !== null && details.bloodsugar !== ''"><strong>Blood Sugar : {{details.bloodsugar}} mg-DL</strong></p>
+ <p ng-show="details.bloodpressure !== null && details.bloodpressure !== ''"><strong>Blood Sugar : {{details.bloodsugar}} mg-DL</strong></p>
  <p ng-show="details.allergies !== null && details.allergies !== ''"><strong>Allergies : {{details.allergies}}</strong></p>
- <p ng-show="details.medication !== null && details.medication !== ''"><strong>Medication : {{details.medication}}</strong></p>
-                                    </div> 
-                              </div>
+ <p ng-show="details.medication !== null && details.medication !== ''"><strong>Medication : {{details.medication}}</strong> </p>
+
+<button class="button button-small button-clear button-assertive ion-edit" ng-click="openModal1()" on-tap="tracker6()"></button> 
+                				
+				              </div>
                         </div>
                     </div>
                 </div>
@@ -92,69 +94,108 @@
         <form name="timeLineForm" >
 			<div class="list" ng-if="val === 'weight'">
            		<div class="item item-divider">
-			 		<div class="pull-left" >Date {{tdate | date: "yyyy.MM.dd hh.mm.ss a"}}</div>
+			 		<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
 				</div>
-				<label class="item item-input">
+				<label class="item item-input item-floating-label">
             	<span class="input-label">Weight</span>
             	<input type="number" placeholder="Weight Ex : 63. kg" name="weight" ng-model="data.weight">
 				</label> 
-		 		<label class="item item-input">
+		 		<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
     			<textarea placeholder="Notes"></textarea>
 				</label>
 			</div>
+			
          	<div class="list" ng-if="val === 'bloodsugar'" >
 				<div class="item item-divider">
-				 	<div class="pull-left" >Date {{tdate | date: "yyyy.MM.dd hh.mm.ss a"}}</div>
+				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
 				</div>
-			   	<label class="item item-input">
+			   	<label class="item item-input item-floating-label">
 				<span class="input-label">Blood Sugar</span>
-				<input type="number" placeholder="blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
+				<input type="number" placeholder="Blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
 				</label> 
-				<label class="item item-input">
+				<div class="item-input">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Random</span>
+					<input type="number" placeholder="RBS value" ng-model="data.random">
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Fasting</span>
+					<input type="number" placeholder="FBS value" ng-model="data.fasting">
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Post Prandial</span>
+					<input type="number" placeholder="PPBS value" ng-model="data.postprandial">
+				</label>
+				
+				</div>
+				
+				<label class="item item-input item-floating-label">
 				<span class="input-label">Notes</span>
-				<textarea placeholder="Notes"></textarea>
+					<textarea  placeholder="Notes"></textarea>
 				</label>
 			</div>
+			
 			<div class="list" ng-if="val === 'bloodpressure'">
 			 	<div class="item item-divider">
-			 		<div class="pull-left" >Date {{tdate | date: "yyyy.MM.dd hh.mm.ss a"}}</div>
+			 		<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
 				</div>
-          		<label class="item item-input">
+          		<label class="item item-input item-floating-label">
             	<span class="input-label">Blood Pressure</span>
-            	<input type="number" placeholder="blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
+            	<input type="number" placeholder="Blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
           		</label> 
-				<label class="item item-input">
+				<div class="item-input">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Systolic</span>
+					<input type="number" placeholder="Systolic value" ng-model="data.systolic">
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Diastolic</span>
+					<input type="number" placeholder="Diastolic value" ng-model="data.diastolic">
+				</label>
+				
+				</div>
+				<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
     			<textarea placeholder="Notes"></textarea>
   		  		</label>
 			</div>
             <div class="list" ng-if="val === 'medication'" >
 				<div class="item item-divider">
-					<div class="pull-left" >Date {{tdate | date: "yyyy.MM.dd hh.mm.ss a"}}</div>
+					<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
 				</div>
-				<label class="item item-input">
+				<label class="item item-input item-floating-label">
             	<span class="input-label">Medication</span>
             	<input type="text" placeholder="Medication details" name="medication" ng-model="data.medication">
           		</label> 
-			 	<label class="item item-input">
+			 	<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
     			<textarea placeholder="Notes"></textarea>
   		  		</label>
 			</div>
         	<div class="list" ng-if="val === 'allergy'">
            		<div class="item item-divider">
-					<div class="pull-left" >Date {{tdate | date: "yyyy.MM.dd hh.mm.ss a"}}</div>
+					<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
 				</div>
-				<label class="item item-input">
+				<label class="item item-input item-floating-label">
             	<span class="input-label">Allergies</span>
             	<input type="text" placeholder="Ex : Peanuts, dust mites" name="allergies" ng-model="data.allergies">
 				</label> 
-				<label class="item item-input">
+				<label class="item item-input item-floating-label">
 				<span class="input-label">Notes</span>
 				<textarea placeholder="Notes"></textarea>
   		  		</label>
         	</div>
+			
+			<div class="list" ng-if="val === 'notes'">
+				<div class="item item-divider">
+					<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
+				</div>
+				<label class="item item-input item-floating-label">
+				<span class="input-label">Notes</span>
+					<textarea  placeholder="Notes"></textarea>
+				</label>
+			</div>
         	<div class="pull-center">  
 				<button class="button button-outline button-assertive" ng-click="create(data)">Submit</button>
 			</div>

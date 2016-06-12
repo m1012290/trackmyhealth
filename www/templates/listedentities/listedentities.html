@@ -27,7 +27,7 @@
         
   <ion-content>
         <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
-          <ion-item ng-repeat="entity in hospitalslist" class="item item-avatar item-remove-animate" 
+          <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate" 
                     style="    padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 0px;

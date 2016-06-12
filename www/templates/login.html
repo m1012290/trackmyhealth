@@ -1,5 +1,5 @@
 <ion-view view-title="Please Login" name="login-view">
-<ion-content style="margin-top:40%;"   scroll="false">
+<ion-content class="central">
 	 <form name="signin" ng-submit="login(logindata)" required>
          <ion-list>
             <ion-item class="item-input">
@@ -70,7 +70,7 @@
 				</div>
             </ion-list>
 			<br>
-          	<div class="pull-center" ng-hide="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">  
+          	<div class="pull-center" ng-hide="forgot.password && forgot.confirmpwd ">  
 				<button class="button button-outline button-assertive" ng-click="save(forgot)">OK</button>
 			</div>
 			<div class="pull-center" ng-if="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">  

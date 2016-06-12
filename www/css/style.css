@@ -1080,3 +1080,14 @@ abbr.timestamp {
 .ion-locked:before {
    font-size: px;
 }
+
+
+.bar.bar-positive {
+    border-color: #d14836 !important;
+    background-color: #d14836 !important;
+    background-image: linear-gradient(0deg, #d14836, #d14836 50%, transparent 50%) !important;
+    color: #fff !important; 
+}
+.central {
+	padding-top: 50%;
+}

@@ -389,7 +389,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       controller : 'PatientprofileCtrl'
   });
   $urlRouterProvider.otherwise('/landing');
-    
+    $ionicConfigProvider.scrolling.jsScrolling(false);
 $ionicConfigProvider.navBar.alignTitle('left');
 }])
 .config(['$httpProvider', function ($httpProvider) {
