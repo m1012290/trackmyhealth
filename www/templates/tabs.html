@@ -1,11 +1,11 @@
 <ion-view>
   <ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
     
-    <ion-tab title="Hospitals" href="#/main/listedentities">
+    <ion-tab title="Hospitals" href="#/main/listedentities" nav-direction="forward">
       <ion-nav-view name="listed-entities"></ion-nav-view>
     </ion-tab>
     
-    <ion-tab title="Visits" href="#/main/allnotifications/123" badge="messagesdata.badgeCount" badge-style="badge-container badge-assertive">
+    <ion-tab title="Visits" href="#/main/allnotifications/123" nav-direction="forward">
       <ion-nav-view name="all-notifications"></ion-nav-view>
     </ion-tab>
     <!--
@@ -13,7 +13,7 @@
       <ion-nav-view name="recent-notifications"></ion-nav-view>
     </ion-tab> -->
     
-    <ion-tab title="My Health" href="#/main/myhealth" >
+    <ion-tab title="My Health" href="#/main/myhealth" nav-direction="forward">
       <ion-nav-view name="my-health"></ion-nav-view>
     </ion-tab>
       

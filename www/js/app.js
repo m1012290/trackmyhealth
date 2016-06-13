@@ -171,7 +171,8 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
     
   });
-  ionic.Platform.isFullScreen = true;
+    ionic.Platform.fullScreen(true);
+  //ionic.Platform.isFullScreen = true;
   window.addEventListener('native.keyboardshow', function(){
     //cordova.plugins.Keyboard.close();//suppressing native keyboard
   });
