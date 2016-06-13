@@ -7,7 +7,9 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
 .run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
-      StatusBar.styleDefault();
+      //StatusBar.styleDefault();
+      StatusBar.backgroundColorByHexString('#d14836');
+      
     }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -37,7 +39,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         console.log('printing db object ['+ db + ']');
     }
     
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text)").then(function(result){
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text)").then(function(result){
        console.log('Table created successfully with result as ['+ result.rows.length + ']'); 
     }).catch(function(error){
         console.log('Table creation failed with error as ['+ error + ']');
@@ -171,7 +173,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
     
   });
-    ionic.Platform.fullScreen(true);
+    ionic.Platform.fullScreen(true, true);
   //ionic.Platform.isFullScreen = true;
   window.addEventListener('native.keyboardshow', function(){
     //cordova.plugins.Keyboard.close();//suppressing native keyboard
