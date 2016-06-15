@@ -35,9 +35,9 @@ angular.module('bnotifiedappctrls', [])
   $rootScope.showToast = function(message, duration, position){
       if(window.cordova){
           $cordovaToast.show(message, duration, position).then(function(success){
-            //success   
+            //success
           }, function(error){
-            //error  
+            //error
           });
       }
   };
@@ -48,10 +48,10 @@ angular.module('bnotifiedappctrls', [])
       });
       $ionicHistory.clearCache()
       $rootScope.showPopup({title:'Invalid Login', template:'Session lost, please login again'}, function(res){
-        
+
       });
   });
-      
+
   $rootScope.$on(AUTH_EVENTS.jsonwebtokenExpired, function(response){
       registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(result){
         $state.go('login',{}, {reload: true});
@@ -64,11 +64,11 @@ angular.module('bnotifiedappctrls', [])
         });
       }).catch(function(error){
         $rootScope.showPopup({title:'System Error', template:'Oops !! There is some problem logging in right now'}, function(res){
-            console.log('on ok click'); 
+            console.log('on ok click');
         });
       });
-  });    
-    
+  });
+
 
   $rootScope.$on(AUTH_EVENTS.notAuthenticated, function(response){
       $state.go('login',{}, {reload: true});
@@ -77,11 +77,11 @@ angular.module('bnotifiedappctrls', [])
       });
       $ionicHistory.clearCache()
       $rootScope.showPopup({title:'Invalid Login', template:'Session lost, please login again'}, function(res){
-        
+
       });
   });
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>', 
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
   {
     scope: $scope
   });
@@ -106,10 +106,10 @@ angular.module('bnotifiedappctrls', [])
   $scope.goToAddSubscriptions = function($event){
       console.log('invoked from goToAddSubscriptions');
     $state.go('addsubscriptions');
-  };	
+  };
   $scope.backButtonAction = function(){
-        $ionicHistory.goBack();    
-    }; 
+        $ionicHistory.goBack();
+    };
   $rootScope.messagesdata = {
      badgeCount: ''
     }
@@ -119,7 +119,7 @@ angular.module('bnotifiedappctrls', [])
     //$scope.mobilenumber = '';
     $scope.errordescription = '';
     $scope.registrationdets = {
-      mobilenumber : ''  
+      mobilenumber : ''
     };
     /*$scope.options = {
     rightControl: '<i class="icon ion-backspace-outline"></i></button>',
@@ -133,14 +133,14 @@ angular.module('bnotifiedappctrls', [])
         }
       }
     };*/
-    $scope.clearFormFields = function(){  
+    $scope.clearFormFields = function(){
         $scope.registrationdets.mobilenumber = '';
     };
     $scope.continuebtn = function(){
         //check for internet connectivity before doing anything
         var available = internetservice.isInternetAvailable();
         if(!available){ return ; } //no internet connectivity
-        
+
         $rootScope.showLoader();
 
         //validate mobile number length --
@@ -170,7 +170,7 @@ angular.module('bnotifiedappctrls', [])
                 $scope.registrationdets.mobilenumber = '';
                 if(error.status === 400){
                     $rootScope.showPopup({title:'Error', template:"Please check the mobile number entered"}, function(res){
-                    });    
+                    });
                 }
                 if(error.status === 401){
                     $rootScope.showPopup({title:'Error', template:"Mobile number is not registered, please register"}, function(res){
@@ -182,16 +182,15 @@ angular.module('bnotifiedappctrls', [])
 
                     });
                 }
-                
+
                 /*$rootScope.showPopup({title:'Error', template:"Couldn't validate mobile number right now, Please try again!"}, function(res){
                 });*/
             });
         }
     };
-    
-}]) 
-.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice',  function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice) {
-		
+
+}])
+.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
     $scope.logindata=[];
 	$scope.forgot=[];
 
@@ -201,43 +200,43 @@ angular.module('bnotifiedappctrls', [])
   	}).then(function(modal) {
     	$scope.modal = modal;
   	});
-		 
-	$scope.openModal4 = function() {	 
+
+	$scope.openModal4 = function() {
 		$scope.modal.show();
-	 
-	}; 	
-	
-  	$scope.closeModal4 = function() {
-    	$scope.modal.hide();  
+
 	};
-	
+
+  	$scope.closeModal4 = function() {
+    	$scope.modal.hide();
+	};
+
 	$scope.save=function(dets){
         console.log("calling the forgot password service");
 		$scope.forgotpass = true;
-	
-	
-forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
-		console.log( data);
-		if(data.status === "SUCCESS"){
-			console.log("mobile no exists generate otp now");
-			$scope.pass=true;
-			var mobnum= $scope.forgot.mobNo.toString();
-			signupservice.generateOtp($scope.forgot.emailId, mobnum ).then(function(data){
-						if(data.status === "SUCCESS"){
-							console.log("The otp is generated");
-						}
-					}).catch(function(error){
-				console.log("The Otp is not generated");
-			})
-		}
-		}).catch(function(error){
-		if(error.status === 404){
-			console.log("mobile no doesn't please register ")
-		$scope.closeModal4();
-		}
-	})
-    };	
-	
+
+
+        forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
+            console.log( data);
+                if(data.status === "SUCCESS"){
+                    console.log("mobile no exists generate otp now");
+                    $scope.pass=true;
+                    var mobnum= $scope.forgot.mobNo.toString();
+                    signupservice.generateOtp($scope.forgot.emailId, mobnum ).then(function(data){
+                                if(data.status === "SUCCESS"){
+                                    console.log("The otp is generated");
+                                }
+                            }).catch(function(error){
+                        console.log("The Otp is not generated");
+                    })
+                }
+            }).catch(function(error){
+                if(error.status === 404){
+                    console.log("mobile no doesn't please register ")
+                      $scope.closeModal4();
+                }
+            });
+    };
+
 	$scope.newpassword= function(chg){
 		console.log("changing the pasword");
 $scope.forgot.push({emailId : chg.emailId, mobNo : chg.mobNo, password: chg.password, confirmpwd: chg.confirmpwd, smsotp: chg.smsotp, emailotp: chg.emailotp});
@@ -260,30 +259,49 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 				})
 			});
 		}
-		
+
 	}
-	
+
     $scope.signup=function(){
         $state.go('signup');
-        
+
     };
-	
+
 	$scope.login =function(logindata){
-        
+
 		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
-        
+
 		$rootScope.showLoader();
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
             if(data.status === 'SUCCESS'){
-                $rootScope.hideLoader();
-                $state.go('main.listedentities');
+              $rootScope.hideLoader();
+              registrationdetsdb.query({}).then(function(response){
+              var result = DBA.getById(response);
+                if(result.appregistrationid === null || result.appregistrationid === ''){
+                    //update the table with the id gotten after login
+                    registrationdetsdb.updateAppRegistrationId(data.appregistrationid).then(function(result){
+                        $state.go('main.listedentities');
+                    }).catch(function(error){
+                        $rootScope.showPopup({
+                               title:'System Error',
+                                    template:'Unable to login right now, please try again !!'
+                        },function(res){
+                        });
+                    });
+                }else{
+                  $state.go('main.listedentities');
+                }
+              }).catch(function(error){
+
+              });
+
+
             }else{
                 $rootScope.showPopup({
-					title:'Invalid Login',
-					template:'Invalid login details, please try again'
-				},function(res){
-                	});
-                
+      					       title:'Invalid Login',
+      					            template:'Invalid login details, please try again'
+				        },function(res){
+                });
             }
 		}).catch(function(error){
             $rootScope.hideLoader();
@@ -292,13 +310,17 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 			}).then(function(res){
 				//$state.go('login');
 			})
-		})
+		});
 	}
+
+
+
+
 }])
 .controller('SignUpCtrl',['$scope', '$state', 'ionicDatePicker', '$filter', 'signupservice', '$ionicModal', '$ionicPopup', function($scope, $state, ionicDatePicker, $filter, signupservice, $ionicModal, $ionicPopup){
-                          
+
 	$scope.formData = [];
-	
+
 	// DatePicker object with callbcak to obtain the date
 	var ipObj1 = {
       callback: function (val) {  //Mandatory
@@ -317,7 +339,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
     $scope.openDatePicker = function(){
       ionicDatePicker.openDatePicker(ipObj1);
     };
-	
+
 	    //modal
 	$ionicModal.fromTemplateUrl('my-modal2.html', {
     	scope: $scope,
@@ -326,19 +348,19 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
     	$scope.modal = modal;
   	});
 	$scope.openModal2 = function() {
-    	$scope.modal.show();  
+    	$scope.modal.show();
     }
 	$scope.closeModal2 = function() {
-    	$scope.modal.hide(); 
-            } 
+    	$scope.modal.hide();
+            }
 
 	// saving data into an array and calling the modal func to capture the otp
     $scope.save = function(fdata){
-    	
+
 		console.log("saving");
 		$scope.formData.push({
 		firstname: fdata.firstname, lastname:fdata.lastname, mobnum:fdata.mobnum, emailadd:fdata.emailadd, 			password:fdata.password, confirmpassword:fdata.confirmpassword,age: fdata.age, dob:fdata.dob, male:fdata.male, female: fdata.female, address: fdata.address, city: fdata.city, pincode: fdata.pincode, state: fdata.state, country: fdata.country, doctor : fdata.doctor, licenceNo: fdata.licenceNo, termyes: fdata.termsyes });
-		
+
 		console.log($scope.formData);
 
 		signupservice.savedetails($scope.formData.emailadd, $scope.formData.mobnum, $scope.formData.doctor ).then(function(data){
@@ -352,14 +374,14 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 				var mobilenum = $scope.formData.mobnum.toString();
 			signupservice.generateOtp($scope.formData.emailadd, mobilenum ).then(function(data){
 					console.log("genetrated OTP " + data);
-					$scope.openModal2();	
+					$scope.openModal2();
 				})
 			}
 			});
 		}
 	//otp
 	$scope.security=[];
-	
+
 	$scope.securitydets = function(u){
 		$scope.security.push({otpsms: u.otpsms, otpemail: u.otpemail });
 		console.log($scope.security);
@@ -368,11 +390,11 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 		}else{
 			$scope.formData.gender = "male"
 		}
-		
+
 	var mobile = $scope.formData.mobnum.toString();
-		
+
 		if($scope.formData.doctor == true){
-			
+
 signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
 			var alertPopUp = $ionicPopup.alert({
 				title:"Registration Successful"
@@ -396,7 +418,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 				$scope.closeModal2();
 				$state.go('main.listedentities');
 			})
-				
+
 		});
 
 		}
@@ -410,7 +432,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     };
     $scope.errordescription = '';
     $scope.passcode = '';
-    
+
     $scope.options = {
     rightControl: '<i class="icon ion-backspace-outline"></i></button>',
     onKeyPress: function(value, source) {
@@ -426,7 +448,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
         }
       }
     };
-    
+
     $scope.continuebtn = function(){
         //check for internet connectivity before doing anything
         var available = internetservice.isInternetAvailable();
@@ -458,17 +480,17 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             });
         }
     };
-    
+
     $scope.loginfunction = function(){
         if(window.cordova){
             //check for internet connectivity before doing anything
             var available = internetservice.isInternetAvailable();
             if(!available){ return ; } //no internet connectivity
-            
+
         }
         $rootScope.showLoader();
         console.log('Before login call checking the payload ['+ JSON.stringify($scope.logindata) + '] stateParams mobilenumber is ['+ $stateParams.mobilenumber +']' );
-        
+
         registrationdetsdb.query({}).then(function(response){
                         var result = DBA.getById(response);
                         console.log('printing result of local table query b4 login ['+ JSON.stringify(result) + ']');
@@ -489,7 +511,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                         $state.go('main.recentnotifications', {mobilenumber:$stateParams.mobilenumber});
                     }).catch(function(error){
                         $rootScope.showPopup({title:'System Error', template:'Oops !! There is some problem logging in right now'}, function(res){
-                   console.log('on ok click'); 
+                   console.log('on ok click');
                         });
                     });
                 //}
@@ -504,9 +526,9 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                });*/
                 $scope.logindata.passcode = '';
                 $rootScope.showPopup({title:'Invalid Login Details', template:'Please check your mobilenumber and passcode combination'}, function(res){
-                   console.log('on ok click'); 
+                   console.log('on ok click');
                 });
-               
+
             }
         }).catch(function(error){
           $rootScope.hideLoader();
@@ -518,35 +540,35 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
              console.log('Thank you for not eating my delicious ice cream cone');
            });*/
            $scope.logindata.passcode = '';
-                            
+
            if(error.status === 400){
                 $rootScope.showPopup({title:'System Error', template:'Oops !! There is some problem logging in right now, Please try again'}, function(res){
-                   console.log('on ok click'); 
+                   console.log('on ok click');
                 });
            }else{
                if(error.status !== 401 && error.status !== 419){ //there is handling for these error codes seperately
                     $rootScope.showPopup({title:'Invalid Login Details', template:'Please check your mobilenumber and passcode combination'}, function(res){
-                    console.log('on ok click'); 
+                    console.log('on ok click');
                     });
                }
            }
         });
      }).catch(function(error){
                         $rootScope.showPopup({title:'System Error', template:'Oops !! There is some problem logging in right now, Please try again'}, function(res){
-                   console.log('on ok click'); 
+                   console.log('on ok click');
                         });
 
-      }); 
-        
+      });
+
     };
-    
+
 }])
 
 .controller('RegistrationCtrl', ['$scope','$rootScope','$ionicPlatform','registrationservice', '$state','$ionicPopup','internetservice', function($scope, $rootScope, $ionicPlatform, registrationservice, $state, $ionicPopup, internetservice){
     //$scope.mobilenumber = '';
     $scope.errordescription = '';
     $scope.registrationdets = {
-      mobilenumber : ''  
+      mobilenumber : ''
     };
     /*$scope.hidekeyboard = function($event){
         console.log('hidekeyboard is invoked');
@@ -557,13 +579,13 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                 console.log('printing keyboard value ['+ cordova.plugins.Keyboard.isVisible +'] b4 close');
                 cordova.plugins.Keyboard.close();
                 console.log('printing keyboard visible value ['+ cordova.plugins.Keyboard.isVisible +'] after close');
-                
+
             }
             console.log('printing keyboard value ['+ $cordovaKeyboard.isVisible() +'] b4 close with ngCordova');
             $cordovaKeyboard.close();
         //});
     };
-    */  
+    */
     /*$scope.options = {
     rightControl: '<i class="icon ion-backspace-outline"></i></button>',
     onKeyPress: function(value, source) {
@@ -576,17 +598,17 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
         }
       }
     };*/
-    
+
     $scope.continuebtn = function(){
         //check for internet connectivity before doing anything
-        
+
         var available = internetservice.isInternetAvailable();
         if(!available){ return ; } //no internet connectivity
         $rootScope.showLoader();
         console.log('continuebtn click with mobile number ['+ $scope.registrationdets.mobilenumber + ']');
         //validate mobile number length --
         if($scope.registrationdets.mobilenumber.length === '' || $scope.registrationdets.mobilenumber.length > 10 ||  $scope.registrationdets.mobilenumber.length < 10 ){
-        
+
             console.log('Invalid mobile number entered');
             $scope.errordescription = 'Invalid mobile number';
             $scope.registrationdets.mobilenumber = '';
@@ -595,14 +617,14 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             registrationservice.validateMobileNumber($scope.registrationdets.mobilenumber).then(function(data){
                 console.log('successful call to node service to validate mobile number ['+ JSON.stringify(data) +']');
                 if(data.status == 'SUCCESS'){
-                    $state.go('securitydetails', {mobilenumber:$scope.registrationdets.mobilenumber}); 
+                    $state.go('securitydetails', {mobilenumber:$scope.registrationdets.mobilenumber});
 					//goto security details and password screen
                 }else{
                     //$scope.errordescription = data.errorDescription;
                     $scope.registrationdets.mobilenumber = '';
                     $rootScope.hideLoader();
                     $rootScope.showPopup({title:'Error', template:data.errorDescription}, function(res){
-                   console.log('on ok click'); 
+                   console.log('on ok click');
                     });
                 }
             }).catch(function(error){
@@ -611,12 +633,12 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                 $scope.registrationdets.mobilenumber = ''
                 $rootScope.hideLoader();
                 $rootScope.showPopup({title:'Error', template:"Couldn't validate mobile number right now, Please try again!"}, function(res){
-                   console.log('on ok click'); 
+                   console.log('on ok click');
                 });
             });
         }
     };
-    
+
 }])
 
 .controller('SecurityDetailsCtrl', ['$scope','$rootScope','$stateParams', '$state', 'securityquestions','initiateotpgeneratesvc', 'pushnotificationservice','registrationservice', 'registrationdetsdb','DBA', function($scope, $rootScope, $stateParams, $state, securityquestions, initiateotpgeneratesvc, pushnotificationservice, registrationservice, registrationdetsdb, DBA){
@@ -631,7 +653,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     $scope.onBlurFn = function($event){
         console.log('Printing security answer ['+ $scope.securitydets +']');
         console.log('Printing security answer ['+ $event +']');
-        
+
     }
     $scope.registerbtn = function(){
         $scope.errordescription = '';
@@ -640,14 +662,14 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             //proceed with registration
             console.log('securityquesdata is [' + JSON.stringify($scope.securityquesdata) +']');
             initiateotpgeneratesvc.validateOtp($stateParams.mobilenumber,$scope.securityquesdata.otppin).then(function(data){
-                
+
                 if(data.status == 'SUCCESS'){
                     console.log('Successfully validated OTP');
                     //proceed to data save service call
                     //pushnotificationservice.registerDevice(registrationhandler, notificationhandler, errorhandler);
                     if(window.cordova){
                         registrationdetsdb.query({}).then(function(response){
-                            
+
                             var result = DBA.getById(response);
                             console.log('registration token is ['+ result.registrationtoken + ']');
                             var registrationdetails={ mobilenumber : $stateParams.mobilenumber,
@@ -658,7 +680,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                                                             registrationtoken : result.registrationtoken
                                                         }
                                                     };
-                           //update mobile number to registrationtable on sqlite                               
+                           //update mobile number to registrationtable on sqlite
                            registrationdetsdb.updateMobileNumber(registrationdetails);
                             registrationservice.saveRegistrationDetails(registrationdetails).then(function(data){
                                 $rootScope.hideLoader();
@@ -683,7 +705,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                                 });
                         });
                     }else{
-                        
+
                             console.log('within else wherein there is no cordova');
                             var registrationdetails={   mobilenumber : $stateParams.mobilenumber,
                                                         securitydetails : {
@@ -693,7 +715,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                                                             registrationtoken : 'emp9i_R3PjY:APA91bEpoRrVZkOBiTeXuCn98aMNypJsqmzAMX8I9M86fMlBwn7ZElyoxX9TwezSoNXLC6dGery8GcCRufQArQnl8rYMoFn1K_tbQ6RuAzWoSr4PTp--ro2lOMmuqg7dUlSFNsOSvM8y'
                                                         }
                                                     };
-                                                       
+
                             console.log('printing registrationdetails [' + JSON.stringify(registrationdetails) + ']');
                             registrationservice.saveRegistrationDetails(registrationdetails).then(function(data){
                                 $rootScope.hideLoader();
@@ -751,11 +773,11 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             });
          }
     };
-    
+
 }])
 
 /*.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal){
-   
+
 	$scope.listedentities=[];
 	$scope.hospitalslist=[];
 	$scope.patientId = "5751377e4f09030255c59a8b";
@@ -797,17 +819,17 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             $rootScope.showPopup({
 				title:'Error Retrieving Hospitals',
 				template:"Couldn't retrieve Hospitals Registered!"}, function(res){
-                console.log('on click ok'); 
+                console.log('on click ok');
             });
         }
     }).catch(function(error){
         console.log('Error encounterd while calling getregHospitals['+ error + ']');
         $rootScope.hideLoader();
                 });
-	
-    
+
+
     $scope.showFilterBar = function(){
-            
+
             filterBarInstance = $ionicFilterBar.show({
             items:$scope.listedentities,
             update:function(filteredItemList){
@@ -820,27 +842,27 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             });
         //console.log('filterBarInstance -->['+filterBarInstance + ']');
     };
-    
+
     $scope.shouldShowReorder = false;
     $scope.shouldShowDelete  = false;
     $scope.listCanSwipe = true;
 
-	
+
 	//hospital info modal
-	
-	$ionicModal.fromTemplateUrl('my-modal3.html', {				
+
+	$ionicModal.fromTemplateUrl('my-modal3.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modal = modal;
   	});
 	$scope.openModal3 = function() {
-    	$scope.modal.show();  
+    	$scope.modal.show();
     }
 	$scope.closeModal3 = function() {
-    	$scope.modal.hide(); 
-            } 	
-	
+    	$scope.modal.hide();
+            }
+
 	//hospital info data
 	$scope.hospitals= [
   {
@@ -850,7 +872,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 		  addressline1 : "#32, 4th main",
 		  addressline2 : " 4th Block",
 		  addressline3 : " Rajajinagar",
-		  city : "Bangalore",   
+		  city : "Bangalore",
 		  pincode : " 567992 ",
 		  state : "Karnataka",
 		  country : "India"
@@ -864,60 +886,64 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                  dept1:"cardio",
                  dept2:"neuro",
                  dept3:"optha",
-                 dept4:"eye", 
+                 dept4:"eye",
                  dept5:"dental",
                  dept6:"EnT"
              },
       inhouselabs :{
                  lab1:" Basic blood analysis lab",
                  lab2:"Bio-Chem analysis lab",
-                 lab3:"Hormonal analysis lab "   
+                 lab3:"Hormonal analysis lab "
                   },
   }];
-	
-	
+
+
 	}])*/
-.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate', function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal, $ionicSlideBoxDelegate){
-   
+.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb', function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal, $ionicSlideBoxDelegate, DBA, registrationdetsdb){
+
 	$scope.listedentities=[];
 	$scope.hospitalslist=[];
 	$scope.hos=[];
-	$scope.patientId = "5751377e4f09030255c59a8b";
-    $scope.filterBarInstance;
-    $rootScope.showLoader();
-    
+  //$scope.patientId = "5751377e4f09030255c59a8b";
+ //result.appregistrationid
+ $rootScope.showLoader();
+ registrationdetsdb.query({}).then(function(response){
+        var result = DBA.getById(response);
+        $scope.patientId = result.appregistrationid;
         hospitalservice.getregHospitals($scope.patientId).then(function(data){
             if(data.status === 'SUCCESS'){
                 $rootScope.hideLoader();
                 console.log("hospital list data" + data );
                 $scope.listedentities = data;
                 $scope.hospitalslist = $scope.listedentities.data;
-            /**/
-           /*  angular.forEach($scope.listedentities.data, function(value,key){
-                    $scope.hos.push(value);
-                    $scope.hoscode= $scope.hos.hospitalcode;
-                    $scope.hosid= $scope.hos.hospitalid;
-                    $scope.hosname = $scope.hos.hospitalname;
-                    console.log($scope.hoscode);
-                    console.log($scope.hosid);
-                    console.log($scope.hosname);
-                    //$scope.hosinfo();
-              });
-                    console.log($scope.hos);*/
-           }
-           else{
+          }else{
                 $rootScope.hideLoader();
                 $rootScope.showPopup({
                     title:'Error Retrieving Hospitals',
                     template:"Couldn't retrieve Hospitals Registered!"}, function(res){
-                    console.log('on click ok'); 
+                    console.log('on click ok');
                 });
             }
         }).catch(function(error){
             console.log('Error encounterd while calling getregHospitals['+ error + ']');
             $rootScope.hideLoader();
-                    });
-    
+            $rootScope.showPopup({
+                title:'Error Retrieving Hospitals',
+                template:"Couldn't retrieve Hospitals Registered!"}, function(res){
+                console.log('on click ok');
+            });
+        });
+
+ }).catch(function(error){
+   $rootScope.hideLoader();
+   $rootScope.showPopup({
+       title:'Error Retrieving Hospitals',
+       template:"Couldn't retrieve Hospitals Registered!"}, function(res){
+       console.log('on click ok');
+   });
+
+ });
+
 	$scope.hosinfo= function(hospitalid,hospitalcode){
 		console.log("hospital info calling");
 			hospitalservice.hospitalinfo(hospitalid,hospitalcode).then(function(data){
@@ -930,12 +956,12 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 					title: "Failed to retrieve hospital info"
 				}).then(function(res){
 					console.log("Okay on hospital info");
-				})
+				});
 			});
-		  }
-    
-    $scope.showFilterBar = function(){
-            
+	}
+$scope.filterBarInstance;
+  $scope.showFilterBar = function(){
+
             filterBarInstance = $ionicFilterBar.show({
             items:$scope.listedentities,
             update:function(filteredItemList){
@@ -948,33 +974,33 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             });
         //console.log('filterBarInstance -->['+filterBarInstance + ']');
     };
-    
+
     $scope.shouldShowReorder = false;
     $scope.shouldShowDelete  = false;
     $scope.listCanSwipe = true;
 
-	
+
 	//hospital info modal
-	
-	$ionicModal.fromTemplateUrl('my-modal3.html', {				
+
+	$ionicModal.fromTemplateUrl('my-modal3.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modal = modal;
   	});
 	$scope.openModal3 = function() {
-    	$scope.modal.show();  
+    	$scope.modal.show();
     }
 	$scope.closeModal3 = function() {
-    	$scope.modal.hide(); 
+    	$scope.modal.hide();
 	}
-	//feedback questions 
+	//feedback questions
 	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
 		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
 		{question : "The ease of obtaining the records and lab-reports",answer: ''},
 		{question: "Trackmyhealth app , has it been helpful?",answer: ''},
 		{question: "Is the app easy to use?",answer: ''}];
-	
+
 	//ratings for feedback
 	$scope.ratingsObject = {
         iconOn : 'ion-ios-star',
@@ -984,24 +1010,24 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 		rating: '',
         minRating: 0 ,
         callback: function(rating) {
-          $scope.ratingsCallback(rating); 
+          $scope.ratingsCallback(rating);
 			return rating;
         }
       };
-	
+
 	// ratings callback function , obtains the current slide and updates the object answer
      $scope.ratingsCallback = function(rating) {
         console.log('Selected rating is : ', rating);
-		$scope.i= $ionicSlideBoxDelegate.currentIndex();	
+		$scope.i= $ionicSlideBoxDelegate.currentIndex();
 		console.log($scope.i);
 		$ionicSlideBoxDelegate.next();
 		$scope.questions[$scope.i].answer = rating;
 		console.log($scope.questions);
-		 if($scope.i === 4){ 
+		 if($scope.i === 4){
 		 $scope.closepopup()
-		 }  
+		 }
 	  };
-	
+
 	//popup to show feedback
 	$scope.showPopup = function() {
 
@@ -1017,8 +1043,8 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 		  myPopup.close();
 	 }
 	};
-	
-	
+
+
 }])
 .controller('RecentEntitiesCtrl', ['$scope', '$rootScope','$state', '$stateParams', '$ionicPopup', 'notificationservice', function($scope, $rootScope, $state, $stateParams, $ionicPopup, notificationservice) {
     $scope.todaysdate = new Date();
@@ -1068,11 +1094,11 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
         console.log('Error encountered with error object retrieved is ['+ JSON.stringify(error) + ']');
         if(error.status != 401 && error.status != 419){ // only when not-authenticated error is encountered
             $rootScope.showPopup({title:'Error', template:"Couldn't retrieve response from server, Please try again!"}, function(res){
-            
+
            });
         }
     });
-    
+
 }])
 
 .controller('SubscriptionCtrl', ['$scope','$rootScope','$ionicHistory','$state','notificationservice',function($scope, $rootScope, $ionicHistory,$state,notificationservice){
@@ -1100,7 +1126,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             }
         }else{
             $rootScope.showPopup({title:'Error', template:"Currently system is facing trouble retrieving response, Please try again!"}, function(res){
-                
+
            });
         }
     }).catch(function(error){
@@ -1108,12 +1134,12 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
         console.log('Error encountered while retrieving list of unsubscribed entities ['+ JSON.stringify(error) + ']');
         if(error.status != 401 && error.status != 419){ // only when not-authenticated error is encountered
             $rootScope.showPopup({title:'Error', template:"Couldn't retrieve response from server, Please try again!"}, function(res){
-                     
+
            });
         }
     });
-    
-    
+
+
     $scope.onchangeofcheckbox = function(){
         $scope.truefalselist = [];
         angular.forEach($scope.unsubscribedentitylist, function(value, key) {
@@ -1126,7 +1152,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             $scope.shouldShowCheckMark = false;
         }
     };
-    
+
     $scope.resubscribeEntities = function(){
         $scope.resubscriptionavailable = false;
         $scope.entityidlist = [];
@@ -1146,7 +1172,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                     //$state.go('main.listedentities');
                     $scope.shouldShowCheckMark = false;
                     $rootScope.showToast('Subscription added successfully',null,'bottom');
-                    
+
                     angular.forEach($scope.entityidlist, function(value, key){
                         console.log('entity id is ['+ value.entityId + ']');
                         angular.forEach($scope.unsubscribedentitylist, function(valueobj, keyobj){
@@ -1156,53 +1182,88 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                             }
                         });
                     });
-                    
+
                 }else{
                     $rootScope.showPopup({title:'Error', template:"Error resubscribing to selected entities, Please try again !!"},                  function(res){
-                
+
                     });
                 }
             }).catch(function(error){
                 $rootScope.hideLoader();
                 $rootScope.showPopup({title:'Error', template:"Error resubscribing to selected entities, Please try again !!"},                  function(res){
-                
+
                 });
             });
         }else{
             $rootScope.showPopup({title:'Error', template:"Please select atleast one entity for resubscription"}, function(res){
-                
+
            });
         }
     };
 }])
-.controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup) {
-     $scope.data ={
-         "weight" : "",
-         "bloodsugar" : "",
-         "medication" : "",
-         "allergies" : "",
-         "patientId" : "5751377e4f09030255c59a8b"
-     };
+.controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb',function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb) {
+   $scope.data ={
+       "weight" : "",
+       "bloodsugar" : "",
+       "medication" : "",
+       "allergies" : "",
+       "patientId" : ""
+   };
+   $rootScope.showLoader();
+   registrationdetsdb.query({}).then(function(response){
+      var result = DBA.getById(response);
+      $scope.data.patientId = result.appregistrationid;
+
+      //Invoke retrieve medicalprofile service in order to display history data if any available
+      medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
+              console.log("obtaining medical details" + data);
+          //$scope.details=data;
+        if(data.status === 'SUCCESS'){
+            $rootScope.hideLoader();
+            console.log('data obtained['+ JSON.stringify(data) + ']');
+          $scope.healthdetails = [];
+
+          angular.forEach(data.data.medicalprofiledetails, function(value, key){
+                  for(var i=0; i< value.medicalprofile.length; i++ ){
+                    this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
+                  }
+          }, $scope.healthdetails);
+
+          console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
+        }
+      }).catch(function(error){
+          $rootScope.hideLoader();
+          var alertPopUp = $ionicPopup.alert({
+              title:"Failed to save details"
+          });
+      });
+
+   }).catch(function(error){
+     $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+     console.log('on ok click');
+     });
+   });
+
 	$scope.tracker1= function(){
 	$scope.val = "allergy";
-		console.log($scope.val);	
+		console.log($scope.val);
 	}
-	
+
 	$scope.tracker2= function(){
 	$scope.val ="medication";
 		console.log($scope.val);
 	}
-		
+
 	$scope.tracker3= function(){
 	$scope.val ="weight";
 		console.log($scope.val);
 	}
-		
+
 	$scope.tracker4= function(){
 	$scope.val ="bloodpressure" ;
 		console.log($scope.val);
 	}
-		
+
 	$scope.tracker5= function(){
 	$scope.val ="bloodsugar";
 		console.log($scope.val);
@@ -1211,55 +1272,30 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 	$scope.val ="notes";
 		console.log($scope.val);
 	}
-	
-			
+
+
   $ionicModal.fromTemplateUrl('my-modal1.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modal = modal;
   	});
-	
+
   	$scope.openModal1 = function(){
-		
-		$scope.modal.show();  
+		    $scope.modal.show();
     }
-    $rootScope.showLoader();
-    //Invoke retrieve medicalprofile service in order to display history data if any available
-    medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
-            console.log("obtaining medical details" + data);
-        //$scope.details=data;
-      if(data.status === 'SUCCESS'){
-          $rootScope.hideLoader();
-          console.log('data obtained['+ JSON.stringify(data) + ']');
-        $scope.healthdetails = [];
-          
-        angular.forEach(data.data.medicalprofiledetails, function(value, key){
-                for(var i=0; i< value.medicalprofile.length; i++ ){
-                  this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
-                }
-            }, $scope.healthdetails);
-          
-          console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
-      }
-    }).catch(function(error){
-        $rootScope.hideLoader();
-        var alertPopUp = $ionicPopup.alert({
-            title:"Failed to save details"
-        });
-    });
-    
-	$scope.create = function() {  
-	
+	$scope.create = function() {
+
 		//$scope.data.push({weight: u.weight ,bloodsugar: u.blood, medication: u.medication, allergies: u.allergies});
-  // console.log($scope.data); 
+  // console.log($scope.data);
          var details =[];
 
-       $rootScope.showLoader(); medicalprofileservice.savedetails($scope.data.weight,$scope.data.bloodsugar,$scope.data.allergies,$scope.data.medication,$scope.data.patientId).then(function(data){
+       $rootScope.showLoader();
+       medicalprofileservice.savedetails($scope.data.weight,$scope.data.bloodsugar,$scope.data.allergies,$scope.data.medication,$scope.data.patientId).then(function(data){
             console.log(data);
              if(data.status == 'SUCCESS'){
                 $rootScope.hideLoader();
-                $rootScope.showToast('Medical profile data saved successfully',null,'top'); 
+                $rootScope.showToast('Medical profile data saved successfully',null,'top');
 			    console.log(" records saved successfully");
                 medicalprofileservice.getdetails('5751377e4f09030255c59a8b').then(function(data){
                 	if(data.status === 'SUCCESS'){
@@ -1291,10 +1327,10 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                     	console.log("internal server processing error at server side");
 					}
                 });
-        
+
 		$scope.data="";
 		$scope.timeLineForm.$setPristine();
-		
+
 		//new timeline data
 		 $scope.events = [{
     badgeClass: 'info',
@@ -1307,7 +1343,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     title: 'Second heading',
     content: 'More awesome content.'
   }];
-              
+
      /*medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
             console.log("obtaining medical details" + data);
         $scope.details=data;
@@ -1318,24 +1354,24 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
          })
             });*/
 		};
-    
+
 	$scope.closeModal1 = function() {
-    	$scope.modal.hide(); 
-       
+    	$scope.modal.hide();
+
     }
    console.log($scope.data);
   $scope.tdate= new Date();
 }])
 .controller('FeedbackCtrl', ['$scope', '$state', '$ionicPopup', '$ionicSlideBoxDelegate', 'feedbackform', function($scope, $state, $ionicPopup, $ionicSlideBoxDelegate, feedbackform){
-	
+
 	$scope.temp = [];
-	//feedback questions 
+	//feedback questions
 	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
 		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
 		{question : "The ease of obtaining the records and lab-reports",answer: ''},
 		{question: "Trackmyhealth app , has it been helpful?",answer: ''},
 		{question: "Is the app easy to use?",answer: ''}];
-	
+
 	//ratings for feedback
 	$scope.ratingsObject = {
         iconOn : 'ion-ios-star',
@@ -1345,24 +1381,24 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 		rating: '',
         minRating: 0 ,
         callback: function(rating) {
-          $scope.ratingsCallback(rating); 
+          $scope.ratingsCallback(rating);
 			return rating;
         }
       };
-	
+
 	// ratings callback function , obtains the current slide and updates the object answer
       $scope.ratingsCallback = function(rating) {
         console.log('Selected rating is : ', rating);
-		$scope.i= $ionicSlideBoxDelegate.currentIndex();	
+		$scope.i= $ionicSlideBoxDelegate.currentIndex();
 		console.log($scope.i);
 		$ionicSlideBoxDelegate.next();
 		$scope.questions[$scope.i].answer = rating;
 		console.log($scope.questions);
-		 if($scope.i === 4){ 
+		 if($scope.i === 4){
 		 $scope.closepopup()
-		 }  
+		 }
 	  };
-	
+
     $scope.slideHasChanged = function(index){
         console.log('printing index value ['+ index + ']');
     }
@@ -1382,11 +1418,11 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 	 }
 	};
 
-	
+
 	}])
 
 .controller('NotificationsCtrl', ['$scope', '$rootScope', 'notificationservice','$stateParams', '$ionicPopup','$cordovaDialogs','$cordovaClipboard', 'DBA', '$ionicHistory', '$timeout','$ionicFilterBar','$ionicModal',function($scope, $rootScope, notificationservice, $stateParams, $ionicPopup, $cordovaDialogs, $cordovaClipboard, DBA, $ionicHistory,$timeout,$ionicFilterBar, $ionicModal){
-    
+
     $scope.shouldShowReorder = false;
     $scope.shouldShowDelete  = false;
     $scope.listCanSwipe = true;
@@ -1396,8 +1432,8 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     $scope.filterBarInstance;
     $scope.isSelected=false;
     $scope.notificationidselected = '';
-    
-	
+
+
 	$scope.selectedNotifications={};
 	$scope.selectMsgForCopyDelete=function(notification,$event){
         if(angular.element($event.target).parent().parent().hasClass('selected-section') ){
@@ -1414,29 +1450,29 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
          }
         angular.element($event.target).parent().parent().toggleClass("selected-section");
     }
-	
+
 	$scope.copyContentToClipboard=function(){
-        
+
         var copyText="";
         for( _id in $scope.selectedNotifications){
             copyText += $scope.selectedNotifications[_id].notificationText +"\n";
         }
-        
+
         //console.info( "Text to be copied to clipboard \n" + copyText);
         $cordovaClipboard.copy(copyText).
         then(function(){
            $scope.selectedNotifications={};
-           $rootScope.showToast('Copied to clipboard',null,'bottom');            
+           $rootScope.showToast('Copied to clipboard',null,'bottom');
         }, function(error){
             console.log('error message['+ error + ']');
             $scope.selectedNotifications={};
             $rootScope.showToast("Message couldn't be copied to clipboard",null,'bottom');
         });
     }
-	
-	
+
+
 	$scope.confirmNotificationDeletion=function() {
-        
+
         if( Object.keys($scope.selectedNotifications).length <= 0){
             console.log("Nothing selected to delete...!!!");
             $rootScope.showToast('Nothing selected!',null,'bottom');
@@ -1461,7 +1497,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
            }
          });
 	};
-    
+
     $scope.confirmAllMsgDelete=function() {
         if( Object.keys($scope.notificationlist).length <= 0){
             //console.log("Nothing selected to delete...!!!");
@@ -1486,9 +1522,9 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
            }
          });
     };
-    
-    
-   
+
+
+
     $scope.deleteSelectedNotifications=function(all){
          var listtobedeleted = [];
          $scope.selectedNotifications = {};
@@ -1506,13 +1542,13 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
          }
          $scope.deleteMultipleNotifications(listtobedeleted);
     }
-    
+
     $scope.deleteallnotifications = {
         checked:false
     }
-    
+
    $rootScope.showLoader();
-   
+
    notificationservice.getNotifications($stateParams.mobilenumber, $stateParams.entityid, null).then(function(data)     {
         console.log('Response obtained while loading notifications window ['+ JSON.stringify(data) + ']');
         console.log('printing $scope.shouldShowDelete -->['+ $scope.shouldShowDelete + ']');
@@ -1526,33 +1562,33 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                 };
                 this.push(value);
             }, $scope.notificationlist);
-            
+
             //$scope.notificationlist = data.msgDetails;
             //console.log('printing notification list after adding to be deleted field ['+ JSON.stringify($scope.notificationlist) + ']');
             if($scope.notificationlist.length === 0){
                 $scope.listisntempty = false;
                 $rootScope.showPopup({title:'Information',template:"There are no notifications to display!"}, function(res){
-                    $ionicHistory.goBack();      
+                    $ionicHistory.goBack();
                 });
             }
         }else{
            $rootScope.hideLoader();
-           
+
            $rootScope.showPopup({title:'Notifications',template:"Error retrieving notifications, Please try again!"}, function(res){
-             console.log('on click ok'); 
+             console.log('on click ok');
             });
             $scope.listisntempty = false;
         }
-        
+
     }).catch(function(error){
         console.log('Error encounterd while calling getNotifications ['+ error + ']');
         $rootScope.hideLoader();
         if(error.status != 401 && error.status != 419){ // only when not-authenticated error is encountered
             $rootScope.showPopup({title:'Notifications',template:"Error retrieving notifications, Please try again!"}, function(res){
-                 console.log('on click ok'); 
+                 console.log('on click ok');
                });
          }
-        
+
     });
  $ionicModal.fromTemplateUrl('image-modal.html', {
       scope: $scope
@@ -1584,7 +1620,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     $scope.$on('modal.shown', function() {
       //console.log('Modal is shown!');
     });
-    
+
      $scope.showImage = function(index) {
         $scope.openModal();
     }
@@ -1623,7 +1659,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
     ];
 	*/
     $scope.showFilterBar = function(){
-            
+
             filterBarInstance = $ionicFilterBar.show({
             items:$scope.notificationlist,
             update:function(filteredItemList){
@@ -1636,15 +1672,15 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             });
         //console.log('filterBarInstance -->['+filterBarInstance + ']');
     };
-    
+
     $scope.backButtonAction = function(){
         $scope.shouldShowDelete = false;
         $ionicHistory.goBack();
     };
-    
+
     $scope.delete = function(notification){
         console.log('delete item from list ['+ JSON.stringify(notification) + ']');
-        
+
         $cordovaDialogs.confirm('This message will be deleted', 'Delete', ['OK', 'Cancel']).
         then(function(buttonindex){
             $rootScope.showLoader();
@@ -1669,7 +1705,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                             console.log('Thank you for not eating my delicious ice cream cone');
                         });*/
                         $rootScope.showPopup({title:'Notifications',template:"Error deleting notification, Please try again!"}, function(res){
-                     console.log('on click ok'); 
+                     console.log('on click ok');
                         });
                     }
                 }).catch(function(error){
@@ -1683,17 +1719,17 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                         });*/
                      if(error.status != 401 && error.status != 419){ // only when not-authenticated error is encountered
                         $rootScope.showPopup({title:'Notifications',template:"Error deleting notification, Please try again!"}, function(res){
-                     console.log('on click ok'); 
-                        }); 
+                     console.log('on click ok');
+                        });
                      }
                 });
             }else{
                 $rootScope.hideLoader();
             }
         });
-        
+
     }
-    
+
     $scope.deleteMultipleNotifications = function(notificationstobedeleted){
         console.log('List to be deleted is ['+ JSON.stringify(notificationstobedeleted) + ']');
         //$cordovaDialogs.confirm('Selected messages will be deleted', 'Delete', ['OK', 'Cancel']).
@@ -1726,7 +1762,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                         //$scope.listisntempty = true;
                         $scope.selectedNotifications={};
                         $rootScope.showToast('Messages deleted succesfully',null,'bottom');
-                        
+
                         //also please ensure there is no delete option displayed in case there are no messages left in list
                         if($scope.notificationlist.length === 0){
                             $scope.listisntempty = true;
@@ -1741,7 +1777,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                     $rootScope.hideLoader();
                     if(error.status != 401 && error.status != 419){ // only when not-authenticated error is encountered
                                 $rootScope.showPopup({title:'Notifications',template:"Error deleting notifications, Please try again!"}, function(res){
-                             console.log('on click ok'); 
+                             console.log('on click ok');
                                 });
                     }
                 });
@@ -1766,7 +1802,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             //$scope.notificationlist = data.msgDetails;
             console.log('printing notification list after adding to be deleted field ['+ JSON.stringify($scope.notificationlist) + ']');
             if($scope.notificationlist.length === 0){
-                $scope.listisntempty = false;   
+                $scope.listisntempty = false;
             }
         }else{
            /*var alertPopup = $ionicPopup.alert({
@@ -1778,13 +1814,13 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
            });*/
            //$rootScope.hideLoader();
            $rootScope.showPopup({title:'Notifications',template:"Error retrieving notifications, Please try again!"}, function(res){
-             console.log('on click ok'); 
+             console.log('on click ok');
            });
             if($scope.notificationlist.length === 0){
-                $scope.listisntempty = false;   
+                $scope.listisntempty = false;
             }
         }
-        
+
     }).catch(function(error){
         console.log('Error encounterd while calling getNotifications ['+ error + ']');
         $scope.$broadcast('scroll.refreshComplete');
@@ -1802,12 +1838,12 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
             });
         }
     });
-            
+
     }
-    
+
     $scope.bookmark=function(notification,$event){
         angular.element($event.target).removeClass("ion-android-star ion-android-star-outline");
-        
+
         if( notification.bookmarked ){
             angular.element($event.target).toggleClass("ion-android-star-outline");
             notification.bookmarked=false;
@@ -1833,46 +1869,57 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
         });
     }
 }])
-.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal){
+.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb', function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb){
 $scope.shouldShowReorder = false;
     $scope.shouldShowDelete  = false;
     $scope.listCanSwipe = true;
     $scope.filterBarInstance;
-	$scope.patientId = "5751377e4f09030255c59a8b";
-	$scope.notinfo =[];
-	$scope.visitinfo=[];
+    $scope.patientId = '';
+	//$scope.patientId = "5751377e4f09030255c59a8b";
+  $scope.notinfo =[];
+  $scope.visitinfo=[];
+
+  registrationdetsdb.query({}).then(function(response){
+      var result = DBA.getById(response);
+      $scope.patientId = result.appregistrationid;
+      console.log('$stateparams hospital id -->['+ $stateParams.hospitalid + ']');
+      if($stateParams.hospitalid === '123'){
+
+              visitservice.getVisits($scope.patientId).then(function(data){
+              console.log("obtaining visit info" + data );
+              $scope.visitinfo = data.data;
+              console.log($scope.visitinfo);
+          }).catch(function(error){
+              var popupalert = $ionicPopup.alert({
+                  title: "Error",
+                  template: "Sorry unable to obatin your visit information"
+              }).then(function(res){
+                  console.log("error received");
+              })
+          });
+      }else{
+          visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
+              console.log("obtaining visit info" + data );
+              $scope.visitinfo = data.data;
+              console.log($scope.visitinfo);
+          }).catch(function(error){
+              var popupalert = $ionicPopup.alert({
+                  title: "Error",
+                  template: "Sorry unable to obatin your visit information"
+              }).then(function(res){
+                  console.log("error received");
+              });
+          });
+      }
+
+  }).catch(function(err){
+        $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+        console.log('on ok click');
+        });
+  });
 	//$scope.visitdets = function(){
-    console.log('$stateparams hospital id -->['+ $stateParams.hospitalid + ']');
-    if($stateParams.hospitalid === '123'){
-        
-            visitservice.getVisits($scope.patientId).then(function(data){
-            console.log("obtaining visit info" + data );
-            $scope.visitinfo = data.data;
-            console.log($scope.visitinfo);
-        }).catch(function(error){
-            var popupalert = $ionicPopup.alert({
-                title: "Error",
-                template: "Sorry unable to obatin your visit information"
-            }).then(function(res){
-                console.log("error received");
-            })
-        });
-    }else{
-        visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
-            console.log("obtaining visit info" + data );
-            $scope.visitinfo = data.data;
-            console.log($scope.visitinfo);
-        }).catch(function(error){
-            var popupalert = $ionicPopup.alert({
-                title: "Error",
-                template: "Sorry unable to obatin your visit information"
-            }).then(function(res){
-                console.log("error received");
-            });
-        });
-    }
     $scope.notifications = function(visitid){
-		
+
 		visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
 			console.log("notifications list obtained" + data);
 			$scope.notinfo = data.data;
@@ -1886,28 +1933,28 @@ $scope.shouldShowReorder = false;
             console.log("error received");
         })
     });
-		
+
 	}
-	
-	$ionicModal.fromTemplateUrl('my-modal5.html', {				
+
+	$ionicModal.fromTemplateUrl('my-modal5.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modal5 = modal;
   	});
 	$scope.openModal5 = function() {
-    	$scope.modal5.show();  
+    	$scope.modal5.show();
     }
 	$scope.closeModal5 = function() {
-    	$scope.modal5.hide(); 
+    	$scope.modal5.hide();
 	}
-    
+
     $scope.patientdetails = function(visitid){
         $scope.visitdata = {
             "patientdetails" : ""
         };
         console.log('printing visitid ['+ visitid + ']');
-         
+
         console.log('printing length ['+ JSON.stringify($scope.visitinfo) + ']');
 
         angular.forEach($scope.visitinfo, function(value, key){
@@ -1920,13 +1967,13 @@ $scope.shouldShowReorder = false;
         console.log('$scope.visitdata['+ $scope.visitdata + ']');
         $scope.openModal3();
     }
-    
+
     $scope.hospitaldetails = function(visitid){
         $scope.visitdata = {
             "hospitaldetails" : ""
         };
         console.log('printing visitid ['+ visitid + ']');
-         
+
         console.log('printing length ['+ JSON.stringify($scope.visitinfo) + ']');
 
         angular.forEach($scope.visitinfo, function(value, key){
@@ -1939,13 +1986,13 @@ $scope.shouldShowReorder = false;
         console.log('$scope.visitdata['+ $scope.visitdata + ']');
         $scope.openModal4();
     }
-    
+
     $scope.visitdetails = function(visitid){
         $scope.visitdata = {
             "visitdetails" : ""
         };
         console.log('printing visitid ['+ visitid + ']');
-         
+
         console.log('printing length ['+ JSON.stringify($scope.visitinfo) + ']');
 
         angular.forEach($scope.visitinfo, function(value, key){
@@ -1957,52 +2004,52 @@ $scope.shouldShowReorder = false;
         });
         console.log('$scope.visitdata['+ $scope.visitdata + ']');
         $scope.openModal6();
-        
+
     }
-    
-    $ionicModal.fromTemplateUrl('patientdetails.html', {				
+
+    $ionicModal.fromTemplateUrl('patientdetails.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modal = modal;
   	});
 	$scope.openModal3 = function() {
-    	$scope.modal.show();  
+    	$scope.modal.show();
     }
 	$scope.closeModal3 = function() {
     	$scope.modal.hide();
 	}
-    
-    $ionicModal.fromTemplateUrl('hospitaldetails.html', {				
+
+    $ionicModal.fromTemplateUrl('hospitaldetails.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modalhospitaldets = modal;
   	});
 	$scope.openModal4 = function() {
-    	$scope.modalhospitaldets.show();  
+    	$scope.modalhospitaldets.show();
     }
 	$scope.closeModal4 = function() {
     	$scope.modalhospitaldets.hide();
 	}
-    
-    
-    $ionicModal.fromTemplateUrl('visitdetails.html', {				
+
+
+    $ionicModal.fromTemplateUrl('visitdetails.html', {
     	scope: $scope,
     	animation: 'slide-in-right'
   	}).then(function(modal) {
     	$scope.modalvisitdets = modal;
   	});
 	$scope.openModal6 = function() {
-    	$scope.modalvisitdets.show();  
+    	$scope.modalvisitdets.show();
     }
 	$scope.closeModal6 = function() {
     	$scope.modalvisitdets.hide();
 	}
-    
-    
+
+
 	//}
-	
+
 	/*hospitalservice.getregHospitals($scope.patientId).then(function(data){
 		console.log("obtaining hospital code name n id");
 		$scope.visits = data.data;
@@ -2016,14 +2063,14 @@ $scope.shouldShowReorder = false;
 				console.log($scope.hosname);
 				$scope.visitdets();
           });
-	
+
 	}).catch(function(error){
 		var popupalert = $ionicPopup.alert({
 			title: "failed to obtain hospital info"
 		})
 	})*/
-	
-    
+
+
 
 }])
 .controller('ForgotPasswordCtrl', ['$scope', '$rootScope', '$state', '$stateParams','authservice','initiateotpgeneratesvc', 'securityquestions', function($scope, $rootScope, $state, $stateParams, authservice, initiateotpgeneratesvc, securityquestions){
@@ -2036,13 +2083,13 @@ $scope.shouldShowReorder = false;
         securitypin : '',
         otppin : ''
     }
-    
+
     $scope.resetpasscodebtn = function(){
         $scope.errordescription = '';
         $rootScope.showLoader();
         if($scope.enableotp){
             initiateotpgeneratesvc.validateOtp($stateParams.mobilenumber, $scope.securityquesdata.otppin).then(function(data){
-                
+
                 if(data.status === 'SUCCESS'){
                     authservice.updatePassword({mobileNumber:$stateParams.mobilenumber, bnotifiedpin:$scope.securityquesdata.securitypin}).then(function(data){
                         $rootScope.hideLoader();
@@ -2064,13 +2111,13 @@ $scope.shouldShowReorder = false;
                 }else{
                     $rootScope.hideLoader();
                     $rootScope.showPopup({title:'OTP Validation', template:"OTP validation failed, Please re-check OTP!"}, function(res){
-                        
+
                     });
                 }
             }).catch(function(error){
                  $rootScope.hideLoader();
                 $rootScope.showPopup({title:'OTP Validation', template:"OTP validation failed, Please re-check OTP!"}, function(res){
-                        
+
                     });
             });
         }else{
@@ -2090,7 +2137,7 @@ $scope.shouldShowReorder = false;
                         }else{
                             $rootScope.showPopup({title:'Error', template:"Couldn't generate OTP, Please retry again!"}, function(res){
                             console.log('on ok click');
-                            });    
+                            });
                         }
                     }).catch(function(error){
                         console.log('error encountered during validating security details ['+ error + ']');
@@ -2133,10 +2180,21 @@ $scope.shouldShowReorder = false;
         $rootScope.showToast('Logout failed, Please try again later !!', null, 'bottom');
     });
 }])
-.controller('PatientprofileCtrl',['$scope','$rootScope','$state','ionicDatePicker','$filter','patientprflservice','$ionicHistory',function($scope,$rootScope,$state,ionicDatePicker,$filter, patientprflservice,$ionicHistory){
-   
+.controller('PatientprofileCtrl',['$scope','$rootScope','$state','ionicDatePicker','$filter','patientprflservice','$ionicHistory','DBA','registrationdetsdb', function($scope,$rootScope,$state,ionicDatePicker,$filter, patientprflservice,$ionicHistory, DBA, registrationdetsdb){
+
 	$scope.formData = [];
-    $scope.patientId="5751377e4f09030255c59a8b";
+  //$scope.patientId="5751377e4f09030255c59a8b";
+  $scope.patientId = '';
+  registrationdetsdb.query({}).then(function(response){
+      var result = DBA.getById(response);
+      $scope.patientId = result.appregistrationid;
+  }).catch(function(err){
+        $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+        console.log('on ok click');
+        });
+  });
+
+
 	$scope.backButtonAction = function(){
      $scope.shouldShowDelete = false;
      $ionicHistory.goBack();
@@ -2158,16 +2216,16 @@ $scope.shouldShowReorder = false;
      $scope.openDatePicker = function(){
       ionicDatePicker.openDatePicker(ipObj1);
     };
-   
+
 	patientprflservice.getpatientinfo($scope.patientId).then(function(data){
         $scope.list= data.data;
         console.log("Obtaining patient profile" + data);
-        
+
          /*if(data.status === 'SUCCESS'){
             console.log('data obtained['+ JSON.stringify(data) + ']');
                 angular.forEach($scope.list, function(value, key){
                     $scope.formData.push(key +":" + value);
-                   
+
                 })
                  console.log($scope.formData);*/
              console.log($scope.list);
@@ -2175,7 +2233,7 @@ $scope.shouldShowReorder = false;
          $rootScope.hideLoader();
     console.log('Failed to retrieve the data['+ error + ']');
     });
-   
+
    /* $scope.formData ={
          "dob" : "",
          "address1" : "",
@@ -2183,7 +2241,7 @@ $scope.shouldShowReorder = false;
          "pincode" : "",
          "state" : "",
         "country" :""
-     }; 
+     };
     console.log($scope.formData);*/
      $scope.save = function(fdata){
     	console.log("saving");
@@ -2197,7 +2255,7 @@ $scope.shouldShowReorder = false;
          }).catch(function(error){
              $rootScope.hideLoader();
                console.log('Failed to retrieve patient details['+ error + ']');
-         });     
+         });
      }
-   
+
 }]);

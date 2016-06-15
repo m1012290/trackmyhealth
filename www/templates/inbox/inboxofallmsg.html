@@ -1,25 +1,25 @@
 <ion-view view-title="trackmyhealth" name="all-notifications-view">
-    
+
     <ion-nav-title>
-        
+
       <img src="img/icon.png" style="max-width: 35px;
     max-height: 30px;
     width: 100%;
     height: 100%;margin-top:10px"/>
-        
+
         <span>trackmyhealth</span>
-            
+
     </ion-nav-title>
        <ion-nav-buttons side="right" >
             <button class="button button-clear" ng-click="showFilterBar()">
              <i class=" ion-search icon-btn-customize"></i>
             </button>
-            <button class="button button-clear" on-touch="openPopover($event)">          
+            <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize"></i>
             </button>
     </ion-nav-buttons>
 	<ion-content>
-		
+
 <div class="list card" ng-repeat=" visit in visitinfo track by $index">
 
   <div class="item item-avatar">
@@ -36,7 +36,7 @@
 	  <p>{{visit.visittype}}</p>
     <p>
       <a  href="" ng-click="notifications(visit._id)" class="subdued">Notifications </a>
-    </p>  -->    
+    </p>  -->
  <div class="list card">
 
   <a href="#" ng-click="patientdetails(visit._id)" class="item item-icon-left">
@@ -62,10 +62,10 @@
   </div>
 
 </div>
-   
+
  </ion-content>
 
-	
+
 	<script id="my-modal5.html" type="text/ng-template">
      <ion-modal-view>
 
@@ -83,22 +83,22 @@
 				<p>
 				{{note.notificationtext}}
 				</p>
-                                     
+
                  <p>
-                     <span class="item-note notifyTimeCls">  
+                     <span class="item-note notifyTimeCls">
                         <span class="item-note" >{{note.notificationdate |date:"dd MMM HH:mm ":"UTC"}}</span>
                     </span>
                  </p>
 				<!--<p><a class="subdued"> </a></p>-->
-                </div>			
+                </div>
             </div>
-		
+
          </ion-content>
        </ion-modal-view>
 	</script>
-    
+
 <script id="patientdetails.html" type="text/ng-template">
- 
+
 <ion-modal-view>
   <ion-header-bar class=" bar bar-positive">
    <h1 class="title">Patient Details</h1>
@@ -124,7 +124,7 @@
                          <span class="input-label"><i class="ion-email" ></i> <strong>Email :</strong><p>
                              <a> {{hos.hospitalemailid}} </a> <a>{{hos.hospitalsecondaryemailid}}</a></p>
             </span>
-                   </div>  
+                   </div>
                      <div class="item">
                          <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in hos.hospitaldepartments"> {{dept}} </p></span>
                       </div>
@@ -139,9 +139,9 @@
  </ion-modal-view>
 </script>
 
-    
+
 <script id="hospitaldetails.html" type="text/ng-template">
- 
+
 <ion-modal-view>
   <ion-header-bar class=" bar bar-positive">
    <h1 class="title">Hospital Details</h1>
@@ -155,7 +155,7 @@
                     </div>
                    	<div class="item">
                         <span class="input-label"><i class="ion-ios-location" ></i><strong> Address:</strong>
-              <p>{{visitdata.hospitaldetails.hospitaladdress.addressline1}}  
+              <p>{{visitdata.hospitaldetails.hospitaladdress.addressline1}}
 				 {{visitdata.hospitaldetails.hospitaladdress.addressline2}}  <br>{{visitdata.hospitaldetails.hospitaladdress.addressline3}} {{visitdata.hospitaldetails.hospitaladdress.city}} <br> {{visitdata.hospitaldetails.hospitaladdress.pincode}}  {{visitdata.hospitaldetails.hospitaladdress.state}} {{visitdata.hospitaldetails.hospitaladdress.country}}</p>
              </span>
                    </div>
@@ -166,7 +166,7 @@
          <div class="item">
                         <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Tel Number:</strong><br><p> {{visitdata.hospitaldetails.hospitaltelnumber}}</p>
                </span>
-                 </div> 
+                 </div>
                      <div class="item">
                          <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}, </p></span>
                       </div>
@@ -183,7 +183,7 @@
 </script>
 
 <script id="visitdetails.html" type="text/ng-template">
- 
+
 <ion-modal-view>
   <ion-header-bar class=" bar bar-positive">
    <h1 class="title">Visit Details</h1>
@@ -209,7 +209,7 @@
                 <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Lab Tests :</strong><br><p>{{visitdata.visitdetails.labtests[1].test2}}</p>
                </span>
                  </div>
-    
+
     <div class="item">
                 <span class="input-label"><i class="ion-ios-telephone" ></i><strong> IP Admission No :</strong><br><p>{{visitdata.visitdetails.ipadmissionno}}</p>
                </span>
@@ -218,13 +218,13 @@
                 <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Ward Information :</strong><br><p>{{visitdata.visitdetails.wardinfo}}</p>
                </span>
                  </div>
-    
-    
+
+
                      <!--<div class="item">
                          <span class="input-label"><i class="ion-email" ></i> <strong>Email :</strong><p>
                              <a> {{hos.hospitalemailid}} </a> <a>{{hos.hospitalsecondaryemailid}}</a></p>
             </span>
-                   </div>  
+                   </div>
                      <div class="item">
                          <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in hos.hospitaldepartments"> {{dept}} </p></span>
                       </div>
@@ -241,6 +241,6 @@
 
 
 
-    
-    
+
+
 </ion-view>

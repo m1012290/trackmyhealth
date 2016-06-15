@@ -6,35 +6,35 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
   var isAuthenticated = false;
   var role = '';
   var authToken;
- 
+
   function loadUserCredentials() {
     var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
     if (token) {
       useCredentials(token);
     }
   }
- 
+
   function storeUserCredentials(token) {
     window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
     useCredentials(token);
   }
- 
+
   function useCredentials(token) {
     username = token.split('.')[0];
     isAuthenticated = true;
     authToken = token;
- 
+
     if (username == 'admin') {
       role = USER_ROLES.admin
     }
     if (username == 'user') {
       role = USER_ROLES.public
     }
- 
+
     // Set the token as header for your requests!
     $http.defaults.headers.common['X-Auth-Token'] = token;
   }
- 
+
   function destroyUserCredentials() {
     authToken = undefined;
     username = '';
@@ -42,7 +42,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
     $http.defaults.headers.common['X-Auth-Token'] = undefined;
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
- 
+
   var login = function(name, pw) {
     return $q(function(resolve, reject) {
       if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
@@ -54,20 +54,20 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
       }
     });
   };
- 
+
   var logout = function() {
     destroyUserCredentials();
   };
- 
+
   var isAuthorized = function(authorizedRoles) {
     if (!angular.isArray(authorizedRoles)) {
       authorizedRoles = [authorizedRoles];
     }
     return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
   };
- 
+
   loadUserCredentials();
- 
+
   return {
     login: login,
     logout: logout,
@@ -83,7 +83,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
     registrationservice.validateMobileNumber = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registration/:mobileNumber/validate');
-        resource.get({mobileNumber:mobilenumber}, 
+        resource.get({mobileNumber:mobilenumber},
         function(data){
            console.log('successfully called validate service ['+ JSON.stringify(data) +'] ');
            deferred.resolve(data);
@@ -98,15 +98,15 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         console.log('within saveRegistrationDetails service');
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registration/:mobileNumber/register', {mobileNumber:registrationdetails.mobilenumber});
-        var payload = { securitydetails : 
+        var payload = { securitydetails :
                         {   mobilenumber:registrationdetails.mobilenumber,
                             securitypin:registrationdetails.securitydetails.securitypin,
                             securityquestion:registrationdetails.securitydetails.securityquestion,
                             securityquestionanswer:registrationdetails.securitydetails.securityquestionanswer,
                             registrationtoken:registrationdetails.securitydetails.registrationtoken
-                        } 
+                        }
                       };
-        resource.save(payload, 
+        resource.save(payload,
         function(data){
             console.log('successfuly called saveRegistrationDetails service ['+ JSON.stringify(data) + ']');
             deferred.resolve(data);
@@ -114,7 +114,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
             console.log('failed calling saveRegistrationDetails service [' + error + ']');
             deferred.reject(error);
         });
-        
+
         return deferred.promise;
     };
     return registrationservice;
@@ -123,7 +123,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 	return {
 		savedetails: function(emailid, mobileno, doctor){
 			var deferred = $q.defer();
-			
+
 			var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/:emailid/:mobilenumber" + "?isdoctor=:doctor");
 			resource.get({ emailid :emailid, mobilenumber :mobileno, doctor:doctor }, function(data){
 				console.log( "signup service call is successful ["+ JSON.stringify(data) + "]");
@@ -134,7 +134,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-		
+
 		savedocdetails: function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,licence,smsotp,emailotp,pw){
 			var deferred= $q.defer();
 			var resource= $resource (" https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/doctor");
@@ -143,17 +143,17 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 				lastname:lastname,
 				gender:gender,
 				emailid:emailid,
-				mobilenumber:mobilenumber, 
+				mobilenumber:mobilenumber,
 				address:{
-				addressline1:address	
+				addressline1:address
 				},
 				age:age,
 				dateofbirth:dob,
-				isdoctor:doc, 
+				isdoctor:doc,
 				doctorlicenseno: licence,
 				otpdetails:{
 					smsotp:smsotp,
-					emailotp:emailotp	
+					emailotp:emailotp
 				},
 				password : pw
 			}},function(data){
@@ -165,7 +165,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-		
+
 		generateOtp: function(emailid, mobileno){
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/generateotp");
@@ -178,26 +178,26 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-		
+
 		regOtp:function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw)		{
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/patient");
-			 
+
 			resource.save({regdets:{
 				firstname:firstname,
 				lastname:lastname,
 				gender:gender,
 				emailid:emailid,
-				mobilenumber:mobilenumber, 
+				mobilenumber:mobilenumber,
 				address:{
-				addressline1:address	
+				addressline1:address
 				},
 				age:age,
 				dateofbirth:dob,
-				isdoctor:doc, 
+				isdoctor:doc,
 				otpdetails:{
 					smsotp:smsotp,
-					emailotp:emailotp	
+					emailotp:emailotp
 				},
 				password : pw
 			}},function(data){
@@ -221,7 +221,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 				console.log("Login service Call successful ["+ JSON.stringify(data) + "]");
 				deferred.resolve(data);
 			},function(error){
-					  
+
 				console.log("Login service call failed ["+ JSON.stringify(error) + "]");
 				deferred.reject(error);
 			})
@@ -256,16 +256,16 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			return deferred.promise;
 		}
 	}
-	
+
 }])
 .factory('securityquestionservice', ['$q', '$resource', 'NODE_SERVER_DETAILS', function($q, $resource, NODE_SERVER_DETAILS){
     var securityquestionsvc = {};
-    
+
     securityquestionsvc.getSecurityQuestions = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registration/:mobileNumber/securityquestionlist');
         resource.query({mobileNumber:mobilenumber}, function(data){
-            console.log('successfully called getSecurityQuestions service ['+ JSON.stringify(data) +'] '); 
+            console.log('successfully called getSecurityQuestions service ['+ JSON.stringify(data) +'] ');
             deferred.resolve(data);
         }, function(error){
             console.log('failed calling securityquestionlist service ['+ error +']');
@@ -273,16 +273,16 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         });
         return deferred.promise;
     };
-    
+
     securityquestionsvc.saveSecurityDetails = function(securitydetails){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registration/:mobileNumber/register');
         resource.save({securitydetails:securitydetails}, function(data){
-            console.log('successfully called saveSecurityDetails service [' + JSON.stringify(data) +'] '); 
+            console.log('successfully called saveSecurityDetails service [' + JSON.stringify(data) +'] ');
             deferred.resolve(data);
         }, function(error){
             console.log('failed calling saveSecurityDetails service ['+ error +']');
-            deferred.reject(error); 
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -294,10 +294,10 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registration/:mobileNumber/generateotp',{mobileNumber:mobilenumber});
         resource.save({mobileNumber:mobilenumber}, function(data){
-            console.log('successfully called generateOtp service ['+ JSON.stringify(data) +']'); 
+            console.log('successfully called generateOtp service ['+ JSON.stringify(data) +']');
             deferred.resolve(data);
         },  function(error){
-            console.log('failed calling generateOtp service ['+ error +'] '); 
+            console.log('failed calling generateOtp service ['+ error +'] ');
             deferred.reject(error);
         });
         return deferred.promise;
@@ -312,7 +312,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
             console.log('successfully called validateOtp service ['+ JSON.stringify(data) + ']');
             deferred.resolve(data);
         },  function(error){
-            console.log('failed calling validateOtp service ['+ error +'] '); 
+            console.log('failed calling validateOtp service ['+ error +'] ');
             deferred.reject(error);
         });
         return deferred.promise;
@@ -322,7 +322,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 .factory('pushnotificationservice', ['$q', '$resource', '$ionicPlatform', function($q, $resource, $ionicPlatform){
     var pushnotificationservice = {};
     pushnotificationservice.registerDevice = function(registrationhandler, notificationhandler, errorhandler){
-        
+
         $ionicPlatform.ready(function() {
             push = PushNotification.init({ "android": {
                 "senderID": '496534223786'
@@ -354,7 +354,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
             return self.available;
         }
     };
-    
+
 }])
 .factory('DBA', ['$q', '$cordovaSQLite', '$ionicPlatform', function($q, $cordovaSQLite, $ionicPlatform){
     var self = this;
@@ -407,7 +407,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         return DBA.query("UPDATE registrationtable SET mobilenumber = (?)", parameters);
     };
     self.query = function(registrationdets) {
-        return DBA.query("SELECT mobilenumber, registrationtoken, deviceuuid, jsonwebtoken from registrationtable");
+        return DBA.query("SELECT mobilenumber, registrationtoken, deviceuuid, jsonwebtoken, appregistrationid from registrationtable");
     };
     self.updateJWT = function(registrationdets){
         var parameters = [registrationdets.jsonwebtoken, registrationdets.mobilenumber];
@@ -417,7 +417,12 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         var parameters = [registrationdets.jsonwebtoken];
         return DBA.query("UPDATE registrationtable SET jsonwebtoken = (?)",parameters);
     };
-    
+
+    self.updateAppRegistrationId = function(appregistrationid){
+        var parameters = [appregistrationid];
+        return DBA.query("UPDATE registrationtable SET appregistrationid = (?)",parameters);
+    };
+
     return self;
 }])
 .factory('authservice',['$q', '$resource', 'NODE_SERVER_DETAILS', function($q, $resource, NODE_SERVER_DETAILS){
@@ -433,15 +438,15 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
             console.log('login service call failed with response ['+ error + ']');
             deferred.reject(error);
         });
-        return deferred.promise;    
+        return deferred.promise;
     };
-    
+
     self.validateMobileNumber = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/login/:mobileNumber/validate');
         resource.get({mobileNumber:mobilenumber}, function(data){
             console.log('validateMobileNumber service during login called successfully with response['+ JSON.stringify(data)+']');
-            deferred.resolve(data); 
+            deferred.resolve(data);
         }, function(error){
             console.log('validateMobileNumber service during login call failed ['+ JSON.stringify(error) + ']');
             deferred.reject(error);
@@ -453,7 +458,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registration/:mobileNumber/forgotpassword/validate',{mobileNumber:securitydetails.mobileNumber});
         resource.save(securitydetails, function(data){
             console.log('validateMobileNumber service during login called successfully with response['+ JSON.stringify(data)+']');
-            deferred.resolve(data); 
+            deferred.resolve(data);
         }, function(error){
             console.log('validateMobileNumber service during login call failed ['+ error + ']');
             deferred.reject(error);
@@ -481,14 +486,14 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/entities/:mobileNumber');
         resource.get({mobileNumber:mobilenumber}, function(data){
             console.log('getRegisteredEntities service called successfully with response['+ JSON.stringify(data)+']');
-            deferred.resolve(data); 
+            deferred.resolve(data);
         }, function(error){
             console.log('getRegisteredEntities service call failed ['+ JSON.stringify(error) + ']');
             deferred.reject(error);
         });
         return deferred.promise;
     };
-    
+
     self.getNotifications = function(mobilenumber, entityid, datetime){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/entitiesmessages/:mobileNumber/:entityId');
@@ -501,7 +506,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         });
         return deferred.promise;
     };
-    
+
     self.getAllNotifications = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/:mobileNumber/allmessages');
@@ -514,8 +519,8 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         });
         return deferred.promise;
     };
-    
-    
+
+
     self.deleteNotification = function(mobilenumber, entityid, notificationid){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/:mobileNumber/message/:id');
@@ -528,7 +533,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         });
         return deferred.promise;
     };
-    
+
     self.deleteMultipleNotification = function(mobilenumber, entityid, notificationidlist){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/:entityId/:mobileNumber/messages', {entityId:entityid, mobileNumber:mobilenumber}, {'update': { method:'PUT' } });
@@ -539,7 +544,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         });
         return deferred.promise;
     };
-    
+
     self.getRecentNotifications = function(mobilenumber, entityid){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/:mobileNumber/recentnotifications');
@@ -552,7 +557,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         });
         return deferred.promise;
     };
-    
+
     self.updateNotificationAsRead = function(mobilenumber, entityid, notificationidlist){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':'+ NODE_SERVER_DETAILS.port +'/bnotified/registered/:mobileNumber/:entityid/messagereadstatus', {mobileNumber: mobilenumber});
@@ -564,12 +569,12 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
            deferred.reject(error);
         });
         return deferred.promise;
-        
+
     };
-    
+
     self.unsubscribeFromEntity = function(mobilenumber, entityid){
         var deferred = $q.defer();
-        var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' + 
+        var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' +
 NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubscribeentity', {mobileNumber:mobilenumber, entityId:entityid});
         resource.save({mobileNumber:mobilenumber, entityId:entityid}, function(data){
              console.log('unsubscribeFromEntity service called successfully with response['+ JSON.stringify(data)+']');
@@ -580,7 +585,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     };
-    
+
     self.listUnsubscribedEntities = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' + NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/getunsubscribeentitylist');
@@ -593,7 +598,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     };
-    
+
     self.subscribeEntities = function(mobilenumber, entityidlist){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' + NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/subscribeentities', {mobileNumber:mobilenumber});
@@ -606,7 +611,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     } ;
-    
+
     self.unreadMessagesCount = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' + NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/unreadmessages/count');
@@ -617,7 +622,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     };
-    
+
     self.messageBookmark = function(mobilenumber, bookmarkpayload){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' + NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/message/bookmark', {mobileNumber:mobilenumber}, {'update': { method:'PUT' } } );
@@ -628,18 +633,18 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     };
-                        
+
     self.getBookmarkedMessages = function(mobilenumber){
         var deferred = $q.defer();
         var resource = $resource(NODE_SERVER_DETAILS.protocol + '://' + NODE_SERVER_DETAILS.server + ':' + NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/messages/bookmarked');
         resource.get({mobileNumber:mobilenumber}, function(data){
-            deferred.resolve(data);     
+            deferred.resolve(data);
         },function(error){
             deferred.reject(error);
         });
         return deferred.promise;
     };
-    
+
     return self;
 }])
 .factory('AuthInterceptor', ['$rootScope','$q','registrationdetsdb', 'DBA','AUTH_EVENTS',function ($rootScope, $q, registrationdetsdb, DBA, AUTH_EVENTS) {
@@ -654,14 +659,14 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
       return $q.reject(response);
     },
     // optional method
-      
+
     'request': function(config) {
       // do something on success
         var deferred = $q.defer();
         var url = String(config.url);
-        
+
         //if(config.url && url.search('bnotified') != -1 && window.cordova){
-        if(config.url && url.search('bnotified') != -1){
+        if(config.url && url.search('v1') != -1){
             //check if we do have an internet connectivity
             if(window.cordova && window.navigator.connection){
                 if(navigator.connection.type === 'none'){
@@ -683,7 +688,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
                 }
                 deferred.resolve(config);
             }).catch(function(error){
-                console.log('error fetching details from registrationtable within interceptor');  
+                console.log('error fetching details from registrationtable within interceptor');
                 //return config;
                 deferred.reject(config);
             });
@@ -702,14 +707,14 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
          resource.save( {"medicalprofile":{"weight" : {"value" :weight , "unit":"kg" }, "bloodsugar": { "value": bloodsugar, "unit": "mg-DL"}, "allergydetails": {"value":allergies},  "medicationdetails" : {"value":medication } } },function(data){
              console.log("medical profile saved successfully [" + JSON.stringify(data) + "]");
              deferred.resolve(data);
-             
+
          },function(error){
              console.log("medical profile not saved successfully [" + JSON.stringify(error) + "]");
              deferred.reject(error);
          });
             return deferred.promise;
         },
-        
+
         getdetails:function(patientId){
      var deferred = $q.defer();
          var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofile");
@@ -722,9 +727,9 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     }
-                                   
+
     }
-                                   
+
  }])
 .service('visitservice', ['$q', '$resource', function($q, $resource){
 	return{
@@ -753,11 +758,11 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 			});
 			return deferred.promise;
         },
-		
+
 		savevisitinfo: function(patientid,visitid){
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/visits/:visitid/notifications");
-			
+
 			resource.get({ patientid: patientid, visitid: visitid }, function(data){
 				console.log( "visitinfo service call is successful ["+ JSON.stringify(data) + "]");
 				deferred.resolve(data);
@@ -768,7 +773,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 			return deferred.promise;
 		},
 	}
-	
+
 }])
 .service('patientprflservice',['$q','$resource', function($q, $resource){
     return{
@@ -787,7 +792,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
          changedpatientinfo : function(emailadd,mobnum,dob,doctor,licenceNo,patientId){
             var deferred=$q.defer();
          var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/patients/:patientid", {patientid : patientId}, {'update': { method:'PUT' }});
-             
+
               resource.update({emailid:emailadd,mobilenumber:mobnum,dateofbirth:dob,isdoctor:doctor,doctorlicenseno:licenceNo}, function(data){
             console.log('update all details call was successful with response['+ JSON.stringify(data)+']');
             deferred.resolve(data);
@@ -796,10 +801,10 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             deferred.reject(error);
         });
         return deferred.promise;
-             
+
          }
     }
-       
+
 }])
 .factory('feedbackform', ['$q', '$resource', function($q, $resource){
 	var self = this;
@@ -815,7 +820,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 		},
 		{
 			question : "The ease of obtaining the records and lab-reports",
-			answer: '' 
+			answer: ''
 		},
 		{
 			question: "Trackmyhealth app , has it been helpful?",
@@ -844,12 +849,12 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
     return deferred.promise;
 		},
-		
+
 		changedpwd : function(emailid, mobNo, password, smsotp, emailotp, pass){
 			var mobnum = mobNo.toString();
             var deferred=$q.defer();
             var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/patient?forgotpwd=:pass" , {pass: pass}, {'update': { method:'PUT' } } );
-			
+
             resource.update({emailid: emailid, mobilenumber:mobnum, password : password, smsotp: smsotp, emailotp: emailotp},function(data){
                 console.log("forgotpwd otp service call successful [" + JSON.stringify(data) + "]");
                 deferred.resolve(data);
@@ -861,4 +866,3 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             }
     }
 }]);
-

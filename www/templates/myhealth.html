@@ -1,25 +1,20 @@
 <ion-view view-title="trackmyhealth" name="my-health-view">
 
     <ion-nav-title>
-        
-      <img src="img/icon.png" style="max-width: 35px;
+    <img src="img/icon.png" style="max-width: 35px;
     max-height: 30px;
     width: 100%;
     height: 100%;margin-top:10px"/>
-        
-        <span>trackmyhealth</span>
-            
-    </ion-nav-title>
-    <!--<ion-nav-buttons side="left" >
 
-        <i class="ion-drag"></i>
-                  </ion-nav-buttons>-->
+        <span>trackmyhealth</span>
+
+    </ion-nav-title>
         <ion-nav-buttons side="right" >
-           
+
             <button class="button button-clear" ng-click="showFilterBar()">
              <i class=" ion-search icon-btn-customize"></i>
             </button>
-            <button class="button button-clear" on-touch="openPopover($event)">          
+            <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize"></i>
             </button>
     </ion-nav-buttons>
@@ -30,9 +25,9 @@
     <ion-floating-item icon="ion-ios-speedometer" ng-click="openModal1()" on-tap=tracker3() button-color= "#d14836" iconColor="#fff" text="Weight" ></ion-floating-item>
     <ion-floating-item icon="ion-waterdrop" ng-click="openModal1()" on-tap=tracker4() button-color= "#d14836" iconColor="#fff" text="Blood Pressure" ></ion-floating-item>
     <ion-floating-item icon="ion-stats-bars" ng-click="openModal1()" on-tap=tracker5() button-color= "#d14836" iconColor="#fff" text="Blood Sugar" ></ion-floating-item>
-	
+
 </ion-floating-menu>
-<ion-content>       
+<ion-content>
 	<div class="card">
 		<div class="item item-body" style="background-color: #d14836">
 		<h3>Allergies</h3>
@@ -47,7 +42,7 @@
             <div class="padding">
                 </div>
                   <div class="visits-block text-muted">
-                
+
                 <div class="visits" >
                     <div class="timeline">
                       <div class="row"  ng-repeat="details in healthdetails track by $index">
@@ -66,21 +61,21 @@
  <p ng-show="details.allergies !== null && details.allergies !== ''"><strong>Allergies : {{details.allergies}}</strong></p>
  <p ng-show="details.medication !== null && details.medication !== ''"><strong>Medication : {{details.medication}}</strong> </p>
 
-<button class="button button-small button-clear button-assertive ion-edit" ng-click="openModal1()" on-tap="tracker6()"></button> 
-                				
+<button class="button button-small button-clear button-assertive ion-edit" ng-click="openModal1()" on-tap="tracker6()"></button>
+
 				              </div>
                         </div>
                     </div>
                 </div>
              </div>
           </div>
-      </div> 
+      </div>
    </div>
 </ion-content>
-		
-	
+
+
 	<!--div class="bar bar-footer bar-light"><div class="title"></div><div class="buttons buttons-right"><button class="button button-assertive button-fab"><i class="icon ion-code light"></i></button></div></div-->
-	
+
 <script id="my-modal1.html" type="text/ng-template">
      <ion-modal-view>
 
@@ -99,13 +94,13 @@
 				<label class="item item-input item-floating-label">
             	<span class="input-label">Weight</span>
             	<input type="number" placeholder="Weight Ex : 63. kg" name="weight" ng-model="data.weight">
-				</label> 
+				</label>
 		 		<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
     			<textarea placeholder="Notes"></textarea>
 				</label>
 			</div>
-			
+
          	<div class="list" ng-if="val === 'bloodsugar'" >
 				<div class="item item-divider">
 				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
@@ -113,7 +108,7 @@
 			   	<label class="item item-input item-floating-label">
 				<span class="input-label">Blood Sugar</span>
 				<input type="number" placeholder="Blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
-				</label> 
+				</label>
 				<div class="item-input">
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Random</span>
@@ -127,15 +122,15 @@
 					<span class="input-label">Post Prandial</span>
 					<input type="number" placeholder="PPBS value" ng-model="data.postprandial">
 				</label>
-				
+
 				</div>
-				
+
 				<label class="item item-input item-floating-label">
 				<span class="input-label">Notes</span>
 					<textarea  placeholder="Notes"></textarea>
 				</label>
 			</div>
-			
+
 			<div class="list" ng-if="val === 'bloodpressure'">
 			 	<div class="item item-divider">
 			 		<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
@@ -143,7 +138,7 @@
           		<label class="item item-input item-floating-label">
             	<span class="input-label">Blood Pressure</span>
             	<input type="number" placeholder="Blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
-          		</label> 
+          		</label>
 				<div class="item-input">
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Systolic</span>
@@ -153,7 +148,7 @@
 					<span class="input-label">Diastolic</span>
 					<input type="number" placeholder="Diastolic value" ng-model="data.diastolic">
 				</label>
-				
+
 				</div>
 				<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
@@ -167,7 +162,7 @@
 				<label class="item item-input item-floating-label">
             	<span class="input-label">Medication</span>
             	<input type="text" placeholder="Medication details" name="medication" ng-model="data.medication">
-          		</label> 
+          		</label>
 			 	<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
     			<textarea placeholder="Notes"></textarea>
@@ -180,13 +175,13 @@
 				<label class="item item-input item-floating-label">
             	<span class="input-label">Allergies</span>
             	<input type="text" placeholder="Ex : Peanuts, dust mites" name="allergies" ng-model="data.allergies">
-				</label> 
+				</label>
 				<label class="item item-input item-floating-label">
 				<span class="input-label">Notes</span>
 				<textarea placeholder="Notes"></textarea>
   		  		</label>
         	</div>
-			
+
 			<div class="list" ng-if="val === 'notes'">
 				<div class="item item-divider">
 					<div class="pull-left" >{{tdate | date: "dd MMM yy hh.mm a"}}</div>
@@ -196,11 +191,11 @@
 					<textarea  placeholder="Notes"></textarea>
 				</label>
 			</div>
-        	<div class="pull-center">  
+        	<div class="pull-center">
 				<button class="button button-outline button-assertive" ng-click="create(data)">Submit</button>
 			</div>
 		</form>
 	</ion-content>
 	</ion-modal-view>
-</script>                        
+</script>
 </ion-view>
