@@ -24,7 +24,7 @@
 /* SLIDE UP KEYBOARD */
 
 /* here is how you can animate the keyboard */
-.ion-numeric-keyboard.slide-up { 
+.ion-numeric-keyboard.slide-up {
     -webkit-animation: slide-up .25s cubic-bezier(.5, 0, 1, 1);
 }
 
@@ -41,13 +41,13 @@
 /* FLAT KEYBOARD */
 
 /* here is how you can remove the border around the keys */
-.ion-numeric-keyboard.flat .key { 
+.ion-numeric-keyboard.flat .key {
     border: none;
 }
 .ion-numeric-keyboard.flat .key.control-key {
     background-color: #fff;
 }
- 
+
 /* END FLAT KEYBOARD */
 
 
@@ -412,7 +412,7 @@
 
 /*New css style by Amal starting*/
 .customBtnStyle{
-    
+
 /*
 border:1px solid #d7dada;-webkit-box-shadow: #B4B5B5 1px 1px 1px  ;-moz-box-shadow: #B4B5B5 1px 1px 1px ; box-shadow: #B4B5B5 1px 1px 1px  ; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 5px 5px 5px 5px; text-decoration:none; display:inline-block;text-shadow: 0px 0px 0 rgba(0,0,0,0.3);font-weight:bold; color: #031B30;
  background-color: #f4f5f5; background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
@@ -428,8 +428,8 @@ border:1px solid #d7dada;-webkit-box-shadow: #B4B5B5 1px 1px 1px  ;-moz-box-shad
 	float:left!important;
 	clear:none;
     background: #106194 !important;
-	
-    
+
+
 }
 .popup-container .button-positive{
 
@@ -458,7 +458,7 @@ border:1px solid #d7dada;-webkit-box-shadow: #B4B5B5 1px 1px 1px  ;-moz-box-shad
     height:100%;
 }
 body{
-    font-family: 'Trebuchet MS', Helvetica, sans-serif!important;    
+    font-family: 'Trebuchet MS', Helvetica, sans-serif!important;
 }
 .requiredStyle{
     padding:5px;
@@ -501,7 +501,7 @@ body{
 .errorCls{
     color:#FF0000;
     background-color:#fff;
-    width:100%; 
+    width:100%;
 }
 .tabs-striped.tabs-background-positive .tabs{
     background-color: #d14836;
@@ -528,11 +528,11 @@ body{
      margin:10px 15px 0px 0px;
 }*/
 .ion-android-add{
-    font-size: 170% !important;   
+    font-size: 170% !important;
     margin:10px 10px 0px 0px;
 }
 .ion-android-arrow-back{
-    font-size: 170% !important;   
+    font-size: 170% !important;
     margin:10px 10px 0px 0px;
 }
 .notifyTimeCls{
@@ -562,8 +562,8 @@ body{
     position: static;
     float: left;
     background: none;
-   
-    
+
+
 }
 .allNotificationCls .item-checkbox{
     padding-left: 15px;
@@ -623,7 +623,7 @@ body{
 .popup{
     width:auto;
     height:auto;
- 
+
 }
 .popup-head{
     background-color:#d14836 ;
@@ -639,15 +639,15 @@ body{
 
 .popup-buttons{
   padding:10px 0px 0px 0px;!important;
-  min-height: auto; 
+  min-height: auto;
   background-color: #d14836;
 }
 
 .notificationBoxCls{
     margin:10px 10px 10px 15px;
     border:1px solid #F2F4F5;
-   
-    
+
+
 }
 .allNotificationCls .item-complex .item-content{
     /*background-color: #F2F4F5;*/
@@ -713,7 +713,7 @@ body{
 
 }
 span.item-note{
-    float:right;    
+    float:right;
 }
 .passcode-example .ion-numeric-keyboard .col, .control-key{
    color: #fff;
@@ -750,7 +750,7 @@ span.item-note{
     padding-left: 5px !important;
     padding: 10px 0px 5px 10px;
     transform: translate(0px, 0px);
-    
+
 }
 
 
@@ -760,7 +760,7 @@ span.item-note{
 
 .direct-chat-messages-active{
         background-color: #d9edf7;
-    
+
      overflow: auto;
     padding-left: 5px !important;
     padding: 10px 0px 5px 10px;
@@ -790,7 +790,7 @@ abbr.timestamp {
     color: #fff;
     padding: 0 22px;
 }
-    
+
 .direct-chat-text {
     background: #dfece7 none repeat scroll 0 0;  /*backup pinck color F5F5F5*/
     border: 1px solid #dfece7;
@@ -799,9 +799,9 @@ abbr.timestamp {
 }
 
 .direct-chat-text::after, .direct-chat-text::before {
-   
+
     border-color: transparent #dfece7 transparent transparent;
-    
+
 }
 .direct-chat-text::after, .direct-chat-text::before {
     -moz-border-bottom-colors: none;
@@ -850,7 +850,7 @@ abbr.timestamp {
 			display: block;
 			word-wrap: break-word;
 			padding: 6px 5px 0px 1px ;/*11px 9px 0px 7px;*/
-			
+
 			font-size: 12px;
 		}
 
@@ -877,7 +877,7 @@ abbr.timestamp {
 }
 
 .delete-msg-confirm-popup{
-    
+
 }
 
 .delete-msg-confirm-popup .popup-head {
@@ -935,9 +935,9 @@ abbr.timestamp {
 .tabs .tab-item .badge.badge-assertive, .badge.badge-assertive{
     right: 0%;
     top: 11%;
-    font-size: 8px;    
+    font-size: 8px;
 }
-    
+
 
 /***********************************JABEE-15-MAR-2015**************************************************/
 .item-avatar > span:first-child{
@@ -1068,7 +1068,7 @@ abbr.timestamp {
 	font-size: 35px;
 }
 .ionic_datepicker_popup .popup-body .selected_date_full {
-	background-color: #d14836; 
+	background-color: #d14836;
 }
 .pull-center {
 	text-align: center;
@@ -1086,8 +1086,13 @@ abbr.timestamp {
     border-color: #d14836 !important;
     background-color: #d14836 !important;
     background-image: linear-gradient(0deg, #d14836, #d14836 50%, transparent 50%) !important;
-    color: #fff !important; 
+    color: #fff !important;
 }
 .central {
 	padding-top: 50%;
+}
+
+p.wordwraplabtests {
+    width: 100%;  
+    word-wrap: break-word;
 }

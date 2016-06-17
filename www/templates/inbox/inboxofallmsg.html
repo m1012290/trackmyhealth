@@ -90,8 +90,12 @@
                     </span>
                  </p>
 				<!--<p><a class="subdued"> </a></p>-->
-                </div>
-            </div>
+        <div class="pull-center">
+  				<button class="button button-outline button-assertive" ng-click="downloaddocument(note.reporturl)">View Document</button>
+  			</div>
+        </div>
+
+      </div>
 
          </ion-content>
        </ion-modal-view>
@@ -206,7 +210,7 @@
                </span>
                  </div>
                 <div class="item">
-                <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Lab Tests :</strong><br><p>{{visitdata.visitdetails.labtests[1].test2}}</p>
+                <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Lab Tests :</strong><br><p ng-repeat="labtest in visitdata.visitdetails.labtests track by $index">{{labtest}}</p>
                </span>
                  </div>
 

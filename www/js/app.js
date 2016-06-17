@@ -9,7 +9,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     if (window.StatusBar) {
       //StatusBar.styleDefault();
       StatusBar.backgroundColorByHexString('#d14836');
-      
+
     }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -17,7 +17,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
     console.log('checking internet connectivity');
     var state = checkForInternetConnection($ionicPlatform);
-    
+
     if(state === 'none'){
            console.log('no internet connectivity hence the pop up ['+ state +']');
            var alertPopup = ionicAlertPopup($ionicPopup);
@@ -25,22 +25,22 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
               alertPopup.close();
            });
     }
-      
+
     if(window.cordova) {
         // App syntax
         console.log('Within OpenDB call');
         db = $cordovaSQLite.openDB({name:"bnotified.db"});
     }else{/*
         window.sqlitePlugin.openDatabase({name:"bnotified.db"}, function (db) {
-            db = db; 
+            db = db;
         });*/
-        
+
         db = window.openDatabase("bnotified.db", "1.0", "Demo", -1);
         console.log('printing db object ['+ db + ']');
     }
-    
+
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text)").then(function(result){
-       console.log('Table created successfully with result as ['+ result.rows.length + ']'); 
+       console.log('Table created successfully with result as ['+ result.rows.length + ']');
     }).catch(function(error){
         console.log('Table creation failed with error as ['+ error + ']');
     });
@@ -57,14 +57,14 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     };
 
     var notificationhandler = function(data){
-        console.log('notification handler ['+ JSON.stringify(data) + ']');   
+        console.log('notification handler ['+ JSON.stringify(data) + ']');
     };
 
     var errorhandler = function(error) {
-        console.log('error encountered while registering the device ['+ error + ']');  
+        console.log('error encountered while registering the device ['+ error + ']');
     };
     */
-      
+
     window.onNotification = function(e){
         console.log('onNotification recieved using window object['+ JSON.stringify(e) + ']');
         switch(e.event) {
@@ -76,7 +76,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
               registrationdetsdb.add({mobilenumber:0, registrationtoken:e.regid, deviceuuid:device.uuid});
           }
           break;
-              
+
         case 'message':
           // this is the actual push notification. its format depends on the data model from the push server
           alert('message = ' + e.message + ' msgCount = ' + e.msgcnt);
@@ -89,14 +89,14 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         default:
           alert('An unknown GCM event has occurred');
           break;
-      }  
-          
-      
+      }
+
+
       }
       $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-    
+
           console.log('printing event object when inline message is recieved ['+ JSON.stringify(event) + ']');
-          console.log('printing notification object when inline message is recieved ['+ JSON.stringify(notification) + ']');      
+          console.log('printing notification object when inline message is recieved ['+ JSON.stringify(notification) + ']');
       switch(notification.event) {
         case 'registered':
           if (notification.regid.length > 0 ) {
@@ -106,7 +106,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
               registrationdetsdb.add({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
           }
           break;
-              
+
         case 'message':
           // this is the actual push notification. its format depends on the data model from the push server
           console.log('printing event object when inline message is recieved ['+ JSON.stringify(event) + ']');
@@ -124,13 +124,13 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       }
     });
 
-    
+
     if(window.cordova){
         console.log('Printing device object ['+ JSON.stringify(device) +']');
         var registrationtoken = null;
         registrationdetsdb.query({}).then(function(result){
             var result = DBA.getById(result);
-            
+
             if(!result || !result.registrationtoken){
                 /*console.log('Before Push Notifications Invocation within Bnotified');
                 var push = PushNotification.init({ "android": {
@@ -139,16 +139,16 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
                 push.on('registration', registrationhandler);
                 push.on('notification', notificationhandler);
                 push.on('error', errorhandler);*/
-                
+
                  $cordovaPush.register({"senderID": "496534223786", "ecb":"onNotification"}).then(function(result){
-                    console.log('registration was successful with result of it as ['+ JSON.stringify(result) + ']');   
+                    console.log('registration was successful with result of it as ['+ JSON.stringify(result) + ']');
                  }, function(error){
                     console.log('registration failed hence to try again ['+ error + ']');
                  });
             }else{
                 registration_token = result.registrationtoken;
                 console.log('registrationtoken retrieved from DB is ['+ result.registrationtoken + ']');
-                console.log('Already registered on database hence skipping it'); 
+                console.log('Already registered on database hence skipping it');
             }
         }).catch(function(error){
             console.log('Error encountered while retrieving registration token hence let registration happen['+ error + ']');
@@ -157,28 +157,28 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         var registrationtoken = null;
         registrationdetsdb.query({}).then(function(result){
             console.log('result.rows ['+ JSON.stringify(result.rows) + ']');
-            
+
         if(result.rows.length === 0){
-                
+
             registrationdetsdb.add({mobilenumber:9739314152, registrationtoken:'APA91bF1pmC17Kw6f9r0V2QwYh-tTmCL3NZzn7aV0NzNDxPhj066aqpAR4oNqfJhqsrirxe2Ay3J7Ghsdt9DwuT701hu2ZyNMbnEJ0YkCActRPQNVTd7A9AU9q1acibh01IfU6I33m_PyHfFNaryvrhOnsbHCkVq5w', deviceuuid:'b80d1ec1a4765302'});
             }else{
                 var result = DBA.getById(result);
                 registration_token = result.registrationtoken;
                 console.log('registrationtoken retrieved from DB is ['+ result.registrationtoken + ']');
-                console.log('Already registered on database hence skipping it'); 
+                console.log('Already registered on database hence skipping it');
             }
         }).catch(function(error){
             console.log('Error encountered while retrieving registration token hence let registration happen['+ error + ']');
         });
     }
-    
+
   });
-    ionic.Platform.fullScreen(true, true);
+  //ionic.Platform.fullScreen(true, true);
   //ionic.Platform.isFullScreen = true;
   window.addEventListener('native.keyboardshow', function(){
     //cordova.plugins.Keyboard.close();//suppressing native keyboard
   });
-    
+
   window.addEventListener("offline", function(){
     console.log('device went offline ');
     var alertPopup = ionicAlertPopup($ionicPopup);
@@ -186,7 +186,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         //console.log('');
     });
   }, false);
-    
+
   $ionicPlatform.registerBackButtonAction(function(event) {
     console.log('printing state name-->'+$state.current.name);
     if ($state.current.name === 'forgotpassword' || $state.current.name === 'main.recentnotifications' || $state.current.name === 'main.listedentities' || $state.current.name === 'landing') { // your check here
@@ -198,7 +198,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
           ionic.Platform.exitApp();
         }
       })*/
-        
+
     //else if($state.current.name === 'landing')  {
         ionic.Platform.exitApp();
     //}
@@ -208,7 +208,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         $ionicHistory.goBack();
     }
   }, 100);
-    
+
    /*$ionicPlatform.onHardwareBackButton(function(event){
          console.log('Printing current state name -->'+ $state.current.name);
         if($state.current.name === 'main.recentnotifications' || $state.current.name === 'main.listedentities'){
@@ -219,9 +219,9 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
                 if (res) {
                     ionic.Platform.exitApp();
                 }
-            })    
+            })
         }
-        
+
     });*/
 }])
 .config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider', function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
@@ -262,10 +262,10 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
      resolve : {
            securityquestionservice : 'securityquestionservice',
            securityquestions : function(securityquestionservice, $stateParams){
-                return securityquestionservice.getSecurityQuestions($stateParams.mobilenumber);     
+                return securityquestionservice.getSecurityQuestions($stateParams.mobilenumber);
            },
            mobilenumber : function($stateParams){
-                return $stateParams.mobilenumber;   
+                return $stateParams.mobilenumber;
            }
      },
      /*controller: function($scope, $rootScope, securityquestions){
@@ -282,7 +282,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       resolve : {
            securityquestionservice : 'securityquestionservice',
            securityquestions : function(securityquestionservice, $stateParams){
-                return securityquestionservice.getSecurityQuestions($stateParams.mobilenumber);     
+                return securityquestionservice.getSecurityQuestions($stateParams.mobilenumber);
            }
       },
       controller: 'ForgotPasswordCtrl'
@@ -300,7 +300,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
 /*    resolve : {
         mobilenumber : function($stateParams){
-            $stateParams.mobilenumber = 
+            $stateParams.mobilenumber =
             return $stateParams.mobilenumber;
         }
     }*/
@@ -351,7 +351,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.myhealth', {
-    cache: false,
+    cache: true,
     url: '/myhealth',
     views: {
         'my-health': {
@@ -405,9 +405,9 @@ $ionicConfigProvider.navBar.alignTitle('left');
 		return function(input) {
             //console.log('filter called with input [' + JSON.stringify(input) + ']');
 			if (!input || !input.length) return;
-			
-			var output = [], 
-				previousDate, 
+
+			var output = [],
+				previousDate,
 				currentDate;
 
 			for (var i = 0, ii = input.length; i < ii && (item = input[i]); i++) {
@@ -427,7 +427,7 @@ $ionicConfigProvider.navBar.alignTitle('left');
                         dividers[dividerId] = {
 							isDivider: true,
 							_id: dividerId,
-							divider: currentDate.format('DD MMMM YYYY') 
+							divider: currentDate.format('DD MMMM YYYY')
 						};
 					}
 					//console.log('printing dividers[dividerId ['+ JSON.stringify(dividers[dividerId]) + ']');
@@ -451,9 +451,9 @@ $ionicConfigProvider.navBar.alignTitle('left');
 		return function(input) {
             //console.log('filter called with input [' + JSON.stringify(input) + ']');
 			if (!input || !input.length) return;
-			
-			var output = [], 
-				previousDate, 
+
+			var output = [],
+				previousDate,
 				currentDate;
             var newOutput={};
 			for (var i = 0, ii = input.length; i < ii && (item = input[i]); i++) {
@@ -476,10 +476,10 @@ $ionicConfigProvider.navBar.alignTitle('left');
                         dividers[dividerId] = {
 							isDivider: true,
 							_id: dividerId,
-							divider: currentDate.format('DD MMMM YYYY') 
+							divider: currentDate.format('DD MMMM YYYY')
 						};
 					}
-					
+
                     if(output.length >0)
                         output.push({viewMoreBtn:true});
                     //console.log('printing dividers[dividerId ['+ JSON.stringify(dividers[dividerId]) + ']');
@@ -487,13 +487,13 @@ $ionicConfigProvider.navBar.alignTitle('left');
                     //console.log('printing output ['+ JSON.stringify(output) +']');
 				}else{
                     if(newOutput[currentDate.format('DDMMYYYY')]){
-                        newOutput[currentDate.format('DDMMYYYY')].list.push(item);    
+                        newOutput[currentDate.format('DDMMYYYY')].list.push(item);
                     }else{
                         newOutput[currentDate.format('DDMMYYYY')]={date:currentDate.format('DDMMYYYY'), list:[item]};
                     }
                     /*angular.extend(newOutput,{ currentDate.format('DDMMYYYY'):'obj'});*/
                 }
-                
+
                 console.log(newOutput);
                 //console.log('item being pushed is ['+ JSON.stringify(item) + ']');
 				output.push(item);
@@ -524,6 +524,6 @@ function ionicAlertPopup($ionicPopup){
              title: 'No Internet Connection',
              template: 'Please check your internet connectivity'
            });
-    
+
     return alertPopup;
 }

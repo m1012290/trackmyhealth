@@ -213,13 +213,13 @@ html {
   overflow: hidden;
   border: 1px solid #ddd;
   margin-bottom: 15px;
-  width: 50%;
+  width: 100%;
 }
 .h-list .item-card .visits-block .timeline .row .right .notification .message {
   color: #333;
   padding: 5px;
   border-bottom: 1px solid #ddd;
-width: 90%
+width: 100%
 }
 .h-list .item-card .visits-block .timeline .row .right .notification .date {
   margin-top: 4px;

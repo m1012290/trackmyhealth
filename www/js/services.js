@@ -701,23 +701,32 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 }])
 .service('medicalprofileservice', ['$q','$resource',function($q,$resource){
     return {
-        savedetails: function(weight,bloodsugar,allergies,medication,patientId){
+        savedetails: function(patientId, medicalprofile){
         var deferred = $q.defer();
-         var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofile",{patientid: patientId});
-         resource.save( {"medicalprofile":{"weight" : {"value" :weight , "unit":"kg" }, "bloodsugar": { "value": bloodsugar, "unit": "mg-DL"}, "allergydetails": {"value":allergies},  "medicationdetails" : {"value":medication } } },function(data){
+        var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofile",{patientid: patientId});
+        //inspect for properties and leave out properties
+        //whose values are null or ''
+        /*var arrayofproperties = Object.getOwnPropertyNames(medicalprofile.data);
+        var datatopass = {};
+        for(var property in arrayofproperties){
+            if(medicalprofile.data[property] !== null || medicalprofile.data[property] !== ''){
+              datatopass[property] = medicalprofile.data[property];
+            }
+        }*/
+        resource.save( {"medicalprofile": medicalprofile.data, "createdat":medicalprofile.createdat},function(data){
              console.log("medical profile saved successfully [" + JSON.stringify(data) + "]");
              deferred.resolve(data);
 
-         },function(error){
+        },function(error){
              console.log("medical profile not saved successfully [" + JSON.stringify(error) + "]");
              deferred.reject(error);
-         });
-            return deferred.promise;
+        });
+        return deferred.promise;
         },
 
         getdetails:function(patientId){
      var deferred = $q.defer();
-         var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofile");
+         var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofilet");
         resource.get({patientid: patientId},function(data){
             console.log('medical profile history data of a patient saved successfully ['+ JSON.stringify(data)+']');
             deferred.resolve(data);

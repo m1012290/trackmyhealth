@@ -1202,111 +1202,61 @@ $scope.filterBarInstance;
     };
 }])
 .controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb',function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb) {
+   $scope.patientId = '';
+   $scope.healthdetails = [];
    $scope.data ={
-       "weight" : "",
-       "bloodsugar" : "",
-       "medication" : "",
-       "allergies" : "",
-       "patientId" : ""
-   };
-   $rootScope.showLoader();
-   registrationdetsdb.query({}).then(function(response){
-      var result = DBA.getById(response);
-      $scope.data.patientId = result.appregistrationid;
-
-      //Invoke retrieve medicalprofile service in order to display history data if any available
-      medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
-              console.log("obtaining medical details" + data);
-          //$scope.details=data;
-        if(data.status === 'SUCCESS'){
-            $rootScope.hideLoader();
-            console.log('data obtained['+ JSON.stringify(data) + ']');
-          $scope.healthdetails = [];
-
-          angular.forEach(data.data.medicalprofiledetails, function(value, key){
-                  for(var i=0; i< value.medicalprofile.length; i++ ){
-                    this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
-                  }
-          }, $scope.healthdetails);
-
-          console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
-        }
-      }).catch(function(error){
-          $rootScope.hideLoader();
-          var alertPopUp = $ionicPopup.alert({
-              title:"Failed to save details"
-          });
-      });
-
-   }).catch(function(error){
-     $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-     console.log('on ok click');
-     });
-   });
-
-	$scope.tracker1= function(){
-	$scope.val = "allergy";
-		console.log($scope.val);
-	}
-
-	$scope.tracker2= function(){
-	$scope.val ="medication";
-		console.log($scope.val);
-	}
-
-	$scope.tracker3= function(){
-	$scope.val ="weight";
-		console.log($scope.val);
-	}
-
-	$scope.tracker4= function(){
-	$scope.val ="bloodpressure" ;
-		console.log($scope.val);
-	}
-
-	$scope.tracker5= function(){
-	$scope.val ="bloodsugar";
-		console.log($scope.val);
-	}
-	$scope.tracker6= function(){
-	$scope.val ="notes";
-		console.log($scope.val);
-	}
-
-
-  $ionicModal.fromTemplateUrl('my-modal1.html', {
-    	scope: $scope,
-    	animation: 'slide-in-up'
-  	}).then(function(modal) {
-    	$scope.modal = modal;
-  	});
-
-  	$scope.openModal1 = function(){
-		    $scope.modal.show();
-    }
+       "weight" : {
+          "value" : "",
+          "notes" : ""
+       },
+       "bloodsugar" : {
+         "rbs" : "",
+         "ppbs": "",
+         "fbs" : "",
+         "notes" :""
+       },
+       "bloodpressure" :{
+         "systolic" : "",
+         "diastolic": ""
+       },
+       "medication" : {
+         "value" : "",
+         "notes" : ""
+       },
+       "allergies" : {
+         "value" : "",
+         "notes" : ""
+       }
+  };
+  $scope.tracker = function(trackername, title){
+      $scope.trackername = trackername;
+      $scope.title = title;
+  };
 	$scope.create = function() {
-
-		//$scope.data.push({weight: u.weight ,bloodsugar: u.blood, medication: u.medication, allergies: u.allergies});
-  // console.log($scope.data);
-         var details =[];
-
+	     var details =[];
        $rootScope.showLoader();
-       medicalprofileservice.savedetails($scope.data.weight,$scope.data.bloodsugar,$scope.data.allergies,$scope.data.medication,$scope.data.patientId).then(function(data){
+       var medicalprofile = {
+         "data": $scope.data,
+         "createdat" : $scope.tdate
+       }
+       medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
             console.log(data);
              if(data.status == 'SUCCESS'){
                 $rootScope.hideLoader();
                 $rootScope.showToast('Medical profile data saved successfully',null,'top');
-			    console.log(" records saved successfully");
-                medicalprofileservice.getdetails('5751377e4f09030255c59a8b').then(function(data){
+			          console.log(" records saved successfully");
+                medicalprofileservice.getdetails($scope.patientId).then(function(data){
                 	if(data.status === 'SUCCESS'){
                     	console.log('data obtained['+ JSON.stringify(data) + ']');
-                    	$scope.healthdetails = [];
-						angular.forEach(data.data.medicalprofiledetails, function(value, key){
+                        /*
+						            angular.forEach(data.data.medicalprofiledetails, function(value, key){
                             for(var i=0; i< value.medicalprofile.length; i++ ){
                               this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
                             }
                         }, $scope.healthdetails);
-						console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
+						            console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
+                        */
+                        $scope.healthdetails = data.data;
                   	}
                 }).catch(function(error){
                     $rootScope.hideLoader();
@@ -1314,53 +1264,93 @@ $scope.filterBarInstance;
                     /*var alertPopUp = $ionicPopup.alert({
                         title:"Failed to save details"
                     });*/
-					});
-                	$scope.closeModal1();
+					      });
+                $scope.closeModal1();
              }}).catch(function(error){
 		   		$rootScope.hideLoader();
-            	console.log("error received " + error);
-		   			if(error.status === 404){
-                		console.log(" patientid passed is invalid");
-        			}
-            		else if(error.status ===500)
-					{
-                    	console.log("internal server processing error at server side");
-					}
-                });
-
-		$scope.data="";
-		$scope.timeLineForm.$setPristine();
-
-		//new timeline data
-		 $scope.events = [{
-    badgeClass: 'info',
-    badgeIconClass: 'glyphicon-check',
-    title: 'First heading',
-    content: 'Some awesome content.'
-  }, {
-    badgeClass: 'warning',
-    badgeIconClass: 'glyphicon-credit-card',
-    title: 'Second heading',
-    content: 'More awesome content.'
-  }];
-
-     /*medicalprofileservice.getdetails($scope.data.patientId).then(function(data){
-            console.log("obtaining medical details" + data);
-        $scope.details=data;
-            $scope.healthdetails=details.data;
-            }).catch(function(error){
-            var alertPopUp = $ionicPopup.alert({
-				title:"Failed to save details"
-         })
-            });*/
-		};
-
+            	//console.log("error received " + error);
+  		   			if(error.status === 404){
+                console.log(" patientid passed is invalid");
+          		}else if(error.status ===500){
+                console.log("internal server processing error at server side");
+  					  }
+           });
+		         $scope.data="";
+		        //$scope.timeLineForm.$setPristine();
+	};
 	$scope.closeModal1 = function() {
     	$scope.modal.hide();
-
-    }
-   console.log($scope.data);
+  };
   $scope.tdate= new Date();
+  $scope.$on("$ionicView.beforeLeave", function(event, data){
+      // handle event
+      console.log("$ionicView.beforeLeave", data.stateParams);
+      $scope.modal.remove();
+  });
+
+  $scope.$on("$ionicView.beforeEnter", function(event, data){
+    $ionicModal.fromTemplateUrl('medicalprofile.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+  	$scope.openModal1 = function(){
+      $scope.modal.show();
+    };
+
+  });
+
+  $scope.$on("$ionicView.enter", function(event, data){
+
+  /*  if($scope.healthdetails !== null && $scope.healthdetails.length === 0 ){
+      var alertPopUp = $ionicPopup.alert({
+          title:"There is no medical history currently available"
+      });
+    } */
+  });
+  $scope.healthdetails = [];
+  $scope.$on("$ionicView.loaded", function(event, data){
+    $rootScope.showLoader();
+    registrationdetsdb.query({}).then(function(response){
+       var result = DBA.getById(response);
+       //$scope.data.patientId = result.appregistrationid;
+       $scope.patientId = result.appregistrationid;
+
+       //Invoke retrieve medicalprofile service in order to display history data if any available
+       medicalprofileservice.getdetails($scope.patientId).then(function(data){
+               console.log("obtaining medical details" + data);
+           //$scope.details=data;
+         if(data.status === 'SUCCESS'){
+             $rootScope.hideLoader();
+             console.log('data obtained['+ JSON.stringify(data) + ']');
+           $scope.healthdetails = data.data;
+           /*
+           angular.forEach(data.data.medicalprofiledetails, function(value, key){
+                 for(var i=0; i< value.medicalprofile.length; i++ ){
+                     this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
+                  }
+           }, $scope.healthdetails);
+
+           console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
+           */
+
+         }
+       }).catch(function(error){
+           $rootScope.hideLoader();
+           var alertPopUp = $ionicPopup.alert({
+               title:"There is no medical history currently available"
+           });
+       });
+
+    }).catch(function(error){
+      $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+      console.log('on ok click');
+      });
+    });
+
+  });
+
 }])
 .controller('FeedbackCtrl', ['$scope', '$state', '$ionicPopup', '$ionicSlideBoxDelegate', 'feedbackform', function($scope, $state, $ionicPopup, $ionicSlideBoxDelegate, feedbackform){
 
@@ -1869,7 +1859,7 @@ $scope.filterBarInstance;
         });
     }
 }])
-.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb', function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb){
+.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser){
 $scope.shouldShowReorder = false;
     $scope.shouldShowDelete  = false;
     $scope.listCanSwipe = true;
@@ -2069,7 +2059,36 @@ $scope.shouldShowReorder = false;
 			title: "failed to obtain hospital info"
 		})
 	})*/
+  $scope.downloaddocument = function(url){
+   console.log('printing url ['+ url +']');
+    var options = {
+      location: 'yes',
+      clearcache: 'yes',
+      toolbar: 'no'
+    };
 
+   //document.addEventListener(function () {
+    $cordovaInAppBrowser.open(encodeURI(url), '_system', options)
+      .then(function(event) {
+        console.log('i m open');
+      }).catch(function(event) {
+        console.log('error opening');
+      });
+
+    //}, false);
+  }
+  $rootScope.$on('$cordovaInAppBrowser:loadstart', function(e, event){
+      console.log('load started');
+  });
+
+
+  $rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, event){
+      console.log('load error');
+  });
+
+  $rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
+      console.log('load exit');
+  });
 
 
 }])
@@ -2188,9 +2207,29 @@ $scope.shouldShowReorder = false;
   registrationdetsdb.query({}).then(function(response){
       var result = DBA.getById(response);
       $scope.patientId = result.appregistrationid;
+
+      patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+            $scope.list= data.data;
+            console.log("Obtaining patient profile" + data);
+
+             /*if(data.status === 'SUCCESS'){
+                console.log('data obtained['+ JSON.stringify(data) + ']');
+                    angular.forEach($scope.list, function(value, key){
+                        $scope.formData.push(key +":" + value);
+
+                    })
+                     console.log($scope.formData);*/
+                 console.log($scope.list);
+        }).catch(function(error){
+            $rootScope.hideLoader();
+            $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+            console.log('on ok click');
+            });
+        });
   }).catch(function(err){
+        $rootScope.hideLoader();
         $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-        console.log('on ok click');
+          console.log('on ok click');
         });
   });
 
@@ -2217,22 +2256,6 @@ $scope.shouldShowReorder = false;
       ionicDatePicker.openDatePicker(ipObj1);
     };
 
-	patientprflservice.getpatientinfo($scope.patientId).then(function(data){
-        $scope.list= data.data;
-        console.log("Obtaining patient profile" + data);
-
-         /*if(data.status === 'SUCCESS'){
-            console.log('data obtained['+ JSON.stringify(data) + ']');
-                angular.forEach($scope.list, function(value, key){
-                    $scope.formData.push(key +":" + value);
-
-                })
-                 console.log($scope.formData);*/
-             console.log($scope.list);
-    }).catch(function(error){
-         $rootScope.hideLoader();
-    console.log('Failed to retrieve the data['+ error + ']');
-    });
 
    /* $scope.formData ={
          "dob" : "",
