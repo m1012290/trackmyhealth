@@ -18,4 +18,552 @@
     </ion-tab>
 
   </ion-tabs>
+
+  <script id="templates/inbox/inboxofallmsg.html" type="text/ng-template">
+    <ion-nav-title>
+
+      <img src="img/icon.png" style="max-width: 35px;
+    max-height: 30px;
+    width: 100%;
+    height: 100%;margin-top:10px"/>
+
+        <span>trackmyhealth</span>
+
+    </ion-nav-title>
+    <ion-nav-buttons side="right" >
+            <button class="button button-clear" ng-click="showFilterBar()">
+             <i class=" ion-search icon-btn-customize"></i>
+            </button>
+            <button class="button button-clear" on-touch="openPopover($event)">
+                <i class="ion-android-more-vertical icon-btn-customize"></i>
+            </button>
+    </ion-nav-buttons>
+	<ion-content>
+
+<div class="list card" ng-repeat=" visit in visitinfo track by $index">
+
+  <div class="item item-avatar">
+	  <img src="img/icon.png">
+	  <h2>{{visit.hospitalname}}</h2>
+	  <p>
+            {{visit.admissiondate|date:"dd MMM HH:mm ":"UTC"}}
+      </p>
+  </div>
+
+  <div class="item item-body">
+	  <!--<p>{{visit.admissiondate}}</p>
+	  <p>{{visit.department}}</p>
+	  <p>{{visit.visittype}}</p>
+    <p>
+      <a  href="" ng-click="notifications(visit._id)" class="subdued">Notifications </a>
+    </p>  -->
+ <div class="list card">
+
+  <a href="#" ng-click="patientdetails(visit._id)" class="item item-icon-left">
+    <i class="icon ion-person"></i>
+    Patient Details
+  </a>
+  <a href="#" ng-click="hospitaldetails(visit._id)" class="item item-icon-left">
+    <i class="icon ion-medkit"></i>
+    Hospital Details
+  </a>
+
+  <a href="#" ng-click="visitdetails(visit._id)" class="item item-icon-left">
+    <i class="icon ion-information-circled"></i>
+    Visit Details
+  </a>
+
+  <a href="#" ng-click="notifications(visit._id)" class="item item-icon-left">
+    <i class="icon ion-chatbox"></i>
+    Notifications
+  </a>
+
+</div>
+  </div>
+
+</div>
+
+ </ion-content>
+
+</script>
+
+<script id="my-modal5.html" type="text/ng-template">
+   <ion-modal-view>
+
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Notifications for Visit</h1>
+      <button class="button button-clear button-primary" ng-click="closeModal5()"><i class="icon ion-android-close"></i></button>
+  </ion-header-bar>
+    <ion-content class="padding">
+      <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
+    <div class="item item-avatar">
+      <img src="img/icon.png">
+      <h2>{{note.notificationdate | date: "dd MMM yyyy" }}</h2>
+    </div>
+     <div class="item item-body">
+      <p>
+      {{note.notificationtext}}
+      </p>
+
+               <p>
+                   <span class="item-note notifyTimeCls">
+                      <span class="item-note" >{{note.notificationdate |date:"dd MMM HH:mm ":"UTC"}}</span>
+                  </span>
+               </p>
+      <!--<p><a class="subdued"> </a></p>-->
+      <div class="pull-center">
+        <button class="button button-outline button-assertive" ng-click="downloaddocument(note.reporturl)">View Document</button>
+      </div>
+      </div>
+
+    </div>
+
+       </ion-content>
+     </ion-modal-view>
+</script>
+
+<script id="patientdetails.html" type="text/ng-template">
+
+<ion-modal-view>
+<ion-header-bar class=" bar bar-positive">
+ <h1 class="title">Patient Details</h1>
+ <button class="button button-clear button-primary" ng-click="closeModal3()"><i class="icon ion-android-close"></i></button>
+  </ion-header-bar>
+
+<ion-content >
+<div class="list list-inset">
+                  <div class="item">
+                      <span class="input-label"><i class="ion-medkit" ></i><strong>Patient Name :</strong><p>{{visitdata.patientdetails.firstname}} {{visitdata.patientdetails.lastname}}</p></span>
+                  </div>
+                  <div class="item">
+                      <span class="input-label"><i class="ion-ios-email" ></i><strong> Email Id:</strong>
+            <p>{{visitdata.patientdetails.emailid}}
+            </p>
+           </span>
+                 </div>
+                 <div class="item">
+                      <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Mobile Number:</strong><br><p>{{visitdata.patientdetails.mobilenumber}}</p>
+             </span>
+               </div>
+                   <!--<div class="item">
+                       <span class="input-label"><i class="ion-email" ></i> <strong>Email :</strong><p>
+                           <a> {{hos.hospitalemailid}} </a> <a>{{hos.hospitalsecondaryemailid}}</a></p>
+          </span>
+                 </div>
+                   <div class="item">
+                       <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in hos.hospitaldepartments"> {{dept}} </p></span>
+                    </div>
+                    <div class="item">
+                        <span class="input-label"><i class="ion-erlenmeyer-flask" ></i><strong> In House Labs :</strong><br> <p><i class="ion-checkmark"></i></p>
+          </span>
+                    </div>-->
+                 </div>
+ </ion-item>
+</ion-list>
+</ion-content>
+</ion-modal-view>
+</script>
+
+
+<script id="hospitaldetails.html" type="text/ng-template">
+
+<ion-modal-view>
+<ion-header-bar class=" bar bar-positive">
+ <h1 class="title">Hospital Details</h1>
+ <button class="button button-clear button-primary" ng-click="closeModal4()"><i class="icon ion-android-close"></i></button>
+  </ion-header-bar>
+
+<ion-content >
+   <div class="list list-inset">
+                  <div class="item">
+          <span class="input-label"><i class="ion-medkit" ></i> <strong>Hospital :</strong><p>{{visitdata.hospitaldetails.hospitalname}}</p></span>
+                  </div>
+                  <div class="item">
+                      <span class="input-label"><i class="ion-ios-location" ></i><strong> Address:</strong>
+            <p>{{visitdata.hospitaldetails.hospitaladdress.addressline1}}
+       {{visitdata.hospitaldetails.hospitaladdress.addressline2}}  <br>{{visitdata.hospitaldetails.hospitaladdress.addressline3}} {{visitdata.hospitaldetails.hospitaladdress.city}} <br> {{visitdata.hospitaldetails.hospitaladdress.pincode}}  {{visitdata.hospitaldetails.hospitaladdress.state}} {{visitdata.hospitaldetails.hospitaladdress.country}}</p>
+           </span>
+                 </div>
+                 <div class="item">
+                      <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Mobile Number:</strong><br><p> {{visitdata.hospitaldetails.hopitalmobnumber}}</p>
+             </span>
+               </div>
+       <div class="item">
+                      <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Tel Number:</strong><br><p> {{visitdata.hospitaldetails.hospitaltelnumber}}</p>
+             </span>
+               </div>
+                   <div class="item">
+                       <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}, </p></span>
+                    </div>
+                    <div class="item">
+                        <span class="input-label"><i class="ion-erlenmeyer-flask" ></i><strong> In House Labs :</strong><br> <p><i class="ion-checkmark"></i></p>
+          </span>
+                    </div>
+                 </div>
+
+ </ion-item>
+</ion-list>
+</ion-content>
+</ion-modal-view>
+</script>
+
+<script id="visitdetails.html" type="text/ng-template">
+
+<ion-modal-view>
+<ion-header-bar class=" bar bar-positive">
+ <h1 class="title">Visit Details</h1>
+ <button class="button button-clear button-primary" ng-click="closeModal6()"><i class="icon ion-android-close"></i></button>
+  </ion-header-bar>
+
+<ion-content >
+<div class="list list-inset">
+                  <div class="item">
+                      <span class="input-label"><i class="ion-medkit" ></i><strong>Visit Type :</strong><p>{{visitdata.visitdetails.visittype}}</p></span>
+                  </div>
+                  <div class="item">
+                      <span class="input-label"><i class="ion-ios-email" ></i><strong> Reason for visit :</strong>
+            <p>{{visitdata.visitdetails.diagnosticdets[0].reasonforvisit}}
+            </p>
+           </span>
+                 </div>
+                 <div class="item">
+                      <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Primary Diagnosis :</strong><br><p>{{visitdata.visitdetails.diagnosticdets[0].primarydiagnosis}}</p>
+             </span>
+               </div>
+              <div class="item">
+              <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Lab Tests :</strong><br><p ng-repeat="labtest in visitdata.visitdetails.labtests track by $index">{{labtest}}</p>
+             </span>
+               </div>
+
+  <div class="item">
+              <span class="input-label"><i class="ion-ios-telephone" ></i><strong> IP Admission No :</strong><br><p>{{visitdata.visitdetails.ipadmissionno}}</p>
+             </span>
+               </div>
+  <div class="item">
+              <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Ward Information :</strong><br><p>{{visitdata.visitdetails.wardinfo}}</p>
+             </span>
+               </div>
+
+
+                   <!--<div class="item">
+                       <span class="input-label"><i class="ion-email" ></i> <strong>Email :</strong><p>
+                           <a> {{hos.hospitalemailid}} </a> <a>{{hos.hospitalsecondaryemailid}}</a></p>
+          </span>
+                 </div>
+                   <div class="item">
+                       <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in hos.hospitaldepartments"> {{dept}} </p></span>
+                    </div>
+                    <div class="item">
+                        <span class="input-label"><i class="ion-erlenmeyer-flask" ></i><strong> In House Labs :</strong><br> <p><i class="ion-checkmark"></i></p>
+          </span>
+                    </div>-->
+                 </div>
+ </ion-item>
+</ion-list>
+</ion-content>
+</ion-modal-view>
+</script>
+<script id="templates/listedentities/listedentities.html" type="text/ng-template">
+
+   <ion-nav-title>
+
+        <img src="img/icon.png" style="max-width: 35px;
+      max-height: 30px;
+      width: 100%;
+      height: 100%;margin-top:10px"/>
+
+          <span>trackmyhealth</span>
+
+      </ion-nav-title>
+
+          <ion-nav-buttons side="right" >
+              <button class="button button-clear" ng-click="showFilterBar()">
+               <i class="ion-search icon-btn-customize"></i>
+              </button>
+              <button class="button button-clear" on-touch="openPopover($event)">
+                  <i class="ion-android-more-vertical icon-btn-customize"></i>
+              </button>
+
+      </ion-nav-buttons>
+
+    <ion-content>
+          <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
+            <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate"
+                      style="    padding-left: 5px;
+      padding-right: 5px;
+      padding-bottom: 0px;
+      padding-top: 0px;">
+  			  <!--<div class="col pull-left">
+  			  <span class="circle-span direct-chat-timestamp" style="padding-top: 12px; padding-left: 5px;font-weight: bold; font-size: 20px;">{{entity.hospitalname|limitTo:1}}</span>
+  			  </div>
+                <div style="col">
+                <h2 style="line-height: 40px;padding-left: 50px;">{{entity.hospitalname}} <div style="float:right;"><button class="button button-clear button-assertive" ng-click="hosinfo(entity.hospitalid, entity.hospitalcode)"></button>
+  				  </div> </h2>
+                </div>
+                <div class="col">
+                  <i class="ion-information-circled" ></i>
+                </div>-->
+
+                <a href="#/main/allnotifications/{{entity.hospitalid}}" class="item item-text-wrap item-avatar item-icon-right" style="padding-left: 60px;" nav-direction="enter">
+                      <span class="circle-span direct-chat-timestamp"
+                            style="padding-top: 12px; padding-left: 5px;font-weight: bold; font-size: 20px; left:5px; background-color: #D14836;opacity:1">{{entity.hospitalname|limitTo:1}}</span>
+                      <h2>{{entity.hospitalname}}
+
+                    </h2>
+
+                    <i class="icon ion-information-circled" style="color: #D14836;" ng-click="hosinfo(entity.hospitalid, entity.hospitalcode)">
+
+                    </i>
+
+
+                      <!--<i class="icon ion-chatbubble muted"></i>-->
+                  </a>
+
+
+  			  </ion-item>
+          </ion-list>
+
+    </ion-content>
+  <ion-floating-button  ng-click="showPopup()" has-footer="false" button-color=#d14836 icon="ion-plus" iconColor="#fff">
+  </ion-floating-button>
+</script>
+
+<script id="my-modal3.html" type="text/ng-template">
+
+<ion-modal-view>
+  <ion-header-bar class=" bar bar-positive">
+   <h1 class="title">Hospital Registration</h1>
+   <button class="button button-clear button-primary" ng-click="closeModal3()"><i class="icon ion-android-close"></i></button>
+    </ion-header-bar>
+
+ <ion-content >
+<div class="list list-inset">
+                    <div class="item">
+						<span class="input-label"><i class="ion-medkit" ></i> <strong>Hospital :</strong><p>{{hos.hospitalname}}</p></span>
+                    </div>
+                   	<div class="item">
+                        <span class="input-label"><i class="ion-ios-location" ></i><strong> Address:</strong>
+              <p>{{hos.hospitaladdress.addressline1}}
+				 {{hos.hospitaladdress.addressline2}}  <br>{{hos.hospitaladdress.addressline3}} {{hos.hospitaladdress.city}} <br> {{hos.hospitaladdress.pincode}}  {{hos.hospitaladdress.state}} {{hos.hospitaladdress.country}}</p>
+             </span>
+                   </div>
+                   <div class="item">
+                        <span class="input-label"><i class="ion-ios-telephone" ></i><strong> Contacts:</strong><br><p> {{ hos.hospitaltelnumber}} {{hos.hospitalmobnumber}}</p>
+               </span>
+                 </div>
+                     <div class="item">
+                         <span class="input-label"><i class="ion-email" ></i> <strong>Email :</strong><p>
+                             <a> {{hos.hospitalemailid}} </a> <a>{{hos.hospitalsecondaryemailid}}</a></p>
+            </span>
+                   </div>
+                     <div class="item">
+                         <span class="input-label"><i class="ion-eye" ></i><strong> Departments :</strong><br><p ng-repeat="dept in hos.hospitaldepartments"> {{dept}} </p></span>
+                      </div>
+                      <div class="item">
+                          <span class="input-label"><i class="ion-erlenmeyer-flask" ></i><strong> In House Labs :</strong><br> <p><i class="ion-checkmark"></i></p>
+            </span>
+                      </div>
+                   </div>
+   </ion-item>
+  </ion-list>
+  </ion-content>
+ </ion-modal-view>
+</script>
+<script id="templates/myhealth.html" type="text/ng-template">
+
+     <ion-nav-title>
+      <img src="img/icon.png" style="max-width: 35px;
+      max-height: 30px;
+      width: 100%;
+      height: 100%;margin-top:10px"/>
+
+          <span>trackmyhealth</span>
+
+      </ion-nav-title>
+          <ion-nav-buttons side="right" >
+
+              <button class="button button-clear" ng-click="showFilterBar()">
+               <i class=" ion-search icon-btn-customize"></i>
+              </button>
+              <button class="button button-clear" on-touch="openPopover($event)">
+                  <i class="ion-android-more-vertical icon-btn-customize"></i>
+              </button>
+      </ion-nav-buttons>
+
+  <ion-floating-menu menu-color="#d14836" menu-open-color="#d14836" iconColor="#fff">
+  	  <ion-floating-item icon="ion-clipboard" ng-click="openModal1()" on-tap="tracker('Allergies', 'Allergy Details')" button-color= "#d14836" iconColor="#fff" text="Allergies">Allergies</ion-floating-item>
+      <ion-floating-item icon="ion-medkit" ng-click="openModal1()" on-tap="tracker('Medication', 'Medication Details')" button-color= "#d14836" iconColor="#fff" text="Medication"></ion-floating-item>
+      <ion-floating-item icon="ion-ios-speedometer" ng-click="openModal1()" on-tap="tracker('Weight', 'Weight')" button-color= "#d14836" iconColor="#fff" text="Weight" ></ion-floating-item>
+      <ion-floating-item icon="ion-waterdrop" ng-click="openModal1()" on-tap="tracker('Blood Pressure', 'Blood Pressure')" button-color= "#d14836" iconColor="#fff" text="Blood Pressure" ></ion-floating-item>
+      <ion-floating-item icon="ion-stats-bars" ng-click="openModal1()" on-tap="tracker('Blood Sugar', 'Blood Sugar')" button-color= "#d14836" iconColor="#fff" text="Blood Sugar" ></ion-floating-item>
+  </ion-floating-menu>
+
+  <ion-content>
+
+  <div class="h-list">
+          <div class="item-card active">
+              <div class="padding">
+                  </div>
+                    <div class="visits-block text-muted">
+
+                  <div class="visits" >
+                      <div class="timeline">
+                        <div class="row"  ng-repeat="details in healthdetails track by $index">
+                          <div class="left">
+                             <div class="circle">
+                                 <div class="day">{{details.createdat.day}}</div>
+                                 <div class="month"><small>{{details.medicalprofile[0].recorddate|date:"MMM"}}</small></div>
+                             </div>
+                          </div>
+                          <div class="right" style="width:100%">
+                                  <div class="notification">
+                                      <div class="message">
+                                        <div ng-repeat="medicalprofiledata in details.medicalprofile">
+   <p ng-show="medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''"><strong>Weight : {{medicalprofiledata.profile[0].weight.value}} Kg </strong></p>
+   <p ng-show="medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''"><strong>Random Blood Sugar(rbs) : {{medicalprofiledata.profile[0].bloodsugar.rbs}} mg/dl</strong></p>
+   <p ng-show="medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''"><strong>Post Pandrial Blood Sugar(ppbs) : {{medicalprofiledata.profile[0].bloodsugar.ppbs}} mg/dl</strong></p>
+   <p ng-show="medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''"><strong>Fasting Blood Sugar(fbs) : {{medicalprofiledata.profile[0].bloodsugar.fbs}} mg/dL</strong></p>
+   <p ng-show="medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== ''"><strong>Blood Pressure : {{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} mm hg</strong></p>
+   <p ng-show="medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''"><strong>Allergies : {{medicalprofiledata.profile[0].allergies.value}}</strong></p>
+   <p ng-show="medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''"><strong>Medication : {{medicalprofiledata.profile[0].medication.value}}</strong> </p>
+
+  <!-- <button class="button button-small button-clear button-assertive ion-edit" ng-click="openModal1()" on-tap="tracker6()"></button> -->
+                                      </div>
+  				              </div>
+                          </div>
+                      </div>
+                  </div>
+               </div>
+            </div>
+        </div>
+     </div>
+  </ion-content>
+</script>
+<script id="medicalprofile.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar-positive">
+      <h1 class="title">{{title}}</h1>
+        <button class="button button-clear button-primary" ng-click="closeModal1()"><i class="icon ion-android-close"></i></button>
+    </ion-header-bar>
+  <ion-content class="padding" scroll="false"><!--style="background-color: rgba(178, 199, 218, 0.79);"-->
+      <form name="timeLineForm" >
+			<div class="list" ng-if="trackername === 'Weight'">
+           		<div class="item item-divider">
+			 		          <div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm a"}}</div>
+				      </div>
+				<label class="item item-input item-floating-label">
+            	<span class="input-label">Weight</span>
+            	<input type="number" placeholder="Weight Ex : 63. KG" name="weight" ng-model="data.weight.value">
+				</label>
+		 		<label class="item item-input item-floating-label">
+			  	<span class="input-label">Notes</span>
+    			<textarea placeholder="Notes" ng-model="data.weight.notes"></textarea>
+				</label>
+			</div>
+
+      <div class="list" ng-if="trackername === 'Blood Sugar'" >
+				<div class="item item-divider">
+				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm a"}}</div>
+				</div>
+			<!--  <label class="item item-input item-floating-label">
+				<span class="input-label">Blood Sugar</span>
+				<input type="number" placeholder="Blood sugar ex- 100 mg-DL" name="height" ng-model="data.bloodsugar">
+      </label> -->
+				<div class="item-input">
+  				<label class="item item-input item-floating-label">
+  					<span class="input-label">Random</span>
+  					<input type="number" placeholder="RBS value in mg/DL" ng-model="data.bloodsugar.rbs">
+  				</label>
+        </div>
+        <div class="item-input">
+  				<label class="item item-input item-floating-label">
+  					<span class="input-label">Fasting</span>
+  					<input type="number" placeholder="FBS value in mg/DL" ng-model="data.bloodsugar.fbs">
+  				</label>
+        </div>
+          <div class="item-input">
+  				<label class="item item-input item-floating-label">
+  					<span class="input-label">Post Prandial</span>
+  					<input type="number" placeholder="PPBS value mg/DL" ng-model="data.bloodsugar.ppbs">
+  				</label>
+				</div>
+        <div class="item-input">
+  				<label class="item item-input item-floating-label">
+  				<span class="input-label">Notes</span>
+  					<textarea  placeholder="Notes" ng-model="data.bloodsugar.notes"></textarea>
+  				</label>
+        </div>
+			</div>
+
+			<div class="list" ng-if="trackername === 'Blood Pressure'">
+			 	<div class="item item-divider">
+			 		<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm a"}}</div>
+				</div>
+        <div class="item-input">
+  				<label class="item item-input item-floating-label">
+  					<span class="input-label">Systolic</span>
+  					<input type="number" placeholder="Systolic Blood Pressure" ng-model="data.bloodpressure.systolic">
+  				</label>
+        </div>
+        <div class="item-input">
+  				<label class="item item-input item-floating-label">
+  					<span class="input-label">Diastolic</span>
+  					<input type="number" placeholder="Diastolic Blood Pressure" ng-model="data.bloodpressure.diastolic">
+  				</label>
+        </div>
+				<div class="item-input">
+				  <label class="item item-input item-floating-label">
+			  	      <span class="input-label">Notes</span>
+    			      <textarea placeholder="Notes" ng-model="data.bloodpressure.notes"></textarea>
+  		  	</label>
+          </div>
+          </div>
+			  </div>
+       <div class="list" ng-if="trackername === 'Medication'" >
+				<div class="item item-divider">
+					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm a"}}</div>
+				</div>
+        <div class="item-input">
+				      <label class="item item-input item-floating-label">
+            	<span class="input-label">Medication</span>
+            	<input type="text" placeholder="Medication details" name="medication" ng-model="data.medication.value">
+          		</label>
+        </div>
+        <div class="item-input">
+  			 	<label class="item item-input item-floating-label">
+  			  	<span class="input-label">Notes</span>
+      			<textarea placeholder="Notes" ng-model="data.medication.notes"></textarea>
+    		  </label>
+        </div>
+			</div>
+        	<div class="list" ng-if="trackername === 'Allergies'">
+           		<div class="item item-divider">
+					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm a"}}</div>
+				</div>
+				<label class="item item-input item-floating-label">
+            	<span class="input-label">Allergies</span>
+            	<input type="text" placeholder="Ex : Peanuts, dust mites" name="allergies" ng-model="data.allergies.value">
+				</label>
+				<label class="item item-input item-floating-label">
+				<span class="input-label">Notes</span>
+				<textarea placeholder="Notes" ng-model="data.allergies.notes"></textarea>
+  		  		</label>
+        	</div>
+
+			<div class="list" ng-if="trackername === 'notes'">
+				<div class="item item-divider">
+					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm a"}}</div>
+				</div>
+				<label class="item item-input item-floating-label">
+				<span class="input-label">Notes</span>
+					<textarea  placeholder="Notes"></textarea>
+				</label>
+			</div>
+      <div class="pull-center">
+				<button class="button button-outline button-assertive" ng-click="create(data)">Submit</button>
+			</div>
+		</form>
+	</ion-content>
+	</ion-modal-view>
+</script>
 </ion-view>

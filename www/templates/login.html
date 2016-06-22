@@ -1,10 +1,10 @@
 <ion-view view-title="Please Login" name="login-view">
-<ion-content class="central" scroll="false">
+<ion-content class="top">
 	 <form name="signin" ng-submit="login(logindata)" required>
          <ion-list>
             <ion-item class="item-input">
              <label class="item item-input item-floating-label">
-             <span class="input-label"><i class="ion-person"></i>  User Email-id/Mobile </span> 
+             <span class="input-label"><i class="ion-person"></i>  User Email-id/Mobile </span>
 		  	<input type="text" ng-model="logindata.email" placeholder="User Email-id/Mobile" required>
                 </label>
 			</ion-item>
@@ -14,23 +14,23 @@
                   	<input type="password" name="passcode" ng-model="logindata.passcode" placeholder="Password" required>
                 </label>
             </ion-item>
-         </ion-list>   
+         </ion-list>
 		 <br/>
-         
+
 		 <div>
             <button class="button button-block button-raised button-positive" type="submit">LOGIN</button>
          </div>
 		 </form>
-	     
+
          <div class="pull-left">
             <button class="button button-clear button-flat button-assertive " href="" ng-click="signup()">Sign up</button>
-         </div>         
-         <div class="pull-right">        
+         </div>
+         <div class="pull-right">
              <a class="button button-clear button-flat button-assertive" href="" ng-click="openModal4()">Forgot password</a>
          </div>
-	
-</ion-content>        
-	
+
+</ion-content>
+
 <script id="my-modal4.html" type="text/ng-template">
  <ion-modal-view>
     <ion-header-bar class="bar-positive">
@@ -40,15 +40,15 @@
 
     <ion-content class="padding">
 		<br>
-		<form name="frgotpassword"> 
-			<ion-list> 
+		<form name="frgotpassword">
+			<ion-list>
  				<ion-item class="item-input item-floating-label">
 					<span class="input-label">Email Id</span>
                 <input name="email" type="email" placeholder="Enter email-id" ng-model="forgot.emailId" required>
 				</ion-item>
                 <ion-item class="item-input item-floating-label">
 					<span class="input-label">Mobile Number</span>
-                <input name="mobnum" type="number" placeholder="Enter mobile number" ng-model="forgot.mobNo" required> 
+                <input name="mobnum" type="number" placeholder="Enter mobile number" ng-model="forgot.mobNo" required>
 				</ion-item>
 				<div ng-if="pass">
 					<ion-item class="item-input item-floating-label">
@@ -70,13 +70,13 @@
 				</div>
             </ion-list>
 			<br>
-          	<div class="pull-center" ng-hide="forgot.password && forgot.confirmpwd ">  
+          	<div class="pull-center" ng-hide="forgot.password && forgot.confirmpwd ">
 				<button class="button button-outline button-assertive" ng-click="save(forgot)">OK</button>
 			</div>
-			<div class="pull-center" ng-if="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">  
+			<div class="pull-center" ng-if="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">
 				<button class="button button-outline button-assertive" ng-click="newpassword(forgot)">Save New Password</button>
 			</div>
-			
+
         </form>
     </ion-content>
  </ion-modal-view>

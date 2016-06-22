@@ -64,7 +64,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         console.log('error encountered while registering the device ['+ error + ']');
     };
     */
-
     window.onNotification = function(e){
         console.log('onNotification recieved using window object['+ JSON.stringify(e) + ']');
         switch(e.event) {
@@ -90,10 +89,8 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
           alert('An unknown GCM event has occurred');
           break;
       }
-
-
-      }
-      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+    }
+    $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
 
           console.log('printing event object when inline message is recieved ['+ JSON.stringify(event) + ']');
           console.log('printing notification object when inline message is recieved ['+ JSON.stringify(notification) + ']');
@@ -132,14 +129,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
             var result = DBA.getById(result);
 
             if(!result || !result.registrationtoken){
-                /*console.log('Before Push Notifications Invocation within Bnotified');
-                var push = PushNotification.init({ "android": {
-                    "senderID": '496534223786'
-                }});
-                push.on('registration', registrationhandler);
-                push.on('notification', notificationhandler);
-                push.on('error', errorhandler);*/
-
                  $cordovaPush.register({"senderID": "496534223786", "ecb":"onNotification"}).then(function(result){
                     console.log('registration was successful with result of it as ['+ JSON.stringify(result) + ']');
                  }, function(error){
@@ -202,11 +191,13 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     //else if($state.current.name === 'landing')  {
         ionic.Platform.exitApp();
     //}
-    }else{
+  }else if($state.current.name === 'main.myhealth'){
+
+  }else{
         //console.log('have to return to previous view ['+ JSON.stringify($ionicHistory.viewHistory()) +']');
         console.log('Printing backview object[' + JSON.stringify($ionicHistory.backView()) + ']');
         $ionicHistory.goBack();
-    }
+  }
   }, 100);
 
    /*$ionicPlatform.onHardwareBackButton(function(event){
@@ -351,7 +342,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.myhealth', {
-    cache: true,
+    cache: false,
     url: '/myhealth',
     views: {
         'my-health': {
