@@ -74,7 +74,7 @@
                     '<ion-numeric-keyboard-key content="8" on-key-press="options.onKeyPress" source="\'NUMERIC_KEY\'"></ion-numeric-keyboard-key>' +
                     '<ion-numeric-keyboard-key content="9" on-key-press="options.onKeyPress" source="\'NUMERIC_KEY\'"></ion-numeric-keyboard-key>' +
                   '</div>' +
-                  '<div class="row">' + 
+                  '<div class="row">' +
                     '<ion-numeric-keyboard-key content="options.leftControl" on-key-press="options.onKeyPress" source="\'LEFT_CONTROL\'"></ion-numeric-keyboard-key>' +
                     '<ion-numeric-keyboard-key content="0" on-key-press="options.onKeyPress" source="\'NUMERIC_KEY\'"></ion-numeric-keyboard-key>' +
                     '<ion-numeric-keyboard-key content="options.rightControl" on-key-press="options.onKeyPress" source="\'RIGHT_CONTROL\'"></ion-numeric-keyboard-key>' +
@@ -92,7 +92,7 @@
         if (ionContentElem) {
           ionContentElem.addClass('has-ion-numeric-keyboard');
         }
-       
+
       }
     };
   })
@@ -119,10 +119,10 @@
         }
 
         if (typeof $scope.content !== 'undefined') {
-          $element.replaceWith($compile('<button class="col key button ' + extraClass +'" ng-click="onKeyPress(content, source)" ng-bind-html="content"></button>')($scope));  
+          $element.replaceWith($compile('<button class="col key button ' + extraClass +'" ng-click="onKeyPress(content, source)" ng-bind-html="content"></button>')($scope));
         }
         else {
-          $element.replaceWith($compile('<div class="col key ' + extraClass +'"></div>')($scope));    
+          $element.replaceWith($compile('<div class="col key ' + extraClass +'"></div>')($scope));
         }
       }
     };
@@ -178,12 +178,8 @@
         );
     }
 }])
-  .directive('tabsSwipable', ['$ionicGesture', function($ionicGesture){
-	//
-	// make ionTabs swipable. leftswipe -> nextTab, rightswipe -> prevTab
-	// Usage: just add this as an attribute in the ionTabs tag
-	// <ion-tabs tabs-swipable> ... </ion-tabs>
-	//
+  /*.directive('tabsSwipable', ['$ionicGesture', function($ionicGesture){
+
 	return {
 		restrict: 'A',
 		require: 'ionTabs',
@@ -200,7 +196,7 @@
 					scope.$apply(tabsCtrl.select(target));
 				}
 			};
-		    
+
 		    var swipeGesture = $ionicGesture.on('swipeleft', onSwipeLeft, elm).on('swiperight', onSwipeRight);
 		    scope.$on('$destroy', function() {
 		        $ionicGesture.off(swipeGesture, 'swipeleft', onSwipeLeft);
@@ -208,5 +204,43 @@
 		    });
 		}
 	};
+}]); */
+.directive('tabsSwipable', ['$ionicGesture', '$ionicTabsDelegate',function($ionicGesture, $ionicTabsDelegate){
+
+return {
+  restrict: 'A',
+  require: 'ionTabs',
+  link: function($scope, element, attrs, tabsCtrl){
+    var maxTabIndex = tabsCtrl.tabs.length - 1; // Holds the maximum tab index depending on the amount of tabs.
+
+       /**
+        * Changes selected tab on LEFT SWIPE gesture.
+        */
+        var selectedTabIndex;
+       $ionicGesture.on('swipeleft', function(event) {
+
+         selectedTabIndex = $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).selectedIndex(); // Gets the currently displayed tab index.
+
+         if ( selectedTabIndex >= 0 && selectedTabIndex <= maxTabIndex - 1 ) {
+           $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).select(selectedTabIndex + 1);
+         }
+       }, tabsCtrl.$element);
+
+
+       /**
+        * Changes selected tab on RIGHT SWIPE gesture.
+        */
+       $ionicGesture.on('swiperight', function(event) {
+
+         selectedTabIndex = $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).selectedIndex(); // Gets the currently displayed tab index.
+
+         if ( selectedTabIndex <= 2 && selectedTabIndex >= maxTabIndex - 1 ) {
+
+           $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).select(selectedTabIndex - 1);
+
+         }
+       }, tabsCtrl.$element);
+  }
+};
 }]);
 })();

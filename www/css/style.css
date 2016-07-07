@@ -47,7 +47,6 @@
 .ion-numeric-keyboard.flat .key.control-key {
     background-color: #fff;
 }
-
 /* END FLAT KEYBOARD */
 
 
@@ -1093,6 +1092,6 @@ abbr.timestamp {
 }
 
 p.wordwraplabtests {
-    width: 100%;  
+    width: 100%;
     word-wrap: break-word;
 }

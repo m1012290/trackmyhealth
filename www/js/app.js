@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker'])
+angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista'])
 .run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
@@ -383,7 +383,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       controller : 'PatientprofileCtrl'
   });
   $urlRouterProvider.otherwise('/landing');
-    $ionicConfigProvider.scrolling.jsScrolling(false);
+  $ionicConfigProvider.scrolling.jsScrolling(false);
 $ionicConfigProvider.navBar.alignTitle('left');
 }])
 .config(['$httpProvider', function ($httpProvider) {

@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "ionic-ratings": "^0.2.0",
-    "validator-js": "^5.3.0"
+    "validator-js": "^5.3.0",
+    "ionic-ion-header-shrink": "*",
+    "ionic-scroll-sista": "^1.0.7"
   }
 }

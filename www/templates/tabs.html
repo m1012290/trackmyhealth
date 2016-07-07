@@ -1,45 +1,50 @@
 <ion-view>
-  <ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
+  <ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
 
-    <ion-tab title="Hospitals" href="#/main/listedentities" nav-direction="forward">
+    <ion-tab title="Hospitals" icon="ion-medkit" href="#/main/listedentities" nav-direction="forward">
       <ion-nav-view name="listed-entities"></ion-nav-view>
     </ion-tab>
 
-    <ion-tab title="Visits" href="#/main/allnotifications/123" nav-direction="forward">
+    <ion-tab title="Visits" icon="ion-eye" href="#/main/allnotifications/123" nav-direction="forward">
       <ion-nav-view name="all-notifications"></ion-nav-view>
     </ion-tab>
-    <!--
-    <ion-tab title="Visits" href="#/main/recentnotifications/9739314152">
-      <ion-nav-view name="recent-notifications"></ion-nav-view>
-    </ion-tab> -->
 
-    <ion-tab title="My Health" href="#/main/myhealth" nav-direction="forward">
+    <ion-tab title="My Health" icon="ion-heart" href="#/main/myhealth" nav-direction="forward">
       <ion-nav-view name="my-health"></ion-nav-view>
     </ion-tab>
+    <!--
+    <div class="tabs tabs-dark">
+        <a class="tab-item" href="#/main/listedentities"><i class="material-icons">local_hospital</i></a>
+        <a class="tab-item" href="#/main/allnotifications/123"><i class="material-icons">face</i></a>
+        <a class="tab-item" href="#/main/myhealth"><i class="material-icons">local_hospital</i></a>
+    </div> -->
 
   </ion-tabs>
 
   <script id="templates/inbox/inboxofallmsg.html" type="text/ng-template">
     <ion-nav-title>
 
-      <img src="img/icon.png" style="max-width: 35px;
-    max-height: 30px;
-    width: 100%;
-    height: 100%;margin-top:10px"/>
-
-        <span>trackmyhealth</span>
-
+    <img src="img/icon.png" style="max-width: 35px;
+      max-height: 30px;
+      width: 100%;
+      height: 100%;margin-top:10px"/>
+    <span>trackmyhealth</span>
     </ion-nav-title>
-    <ion-nav-buttons side="right" >
+    <ion-nav-buttons side="right">
             <button class="button button-clear" ng-click="showFilterBar()">
-             <i class=" ion-search icon-btn-customize"></i>
+              <i class=" ion-search icon-btn-customize"></i>
+            </button>
+            <button class="button button-clear" ng-click="showAlert()">
+                 <i class="ion-android-options icon-btn-customize"></i>
+            </button>
+            <button class="button button-clear">
+                 <i class="ion-social-yen-outline icon-btn-customize"></i>
             </button>
             <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize"></i>
             </button>
     </ion-nav-buttons>
-	<ion-content>
-
+<ion-content scroll-sista="header" delegate-handle="myScrollDelegate1">
 <div class="list card" ng-repeat=" visit in visitinfo track by $index">
 
   <div class="item item-avatar">
@@ -94,7 +99,7 @@
     <h1 class="title">Notifications for Visit</h1>
       <button class="button button-clear button-primary" ng-click="closeModal5()"><i class="icon ion-android-close"></i></button>
   </ion-header-bar>
-    <ion-content class="padding">
+    <ion-content class="padding" scroll-sista="header" delegate-handle="myScrollDelegate2">
       <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
     <div class="item item-avatar">
       <img src="img/icon.png">
@@ -105,7 +110,7 @@
       {{note.notificationtext}}
       </p>
 
-               <p>
+       <p>
                    <span class="item-note notifyTimeCls">
                       <span class="item-note" >{{note.notificationdate |date:"dd MMM HH:mm ":"UTC"}}</span>
                   </span>
@@ -130,7 +135,7 @@
  <button class="button button-clear button-primary" ng-click="closeModal3()"><i class="icon ion-android-close"></i></button>
   </ion-header-bar>
 
-<ion-content >
+<ion-content scroll-sista="header" delegate-handle="myScrollDelegate3">
 <div class="list list-inset">
                   <div class="item">
                       <span class="input-label"><i class="ion-medkit" ></i><strong>Patient Name :</strong><p>{{visitdata.patientdetails.firstname}} {{visitdata.patientdetails.lastname}}</p></span>
@@ -173,7 +178,7 @@
  <button class="button button-clear button-primary" ng-click="closeModal4()"><i class="icon ion-android-close"></i></button>
   </ion-header-bar>
 
-<ion-content >
+<ion-content scroll-sista="header" delegate-handle="myScrollDelegate4">
    <div class="list list-inset">
                   <div class="item">
           <span class="input-label"><i class="ion-medkit" ></i> <strong>Hospital :</strong><p>{{visitdata.hospitaldetails.hospitalname}}</p></span>
@@ -215,7 +220,7 @@
  <button class="button button-clear button-primary" ng-click="closeModal6()"><i class="icon ion-android-close"></i></button>
   </ion-header-bar>
 
-<ion-content >
+<ion-content scroll-sista="header" delegate-handle="myScrollDelegate5">
 <div class="list list-inset">
                   <div class="item">
                       <span class="input-label"><i class="ion-medkit" ></i><strong>Visit Type :</strong><p>{{visitdata.visitdetails.visittype}}</p></span>
@@ -286,7 +291,8 @@
 
       </ion-nav-buttons>
 
-    <ion-content>
+    <ion-content scroll-sista="header" delegate-handle="myScrollDelegate6">
+
           <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
             <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate"
                       style="    padding-left: 5px;
@@ -304,22 +310,13 @@
                   <i class="ion-information-circled" ></i>
                 </div>-->
 
-                <a href="#/main/allnotifications/{{entity.hospitalid}}" class="item item-text-wrap item-avatar item-icon-right" style="padding-left: 60px;" nav-direction="enter">
+                <a href="#/main/allnotifications/{{entity.hospitalid}}" class="item item-text-wrap item-avatar item-icon-right" style="padding-left: 60px;" nav-direction="enter" ion-stop-event="click" >
                       <span class="circle-span direct-chat-timestamp"
                             style="padding-top: 12px; padding-left: 5px;font-weight: bold; font-size: 20px; left:5px; background-color: #D14836;opacity:1">{{entity.hospitalname|limitTo:1}}</span>
-                      <h2>{{entity.hospitalname}}
-
-                    </h2>
-
-                    <i class="icon ion-information-circled" style="color: #D14836;" ng-click="hosinfo(entity.hospitalid, entity.hospitalcode)">
-
-                    </i>
-
-
+                      <h2>{{entity.hospitalname}}</h2>
+                      <i class="icon ion-information-circled" style="color: #D14836;" ng-click="hosinfo(entity.hospitalid, entity.hospitalcode)"></i>
                       <!--<i class="icon ion-chatbubble muted"></i>-->
-                  </a>
-
-
+                </a>
   			  </ion-item>
           </ion-list>
 
@@ -336,7 +333,7 @@
    <button class="button button-clear button-primary" ng-click="closeModal3()"><i class="icon ion-android-close"></i></button>
     </ion-header-bar>
 
- <ion-content >
+ <ion-content scroll-sista="header" delegate-handle="myScrollDelegate7">
 <div class="list list-inset">
                     <div class="item">
 						<span class="input-label"><i class="ion-medkit" ></i> <strong>Hospital :</strong><p>{{hos.hospitalname}}</p></span>
@@ -398,7 +395,7 @@
       <ion-floating-item icon="ion-stats-bars" ng-click="openModal1()" on-tap="tracker('Blood Sugar', 'Blood Sugar')" button-color= "#d14836" iconColor="#fff" text="Blood Sugar" ></ion-floating-item>
   </ion-floating-menu>
 
-  <ion-content>
+  <ion-content scroll-sista="header" delegate-handle="myScrollDelegate8">
 
   <div class="h-list">
           <div class="item-card active">
@@ -445,7 +442,7 @@
       <h1 class="title">{{title}}</h1>
         <button class="button button-clear button-primary" ng-click="closeModal1()"><i class="icon ion-android-close"></i></button>
     </ion-header-bar>
-  <ion-content class="padding" scroll="false"><!--style="background-color: rgba(178, 199, 218, 0.79);"-->
+  <ion-content scroll-sista="header" class="padding" delegate-handle="myScrollDelegate9"><!--style="background-color: rgba(178, 199, 218, 0.79);"-->
       <form name="timeLineForm" >
 			<div class="list" ng-if="trackername === 'Weight'">
            		<div class="item item-divider">

@@ -1,7 +1,7 @@
 <ion-view view-title="Sign Up" >
-     <ion-content class="padding" scroll="false">
+     <ion-content class="padding">
 <form name="signup" class="simple-form" ng-submit="save(formData)" required>
-    <div class="list">    
+    <div class="list">
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
         <span class="input-label">  First Name</span>
@@ -9,24 +9,24 @@
 		</label>
 		<label class="item item-input item-floating-label">
         <span class="input-label">  LastName</span>
-			<input type="text" ng-model="formData.lastname" placeholder="  Last Name"  required> 
+			<input type="text" ng-model="formData.lastname" placeholder="  Last Name"  required>
 		</label>
     </ion-item>
-    
+
 	<ion-item class="item-input" >
 		<label class="item item-input item-floating-label">
 		<span class="input-label">  MobileNo</span>
 		<input type="number" ng-model="formData.mobnum" placeholder= "Mobile Number"  required>
 		</label>
     </ion-item>
-    
-	<ion-item class="item-input">      
+
+	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 			<span class="input-label">  Email Id</span>
 		<input type="email" ng-model="formData.emailadd" placeholder= "Email-address"  required>
 		</label>
-	</ion-item>   
-    
+	</ion-item>
+
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 			<span class="input-label">  Password</span>
@@ -36,7 +36,7 @@
 			<span class="input-label">  Confirm Password</span>
 			<input type="password" ng-model="formData.confirmpassword" placeholder= "Confirm Password" required>
 		</label>
-    </ion-item>  
+    </ion-item>
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 		<ion-checkbox ng-model="formData.male"><i class="icon ion-man" ></i></ion-checkbox>
@@ -44,7 +44,7 @@
 		<label class="item item-input item-floating-label">
 		<ion-checkbox ng-model="formData.female"><i class="icon ion-woman"></i></ion-checkbox>
 		</label>
-	</ion-item>	
+	</ion-item>
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 		<span class="input-label"></span>
@@ -53,12 +53,12 @@
 		<label ng-if="formData.doctor" class="item item-floating-label">
 		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
 		</label>
-		
+
 	</ion-item>
 		<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 		<ion-checkbox ng-model="formData.termsyes"> I accept the <a href=""> Terms of Service </a>and <a href="">Privacy Policy</a> </ion-checkbox>
-			</label>	
+			</label>
 	</ion-item>
 	</div>
 	<div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female) && formData.termsyes)">
@@ -67,7 +67,7 @@
 
 	</form>
     </ion-content>
-	
+
 	<script id="my-modal2.html" type="text/ng-template">
      <ion-modal-view>
 
@@ -89,10 +89,10 @@
 		</ion-item>
 		</ion-list>
 		<br/>
-		<div class="pull-center">  
+		<div class="pull-center">
 			<button class="button button-outline button-assertive" ng-click="securitydets(security) ">Submit</button>
 		</div>
-		</form>	
+		</form>
 	</ion-content>
 		</ion-modal-view>
 </ion-view>
