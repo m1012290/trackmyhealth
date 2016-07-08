@@ -30,7 +30,7 @@
           var body = $document[0].body;
           var scrollDelegate = $attr.delegateHandle ? $ionicScrollDelegate.$getByHandle($attr.delegateHandle) : $ionicScrollDelegate;
           var scrollView = scrollDelegate.getScrollView();
-          
+
           //coordinates
           var y, prevY, prevScrollTop;
           //headers
@@ -283,8 +283,8 @@ var scrollTop = scrollView.isNative ? e.currentTarget.scrollTop : e.detail.scrol
     console.log('printing y value is ['+ y + ']');
             //if we are at the bottom, animate the header/tabs back in
             if (scrollView.getScrollMax().top - scrollTop <= contentTop) {
-              y = 0;
-              duration = defaultDuration;
+               //y = 0;
+               duration = defaultDuration;
             }
 
             prevScrollTop = scrollTop;

@@ -118,7 +118,6 @@ angular.module('bnotifiedappctrls', [])
     // Execute action
   });
 
-
 }])
 
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
@@ -1325,39 +1324,48 @@ $scope.closePopover = function() {
       $scope.trackername = trackername;
       $scope.title = title;
   };
+  //function to capture vitals as entered by the user
 	$scope.create = function() {
+       //check if the values are entered by user to proceed further to save the data
+       if($scope.data.weight.value === ''
+         && $scope.data.bloodsugar.fbs === ''
+         && $scope.data.bloodsugar.ppbs === ''
+         && $scope.data.bloodsugar.rbs === ''
+         && $scope.data.bloodpressure.systolic === ''
+         && $scope.data.bloodpressure.diastolic === ''
+         && $scope.data.medication.value === ''
+         && $scope.data.allergies.value === '')
+      {
+        $rootScope.showToast('There was no data entered to be saved','long','top');
+        $scope.closeModal1();
+      }else{
 	     var details =[];
        $rootScope.showLoader();
        var medicalprofile = {
          "data": $scope.data,
          "createdat" : $scope.tdate
-       }
+       };
        medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
             console.log(data);
              if(data.status == 'SUCCESS'){
                 $rootScope.hideLoader();
                 $rootScope.showToast('Medical profile data saved successfully',null,'top');
 			          console.log(" records saved successfully");
+
                 medicalprofileservice.getdetails($scope.patientId).then(function(data){
                 	if(data.status === 'SUCCESS'){
                     	console.log('data obtained['+ JSON.stringify(data) + ']');
-                        /*
-						            angular.forEach(data.data.medicalprofiledetails, function(value, key){
-                            for(var i=0; i< value.medicalprofile.length; i++ ){
-                              this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
-                            }
-                        }, $scope.healthdetails);
-						            console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
-                        */
-                        $scope.healthdetails = data.data;
-                  	}
+                      $scope.healthdetails = data.data;
+                      if(data.summary !== ''){
+                       $scope.summary = data.summary;
+                      }
+                  }
                 }).catch(function(error){
                     $rootScope.hideLoader();
                     console.log('pritning error reason ['+ JSON.stringify(error) + ']');
-                    /*var alertPopUp = $ionicPopup.alert({
-                        title:"Failed to save details"
-                    });*/
+
 					      });
+                //$scope.healthdetails = $scope.healthdetails.splice(0,0,)
                 $scope.closeModal1();
              }}).catch(function(error){
 		   		$rootScope.hideLoader();
@@ -1368,7 +1376,31 @@ $scope.closePopover = function() {
                 console.log("internal server processing error at server side");
   					  }
            });
-		         $scope.data="";
+		$scope.data={
+       "weight" : {
+          "value" : "",
+          "notes" : ""
+       },
+       "bloodsugar" : {
+         "rbs" : "",
+         "ppbs": "",
+         "fbs" : "",
+         "notes" :""
+       },
+       "bloodpressure" :{
+         "systolic" : "",
+         "diastolic": ""
+       },
+       "medication" : {
+         "value" : "",
+         "notes" : ""
+       },
+       "allergies" : {
+         "value" : "",
+         "notes" : ""
+       }
+     };
+      }
 		        //$scope.timeLineForm.$setPristine();
 	};
 	$scope.closeModal1 = function() {
@@ -1377,8 +1409,8 @@ $scope.closePopover = function() {
   $scope.tdate= new Date();
   $scope.$on("$ionicView.beforeLeave", function(event, data){
       // handle event
-      console.log("$ionicView.beforeLeave", data.stateParams);
-      $scope.modal.remove();
+      //console.log("$ionicView.beforeLeave", data.stateParams);
+      //$scope.modal.remove();
   });
 
   $scope.$on("$ionicView.enter", function(event, data){
@@ -1394,6 +1426,30 @@ $scope.closePopover = function() {
     } */
   });
   $scope.healthdetails = [];
+  $scope.summary = {
+     "weight" : {
+        "value" : "",
+        "notes" : ""
+     },
+     "bloodsugar" : {
+       "rbs" : "",
+       "ppbs": "",
+       "fbs" : "",
+       "notes" :""
+     },
+     "bloodpressure" :{
+       "systolic" : "",
+       "diastolic": ""
+     },
+     "medication" : {
+       "value" : "",
+       "notes" : ""
+     },
+     "allergies" : {
+       "value" : "",
+       "notes" : ""
+     }
+   };
   $scope.$on("$ionicView.loaded", function(event, data){
     $ionicModal.fromTemplateUrl('medicalprofile.html', {
       scope: $scope,
@@ -1416,24 +1472,18 @@ $scope.closePopover = function() {
                console.log("obtaining medical details" + data);
            //$scope.details=data;
          if(data.status === 'SUCCESS'){
-             $rootScope.hideLoader();
-             console.log('data obtained['+ JSON.stringify(data) + ']');
+           $rootScope.hideLoader();
+           console.log('data obtained['+ JSON.stringify(data) + ']');
            $scope.healthdetails = data.data;
-           /*
-           angular.forEach(data.data.medicalprofiledetails, function(value, key){
-                 for(var i=0; i< value.medicalprofile.length; i++ ){
-                     this.push({"weight":value.medicalprofile[i].weight.value,"bloodsugar":value.medicalprofile[i].bloodsugar.value, "medication":value.medicalprofile[i].medicationdetails.value, "allergies": value.medicalprofile[i].allergydetails.value, "recorddate":value.createdat});
-                  }
-           }, $scope.healthdetails);
-
-           console.log('healthdetails ['+ JSON.stringify($scope.healthdetails) + ']');
-           */
-
+           if(data.summary !== ''){
+            $scope.summary = data.summary;
+           }
          }
+
        }).catch(function(error){
            $rootScope.hideLoader();
            var alertPopUp = $ionicPopup.alert({
-               title:"There is no medical history currently available"
+               title:"There is no medical history available currently"
            });
        });
 

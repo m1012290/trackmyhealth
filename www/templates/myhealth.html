@@ -37,11 +37,43 @@
 
   <div class="card">
 		<div class="item item-body" style="background-color: #fff">
-		<h3>Allergies</h3>
-		<h3>Medication</h3>
-		<h3>Weight</h3>
-		<h3>Blood Pressure</h3>
-		<h3>Blood Sugar</h3>
+        <div class="row">
+		        <div class="col"><h4>BS(FBS)</h4></div>
+            <div class="col"><h4>BS(PPBS)</h4></div>
+            <div class="col"><h4>BS(RBS)</h4></div>
+        </div>
+        <div class="row">
+            <div class="col" ng-if="summary.bloodsugar.fbs !==''"><h2><b>{{summary.bloodsugar.fbs}}</b></h2></div>
+            <div class="col" ng-if="summary.bloodsugar.ppbs !==''"><h2><b>{{summary.bloodsugar.ppbs}}</b></h2></div>
+            <div class="col" ng-if="summary.bloodsugar.rbs !==''"><h2><b>{{summary.bloodsugar.rbs}}</b></h2></div>
+        </div>
+        <div class="row">
+		        <div class="col"><h4>BP(SYSTOLIC)</h4></div>
+            <div class="col"><h4>BP(DIASTOLIC)</h4></div>
+        </div>
+
+        <div class="row" ng-if="summary.bloodpressure.systolic !==''">
+            <div class="col"><h2><b>{{summary.bloodpressure.systolic}}</b></h2></div>
+            <div class="col"><h2><b>{{summary.bloodpressure.diastolic}}</b></h2></div>
+        </div>
+        <div class="row">
+            <div class="col"><h4>WEIGHT</h4></div>
+        </div>
+        <div class="row" ng-if="summary.weight.value !==''">
+            <div class="col"><h2><b>{{summary.weight.value}}</b></h2></div>
+        </div>
+        <div class="row">
+            <div class="col"><h4>MEDICATION</h4></div>
+        </div>
+        <div class="row" ng-if="summary.medication.value !== ''">
+            <div class="col"><h2><b>{{summary.medication.value}}</b></h2></div>
+        </div>
+        <div class="row">
+            <div class="col"><h4>ALLERGIES</h4></div>
+        </div>
+        <div class="row" ng-if="summary.allergies.value !== ''">
+            <div class="col"><h2><b>{{summary.allergies.value}}</b></h2></div>
+        </div>
 		</div>
 	</div>
     <!--button  class="button icon ion-edit" ng-click="openModaladd()">my record</button-->
@@ -64,17 +96,17 @@
                                 <div class="notification">
                                     <div class="message">
                                       <div ng-repeat="medicalprofiledata in details.medicalprofile">
- <p ng-show="medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''"><strong>Weight : {{medicalprofiledata.profile[0].weight.value}} Kg </strong></p>
- <p ng-show="medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''"><strong>Random Blood Sugar(rbs) : {{medicalprofiledata.profile[0].bloodsugar.rbs}} mg/dl</strong></p>
- <p ng-show="medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''"><strong>Post Pandrial Blood Sugar(ppbs) : {{medicalprofiledata.profile[0].bloodsugar.ppbs}} mg/dl</strong></p>
- <p ng-show="medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''"><strong>Fasting Blood Sugar(fbs) : {{medicalprofiledata.profile[0].bloodsugar.fbs}} mg/dL</strong></p>
- <p ng-show="medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== ''"><strong>Blood Pressure : {{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} mm hg</strong></p>
+ <p ng-show="medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''"><strong>Weight : {{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
+ <p ng-show="medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''"><strong>Random Blood Sugar(rbs) : {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
+ <p ng-show="medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''"><strong>Post Pandrial Blood Sugar(ppbs) : {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
+ <p ng-show="medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''"><strong>Fasting Blood Sugar(fbs) : {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
+ <p ng-show="medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== ''"><strong>Blood Pressure : {{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} MM HG</strong></p>
  <p ng-show="medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''"><strong>Allergies : {{medicalprofiledata.profile[0].allergies.value}}</strong></p>
  <p ng-show="medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''"><strong>Medication : {{medicalprofiledata.profile[0].medication.value}}</strong> </p>
 
 <!-- <button class="button button-small button-clear button-assertive ion-edit" ng-click="openModal1()" on-tap="tracker6()"></button> -->
                                     </div>
-				              </div>
+				                      </div>
                         </div>
                     </div>
                 </div>
@@ -88,12 +120,13 @@
 
 	<!--div class="bar bar-footer bar-light"><div class="title"></div><div class="buttons buttons-right"><button class="button button-assertive button-fab"><i class="icon ion-code light"></i></button></div></div-->
 
-    <script id="medicalprofile.html" type="text/ng-template">
-     <ion-modal-view>
+<script id="medicalprofile.html" type="text/ng-template">
+<ion-modal-view>
 
     <ion-header-bar class="bar-positive">
-      <h1 class="title">{{title}}</h1>
-        <button class="button button-clear button-primary" ng-click="closeModal1()"><i class="icon ion-android-close"></i></button>
+        <button class="button button-clear button-default" ng-click="closeModal1()"><i class="icon ion-android-close"></i></button>
+        <h1 class="title">{{title}}</h1>
+        <button class="button button-clear" ng-click="create(data)"><i class="icon ion-android-done"></i></button>
     </ion-header-bar>
   <ion-content class="padding"><!--style="background-color: rgba(178, 199, 218, 0.79);"-->
       <form name="timeLineForm" >
@@ -103,7 +136,7 @@
 				      </div>
 				<label class="item item-input item-floating-label">
             	<span class="input-label">Weight</span>
-            	<input type="number" placeholder="Weight Ex : 63. kg" name="weight" ng-model="data.weight.value">
+            	<input type="number" placeholder="Weight Ex : 63. KG" name="weight" ng-model="data.weight.value">
 				</label>
 		 		<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>
@@ -122,19 +155,19 @@
 				<div class="item-input">
   				<label class="item item-input item-floating-label">
   					<span class="input-label">Random</span>
-  					<input type="number" placeholder="RBS value in mg/DL" ng-model="data.bloodsugar.rbs">
+  					<input type="number" placeholder="RBS value in MG/DL" ng-model="data.bloodsugar.rbs">
   				</label>
         </div>
         <div class="item-input">
   				<label class="item item-input item-floating-label">
   					<span class="input-label">Fasting</span>
-  					<input type="number" placeholder="FBS value in mg/DL" ng-model="data.bloodsugar.fbs">
+  					<input type="number" placeholder="FBS value in MG/DL" ng-model="data.bloodsugar.fbs">
   				</label>
         </div>
           <div class="item-input">
   				<label class="item item-input item-floating-label">
   					<span class="input-label">Post Prandial</span>
-  					<input type="number" placeholder="PPBS value mg/DL" ng-model="data.bloodsugar.ppbs">
+  					<input type="number" placeholder="PPBS value MG/DL" ng-model="data.bloodsugar.ppbs">
   				</label>
 				</div>
         <div class="item-input">
@@ -209,9 +242,9 @@
 					<textarea  placeholder="Notes"></textarea>
 				</label>
 			</div>
-      <div class="pull-center">
+      <!--<div class="pull-center">
 				<button class="button button-outline button-assertive" ng-click="create(data)">Submit</button>
-			</div>
+			</div> -->
 		</form>
 	</ion-content>
 	</ion-modal-view>
