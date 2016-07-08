@@ -225,7 +225,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
   .state('landing', {
     url: '/landing',
     templateUrl: 'templates/landing.html',
-    controller: 'LoginCtrl'
+    controller: 'LandingCtrl'
   })
   .state('login', {
     url: '/login',
@@ -312,7 +312,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.listedentities', {
-    cache: false,
+    cache: true,
     url: '/listedentities',
     views: {
         'listed-entities': {
@@ -332,7 +332,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })*/
   .state('main.allnotifications', {
-    cache: false,
+    cache: true,
     url: '/allnotifications/:hospitalid',
     views: {
         'all-notifications': {
@@ -342,7 +342,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.myhealth', {
-    cache: false,
+    cache: true,
     url: '/myhealth',
     views: {
         'my-health': {
@@ -383,7 +383,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       controller : 'PatientprofileCtrl'
   });
   $urlRouterProvider.otherwise('/landing');
-  $ionicConfigProvider.scrolling.jsScrolling(false);
+  $ionicConfigProvider.scrolling.jsScrolling(true);
 $ionicConfigProvider.navBar.alignTitle('left');
 }])
 .config(['$httpProvider', function ($httpProvider) {

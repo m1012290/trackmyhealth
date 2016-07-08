@@ -423,6 +423,11 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         return DBA.query("UPDATE registrationtable SET appregistrationid = (?)",parameters);
     };
 
+    self.updateJWTAndAppRegId = function(appregistrationid, jsonwebtoken){
+        var parameters = [appregistrationid, jsonwebtoken];
+        return DBA.query("UPDATE registrationtable SET appregistrationid = (?), jsonwebtoken = (?)", parameters);
+    };
+
     return self;
 }])
 .factory('authservice',['$q', '$resource', 'NODE_SERVER_DETAILS', function($q, $resource, NODE_SERVER_DETAILS){

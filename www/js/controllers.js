@@ -90,7 +90,35 @@ angular.module('bnotifiedappctrls', [])
   };
   $rootScope.messagesdata = {
      badgeCount: ''
-    }
+  }
+
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
+  {
+    scope: $scope
+  });
+  $scope.openPopover = function($event) {
+    console.log('printing openPopover within AppCtrl');
+    $scope.popover.show($event);
+  };
+  $scope.closePopover = function() {
+    console.log('printing closePopover within AppCtrl');
+    $scope.popover.hide();
+  };
+  //Cleanup the popover when we're done with it!
+  $scope.$on('$destroy', function() {
+    console.log('printing $destroy within AppCtrl');
+    $scope.popover.remove();
+  });
+  // Execute action on hide popover
+  $scope.$on('popover.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove popover
+  $scope.$on('popover.removed', function() {
+    // Execute action
+  });
+
+
 }])
 
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
@@ -169,7 +197,7 @@ angular.module('bnotifiedappctrls', [])
 
 }])
 .controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
-    $scope.logindata=[];
+  $scope.logindata=[];
 	$scope.forgot=[];
 
 	$ionicModal.fromTemplateUrl('my-modal4.html',{
@@ -240,40 +268,35 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 
 	}
 
-    $scope.signup=function(){
-        $state.go('signup');
-
-    };
-
+  $scope.signup=function(){
+      $state.go('signup');
+  };
 	$scope.login =function(logindata){
-
 		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
-
 		$rootScope.showLoader();
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
             if(data.status === 'SUCCESS'){
               $rootScope.hideLoader();
               registrationdetsdb.query({}).then(function(response){
-              var result = DBA.getById(response);
-                if(result.appregistrationid === null || result.appregistrationid === ''){
+                  var result = DBA.getById(response);
+              //if(result.appregistrationid === null || result.appregistrationid === ''){
                     //update the table with the id gotten after login
-                    registrationdetsdb.updateAppRegistrationId(data.appregistrationid).then(function(result){
-                        $state.go('main.listedentities');
-                    }).catch(function(error){
-                        $rootScope.showPopup({
-                               title:'System Error',
-                                    template:'Unable to login right now, please try again !!'
-                        },function(res){
-                        });
-                    });
-                }else{
-                  $state.go('main.listedentities');
-                }
+                  registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken).then(function(result){
+                      $state.go('main.listedentities');
+                  }).catch(function(error){
+                      $rootScope.showPopup({
+                        title:'System Error',
+                        template:'Unable to login right now, please try again !!'
+                      },function(res){
+                      });
+                  });
               }).catch(function(error){
-
+                $rootScope.showPopup({
+                       title:'System Error',
+                            template:'Unable to login right now, please try again !!'
+                },function(res){
+                });
               });
-
-
             }else{
                 $rootScope.showPopup({
       					       title:'Invalid Login',
@@ -282,18 +305,22 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
                 });
             }
 		}).catch(function(error){
-            $rootScope.hideLoader();
-			var alertPopup = $ionicPopup.alert({
-				title: "Couldn't login right now, Please try again !!"
-			}).then(function(res){
-				//$state.go('login');
-			})
+      $rootScope.hideLoader();
+      if(error.status === 400){
+        $rootScope.showPopup({
+          title:'Invalid Credentials',
+          template:'Invalid login details, please try again'
+        },function(res){
+        });
+      }else{
+        $rootScope.showPopup({
+          title:'System Error',
+          template:'Unable to login right now, please try again !!'
+        },function(res){
+        });
+      }
 		});
 	}
-
-
-
-
 }])
 .controller('SignUpCtrl',['$scope', '$state', 'ionicDatePicker', '$filter', 'signupservice', '$ionicModal', '$ionicPopup', function($scope, $state, ionicDatePicker, $filter, signupservice, $ionicModal, $ionicPopup){
 
@@ -402,7 +429,31 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 		}
 	}
 }])
-
+.controller('LandingCtrl',['$scope','$rootScope', '$ionicPopup', '$stateParams','registrationdetsdb','DBA','$state','loginservice',function(
+  $scope, $rootScope, $ionicPopup, $stateParams, registrationdetsdb, DBA, $state, loginservice){
+  // first on loading of the landing page lets check if we have
+  //json web token available
+  $scope.$on("$ionicView.enter", function(event, data){
+    $rootScope.showLoader();
+    registrationdetsdb.query({}).then(function(response){
+        var result = DBA.getById(response);
+        loginservice.logindets('', '').then(function(data){
+          $rootScope.hideLoader();
+          if(data.status === 'SUCCESS'){
+              $state.go('main.listedentities');
+          }else{
+            $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
+          }
+        }).catch(function(error){
+            $rootScope.hideLoader();
+            $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
+        });
+    }).catch(function(error){
+          $rootScope.hideLoader();
+          $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
+    });
+  });
+}])
 .controller('PasswordCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, registrationdetsdb, DBA) {
     $scope.logindata = {
         mobilenumber : $stateParams.mobilenumber,
@@ -879,7 +930,7 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
 	}])*/
 .controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal, $ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
+  /* $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
   {
     scope: $scope
   });
@@ -900,7 +951,15 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
   // Execute action on remove popover
   $scope.$on('popover.removed', function() {
     // Execute action
-  });
+  }); */
+  $scope.openPopover = function($event) {
+    console.log('printing openPopOver Withinin EntitiesCtrl');
+    $scope.$parent.openPopover($event);
+  };
+  $scope.closePopover = function() {
+    console.log('printing closePopover Withinin EntitiesCtrl');
+    $scope.$parent.closePopover();
+  };
 
 	$scope.listedentities=[];
 	$scope.hospitalslist=[];
@@ -1203,7 +1262,7 @@ $scope.filterBarInstance;
     };
 }])
 .controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb','$ionicPopover', function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb, $ionicPopover) {
-
+/*
   $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
   {
     scope: $scope
@@ -1226,8 +1285,15 @@ $scope.filterBarInstance;
   $scope.$on('popover.removed', function() {
     // Execute action
   });
-
-
+*/
+$scope.openPopover = function($event) {
+  console.log('printing openPopover within MyHealthCtrl');
+  $scope.$parent.openPopover($event);
+};
+$scope.closePopover = function() {
+  console.log('printing closePopover within MyHealthCtrl');
+  $scope.$parent.closePopover();
+};
 
    $scope.patientId = '';
    $scope.healthdetails = [];
@@ -1317,7 +1383,6 @@ $scope.filterBarInstance;
 
   $scope.$on("$ionicView.enter", function(event, data){
     console.log('within $ionicView.afterEnter');
-
   });
 
   $scope.$on("$ionicView.enter", function(event, data){
@@ -1339,7 +1404,7 @@ $scope.filterBarInstance;
     $scope.openModal1 = function(){
       $scope.modal.show();
     };
-    
+
     $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
        var result = DBA.getById(response);
@@ -1890,15 +1955,27 @@ $scope.filterBarInstance;
 }])
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover', function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover){
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
-  {
-    scope: $scope
-  });
+    //hospital info modal
+
+	$ionicModal.fromTemplateUrl('hospitalinfo.html', {
+    	scope: $scope,
+    	animation: 'slide-in-up'
+  	}).then(function(modal) {
+    	$scope.modal = modal;
+  	});
+	$scope.openhospitalinfo = function() {
+    	$scope.modal.show();
+    }
+	$scope.closehospitalinfo = function() {
+    	$scope.modal.hide();
+	}
   $scope.openPopover = function($event) {
-    $scope.popover.show($event);
+    console.log('printing openPopOver Withinin InboxOfAllMsgCtrl');
+    $scope.$parent.openPopover($event);
   };
   $scope.closePopover = function() {
-    $scope.popover.hide();
+    console.log('printing closePopover Withinin InboxOfAllMsgCtrl');
+    $scope.$parent.closePopover();
   };
   //Cleanup the popover when we're done with it!
   $scope.$on('$destroy', function() {
@@ -1912,8 +1989,6 @@ $scope.filterBarInstance;
   $scope.$on('popover.removed', function() {
     // Execute action
   });
-
-
 $scope.shouldShowReorder = false;
     $scope.shouldShowDelete  = false;
     $scope.listCanSwipe = true;
@@ -1922,17 +1997,32 @@ $scope.shouldShowReorder = false;
 	//$scope.patientId = "5751377e4f09030255c59a8b";
   $scope.notinfo =[];
   $scope.visitinfo=[];
-
-  registrationdetsdb.query({}).then(function(response){
+registrationdetsdb.query({}).then(function(response){
       var result = DBA.getById(response);
       $scope.patientId = result.appregistrationid;
       console.log('$stateparams hospital id -->['+ $stateParams.hospitalid + ']');
       if($stateParams.hospitalid === '123'){
-
-              visitservice.getVisits($scope.patientId).then(function(data){
+      visitservice.getVisits($scope.patientId).then(function(data){
               console.log("obtaining visit info" + data );
-              $scope.visitinfo = data.data;
+             $scope.visitinfo = data.data;
               console.log($scope.visitinfo);
+
+                var visitid = '5762ee91425bd7f27d9a722d';
+            console.log(visitid);
+                  if(visitid === '5762ee91425bd7f27d9a722d'){
+                visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
+			console.log("notifications list obtained" + data);
+			$scope.notinfo = data.data;
+			console.log($scope.notinfo);
+           }).catch(function(error){
+        var popupalert = $ionicPopup.alert({
+            title: "Error",
+            template: "Sorry unable to obatin your notification"
+        }).then(function(res){
+            console.log("error received");
+        })
+    });
+         }
           }).catch(function(error){
               var popupalert = $ionicPopup.alert({
                   title: "Error",
@@ -1941,6 +2031,7 @@ $scope.shouldShowReorder = false;
                   console.log("error received");
               })
           });
+
       }else{
           visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
               console.log("obtaining visit info" + data );
@@ -1962,13 +2053,14 @@ $scope.shouldShowReorder = false;
         });
   });
 	//$scope.visitdets = function(){
-    $scope.notifications = function(visitid){
 
-		visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
-			console.log("notifications list obtained" + data);
+    $scope.notifications = function(visitid){
+visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
+            console.log("notifications list obtained" + data);
 			$scope.notinfo = data.data;
 			console.log($scope.notinfo);
-			$scope.openModal5();
+            $scope.openModal5();
+            console.log(visitid);
 		}).catch(function(error){
         var popupalert = $ionicPopup.alert({
             title: "Error",
@@ -1979,8 +2071,7 @@ $scope.shouldShowReorder = false;
     });
 
 	}
-
-	$ionicModal.fromTemplateUrl('my-modal5.html', {
+$ionicModal.fromTemplateUrl('my-modal5.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
@@ -1995,7 +2086,9 @@ $scope.shouldShowReorder = false;
 
     $scope.patientdetails = function(visitid){
         $scope.visitdata = {
-            "patientdetails" : ""
+            "patientdetails" : "",
+             "hospitaldetails" : "",
+            "visitdetails" : ""
         };
         console.log('printing visitid ['+ visitid + ']');
 
@@ -2008,11 +2101,25 @@ $scope.shouldShowReorder = false;
                 $scope.visitdata.patientdetails = value.patientdetails;
             }
         });
+         angular.forEach($scope.visitinfo, function(value, key){
+            console.log('value is ['+ JSON.stringify(value.patientdetails));
+            if(value._id === visitid){
+                console.log('values are equal');
+                $scope.visitdata.hospitaldetails = value.hospitalid;
+            }
+        });
+         angular.forEach($scope.visitinfo, function(value, key){
+            console.log('value is ['+ JSON.stringify(value.patientdetails));
+            if(value._id === visitid){
+                console.log('values are equal');
+                $scope.visitdata.visitdetails = value;
+            }
+        });
         console.log('$scope.visitdata['+ $scope.visitdata + ']');
         $scope.openModal3();
     }
 
-    $scope.hospitaldetails = function(visitid){
+    /* $scope.hospitaldetails = function(visitid){
         $scope.visitdata = {
             "hospitaldetails" : ""
         };
@@ -2049,9 +2156,9 @@ $scope.shouldShowReorder = false;
         console.log('$scope.visitdata['+ $scope.visitdata + ']');
         $scope.openModal6();
 
-    }
+    }*/
 
-    $ionicModal.fromTemplateUrl('patientdetails.html', {
+   $ionicModal.fromTemplateUrl('patientdetails.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
@@ -2064,7 +2171,7 @@ $scope.shouldShowReorder = false;
     	$scope.modal.hide();
 	}
 
-    $ionicModal.fromTemplateUrl('hospitaldetails.html', {
+    /*$ionicModal.fromTemplateUrl('hospitaldetails.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
@@ -2089,7 +2196,24 @@ $scope.shouldShowReorder = false;
   }
 	$scope.closeModal6 = function() {
     	$scope.modalvisitdets.hide();
-	}
+	}*/
+
+      // filter alert popup
+    $scope.showAlert = function() {
+       var confirmPopup =  $ionicPopup.confirm({
+       title: 'Filter by following',
+       template: '<ion-item class="item-input" ><label class="item-input"><span class="input-label">Date</span><input type="date" placeholder="from date"><input type="date" placeholder="to date"></label></ion-item><ion-item class="item-input"><label class="item-input"><span class="input-label">Name</span><select><option>{{firstname}}</option></select><input type="text"></label></ion-item><ion-item class="item-input"><label class="item-input"><span class="input-label">Hospital Name</span><select><option>{{value.hospitalname}}</option></select><input type="text"></label></ion-item>',
+            scope: $scope
+     });
+     confirmPopup.then(function(res) {
+       if(res) {
+         console.log('You are sure');
+       } else {
+         console.log('You are not sure');
+       }
+     });
+   };
+
 
 	/*hospitalservice.getregHospitals($scope.patientId).then(function(data){
 		console.log("obtaining hospital code name n id");
@@ -2140,6 +2264,21 @@ $scope.shouldShowReorder = false;
   $rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
       console.log('load exit');
   });
+ $scope.showFilterBar = function(){
+
+            filterBarInstance = $ionicFilterBar.show({
+            items:$scope.visitinfo,
+            update:function(filteredItemList){
+                $scope.visitinfo = filteredItemList;
+            },
+            expression:function(filterText, value, index, array){
+                return value.visitName.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;
+
+            }
+            //filterProperties:'entityName'
+            });
+        //console.log('filterBarInstance -->['+filterBarInstance + ']');
+    };
 
 
 }])
