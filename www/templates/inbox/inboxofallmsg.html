@@ -13,8 +13,7 @@
         <span>trackmyhealth</span-->
 
     </ion-nav-title>
-       <ion-nav-buttons side="right" >
-
+       <ion-nav-buttons side="right">
             <button class="button button-clear" ng-click="showFilterBar()">
              <i class=" ion-search icon-btn-customize"></i>
             </button>
@@ -56,7 +55,8 @@
       </div>
 
  </ion-content>
-
+<!--ion-floating-button  ng-click="showPopup()" has-footer="false" button-color=#d14836  icon="ion-plus" iconColor="#fff">
+</ion-floating-button-->
 
 <script id="my-modal5.html" type="text/ng-template">
      <ion-modal-view>
@@ -102,148 +102,118 @@
     </ion-header-bar>
 
  <ion-content >
+     <ion-slide-box active-slide="myActiveSlide">
+  <ion-slide>
        <div class="list card">
-           <div class="item" style="background-color:#DBDBDB";> <h2 style="text-align: center;font-size:18px;"><strong>Patient Details </strong></h2></div>
-            <div class="item item-divider" style="font-size: 17px;">
-                 <i class="ion-medkit" style="font-size:22px;"></i> Patient :
-             {{visitdata.patientdetails.firstname}} {{visitdata.patientdetails.lastname}}
+          <div class="item item-divider" style="background-color:#DBDBDB";> <h2 style="text-align: center;font-size:18px;"><strong>Patient Details </strong></h2></div>
+            <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+                 <i class="ion-medkit" style="font-size:22px;"></i> Patient :</div>
+           <div class="item">
+               <p style="font-size:17px;">{{visitdata.patientdetails.firstname}} {{visitdata.patientdetails.lastname}}</p>
            </div>
-     <div class="item item-divider" style="font-size: 17px;">
-            <i class="ion-ios-email" style="font-size:22px;" ></i> Email :
-        {{visitdata.patientdetails.emailid}}      </div>
+     <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+            <i class="ion-ios-email" style="font-size:22px;" ></i> Email :</div>
+           <div class="item">
+               <p style="font-size:17px;"> {{visitdata.patientdetails.emailid}} </p>
+           </div>
 
-  <div class="item item-divider" style="font-size: 17px;">
-      <i class="ion-ios-telephone" style="font-size:22px;"></i> Phone :
-
-        {{visitdata.patientdetails.mobilenumber}}
+  <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+      <i class="ion-ios-telephone" style="font-size:22px;"></i> Phone :</div>
+<div class="item">
+    <p style="font-size:17px;"> {{visitdata.patientdetails.mobilenumber}}</p>
 
     </div>
+           </div>
+      </ion-slide>
+         <ion-slide>
+    <div class="list card">
+          <div class="item item-divider" style="background-color:#DBDBDB";> <h2 style="text-align: center;font-size:18px;"><strong>Hospital Details </strong></h2></div>
 
-     </div>
-    <!--div class="list card">
-          <div class="item" style="background-color:#DBDBDB";> <h2 style="text-align: center;font-size:18px;"><strong>Hospital Details </strong></h2></div>
-
-            <div class="item item-divider" style="font-size: 17px;">
+            <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
        <i class="ion-ios-location" style="font-size:22px;"></i> Address</div>
-         <div class="item"><h2> {{visitdata.hospitaldetails.hospitaladdress.addressline1}}
-				 {{visitdata.hospitaldetails.hospitaladdress.addressline2}}  <br>{{visitdata.hospitaldetails.hospitaladdress.addressline3}} {{visitdata.hospitaldetails.hospitaladdress.city}} <br> {{visitdata.hospitaldetails.hospitaladdress.pincode}}  {{visitdata.hospitaldetails.hospitaladdress.state}} {{visitdata.hospitaldetails.hospitaladdress.country}}</h2></div>
+         <div class="item"><p style="font-size: 17px;"> {{visitdata.hospitaldetails.hospitaladdress.addressline1}}
+				 {{visitdata.hospitaldetails.hospitaladdress.addressline2}}  <br>{{visitdata.hospitaldetails.hospitaladdress.addressline3}} {{visitdata.hospitaldetails.hospitaladdress.city}} <br> {{visitdata.hospitaldetails.hospitaladdress.pincode}}  {{visitdata.hospitaldetails.hospitaladdress.state}} {{visitdata.hospitaldetails.hospitaladdress.country}}</p></div>
 
- <div class="item item-divider" style="font-size: 17px;">
-     <i class="ion-ios-telephone" style="font-size:22px;" ></i> Mobile Number</div>
-         <div class="item"><h2> {{hos.hospitaladdress.addressline1}} <br>
-         {{visitdata.hospitaldetails.hopitalmobnumber}}</h2></div>
+ <!--div class="item item-divider" style="font-size: 15px;">
+     <i class="ion-ios-telephone" style="font-size:17px;" ></i> Mobile Number</div>
+         <div class="item"><p> {{hos.hospitaladdress.addressline1}} <br>
+         {{visitdata.hospitaldetails.hopitalmobnumber}}</p></div-->
 
-     <div class="item item-divider" style="font-size: 17px;">
-         <i class="ion-ios-telephone" style="font-size:22px;"></i> Telephone Number</div>
-     <div class="item"><h2>{{visitdata.hospitaldetails.hospitaltelnumber}}</h2></div>
+     <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+         <i class="ion-ios-telephone" style="font-size:22px;"></i> Telephone Number :
+         </div>
+        <div class="item">
+            <p style="font-size: 17px;">{{visitdata.hospitaldetails.hospitaltelnumber}}</p></div>
 
- <div class="item item-divider" style="font-size: 17px;">
+ <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
       <i class="ion-eye" style="font-size:22px;"></i> Departments</div>
-     <div class="item"><h2 ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}</h2></div>
+     <div class="item"><p style="font-size: 17px;" ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}</p></div>
 
- <div class="item item-divider" style="font-size: 17px;">
+ <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
       <i class="ion-erlenmeyer-flask" style="font-size:22px;"></i> In House Labs :</div>
-     <div class="item"><h2><i class="ion-checkmark"></i></h2></div>
-</div-->
+     <div class="item"><p style="font-size: 17px;"><i class="ion-checkmark"></i></p></div>
+</div></ion-slide>
+         <ion-slide>
       <div class="list card">
-          <div class="item" style="background-color:#DBDBDB";> <h2 style="text-align: center;font-size:18px;"><strong>Visit Details </strong></h2></div>
-           <div class="item item-divider" style="font-size: 17px;">
+          <div class="item item-divider" style="background-color:#DBDBDB";> <h2 style="text-align: center;font-size:18px;"><strong>Visit Details </strong></h2></div>
+           <!--div class="item item-divider" style="font-size: 17px;">
            <ion-item  class="item item-avatar item-remove-animate"
                     style="padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 0px;
     padding-top: 0px;">
-			        <button class="button button-clear"  ng-click="openhospitalinfo()">
-                         <p > {{visitdata.hospitaldetails.hospitalname | lowercase}} </p>
-                    <span class="circle-span direct-chat-timestamp"
+                <button class="button button-clear" ng-click="showHealthinfo()">
+                 <p> {{visitdata.hospitaldetails.hospitalname | lowercase}} </p>   <span class="circle-span direct-chat-timestamp"
                           style="padding-top: 10px; padding-left: 5px;font-weight: bold; font-size: 15px; left:5px; background-color: #D14836;opacity:1">{{visitdata.hospitaldetails.hospitalname|limitTo:1}}</span>
 
+           </button>
 
-               </button>
+
         </ion-item>
-          </div><br>
-           <div class="item item-divider" style="font-size: 17px;">
-         IP Admission No : {{visitdata.visitdetails.ipadmissionno}}
+          </div><br-->
+           <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+         IP Admission No :</div>
+          <div class="item">
+              <p style="font-size:17px;">{{visitdata.visitdetails.ipadmissionno}}</p>
                  </div>
- <div class="item item-divider" style="font-size: 17px;">
-      <!--i class="ion-medkit" style="font-size:22px;" ></i--> Visit Type :
-           {{visitdata.visitdetails.visittype}}
+ <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+      <!--i class="ion-medkit" style="font-size:22px;" ></i--> Visit Type :</div>
+          <div class="item">
+              <p style="font-size:17px;">{{visitdata.visitdetails.visittype}}</p>
 
                     </div>
 
-      <div class="item item-divider" style="font-size: 17px;">
+      <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
           <!--i class="ion-ios-email" style="font-size:22px;" ></i--> Reason for visit </div>
               <div class="item">
-                  <p>{{visitdata.visitdetails.diagnosticdets[0].reasonforvisit}}
+                  <p style="font-size:17px;">{{visitdata.visitdetails.diagnosticdets[0].reasonforvisit}}
                   </p>
 
                    </div>
 
-                 <div class="item item-divider" style="font-size: 17px;">
+                 <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
                      <!--i class="ion-ios-telephone" style="font-size:22px;"></i-->  Primary Diagnosis </div>
                  <div class="item">
-                     <h2> {{note.notificationtext}}</h2>
+                     <p style="font-size:17px;"> {{note.notificationtext}}</p>
                  </div>
 
-    <div class="item item-divider" style="font-size: 17px;">
+    <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
         <!--i class="ion-erlenmeyer-flask" style="font-size:22px;"></i--> Lab Tests </div>
      <div class="item">
-         <p ng-repeat="labtest in visitdata.visitdetails.labtests track by $index" style="font-size: 17px;">{{labtest}}</p>
+         <p style="font-size:17px;" ng-repeat="labtest in visitdata.visitdetails.labtests track by $index" style="font-size: 15px;">{{labtest}}</p>
+                 </div>
+ <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
+     Ward Information :</div>
+     <div class="item">
+         <p style="font-size:17px;">{{visitdata.visitdetails.wardinfo}}</p>
                  </div>
 
-
-
-     <div class="item item-divider" style="font-size: 17px;">
-         Ward Information : {{visitdata.visitdetails.wardinfo}}
-                 </div>
-
-    </div>
+ </div></ion-slide>
+     </ion-slide-box>
   </ion-content>
  </ion-modal-view>
 </script>
-    <script id="hospitalinfo.html" type="text/ng-template">
 
-<ion-modal-view>
-  <ion-header-bar class=" bar bar-positive">
-      <h1 class="title">Hospital Information</h1>
-   <button class="button button-clear button-primary" ng-click="closehospitalinfo()"><i class="icon ion-android-close"></i></button>
-    </ion-header-bar>
-
- <ion-content >
-
-     <div class="list card">
- <div id="content"><div id="profile-info">
-           <span id="profile-description">
-               <h6 id="profile-name" ;>{{hos.hospitalname}}</h6><br><br><br></span></div>
-
-  <div class="item item-divider" style="font-size: 17px;color:#33aaee";>
-      <i class="ion-ios-telephone" style="font-size:22px;"></i> Phone:</div>
-   <div class="item"> <h2>  {{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}</h2></div>
-
-   <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
-       <i class="ion-email" style="font-size:22px;"></i>  Email :</div>
-         <div class="item"><h2> {{hos.hospitalemailid}} {{hos.hospitalsecondaryemailid}}</h2></div>
-
- <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
-     <i class="ion-ios-location" style="font-size:22px;" ></i> Location</div>
-         <div class="item"><h2> {{hos.hospitaladdress.addressline1}} <br>
-          {{hos.hospitaladdress.addressline2}}{{hos.hospitaladdress.addressline3}}
-             {{hos.hospitaladdress.city}} {{hos.hospitaladdress.pincode}}
-             {{hos.hospitaladdress.state}} {{hos.hospitaladdress.country}}</h2></div>
-
-     <div class="item item-divider" style="font-size: 17px;color:#33aaee;">
-         <i class="ion-eye" style="font-size:22px;"></i> Departments</div>
-     <div class="item"><h2> <h2 ng-repeat="dept in hos.hospitaldepartments">{{dept}}</h2></h2></div>
-
- <div class="item item-divider" style="font-size: 17px; color:#33aaee;">
-     <i class="ion-erlenmeyer-flask" style="font-size:22px;"></i> In House Labs</div>
-   <div class="item"> <h2>  <p>
-               <i class="ion-checkmark"></i> </p></div>
-</div></div>
-</ion-content>
- </ion-modal-view>
-</script>
-</script>
 
 <!--script id="hospitaldetails.html" type="text/ng-template">
 

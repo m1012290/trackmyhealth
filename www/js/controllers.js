@@ -1417,14 +1417,6 @@ $scope.closePopover = function() {
     console.log('within $ionicView.afterEnter');
   });
 
-  $scope.$on("$ionicView.enter", function(event, data){
-
-  /*  if($scope.healthdetails !== null && $scope.healthdetails.length === 0 ){
-      var alertPopUp = $ionicPopup.alert({
-          title:"There is no medical history currently available"
-      });
-    } */
-  });
   $scope.healthdetails = [];
   $scope.summary = {
      "weight" : {
@@ -2006,7 +1998,7 @@ $scope.closePopover = function() {
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover', function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover){
 
     //hospital info modal
-
+$scope.myActiveSlide = 0;
 	$ionicModal.fromTemplateUrl('hospitalinfo.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
@@ -2053,12 +2045,11 @@ registrationdetsdb.query({}).then(function(response){
       console.log('$stateparams hospital id -->['+ $stateParams.hospitalid + ']');
       if($stateParams.hospitalid === '123'){
       visitservice.getVisits($scope.patientId).then(function(data){
-              console.log("obtaining visit info" + data );
+             console.log("obtaining visit info" + data );
              $scope.visitinfo = data.data;
               console.log($scope.visitinfo);
-
-                var visitid = '5762ee91425bd7f27d9a722d';
-            console.log(visitid);
+            var visitid = '5762ee91425bd7f27d9a722d';
+            //console.log(visitid);
                   if(visitid === '5762ee91425bd7f27d9a722d'){
                 visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
 			console.log("notifications list obtained" + data);
