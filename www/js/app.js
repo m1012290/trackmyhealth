@@ -15,8 +15,9 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
+    /*
     if(window.cordova){
-      
+
         cordova.plugins.backgroundMode.enable();
 
         // Called when background mode has been activated
@@ -28,7 +29,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
                 });
             }, 5000);
         }
-    }
+    } */
 
     console.log('checking internet connectivity');
     var state = checkForInternetConnection($ionicPlatform);
