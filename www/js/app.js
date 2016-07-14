@@ -15,6 +15,21 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
+    if(window.cordova){
+      
+        cordova.plugins.backgroundMode.enable();
+
+        // Called when background mode has been activated
+        cordova.plugins.backgroundMode.onactivate = function () {
+            setTimeout(function () {
+                // Modify the currently displayed notification
+                cordova.plugins.backgroundMode.configure({
+                    text:'Running in background for more than 5s now.'
+                });
+            }, 5000);
+        }
+    }
+
     console.log('checking internet connectivity');
     var state = checkForInternetConnection($ionicPlatform);
 
