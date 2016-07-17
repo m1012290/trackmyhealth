@@ -1,5 +1,5 @@
 angular.module('bnotifiedappctrls', [])
-.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover',function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover) {
+.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal',function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal) {
     //handle events and broadcasts such as error scenario to redirect user
    console.log('within AppCtrl current state -->'+JSON.stringify($state.current));
    $scope.$on('NoInternet' , function(event){
@@ -118,8 +118,46 @@ angular.module('bnotifiedappctrls', [])
     // Execute action
   });
 
-}])
 
+  $scope.takeImage = function(){
+    $scope.data = {
+      "tag" : "",
+      "description" : ""
+    }
+    var options = {
+         quality: 100,
+         destinationType: Camera.DestinationType.FILE_URI,
+         sourceType: Camera.PictureSourceType.CAMERA,
+         allowEdit: false,
+         encodingType: Camera.EncodingType.JPEG,
+         targetWidth: 500,
+         targetHeight: 500,
+         popoverOptions: CameraPopoverOptions,
+         saveToPhotoAlbum: false
+     };
+
+     $cordovaCamera.getPicture(options).then(function(imageData) {
+         //$scope.srcImage = "data:image/jpeg;base64," + imageData;
+         $scope.srcImage = imageData;
+         $scope.data.tag = imageData;
+         $scope.openDocModal();
+     }, function(err) {
+        
+     });
+  };
+  $ionicModal.fromTemplateUrl('documentpic.html', {
+  	scope: $scope,
+  	animation: 'slide-in-up'
+  }).then(function(modal) {
+    	$scope.modal = modal;
+  });
+	$scope.openDocModal = function() {
+    	$scope.modal.show();
+  }
+	$scope.closeDocModal = function() {
+    	$scope.modal.hide();
+	}
+}])
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
     //$scope.mobilenumber = '';
     $scope.errordescription = '';
@@ -200,7 +238,7 @@ angular.module('bnotifiedappctrls', [])
 	$scope.forgot=[];
 
 	$ionicModal.fromTemplateUrl('my-modal4.html',{
-        scope: $scope,
+      scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
     	$scope.modal = modal;

@@ -103,6 +103,10 @@
                         {
                             "xml": "<preference default=\"true\" name=\"xwalkMultipleApk\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -120,7 +124,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
@@ -249,6 +253,9 @@
         },
         "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "com.ionicframework.bnotified987585"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.ionicframework.bnotified987585"
         }
     },
     "dependent_plugins": {
@@ -256,6 +263,9 @@
             "PACKAGE_NAME": "com.ionicframework.bnotified987585"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.ionicframework.bnotified987585"
+        },
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.ionicframework.bnotified987585"
         }
     }
