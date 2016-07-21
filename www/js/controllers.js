@@ -130,10 +130,12 @@ angular.module('bnotifiedappctrls', [])
          sourceType: Camera.PictureSourceType.CAMERA,
          allowEdit: false,
          encodingType: Camera.EncodingType.JPEG,
-         targetWidth: 500,
-         targetHeight: 500,
+         //targetWidth: 250,
+         //targetHeight: 250,
          popoverOptions: CameraPopoverOptions,
-         saveToPhotoAlbum: false
+         mediaType: Camera.MediaType.PICTURE,
+         saveToPhotoAlbum: true,
+         correctOrientation : true
      };
 
      $cordovaCamera.getPicture(options).then(function(imageData) {
@@ -142,7 +144,9 @@ angular.module('bnotifiedappctrls', [])
          $scope.data.tag = imageData;
          $scope.openDocModal();
      }, function(err) {
-        
+       $rootScope.showPopup({title:'Error', template:"Camera couldn't capture the image, please try again !!"}, function(res){
+           //console.log('On alert ok ');
+       });
      });
   };
   $ionicModal.fromTemplateUrl('documentpic.html', {
@@ -221,8 +225,6 @@ angular.module('bnotifiedappctrls', [])
                 }
                 if(error.status === 500){
                     $rootScope.showPopup({title:'Error', template:"We couldn't validate mobile number right now, Please try again"}, function(res){
-
-
                     });
                 }
 
@@ -359,15 +361,15 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 		});
 	}
 }])
-.controller('SignUpCtrl',['$scope', '$state', 'ionicDatePicker', '$filter', 'signupservice', '$ionicModal', '$ionicPopup', function($scope, $state, ionicDatePicker, $filter, signupservice, $ionicModal, $ionicPopup){
+.controller('SignUpCtrl',['$scope', '$rootScope','$state', 'ionicDatePicker', '$filter', 'signupservice', '$ionicModal', '$ionicPopup', function($scope, $rootScope, $state, ionicDatePicker, $filter, signupservice, $ionicModal, $ionicPopup){
 
 	$scope.formData = [];
 
 	// DatePicker object with callbcak to obtain the date
 	var ipObj1 = {
       callback: function (val) {  //Mandatory
-        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-		$scope.formData.dob = $filter('date')(val, "dd MMM yyyy");
+          console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+		      $scope.formData.dob = $filter('date')(val, "dd MMM yyyy");
       },
       from: new Date(1980 , 1, 1), //Optional
       to: new Date(2016, 10, 30), //Optional
@@ -376,14 +378,14 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 //      disableWeekdays: [0],       //Optional
       closeOnSelect: false,       //Optional
       templateType: 'popup'       //Optional
-    };
+  };
 
-    $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(ipObj1);
-    };
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(ipObj1);
+  };
 
-	    //modal
-	$ionicModal.fromTemplateUrl('my-modal2.html', {
+  //OTP Details Modal View
+	$ionicModal.fromTemplateUrl('otpscreen.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
@@ -391,34 +393,53 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
   	});
 	$scope.openModal2 = function() {
     	$scope.modal.show();
-    }
+  }
 	$scope.closeModal2 = function() {
     	$scope.modal.hide();
-            }
+  }
 
 	// saving data into an array and calling the modal func to capture the otp
-    $scope.save = function(fdata){
-
-		console.log("saving");
+  $scope.save = function(fdata){
+    $rootScope.showLoader();
 		$scope.formData.push({
-		firstname: fdata.firstname, lastname:fdata.lastname, mobnum:fdata.mobnum, emailadd:fdata.emailadd, 			password:fdata.password, confirmpassword:fdata.confirmpassword,age: fdata.age, dob:fdata.dob, male:fdata.male, female: fdata.female, address: fdata.address, city: fdata.city, pincode: fdata.pincode, state: fdata.state, country: fdata.country, doctor : fdata.doctor, licenceNo: fdata.licenceNo, termyes: fdata.termsyes });
+		firstname: fdata.firstname,
+    lastname:fdata.lastname,
+    mobnum:fdata.mobnum,
+    emailadd:fdata.emailadd,
+    password:fdata.password,
+    confirmpassword:fdata.confirmpassword,
+    age: fdata.age,
+    dob:fdata.dob,
+    male:fdata.male,
+    female: fdata.female,
+    address: fdata.address,
+    city: fdata.city,
+    pincode: fdata.pincode,
+    state: fdata.state,
+    country: fdata.country,
+    doctor : fdata.doctor,
+    licenceNo: fdata.licenceNo,
+    termyes: fdata.termsyes
+    });
 
-		console.log($scope.formData);
+		//console.log($scope.formData);
 
 		signupservice.savedetails($scope.formData.emailadd, $scope.formData.mobnum, $scope.formData.doctor ).then(function(data){
-			console.log(data);
+			//console.log(data);
+      $rootScope.hideLoader();
 			if(data.status == 'SUCCESS'){
-			console.log(" records exist go to main page");
-				}
+			     $rootScope.showPopup({title:'Already Registered', template:'Email id and mobile number combination already exists'});
+			}
 		}).catch(function(error){
-			console.log("error received " + error);
 			if(error.status === 404){
 				var mobilenum = $scope.formData.mobnum.toString();
-			signupservice.generateOtp($scope.formData.emailadd, mobilenum ).then(function(data){
-					console.log("genetrated OTP " + data);
+			  signupservice.generateOtp($scope.formData.emailadd, mobilenum ).then(function(data){
+          $rootScope.hideLoader();
 					$scope.openModal2();
-				})
-			}
+				});
+			}else{
+        $rootScope.hideLoader();
+      }
 			});
 		}
 	//otp
@@ -435,34 +456,33 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 
 	var mobile = $scope.formData.mobnum.toString();
 
-		if($scope.formData.doctor == true){
-
-signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
+if($scope.formData.doctor == true){
+   signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
 			var alertPopUp = $ionicPopup.alert({
 				title:"Registration Successful"
 			}).then(function(res){
 				$scope.closeModal2();
 				$state.go('main.listedentities');
 			});
-		}).catch(function(error){
-	var alertpop = $ionicPopup.alert({
-		title:" Registration failed"
-	}).then(function(res){
-		$state.go('signup');
-	})
-});
-	}
-		else{
+	 }).catch(function(error){
+      	var alertpop = $ionicPopup.alert({
+      		title:" Registration failed"
+      	}).then(function(res){
+      		$state.go('signup');
+      	})
+    });
+	}else{
 			signupservice.regOtp($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
+
 			var alertPopUp = $ionicPopup.alert({
 				title:"Registration Successful"
 			}).then(function(res){
 				$scope.closeModal2();
 				$state.go('main.listedentities');
 			})
-
-		});
-
+    }).catch(function(error){
+        $rootScope.showPopup()
+    })
 		}
 	}
 }])
@@ -1012,7 +1032,22 @@ signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,
                 $rootScope.hideLoader();
                 console.log("hospital list data" + data );
                 $scope.listedentities = data;
-                $scope.hospitalslist = $scope.listedentities.data;
+                //before the data value lets take out duplicate hospitals from the list
+                 var arrayofhospitals =[];
+                _.each($scope.listedentities.data, function(hospitaldata, key, list){
+                    if(arrayofhospitals.length ===0){
+                      arrayofhospitals.push(hospitaldata);
+                    }else{
+                      _.each(arrayofhospitals, function(hospitaladded, key, list){
+                          if(hospitaladded._id !== hospitaldata._id){
+                              arrayofhospitals.push(hospitaldata);
+                          }
+                      });
+                    }
+                });
+                $scope.hospitalslist = arrayofhospitals;
+                //$scope.hospitalslist = $scope.listedentities.data;
+
           }else{
                 $rootScope.hideLoader();
                 $rootScope.showPopup({
@@ -2083,10 +2118,17 @@ registrationdetsdb.query({}).then(function(response){
       console.log('$stateparams hospital id -->['+ $stateParams.hospitalid + ']');
       if($stateParams.hospitalid === '123'){
       visitservice.getVisits($scope.patientId).then(function(data){
-             console.log("obtaining visit info" + data );
+             console.log("obtaining visit info" + JSON.stringify(data) );
+             angular.forEach(data.data.notificationslist, function(value, key){
+                  angular.forEach(data.data, function(value, key){
+
+                  });
+             });
              $scope.visitinfo = data.data;
+
               console.log($scope.visitinfo);
-            var visitid = '5762ee91425bd7f27d9a722d';
+
+          /*  var visitid = '5762ee91425bd7f27d9a722d';
             //console.log(visitid);
                   if(visitid === '5762ee91425bd7f27d9a722d'){
                 visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
@@ -2101,7 +2143,7 @@ registrationdetsdb.query({}).then(function(response){
             console.log("error received");
         })
     });
-         }
+  } */
           }).catch(function(error){
               var popupalert = $ionicPopup.alert({
                   title: "Error",
@@ -2163,41 +2205,40 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     	$scope.modal5.hide();
 	}
 
-    $scope.patientdetails = function(visitid){
-        $scope.visitdata = {
-            "patientdetails" : "",
-             "hospitaldetails" : "",
-            "visitdetails" : ""
-        };
-        console.log('printing visitid ['+ visitid + ']');
+  $scope.patientdetails = function(visitid){
+      $scope.visitdata = {
+          "patientdetails" : "",
+           "hospitaldetails" : "",
+          "visitdetails" : ""
+      };
+      console.log('printing visitid ['+ visitid + ']');
 
-        console.log('printing length ['+ JSON.stringify($scope.visitinfo) + ']');
+      console.log('printing length ['+ JSON.stringify($scope.visitinfo) + ']');
 
-        angular.forEach($scope.visitinfo, function(value, key){
-            console.log('value is ['+ JSON.stringify(value.patientdetails));
-            if(value._id === visitid){
-                console.log('values are equal');
-                $scope.visitdata.patientdetails = value.patientdetails;
-            }
-        });
-         angular.forEach($scope.visitinfo, function(value, key){
-            console.log('value is ['+ JSON.stringify(value.patientdetails));
-            if(value._id === visitid){
-                console.log('values are equal');
-                $scope.visitdata.hospitaldetails = value.hospitalid;
-            }
-        });
-         angular.forEach($scope.visitinfo, function(value, key){
-            console.log('value is ['+ JSON.stringify(value.patientdetails));
-            if(value._id === visitid){
-                console.log('values are equal');
-                $scope.visitdata.visitdetails = value;
-            }
-        });
-        console.log('$scope.visitdata['+ $scope.visitdata + ']');
-        $scope.openModal3();
-    }
-
+    angular.forEach($scope.visitinfo, function(value, key){
+          console.log('value is ['+ JSON.stringify(value.patientdetails));
+          if(value._id === visitid){
+              console.log('values are equal');
+              $scope.visitdata.patientdetails = value.patientregprofiles;
+          }
+      });
+       angular.forEach($scope.visitinfo, function(value, key){
+          console.log('value is ['+ JSON.stringify(value.patientdetails));
+          if(value._id === visitid){
+              console.log('values are equal');
+              $scope.visitdata.hospitaldetails = value.hospitalid;
+          }
+      });
+      angular.forEach($scope.visitinfo, function(value, key){
+          console.log('value is ['+ JSON.stringify(value.patientdetails));
+          if(value._id === visitid){
+              console.log('values are equal');
+              $scope.visitdata.visitdetails = value.visitid;
+          }
+      });
+      console.log('$scope.visitdata['+ $scope.visitdata + ']');
+      $scope.openModal3();
+  }
     /* $scope.hospitaldetails = function(visitid){
         $scope.visitdata = {
             "hospitaldetails" : ""

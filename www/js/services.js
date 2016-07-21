@@ -165,7 +165,6 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-
 		generateOtp: function(emailid, mobileno){
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/generateotp");
@@ -179,7 +178,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			return deferred.promise;
 		},
 
-		regOtp:function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw)		{
+		regOtp:function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw){
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/patient");
 

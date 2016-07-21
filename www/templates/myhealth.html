@@ -49,7 +49,7 @@
             <div class="col" ng-if="summary.bloodsugar.ppbs !==''"><h2><b>{{summary.bloodsugar.ppbs}}</b></h2></div>
             <div class="col" ng-if="summary.bloodsugar.rbs !==''"><h2><b>{{summary.bloodsugar.rbs}}</b></h2></div>
         </div>
-        <div class="row">
+        <!--<div class="row">
 		        <div class="col"><h4>BP(SYSTOLIC)</h4></div>
             <div class="col"><h4>BP(DIASTOLIC)</h4></div>
         </div>
@@ -57,13 +57,25 @@
         <div class="row" ng-if="summary.bloodpressure.systolic !==''">
             <div class="col"><h2><b>{{summary.bloodpressure.systolic}}</b></h2></div>
             <div class="col"><h2><b>{{summary.bloodpressure.diastolic}}</b></h2></div>
+        </div> -->
+        <div class="row">
+		        <div class = "col col-67"><h4>BP(SYSTOLIC/(DIASTOLIC)</h4></div>
+            <div class="col col-67"><h4>WEIGHT</h4></div>
         </div>
+
+        <div class="row">
+         <div class = "col col-67" ng-if="summary.bloodpressure.systolic !==''">
+                <h2><b>{{summary.bloodpressure.systolic}} / {{summary.bloodpressure.diastolic}}</b></h2>
+        </div>
+         <div class="col col-67 col-offset-10" ng-if="summary.weight.value !==''"><h2><b>{{summary.weight.value}}</b></h2></div>
+        </div>
+        <!--
         <div class="row">
             <div class="col"><h4>WEIGHT</h4></div>
         </div>
         <div class="row" ng-if="summary.weight.value !==''">
             <div class="col"><h2><b>{{summary.weight.value}}</b></h2></div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col"><h4>MEDICATION</h4></div>
         </div>
