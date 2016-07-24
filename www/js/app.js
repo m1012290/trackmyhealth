@@ -15,22 +15,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
-    /*
-    if(window.cordova){
-
-        cordova.plugins.backgroundMode.enable();
-
-        // Called when background mode has been activated
-        cordova.plugins.backgroundMode.onactivate = function () {
-            setTimeout(function () {
-                // Modify the currently displayed notification
-                cordova.plugins.backgroundMode.configure({
-                    text:'Running in background for more than 5s now.'
-                });
-            }, 5000);
-        }
-    } */
-
     console.log('checking internet connectivity');
     var state = checkForInternetConnection($ionicPlatform);
 
@@ -180,9 +164,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
   });
   //ionic.Platform.fullScreen(true, true);
   //ionic.Platform.isFullScreen = true;
-  window.addEventListener('native.keyboardshow', function(){
-    //cordova.plugins.Keyboard.close();//suppressing native keyboard
-  });
 
   window.addEventListener("offline", function(){
     console.log('device went offline ');
@@ -233,11 +214,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
 }])
 .config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider', function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
   $stateProvider
-  .state('testfooter', {
-    url: '/testfooter',
-    templateUrl: 'templates/testfooter.html',
-    controller: 'LoginCtrl'
-  })
   .state('landing', {
     url: '/landing',
     templateUrl: 'templates/landing.html',
@@ -252,47 +228,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     url: '/signup',
     templateUrl: 'templates/signup.html',
     controller: 'SignUpCtrl'
-  })
-  .state('password', {
-    url: '/:mobilenumber/password',
-    templateUrl: 'templates/password.html',
-    controller: 'PasswordCtrl'
-  })
-  .state('register', {
-     url:'/register',
-     templateUrl : 'templates/registration.html',
-     controller: 'RegistrationCtrl'
-  })
-  .state('securitydetails',{
-     url: '/:mobilenumber/securitydetails',
-     templateUrl: 'templates/securitydetails.html',
-     resolve : {
-           securityquestionservice : 'securityquestionservice',
-           securityquestions : function(securityquestionservice, $stateParams){
-                return securityquestionservice.getSecurityQuestions($stateParams.mobilenumber);
-           },
-           mobilenumber : function($stateParams){
-                return $stateParams.mobilenumber;
-           }
-     },
-     /*controller: function($scope, $rootScope, securityquestions){
-            $scope.securityquesdata = {
-                securityquestions : securityquestions,
-                selectedquestion  : ''
-            }
-     }*/
-      controller : 'SecurityDetailsCtrl'
-  })
-  .state('forgotpassword',{
-      url :'/:mobilenumber/forgotpassword',
-      templateUrl:'templates/forgotpassword.html',
-      resolve : {
-           securityquestionservice : 'securityquestionservice',
-           securityquestions : function(securityquestionservice, $stateParams){
-                return securityquestionservice.getSecurityQuestions($stateParams.mobilenumber);
-           }
-      },
-      controller: 'ForgotPasswordCtrl'
   })
   .state('main', {
     url : '/main',
@@ -312,21 +247,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         }
     }*/
   })
-  .state('main.recentnotifications', {
-    cache: false,
-    url: '/recentnotifications/:mobilenumber',
-    views: {
-        'recent-notifications': {
-          templateUrl: 'templates/recententities/recententities.html',
-          resolve : {
-              mobilenumber : function($stateParams){
-                    return $stateParams.mobilenumber;
-              }
-          },
-          controller : 'RecentEntitiesCtrl'
-        }
-    }
-  })
   .state('main.listedentities', {
     cache: true,
     url: '/listedentities',
@@ -337,16 +257,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         }
     }
   })
-  /*.state('main.allnotifications',{
-    cache: false,
-    url: '/allnotifications',
-    views: {
-        'all-notifications':{
-            templateUrl: 'templates/inbox/inboxofallmsg.html',
-            controller : 'InboxOfAllMsgCtrl'
-        }
-    }
-  })*/
   .state('main.allnotifications', {
     cache: true,
     url: '/allnotifications/:hospitalid',
@@ -367,24 +277,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         }
     }
   })
-  .state('notifications', {
-    cache: false,
-    url : '/:entityid/:mobilenumber/notifications',
-    templateUrl : 'templates/notifications.html',
-    controller: 'NotificationsCtrl'
-  })
-  .state('addsubscriptions',{
-    cache:false,
-    url:'/addsubscriptions',
-    templateUrl:'templates/addsubscription.html',
-    controller: 'SubscriptionCtrl'
-  })
-  .state('feedback',{
-	  cache: false,
-	  url: '/feedback',
-	  templateUrl: 'templates/feedback.html',
-	  controller: 'FeedbackCtrl'
-  })
   .state('logout', {
     url: '/logout',
     controller: 'LogoutCtrl'
@@ -400,7 +292,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
   });
   $urlRouterProvider.otherwise('/landing');
   $ionicConfigProvider.scrolling.jsScrolling(true);
-$ionicConfigProvider.navBar.alignTitle('left');
+  $ionicConfigProvider.navBar.alignTitle('left');
 }])
 .config(['$httpProvider', function ($httpProvider) {
   $httpProvider.interceptors.push('AuthInterceptor');

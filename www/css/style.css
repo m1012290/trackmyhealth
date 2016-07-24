@@ -1317,3 +1317,100 @@ body {
  .list-inset .item:last-child {
    margin-bottom: -5px;
  margin-top: -5px;}
+
+
+
+ /*inboxofallmsg css*/
+
+ span .circle-span.direct-chat-timestamp {
+     padding-top: 12px;
+     font-weight: bold;
+     font-size: 20px;
+     background-color: #fff;
+     opacity:1
+     }
+
+ .button .ion-android-more-vertical{
+     font-size:30px!important;
+     color: light;
+     }
+ div .list.card{
+    padding-left:19px;
+     padding-top:10px;
+ }
+ .list.card{
+     padding-top:25px;
+ }
+
+ .list .item h2 {
+   text-align: center;
+        font-size:18px;
+      }
+ .list .item h4 {
+     font-size: 17px;
+     color:#33aaee;
+ }
+ .list .item-text-wrap p{
+     font-size: 17px;
+     padding-left:17px
+ }
+
+
+ /* listedentities css*/
+
+ .item.item-avatar.item-remove-animate{
+     padding-left: 5px;
+     padding-right: 5px;
+     padding-bottom: 0px;
+     padding-top: 0px;
+ }
+
+ .item h3{
+     margin: 12px 0 4px 0;
+     font-size: 16px;
+      padding-right: 5px;
+ }
+
+ /*signup page Css*/
+ a {
+    color:#000;
+ }
+ .item .item-content .icon.ion-transgender{
+    font-size:24px !important;
+ }
+ .item-checkbox-left{
+     right:12px;
+ }
+
+
+ /* myhealth css*/
+
+ button .ion-android-more-vertical {
+     font-size:32px!important;
+ }
+ .visit .right{
+     width : 100%;
+ }
+
+ /* patient profile css*/
+
+ .circle-span{
+     padding-top: 12px;
+     padding-left: 5px;
+     font-weight: bold;
+     font-size: 20px;
+     left:5px;
+     background-color:#000;
+     opacity:1;
+ }
+
+ /*landing css*/
+ .container-responsive.logBtnStyle a{
+  display:block;
+ }
+ .container-responsive.logBtnStyle a .button{
+     display:block;
+     width:1px;
+     float:left;
+     height:20px;
+ }

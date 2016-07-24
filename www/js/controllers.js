@@ -92,8 +92,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
-  {
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 29%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -118,6 +117,44 @@ angular.module('bnotifiedappctrls', [])
     // Execute action
   });
 
+  //feedback questions
+ $scope.questions=[{question: "Please rate the App?",answer: ''}];
+
+ //ratings for feedback
+ $scope.ratingsObject = {
+       iconOn : 'ion-ios-star',
+       iconOff : 'ion-ios-star-outline',
+       iconOnColor: 'rgb(200, 200, 100)',
+       iconOffColor:  'rgb(200, 100, 100)',
+   rating: '',
+       minRating: 0 ,
+       callback: function(rating) {
+         $scope.ratingsCallback(rating);
+     return rating;
+       }
+     };
+
+ // ratings callback function , obtains the current slide and updates the object answer
+    $scope.ratingsCallback = function(rating) {
+       console.log('Selected rating is : ', rating);
+    $scope.closepopup()
+   };
+
+ //popup to show feedback
+ $scope.showPopup = function() {
+
+  // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+    template: '<ion-item class="item-input" ><label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></label></ion-item>',
+    title: 'Feedback',
+    scope: $scope
+  })
+   //popup close
+  $scope.closepopup = function(){
+     console.log("closing popup");
+     myPopup.close();
+  }
+ };
 
   $scope.takeImage = function(){
     $scope.data = {

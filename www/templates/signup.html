@@ -9,66 +9,84 @@
 		</label>
 		<label class="item item-input item-floating-label">
         <span class="input-label">  LastName</span>
-			<input type="text" ng-model="formData.lastname" placeholder="  Last Name"  required>
+			<input type="text" ng-model="formData.lastname" placeholder="Last Name"  required>
 		</label>
     </ion-item>
 
 	<ion-item class="item-input" >
 		<label class="item item-input item-floating-label">
 		<span class="input-label">  MobileNo</span>
-		<input type="number" ng-model="formData.mobnum" placeholder= "Mobile Number"  required>
+		<input type="number" ng-model="formData.mobnum" placeholder= "Mobile Number"  ng-maxlength="10" ng-max-length-type="10"  required>
 		</label>
     </ion-item>
 
 	<ion-item class="item-input">
-		<label class="item item-input item-floating-label">
+		<label class="item item-input item-floating-label" >
 			<span class="input-label">  Email Id</span>
-		<input type="email" ng-model="formData.emailadd" placeholder= "Email-address"  required>
+		<input type="email" ng-model="formData.emailadd" placeholder= "Email Id" required>
 		</label>
 	</ion-item>
 
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 			<span class="input-label">  Password</span>
-		<input type="password" ng-model="formData.password" placeholder="Password" required>
+		<input type="password" ng-model="formData.password" placeholder="Password" required ng-minlength="6" ng-maxlength="12" required>
 		</label>
 		<label class="item item-input item-floating-label">
 			<span class="input-label">  Confirm Password</span>
 			<input type="password" ng-model="formData.confirmpassword" placeholder= "Confirm Password" required>
 		</label>
     </ion-item>
-	<ion-item class="item-input">
-		<label class="item item-input item-floating-label">
-		<ion-checkbox ng-model="formData.male"><i class="icon ion-man" ></i></ion-checkbox>
-		</label>
-		<label class="item item-input item-floating-label">
-		<ion-checkbox ng-model="formData.female"><i class="icon ion-woman"></i></ion-checkbox>
-		</label>
-	</ion-item>
+
+    <ion-item class="item-input">
+         <label class="item item-radio item-floating-label">
+            <input type="radio" ng-model="formData.male" name="group">
+               <div class="item-content">
+                   <i class="icon ion-man" ></i>
+               </div>
+                   <i class="radio-icon ion-checkmark"></i>
+         </label>
+
+    <label class="item item-radio item-floating-label">
+      <input type="radio" ng-model="formData.female" name="group">
+          <div class="item-content">
+              <i class="icon ion-woman" ></i>
+           </div>
+              <i class="radio-icon ion-checkmark"></i>
+   </label>
+
+    <label class="item item-radio item-floating-label">
+      <input type="radio" ng-model="formData.transgender" name="group">
+        <div class="item-content">
+            <i class="icon ion-transgender"></i>
+        </div>
+            <i class="radio-icon ion-checkmark"></i>
+   </label>
+        </ion-item>
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 		<span class="input-label"></span>
-		<ion-checkbox ng-model="formData.doctor"> I am a doctor.</ion-checkbox>
+		<ion-checkbox class="item-checkbox-left" ng-model="formData.doctor">I am a doctor</ion-checkbox>
 		</label>
 		<label ng-if="formData.doctor" class="item item-floating-label">
 		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
 		</label>
+    </ion-item>
 
-	</ion-item>
-		<ion-item class="item-input">
-		<label class="item item-input item-floating-label">
-		<ion-checkbox ng-model="formData.termsyes"> I accept the <a href=""> Terms of Service </a>and <a href="">Privacy Policy</a> </ion-checkbox>
-			</label>
-	</ion-item>
+    <ion-item class="item-input">
+         <label class="item item-floating-label">
+         <ion-checkbox class="item-checkbox-left" ng-model="formData.termsyes"></ion-checkbox>
+         </label>
+         <a href="#">I accept the Terms of Service and Privacy Policy </a>
+     </ion-item>
 	</div>
-	<div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female) && formData.termsyes)">
+	<div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female || formData.transgender) && formData.termsyes)">
 		<button  class="button button-block button-positive" href="">SignUp</button>
     </div>
-
-	</form>
+    </form>
     </ion-content>
 
-	<script id="otpscreen.html" type="text/ng-template">
+	<script id="my-modal2.html" type="text/ng-template">
      <ion-modal-view>
 
     <ion-header-bar class="bar-positive">
