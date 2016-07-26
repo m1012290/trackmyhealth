@@ -799,16 +799,15 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             });
             return deferred.promise;
         },
-         changedpatientinfo : function(emailadd,mobnum,dob,doctor,licenceNo,patientId){
-            var deferred=$q.defer();
-         var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/patients/:patientid", {patientid : patientId}, {'update': { method:'PUT' }});
-
-              resource.update({emailid:emailadd,mobilenumber:mobnum,dateofbirth:dob,isdoctor:doctor,doctorlicenseno:licenceNo}, function(data){
-            console.log('update all details call was successful with response['+ JSON.stringify(data)+']');
-            deferred.resolve(data);
+        changedpatientinfo : function(patientprofiledata,patientId){
+          var deferred=$q.defer();
+          var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/patients/:patientid", {patientid : patientId}, {'update': { method:'PUT' }});
+          resource.update(patientprofiledata, function(data){
+          console.log('update all details call was successful with response['+ JSON.stringify(data)+']');
+          deferred.resolve(data);
         }, function(error){
-            console.log('update all details call failed ['+ error + ']');
-            deferred.reject(error);
+          console.log('update all details call failed ['+ error + ']');
+          deferred.reject(error);
         });
         return deferred.promise;
 

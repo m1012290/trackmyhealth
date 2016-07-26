@@ -1,57 +1,54 @@
-<ion-view view-title="Patient Profile">
+<ion-view view-title="User Profile">
     <ion-nav-buttons side="left">
             <button class="button button-clear" ng-click="backButtonAction()">
                 <i class="ion-android-arrow-back icon-btn-customize"></i>
             </button>
         </ion-nav-buttons>
-    <ion-content  class="padding" >
+    <ion-content  class="padding" scroll-sista="subheader">
 
- <div class="list card" style="background-color: #D14836;">
+<div class="list card subheader" style="background-color: #D14836;">
       <div class="item item-avatar">
-        <span class="circle-span ">{{list.firstname|limitTo:1}}</span>
+        <span class="circle-span ">{{patientprofiledata.firstname|limitTo:1}}</span>
           <ion-item style="color:#FFF">
-            <h2><strong>{{list.firstname}} {{list.lastname}}</strong></h2> <hr>
-              {{list.gender}}<br>
-               {{list.emailid}}<br>
-              {{list.mobilenumber}}</ion-item>
+            <h2><strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2> <hr>
+              {{patientprofiledata.gender}}<br>
+               {{patientprofiledata.emailid}}<br>
+              {{patientprofiledata.mobilenumber}}</ion-item>
         </div>
         </div>
 <form name="patienprfl" class="simple-form" required>
-      <div class="list">
-    <label class="item item-input item-floating-label">
-             <span class="input-label">Mobile Number</span>
-    <input type="number" ng-model="formData.mobnum" placeholder="Alternative Mobile Number" required>
+<div class="list">
+		<ion-checkbox ng-model="patientprofiledata.doctor" ng-value="patientprofiledata.doctor" ng-readonly="true">Doctor</ion-checkbox>
+		<div ng-if="patientprofiledata.doctor">
+      <label class="item item-input item-floating-label">
+          <span class="input-label">Licence Number</span>
+   		     <input type="text" ng-model="patientprofiledata.licenseno" placeholder="Licence No" required>
+      </label>
+		</div>
+
+  <label class="item item-input item-floating-label">
+        <span class="input-label">Mobile Number</span>
+    <input type="text" ng-model="patientprofiledata.alternatemobilenum" placeholder="Alternative Mobile Number" required>
   </label>
      <label class="item item-input item-floating-label">
              <span class="input-label">Email Address</span>
-    <input type="email" ng-model="formData.emailadd" placeholder= "Alternative Email address" required>
+    <input type="email" ng-model="patientprofiledata.alternateemailid" placeholder= "Alternative Email address" required>
   </label>
 
-        <label class="item item-input item-floating-label">
+  <label class="item item-input item-floating-label">
              <span class="input-label">Date Of Birth</span>
-    <input type="text" ng-model="formData.dob" placeholder="Date of Birth" ng-click="openDatePicker()" >
+    <input type="text" ng-model="patientprofiledata.dateofbirth" placeholder="Date of Birth" ng-click="openDatePicker()" formatted-date format="medium">
   </label>
 
-		<label class="item item-input item-floating-label">
+	<label class="item item-input item-floating-label">
         <span class="input-label">Address</span>
-    <input type="text" ng-model="formData.address1" placeholder="Enter your Address">
+    <input type="text" ng-model="patientprofiledata.address" placeholder="Enter your Address">
   </label>
 
-          <ion-item>
-		<ion-checkbox ng-model="formData.doctor" ng-value="false"> I am a doctor.</ion-checkbox>
-		<div ng-if="formData.doctor">
-            <label class="item item-input item-floating-label">
-        <span class="input-label">Licence Number</span>
-   		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
-  </label>
-
-		</div>
-		</ion-item>
+  </div>
+  <div class="pull-center">
+			<button class="button button-outline button-assertive" ng-click="save(formData)">Submit</button>
 	</div>
-    <div class="pull-center">
-			<button class="button button-outline button-assertive" ng-click="save(formData) " ng-if="formData.mobnum ||formData.emailadd || formData.dob || formData.address1|| formData.doctor">Submit</button>
-		</div>
   </form>
-
 </ion-content>
- </ion-view>
+</ion-view>

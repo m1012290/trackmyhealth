@@ -80,11 +80,11 @@ angular.module('bnotifiedappctrls', [])
 
       });
   });
-
+/*
   $scope.goToAddSubscriptions = function($event){
       console.log('invoked from goToAddSubscriptions');
     $state.go('addsubscriptions');
-  };
+  };*/
   $scope.backButtonAction = function(){
         $ionicHistory.goBack();
   };
@@ -92,7 +92,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 29%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 29%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -2519,85 +2519,100 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     });
 }])
 .controller('PatientprofileCtrl',['$scope','$rootScope','$state','ionicDatePicker','$filter','patientprflservice','$ionicHistory','DBA','registrationdetsdb', function($scope,$rootScope,$state,ionicDatePicker,$filter, patientprflservice,$ionicHistory, DBA, registrationdetsdb){
-
-	$scope.formData = [];
-  //$scope.patientId="5751377e4f09030255c59a8b";
   $scope.patientId = '';
-  registrationdetsdb.query({}).then(function(response){
-      var result = DBA.getById(response);
-      $scope.patientId = result.appregistrationid;
-
-      patientprflservice.getpatientinfo($scope.patientId).then(function(data){
-            $scope.list= data.data;
-            console.log("Obtaining patient profile" + data);
-
-             /*if(data.status === 'SUCCESS'){
-                console.log('data obtained['+ JSON.stringify(data) + ']');
-                    angular.forEach($scope.list, function(value, key){
-                        $scope.formData.push(key +":" + value);
-
-                    })
-                     console.log($scope.formData);*/
-                 console.log($scope.list);
-        }).catch(function(error){
-            $rootScope.hideLoader();
-            $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-            console.log('on ok click');
-            });
-        });
-  }).catch(function(err){
-        $rootScope.hideLoader();
-        $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-          console.log('on ok click');
-        });
-  });
-
+  $scope.patientprofiledata = {
+    "firstname"        : "",
+    "lastname"         : "",
+    "emailid"          : "",
+    "mobilenumber"     : "",
+    "gender"           : "",
+    "alternateemailid" : "",
+    "alternatemobilenum" : "",
+    "dataofbirth" : "",
+    "licenseno"   : "",
+    "doctor"    : "",
+    "address"     : ""
+  };
+  $scope.originalresponse = '';
 
 	$scope.backButtonAction = function(){
      $scope.shouldShowDelete = false;
      $ionicHistory.goBack();
-      };
+  };
+
+  $scope.$on("$ionicView.beforeEnter", function(event, data){
+    registrationdetsdb.query({}).then(function(response){
+        //alternateemailid alternatemobilenum doctorlicenseno
+        var result = DBA.getById(response);
+        $scope.patientId = result.appregistrationid;
+        patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+             $scope.originalresponse = data.data;
+             $scope.patientprofiledata = {
+                "firstname" : data.data.firstname,
+                "lastname"  : data.data.lastname,
+                "emailid"   : data.data.emailid,
+                "mobilenumber" : data.data.mobilenumber,
+                "gender"    : data.data.gender,
+                "address"   : typeof data.data.address !== 'undefined' ?  data.data.address.addressline1 : "",
+                "doctor"    : data.data.isdoctor,
+                "alternateemailid" : data.data.alternateemailid,
+                "alternatemobilenum" : data.data.alternatemobilenum,
+                "licenseno"  : data.data.doctorlicenseno,
+                "dateofbirth" : data.data.dateofbirth
+              }
+          }).catch(function(error){
+              $rootScope.hideLoader();
+              $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+                //console.log('on ok click');
+              });
+          });
+    }).catch(function(err){
+          $rootScope.hideLoader();
+          $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+            console.log('on ok click');
+          });
+    });
+  });
 	// DatePicker object with callbcak to obtain the date
 	var ipObj1 = {
       callback: function (val) {  //Mandatory
-        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-		$scope.formData.dob = $filter('date')(val, "dd MMM yyyy");
+          console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+		      $scope.patientprofiledata.dateofbirth = $filter('date')(val, "dd MMM yyyy");
       },
-      from: new Date(1980 , 1, 1), //Optional
-      to: new Date(2016, 10, 30), //Optional
+      from: new Date(1910 , 1, 1), //Optional
+      //to: new Date(2016, 10, 30), //Optional
       inputDate: new Date(),      //Optional
       mondayFirst: true,          //Optional
 //      disableWeekdays: [0],       //Optional
       closeOnSelect: false,       //Optional
-      templateType: 'popup'       //Optional
+      templateType: 'popup',       //Optional
+      dateFormat  : 'MMM dd, yyyy'
     };
-     $scope.openDatePicker = function(){
+    $scope.openDatePicker = function(){
       ionicDatePicker.openDatePicker(ipObj1);
     };
+    $scope.save = function(){
+        $rootScope.showLoader();
+         if($scope.originalresponse.alternateemailid !== $scope.patientprofiledata.alternateemailid
+            || $scope.originalresponse.alternatemobilenum !== $scope.patientprofiledata.alternatemobilenum
+            || $scope.originalresponse.isdoctor.toString() !== $scope.patientprofiledata.doctor.toString()
+            || $scope.originalresponse.doctorlicenseno !== $scope.patientprofiledata.licenseno
+            || $scope.originalresponse.dateofbirth !== $scope.patientprofiledata.dateofbirth){
+           $scope.patientprofiledata.doctorlicenseno = !$scope.patientprofiledata.doctor ? "" : $scope.patientprofiledata.doctorlicenseno;
+           patientprflservice.changedpatientinfo($scope.patientprofiledata,
+              $scope.patientId).then(function(data){
+                $rootScope.hideLoader();
+              $rootScope.showToast('Profile updated successfully','Long','top');
+           }).catch(function(error){
+               $rootScope.hideLoader();
+               $rootScope.showPopup({'title':'Error','template':"Couldn't update the profile, please try again"}, function(){
 
-
-   /* $scope.formData ={
-         "dob" : "",
-         "address1" : "",
-          "city" : "",
-         "pincode" : "",
-         "state" : "",
-        "country" :""
-     };
-    console.log($scope.formData);*/
-     $scope.save = function(fdata){
-    	console.log("saving");
-		$scope.formData.push({
- mobnum:fdata.mobnum,emailadd:fdata.emailadd,dob:fdata.dob,address1: fdata.address1,doctor:fdata.doctor,licenceNo:fdata.licenceNo});
-		console.log($scope.formData);
-         var mobnum = $scope.formData.mobnum.toString();
-         patientprflservice.changedpatientinfo($scope.formData.emailadd,mobnum,$scope.formData.dob,$scope.formData.doctor,$scope.formData.licenceNo,
-            $scope.patientId).then(function(data){
-             console.log("patient profile detalis" + data);
-         }).catch(function(error){
-             $rootScope.hideLoader();
-               console.log('Failed to retrieve patient details['+ error + ']');
-         });
+               });
+           });
+         }else{
+            $rootScope.hideLoader();
+            console.log('You have not updated anything in your profile');
+            $rootScope.showToast('You have not updated anything in your profile','Long','top');
+        }
      }
-
 }]);
