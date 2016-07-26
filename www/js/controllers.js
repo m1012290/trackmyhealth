@@ -106,7 +106,7 @@ angular.module('bnotifiedappctrls', [])
   //Cleanup the popover when we're done with it!
   $scope.$on('$destroy', function() {
     console.log('printing $destroy within AppCtrl');
-    $scope.popover.remove();
+    //$scope.popover.remove();
   });
   // Execute action on hide popover
   $scope.$on('popover.hidden', function() {
@@ -1111,11 +1111,10 @@ if($scope.formData.doctor == true){
        console.log('on click ok');
    });
 
- });
-
-	$scope.hosinfo= function(hospitalid,hospitalcode){
-		console.log("hospital info calling");
-			hospitalservice.hospitalinfo(hospitalid,hospitalcode).then(function(data){
+});
+$scope.hosinfo= function(hospitalid,hospitalcode){
+      console.log("hospital info calling with hospitalid["+ hospitalid +"] and hospitalcode ["+ hospitalcode +"]");
+			 hospitalservice.hospitalinfo(hospitalid,hospitalcode).then(function(data){
 				$scope.openModal3();
 				console.log(data);
 				$scope.hos= data.data;
@@ -1128,7 +1127,7 @@ if($scope.formData.doctor == true){
 				});
 			});
 	}
-$scope.filterBarInstance;
+  $scope.filterBarInstance;
   $scope.showFilterBar = function(){
 
             filterBarInstance = $ionicFilterBar.show({
@@ -1371,42 +1370,15 @@ $scope.filterBarInstance;
     };
 }])
 .controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb','$ionicPopover', function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb, $ionicPopover) {
-/*
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
-  {
-    scope: $scope
-  });
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };
-  $scope.closePopover = function() {
-    $scope.popover.hide();
-  };
-  //Cleanup the popover when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.popover.remove();
-  });
-  // Execute action on hide popover
-  $scope.$on('popover.hidden', function() {
-    // Execute action
-  });
-  // Execute action on remove popover
-  $scope.$on('popover.removed', function() {
-    // Execute action
-  });
-*/
 $scope.openPopover = function($event) {
-  console.log('printing openPopover within MyHealthCtrl');
   $scope.$parent.openPopover($event);
 };
 $scope.closePopover = function() {
-  console.log('printing closePopover within MyHealthCtrl');
   $scope.$parent.closePopover();
 };
-
-   $scope.patientId = '';
-   $scope.healthdetails = [];
-   $scope.data ={
+  $scope.patientId = '';
+  $scope.healthdetails = [];
+  $scope.data ={
        "weight" : {
           "value" : "",
           "notes" : ""
@@ -1428,23 +1400,29 @@ $scope.closePopover = function() {
        "allergies" : {
          "value" : "",
          "notes" : ""
+       },
+       "vaccination" : {
+        "value" : "",
+        "notes" : ""
        }
   };
   $scope.tracker = function(trackername, title){
       $scope.trackername = trackername;
       $scope.title = title;
   };
+  $scope.tdate= new Date();
   //function to capture vitals as entered by the user
 	$scope.create = function() {
-       //check if the values are entered by user to proceed further to save the data
-       if($scope.data.weight.value === ''
+      //check if the values are entered by user to proceed further to save the data
+      if($scope.data.weight.value === ''
          && $scope.data.bloodsugar.fbs === ''
          && $scope.data.bloodsugar.ppbs === ''
          && $scope.data.bloodsugar.rbs === ''
          && $scope.data.bloodpressure.systolic === ''
          && $scope.data.bloodpressure.diastolic === ''
          && $scope.data.medication.value === ''
-         && $scope.data.allergies.value === '')
+         && $scope.data.allergies.value === ''
+         && $scope.data.vaccination.value === '')
       {
         $rootScope.showToast('There was no data entered to be saved','long','top');
         $scope.closeModal1();
@@ -1456,71 +1434,66 @@ $scope.closePopover = function() {
          "createdat" : $scope.tdate
        };
        medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
-            console.log(data);
+             //console.log(data);
              if(data.status == 'SUCCESS'){
                 $rootScope.hideLoader();
                 $rootScope.showToast('Medical profile data saved successfully',null,'top');
-			          console.log(" records saved successfully");
-
+			          console.log("Records saved successfully");
                 medicalprofileservice.getdetails($scope.patientId).then(function(data){
                 	if(data.status === 'SUCCESS'){
                     	console.log('data obtained['+ JSON.stringify(data) + ']');
                       $scope.healthdetails = data.data;
                       if(data.summary !== ''){
-                       $scope.summary = data.summary;
+                        $scope.summary = data.summary;
                       }
                   }
-                }).catch(function(error){
-                    $rootScope.hideLoader();
-                    console.log('pritning error reason ['+ JSON.stringify(error) + ']');
-
-					      });
-                //$scope.healthdetails = $scope.healthdetails.splice(0,0,)
-                $scope.closeModal1();
+              }).catch(function(error){
+                  $rootScope.hideLoader();
+                  console.log('pritning error reason ['+ JSON.stringify(error) + ']');
+				      });
+              $scope.closeModal1();
              }}).catch(function(error){
 		   		$rootScope.hideLoader();
-            	//console.log("error received " + error);
   		   			if(error.status === 404){
                 console.log(" patientid passed is invalid");
           		}else if(error.status ===500){
                 console.log("internal server processing error at server side");
   					  }
            });
-		$scope.data={
-       "weight" : {
-          "value" : "",
-          "notes" : ""
-       },
-       "bloodsugar" : {
-         "rbs" : "",
-         "ppbs": "",
-         "fbs" : "",
-         "notes" :""
-       },
-       "bloodpressure" :{
-         "systolic" : "",
-         "diastolic": ""
-       },
-       "medication" : {
-         "value" : "",
-         "notes" : ""
-       },
-       "allergies" : {
-         "value" : "",
-         "notes" : ""
-       }
-     };
-      }
-		        //$scope.timeLineForm.$setPristine();
+      		$scope.data={
+             "weight" : {
+                "value" : "",
+                "notes" : ""
+             },
+             "bloodsugar" : {
+               "rbs" : "",
+               "ppbs": "",
+               "fbs" : "",
+               "notes" :""
+             },
+             "bloodpressure" :{
+               "systolic" : "",
+               "diastolic": ""
+             },
+             "medication" : {
+               "value" : "",
+               "notes" : ""
+             },
+             "allergies" : {
+               "value" : "",
+               "notes" : ""
+             },
+             "vaccination" : {
+                "value" : "",
+                "notes" : ""
+              }
+          };
+      }//$scope.timeLineForm.$setPristine();
 	};
 	$scope.closeModal1 = function() {
     	$scope.modal.hide();
   };
-  $scope.tdate= new Date();
   $scope.$on("$ionicView.beforeLeave", function(event, data){
-      // handle event
-      //console.log("$ionicView.beforeLeave", data.stateParams);
-      //$scope.modal.remove();
   });
 
   $scope.$on("$ionicView.enter", function(event, data){
@@ -1550,8 +1523,12 @@ $scope.closePopover = function() {
      "allergies" : {
        "value" : "",
        "notes" : ""
+     },
+     "vaccination" : {
+        "value" : "",
+        "notes" : ""
      }
-   };
+  };
   $scope.$on("$ionicView.loaded", function(event, data){
     $ionicModal.fromTemplateUrl('medicalprofile.html', {
       scope: $scope,
@@ -1562,7 +1539,6 @@ $scope.closePopover = function() {
     $scope.openModal1 = function(){
       $scope.modal.show();
     };
-
     $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
        var result = DBA.getById(response);
@@ -1581,22 +1557,18 @@ $scope.closePopover = function() {
             $scope.summary = data.summary;
            }
          }
-
        }).catch(function(error){
            $rootScope.hideLoader();
            var alertPopUp = $ionicPopup.alert({
                title:"There is no medical history available currently"
            });
        });
-
     }).catch(function(error){
       $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
       console.log('on ok click');
       });
     });
-
   });
-
 }])
 .controller('FeedbackCtrl', ['$scope', '$state', '$ionicPopup', '$ionicSlideBoxDelegate', 'feedbackform', function($scope, $state, $ionicPopup, $ionicSlideBoxDelegate, feedbackform){
 

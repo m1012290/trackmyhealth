@@ -4,7 +4,7 @@
 
   angular.module('jett.ionic.scroll.sista', ['ionic'])
     .directive('scrollSista', ['$document', '$timeout', '$rootScope', '$ionicScrollDelegate', function($document, $timeout, $rootScope, $ionicScrollDelegate) {
-      var TRANSITION_DELAY = 400;
+      var TRANSITION_DELAY = 200;
       var defaultDelay = TRANSITION_DELAY * 2;
       var defaultDuration = TRANSITION_DELAY + 'ms';
       var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
@@ -268,7 +268,6 @@
            * Called onScroll.  computes coordinates based on scroll position and translates accordingly
            */
           $element.bind('scroll', function (e) {
-            console.log('scrollView is ['+ scrollView.isNative + ']');
             if (isNavBarTransitioning) {
               return;
             }
@@ -277,10 +276,8 @@
 
             var duration = 0;
 //            var scrollTop = e.detail.scrollTop;
-console.log('scrollView is ['+ scrollView.isNative + ']');
 var scrollTop = scrollView.isNative ? e.currentTarget.scrollTop : e.detail.scrollTop;
             y = scrollTop >= 0 ? Math.min(defaultEnd, Math.max(0, y + scrollTop - prevScrollTop)) : 0;
-    console.log('printing y value is ['+ y + ']');
             //if we are at the bottom, animate the header/tabs back in
             if (scrollView.getScrollMax().top - scrollTop <= contentTop) {
                //y = 0;

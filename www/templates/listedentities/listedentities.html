@@ -21,13 +21,12 @@
      <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
         <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
             <span class="circle-span"  style ="background-color: #D14836";
-                  ng-click="hosinfo(entity.hospitalid, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
+                  ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
             </span>
-             <a href="#/main/allnotifications/{{entity.hospitalid}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
+             <a href="#/main/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
                     <h3>{{entity.hospitalname}} </h3>
                     <i class="icon ion-arrow-right-b assertive"></i>
              </a>
-
         </ion-item>
       </ion-list>
   </ion-content>
@@ -35,7 +34,6 @@
        </ion-floating-button>
 
 <script id="my-modal3.html" type="text/ng-template">
-
 <ion-modal-view>
   <ion-header-bar class=" bar bar-positive">
       <h1 class="title">Hospital Information</h1>

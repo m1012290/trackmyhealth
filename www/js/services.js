@@ -727,10 +727,9 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
         },
-
         getdetails:function(patientId){
-     var deferred = $q.defer();
-         var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofilet");
+        var deferred = $q.defer();
+        var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:patientid/medicalprofilet");
         resource.get({patientid: patientId},function(data){
             console.log('medical profile history data of a patient saved successfully ['+ JSON.stringify(data)+']');
             deferred.resolve(data);
@@ -739,10 +738,8 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             deferred.reject(error);
         });
         return deferred.promise;
+      }
     }
-
-    }
-
  }])
 .service('visitservice', ['$q', '$resource', function($q, $resource){
 	return{
