@@ -121,7 +121,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 }])
 .service('signupservice', ['$q', '$resource', function($q, $resource){
 	return {
-		savedetails: function(emailid, mobileno, doctor){
+		validatedetails: function(emailid, mobileno, doctor){
 			var deferred = $q.defer();
 
 			var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/:emailid/:mobilenumber" + "?isdoctor=:doctor");
@@ -134,8 +134,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-
-		savedocdetails: function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,licence,smsotp,emailotp,pw){
+		registerDoctor: function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,licence,smsotp,emailotp,pw){
 			var deferred= $q.defer();
 			var resource= $resource (" https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/doctor");
 			resource.save({regdets:{
@@ -178,7 +177,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 			return deferred.promise;
 		},
 
-		regOtp:function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw){
+		registerPatient:function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw){
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/patient");
 

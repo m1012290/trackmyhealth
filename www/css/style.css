@@ -1511,3 +1511,7 @@ color:#D14836;
 .card .item .pull-right{
 color:grey;
 }
+
+.list .card{
+  background-color: #f9f9f9;
+}

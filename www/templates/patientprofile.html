@@ -4,8 +4,7 @@
                 <i class="ion-android-arrow-back icon-btn-customize"></i>
             </button>
         </ion-nav-buttons>
-    <ion-content  class="padding" scroll-sista="subheader">
-
+<ion-content  class="padding" scroll-sista="subheader">
 <div class="list card subheader" style="background-color: #D14836;">
       <div class="item item-avatar">
         <span class="circle-span ">{{patientprofiledata.firstname|limitTo:1}}</span>
@@ -15,17 +14,19 @@
                {{patientprofiledata.emailid}}<br>
               {{patientprofiledata.mobilenumber}}</ion-item>
         </div>
-        </div>
+</div>
 <form name="patienprfl" class="simple-form" required>
 <div class="list">
+  <div class="card" ng-if="patientprofiledata.doctor">
+   <div class="item item-text-wrap">
+    Please contact your Hospital to update Your Licence Number
+   </div>
 		<ion-checkbox ng-model="patientprofiledata.doctor" ng-value="patientprofiledata.doctor" ng-readonly="true">Doctor</ion-checkbox>
-		<div ng-if="patientprofiledata.doctor">
+    <div ng-if="patientprofiledata.doctor" readonly>
       <label class="item item-input item-floating-label">
           <span class="input-label">Licence Number</span>
-   		     <input type="text" ng-model="patientprofiledata.licenseno" placeholder="Licence No" required>
-      </label>
-		</div>
-
+   		    <input type="text" ng-model="patientprofiledata.licenseno" placeholder="Licence No"  readonly required>
+    </div>
   <label class="item item-input item-floating-label">
         <span class="input-label">Mobile Number</span>
     <input type="text" ng-model="patientprofiledata.alternatemobilenum" placeholder="Alternative Mobile Number" required>

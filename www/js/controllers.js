@@ -408,8 +408,8 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
           console.log('Return value from the datepicker popup is : ' + val, new Date(val));
 		      $scope.formData.dob = $filter('date')(val, "dd MMM yyyy");
       },
-      from: new Date(1980 , 1, 1), //Optional
-      to: new Date(2016, 10, 30), //Optional
+      from: new Date(1900 , 1, 1), //Optional
+      //to: new Date(2016, 10, 30), //Optional
       inputDate: new Date(),      //Optional
       mondayFirst: true,          //Optional
 //      disableWeekdays: [0],       //Optional
@@ -457,12 +457,10 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
     doctor : fdata.doctor,
     licenceNo: fdata.licenceNo,
     termyes: fdata.termsyes
-    });
+   });
 
 		//console.log($scope.formData);
-
-		signupservice.savedetails($scope.formData.emailadd, $scope.formData.mobnum, $scope.formData.doctor ).then(function(data){
-			//console.log(data);
+	  signupservice.validatedetails($scope.formData.emailadd, $scope.formData.mobnum, $scope.formData.doctor ).then(function(data){
       $rootScope.hideLoader();
 			if(data.status == 'SUCCESS'){
 			     $rootScope.showPopup({title:'Already Registered', template:'Email id and mobile number combination already exists'});
@@ -476,9 +474,10 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 				});
 			}else{
         $rootScope.hideLoader();
+        $rootScope.showPopup({title:'Error', template:"Error validating details, please try again"});
       }
-			});
-		}
+		});
+	}
 	//otp
 	$scope.security=[];
 
@@ -494,7 +493,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 	var mobile = $scope.formData.mobnum.toString();
 
 if($scope.formData.doctor == true){
-   signupservice.savedocdetails($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
+   signupservice.registerDoctor($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
 			var alertPopUp = $ionicPopup.alert({
 				title:"Registration Successful"
 			}).then(function(res){
@@ -509,7 +508,7 @@ if($scope.formData.doctor == true){
       	})
     });
 	}else{
-			signupservice.regOtp($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
+			signupservice.registerPatient($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
 
 			var alertPopUp = $ionicPopup.alert({
 				title:"Registration Successful"
