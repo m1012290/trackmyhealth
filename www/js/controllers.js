@@ -1127,16 +1127,14 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
   $scope.showFilterBar = function(){
 
             filterBarInstance = $ionicFilterBar.show({
-            items:$scope.listedentities,
+            items:$scope.hospitalslist,
             update:function(filteredItemList){
-                $scope.listedentities = filteredItemList;
+                $scope.hospitalslist = filteredItemList;
             },
             expression:function(filterText, value, index, array){
-                return value.entityName.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;
+                return value.hospitalname.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;
             }
-            //filterProperties:'entityName'
-            });
-        //console.log('filterBarInstance -->['+filterBarInstance + ']');
+        });
     };
 
     $scope.shouldShowReorder = false;
@@ -2391,21 +2389,21 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
   });
  $scope.showFilterBar = function(){
 
-            filterBarInstance = $ionicFilterBar.show({
+          filterBarInstance = $ionicFilterBar.show({
             items:$scope.visitinfo,
             update:function(filteredItemList){
                 $scope.visitinfo = filteredItemList;
             },
             expression:function(filterText, value, index, array){
-                return value.visitName.toLowerCase().indexOf(filterText.toLowerCase()) !== -1;
-
+                return ( value.notificationtext.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                        || value.visitid.visittype.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                        || value.hospitalid.hospitalname.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                        || value.patientregprofiles.firstname.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                        || value.patientregprofiles.lastname.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                      )
             }
-            //filterProperties:'entityName'
-            });
-        //console.log('filterBarInstance -->['+filterBarInstance + ']');
+          });
     };
-
-
 }])
 .controller('ForgotPasswordCtrl', ['$scope', '$rootScope', '$state', '$stateParams','authservice','initiateotpgeneratesvc', 'securityquestions', function($scope, $rootScope, $state, $stateParams, authservice, initiateotpgeneratesvc, securityquestions){
     $scope.enableotp = false;
@@ -2690,5 +2688,5 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
     }
 	$scope.closeModal5 = function() {
     	$scope.modal5.hide();
-	}  
+	}
 }]);
