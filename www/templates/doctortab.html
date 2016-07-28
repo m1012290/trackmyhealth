@@ -1,0 +1,58 @@
+<ion-view view-title="doctor-tab" name="doctortab">
+        <ion-nav-title>
+<span class="circle-span direct-chat-timestamp">
+    <i class="icon ion-ios-pulse-strong assertive"></i></span>
+         </ion-nav-title>
+        <ion-nav-buttons side="right" >
+
+            <button class="button button-clear" ng-click="showFilterBar()">
+             <i class=" ion-search icon-btn-customize"></i>
+            </button>
+             <button class="button button-clear" ng-click="showAlert()">
+                 <i class="ion-android-options icon-btn-customize"></i>
+           </button>
+           <button class="button button-clear" on-touch="openPopover($event)">
+                <i class="ion-android-more-vertical icon-btn-customize" ></i>
+            </button>
+    </ion-nav-buttons>
+    <ion-content scroll-sista="header">
+
+           <div class="list card item-text-wrap" ng-repeat=" visitdet in drvisitinfo track by $index" >
+               <p><strong style="color:#d14836">{{visitdet.notificationdate|date: "dd MMM yy"}}</strong>
+                   {{visitdet.hospitalid.hospitalemailid}} {{visitdet.hospitalid.hospitalname}}
+                   <button class="button-clear pull-right"><i class="icon pull-right ion-android-attach dark" ng-click="downloaddocument(visitdet.reporturl)"></i> </button></p>
+                <a href="#" ng-click="notification(visitdet.patientregprofiles, visitdet.visitid)">
+                         <button class="button button-clear pull-right"><i class="icon ion-arrow-right-b assertive" ></i></button>
+                    </a>
+               <p><b>Notification :</b>{{visitdet.notificationtext}}</p>
+
+
+  </div>
+
+           </ion-content>
+
+    <script id="mynotification.html" type="text/ng-template">
+  <ion-modal-view>
+       <ion-header-bar class="bar-positive">
+          <h1 class="title">Notifications </h1>
+                <button class="button button-clear button-primary" ng-click="closeModal5()">
+                    <i class="icon ion-android-close"></i>
+                </button>
+        </ion-header-bar>
+<ion-content class="padding">
+    <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
+         <p><strong style="color:#d14836">{{note.notificationdate|date: "dd MMM yy"}}</strong>
+               {{note.patientregprofiles.firstname}} {{note.patientregprofiles.lastname}} {{note.patientregprofiles.emailid}}</p>
+        <p>Reg.date : {{note.patientregprofiles.regdate | date: "dd MMM yy hh:mm a"}}</p>
+        <p>Reg.type : {{note.patientregprofiles.regtype}}</p>
+
+               <p><b>Notification :</b>{{note.notificationtext}} </p>
+         <div class="pull-center">
+                <button class="button button-outline button-assertive" ng-click="downloaddocument(note.reporturl)">View Document</button>
+            </div>
+        </div>
+
+</ion-content>
+</ion-modal-view>
+</script>
+</ion-view>

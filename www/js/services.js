@@ -219,7 +219,6 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 				console.log("Login service Call successful ["+ JSON.stringify(data) + "]");
 				deferred.resolve(data);
 			},function(error){
-
 				console.log("Login service call failed ["+ JSON.stringify(error) + "]");
 				deferred.reject(error);
 			})
@@ -855,8 +854,8 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             console.log("forgotpassword service call failed ["  + JSON.stringify(error) + "]");
             deferred.reject(error);
         });
-    return deferred.promise;
-		},
+        return deferred.promise;
+		    },
 
 		changedpwd : function(emailid, mobNo, password, smsotp, emailotp, pass){
 			var mobnum = mobNo.toString();
@@ -873,4 +872,34 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             return deferred.promise;
             }
     }
+}])
+.service('doctortabservice', ['$q','$resource', function($q, $resource){
+  return{
+    getdctdets: function(doctorid){
+        var deferred = $q.defer();
+        var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:doctorid/notifications");
+        resource.get({doctorid: doctorid}, function(data){
+           console.log( "doctor service call is successful ["+ JSON.stringify(data) + "]");
+            deferred.resolve(data);
+        },function(error){
+           console.log("doctor service call failed with error [" + JSON.stringify(error)+ "]");
+				deferred.reject(error);
+        });
+        return deferred.promise;
+    },
+
+      fetchvisit: function(doctorid, patientid, visitid){
+			var deferred = $q.defer();
+			var resource = $resource (" https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:doctorid/:patientid/visits/:visitid/notifications");
+			resource.get({ doctorid: doctorid, patientid: patientid, visitid: visitid }, function(data){
+				console.log( "doctor service call is successful ["+ JSON.stringify(data) + "]");
+				deferred.resolve(data);
+			},function(error){
+				console.log("doctor service call failed with error [" + JSON.stringify(error)+ "]");
+				deferred.reject(error);
+			});
+			return deferred.promise;
+		},
+
+      }
 }]);

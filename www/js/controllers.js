@@ -186,6 +186,7 @@ angular.module('bnotifiedappctrls', [])
        });
      });
   };
+  /*
   $ionicModal.fromTemplateUrl('documentpic.html', {
   	scope: $scope,
   	animation: 'slide-in-up'
@@ -197,7 +198,7 @@ angular.module('bnotifiedappctrls', [])
   }
 	$scope.closeDocModal = function() {
     	$scope.modal.hide();
-	}
+	} */
 }])
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
     //$scope.mobilenumber = '';
@@ -282,10 +283,8 @@ angular.module('bnotifiedappctrls', [])
   	}).then(function(modal) {
     	$scope.modal = modal;
   	});
-
 	$scope.openModal4 = function() {
 		$scope.modal.show();
-
 	};
 
   	$scope.closeModal4 = function() {
@@ -294,9 +293,7 @@ angular.module('bnotifiedappctrls', [])
 
 	$scope.save=function(dets){
         console.log("calling the forgot password service");
-		$scope.forgotpass = true;
-
-
+		    $scope.forgotpass = true;
         forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
             console.log( data);
                 if(data.status === "SUCCESS"){
@@ -2614,4 +2611,84 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
             $rootScope.showToast('You have not updated anything in your profile','Long','top');
         }
      }
+}])
+.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser' ,function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser){
+
+
+     $scope.drvisitinfo=[];
+     $scope.notinfo=[];
+    registrationdetsdb.query({}).then(function(response){
+      var result = DBA.getById(response);
+       $scope.doctorid =  result.appregistrationid;
+        console.log('$stateparams hospital id -->['+ $scope.doctorid + ']');
+     doctortabservice.getdctdets($scope.doctorid).then(function(data){
+
+             console.log("obtaining doctornotification info" + JSON.stringify(data) );
+
+             $scope.drvisitinfo = data.data;
+              console.log($scope.drvisitinfo);
+
+                     }).catch(function(error){
+              var popupalert = $ionicPopup.alert({
+                  title: "Error",
+                  template: "Sorry unable to obatin your visit information"
+              }).then(function(res){
+                  console.log("error received");
+              })
+          });
+
+  }).catch(function(err){
+        $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+        console.log('on ok click');
+        });
+  });
+
+
+  $scope.downloaddocument = function(url){
+   console.log('printing url ['+ url +']');
+    var options = {
+      location: 'yes',
+      clearcache: 'yes',
+      toolbar: 'no'
+    };
+
+
+    $cordovaInAppBrowser.open(encodeURI(url), '_system', options)
+      .then(function(event) {
+        console.log('i m open');
+      }).catch(function(event) {
+        console.log('error opening');
+      });
+
+  }
+
+    $scope.notification = function(patientid, visitid){
+doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(data){
+            console.log("notifications list obtained" + data);
+			$scope.notinfo = data.data;
+			console.log($scope.notinfo);
+            $scope.openModal5();
+            console.log(visitid);
+		}).catch(function(error){
+        var popupalert = $ionicPopup.alert({
+            title: "Error",
+            template: "Sorry unable to obatin your notification"
+        }).then(function(res){
+            console.log("error received");
+        })
+    });
+    }
+
+    $ionicModal.fromTemplateUrl('mynotification.html', {
+    	scope: $scope,
+    	animation: 'slide-in-up'
+  	}).then(function(modal) {
+    	$scope.modal5 = modal;
+  	});
+	$scope.openModal5 = function() {
+    	$scope.modal5.show();
+    }
+	$scope.closeModal5 = function() {
+    	$scope.modal5.hide();
+	}  
 }]);

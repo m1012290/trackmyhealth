@@ -77,16 +77,16 @@
          <label class="item item-floating-label">
          <ion-checkbox class="item-checkbox-left" ng-model="formData.termsyes"></ion-checkbox>
          </label>
-         <a href="#">I accept the Terms of Service and Privacy Policy </a>
+         <a href="#" style="color:black">I accept the Terms of Service and Privacy Policy </a>
      </ion-item>
 	</div>
-	<div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female || formData.transgender) && formData.termsyes)">
+	<!-- <div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female || formData.transgender) && formData.termsyes)"> -->
 		<button  class="button button-block button-positive" href="">SignUp</button>
-    </div>
+  <!-- </div> -->
     </form>
     </ion-content>
 
-	<script id="my-modal2.html" type="text/ng-template">
+<script id="otpscreen.html" type="text/ng-template">
      <ion-modal-view>
 
     <ion-header-bar class="bar-positive">

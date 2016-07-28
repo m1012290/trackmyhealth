@@ -277,6 +277,16 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         }
     }
   })
+  .state('main.doctortab', {
+    cache: true,
+    url: '/doctortab',
+    views: {
+        'doctor-tab': {
+          templateUrl: 'templates/doctortab.html',
+          controller: 'DoctortabCtrl'
+        }
+    }
+  })
   .state('logout', {
     url: '/logout',
     controller: 'LogoutCtrl'
