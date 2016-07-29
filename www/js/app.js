@@ -15,7 +15,6 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
-    console.log('checking internet connectivity');
     var state = checkForInternetConnection($ionicPlatform);
 
     if(state === 'none'){
@@ -30,16 +29,11 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         // App syntax
         console.log('Within OpenDB call');
         db = $cordovaSQLite.openDB({name:"bnotified.db"});
-    }else{/*
-        window.sqlitePlugin.openDatabase({name:"bnotified.db"}, function (db) {
-            db = db;
-        });*/
-
+    }else{
         db = window.openDatabase("bnotified.db", "1.0", "Demo", -1);
-        console.log('printing db object ['+ db + ']');
     }
 
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text)").then(function(result){
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text, isdoctor text)").then(function(result){
        console.log('Table created successfully with result as ['+ result.rows.length + ']');
     }).catch(function(error){
         console.log('Table creation failed with error as ['+ error + ']');
@@ -123,7 +117,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
 
 
     if(window.cordova){
-        console.log('Printing device object ['+ JSON.stringify(device) +']');
+        //console.log('Printing device object ['+ JSON.stringify(device) +']');
         var registrationtoken = null;
         registrationdetsdb.query({}).then(function(result){
             var result = DBA.getById(result);
@@ -169,7 +163,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     console.log('device went offline ');
     var alertPopup = ionicAlertPopup($ionicPopup);
     alertPopup.then(function(res) {
-        //console.log('');
+        alertPopup.close();
     });
   }, false);
 
@@ -236,9 +230,13 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     data : {
        mobilenumber : ""
     },
-    controller : function($scope, $state){
+    controller : function($scope, $state, loginservice){
         $scope.mobilenumber = $state.current.data.mobilenumber;
-        console.log('$scope.mobilenumber within main ['+ $scope.mobilenumber + ']');
+        var profiledata = loginservice.getProfileData();
+        //$scope.$parent.showDoctorsTab = profiledata.isdoctor;
+        if(typeof profiledata !== 'undefined'){
+          $scope.showDoctorsTab = profiledata.isdoctor;
+        }
     }
 /*    resolve : {
         mobilenumber : function($stateParams){

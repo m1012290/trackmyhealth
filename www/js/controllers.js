@@ -88,6 +88,7 @@ angular.module('bnotifiedappctrls', [])
   $scope.backButtonAction = function(){
         $ionicHistory.goBack();
   };
+  
   $rootScope.messagesdata = {
      badgeCount: ''
   }
@@ -352,9 +353,8 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
               $rootScope.hideLoader();
               registrationdetsdb.query({}).then(function(response){
                   var result = DBA.getById(response);
-              //if(result.appregistrationid === null || result.appregistrationid === ''){
-                    //update the table with the id gotten after login
-                  registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken).then(function(result){
+                  registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken, data.isdoctor).then(function(result){
+                      loginservice.setProfileData({"appregistrationid":data.appregistrationid, "jsonwebtoken":data.authtoken, "isdoctor":data.isdoctor});
                       $state.go('main.listedentities');
                   }).catch(function(error){
                       $rootScope.showPopup({
@@ -523,13 +523,14 @@ if($scope.formData.doctor == true){
   $scope, $rootScope, $ionicPopup, $stateParams, registrationdetsdb, DBA, $state, loginservice){
   // first on loading of the landing page lets check if we have
   //json web token available
-  $scope.$on("$ionicView.enter", function(event, data){
+  $scope.$on("$ionicView.loaded", function(event, data){
     $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
         var result = DBA.getById(response);
         loginservice.logindets('', '').then(function(data){
           $rootScope.hideLoader();
           if(data.status === 'SUCCESS'){
+              loginservice.setProfileData({"appregistrationid":result.appregistrationid, "isdoctor":result.isdoctor});
               $state.go('main.listedentities');
           }else{
             $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');

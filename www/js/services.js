@@ -211,6 +211,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 }])
 
 .service('loginservice', ["$q", '$resource', function($q, $resource){
+  this.profiledata = {};
 	return{
 		logindets:function(email, password){
 			var deferred = $q.defer();
@@ -223,7 +224,13 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 				deferred.reject(error);
 			})
 			return deferred.promise;
-		}
+		},
+    setProfileData:function(profiledata){
+        this.profiledata = profiledata
+    },
+    getProfileData:function(){
+        return this.profiledata;
+    }
 	}
 }])
 .service('hospitalservice', ['$q', '$resource', function($q, $resource){
@@ -404,7 +411,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         return DBA.query("UPDATE registrationtable SET mobilenumber = (?)", parameters);
     };
     self.query = function(registrationdets) {
-        return DBA.query("SELECT mobilenumber, registrationtoken, deviceuuid, jsonwebtoken, appregistrationid from registrationtable");
+        return DBA.query("SELECT mobilenumber, registrationtoken, deviceuuid, jsonwebtoken, appregistrationid, isdoctor from registrationtable");
     };
     self.updateJWT = function(registrationdets){
         var parameters = [registrationdets.jsonwebtoken, registrationdets.mobilenumber];
@@ -420,9 +427,9 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
         return DBA.query("UPDATE registrationtable SET appregistrationid = (?)",parameters);
     };
 
-    self.updateJWTAndAppRegId = function(appregistrationid, jsonwebtoken){
-        var parameters = [appregistrationid, jsonwebtoken];
-        return DBA.query("UPDATE registrationtable SET appregistrationid = (?), jsonwebtoken = (?)", parameters);
+    self.updateJWTAndAppRegId = function(appregistrationid, jsonwebtoken, isdoctor){
+        var parameters = [appregistrationid, jsonwebtoken, isdoctor];
+        return DBA.query("UPDATE registrationtable SET appregistrationid = (?), jsonwebtoken = (?), isdoctor = (?)", parameters);
     };
 
     return self;
