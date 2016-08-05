@@ -1,22 +1,22 @@
 <ion-view view-title="trackmyhealth" name="listed-entities-view">
-    <ion-nav-title>
-<span class="circle-span direct-chat-timestamp">
-     <i class="icon ion-ios-pulse-strong assertive"></i></span></span>
-    </ion-nav-title>
+  <ion-nav-title>
+    <span class="circle-span direct-chat-timestamp">
+    <i class="icon ion-ios-pulse-strong assertive"></i></span></span>
+  </ion-nav-title>
 
- <ion-nav-buttons side="right" >
+ <ion-nav-buttons side="right">
+           <button class="button button-clear" ng-click="takeImage()">
+                <i class=" ion-camera icon-btn-customize"></i>
+           </button>
             <button class="button button-clear" ng-click="showFilterBar()">
                  <i class=" ion-search icon-btn-customize"></i>
             </button>
-            <!-- <button class="button button-clear" ng-click="showAlert()">
-                 <i class="ion-android-options icon-btn-customize"></i>
-            </button>-->
             <button class="button button-clear" on-touch="openPopover($event)">
                  <i class="ion-android-more-vertical icon-btn-customize"></i>
             </button>
 </ion-nav-buttons>
 
-  <ion-content scroll-sista="header">
+  <ion-content scroll-sista="header" class="has-header">
 
      <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
         <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">

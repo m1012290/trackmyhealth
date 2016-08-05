@@ -434,6 +434,17 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 
     return self;
 }])
+.factory('imagesservicedb',['$q','DBA',function($q, DBA){
+   var self = this;
+   self.add = function(imagedetails){
+       var parameters = [imagedetails.imgname, imagedetails.imgtag, imagedetails.imgdesc, imagedetails.imgnativeurl, imagedetails.capturedate];
+       return DBA.query("INSERT INTO tmhimagestable(imgname, imgtag, imgdescription, imgnativeurl, capturedate) VALUES (?,?,?,?,?)", parameters);
+   };
+   self.query = function(){
+      return DBA.query("SELECT imgname, imgtag, imgdescription, imgnativeurl, capturedate from tmhimagestable");
+   }
+   return self;
+}])
 .factory('authservice',['$q', '$resource', 'NODE_SERVER_DETAILS', function($q, $resource, NODE_SERVER_DETAILS){
     var self = this;
     self.loginservice = function(mobilenumber, passcode, registrationtoken){

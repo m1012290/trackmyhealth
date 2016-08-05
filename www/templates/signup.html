@@ -1,44 +1,95 @@
 <ion-view view-title="Sign Up" >
      <ion-content class="padding">
+           <div ng-if="signup.password.$valid" ng-messages="signup.userFirstName.$error" >
+			<div class="error" ng-message="required">
+				<i class="ion-information-circled"></i>Firstname is required!
+			</div>
+		  </div>
+	  <div ng-if="signup.userFirstName.$valid" ng-messages="signup.userLastName.$error" >
+		<div class="error" ng-message="required">
+			<i class="ion-information-circled"></i>Lastname is required!
+		</div>
+	  </div>
+	  <div ng-if="signup.userLastName.$valid" ng-messages="signup.mobnum.$error" >
+		<div class="error" ng-message="required">
+			<i class="ion-information-circled"></i>Mobile no. is required!
+		</div>
+	  </div>
+	  <div ng-if="signup.mobnum.$valid" ng-messages="signup.emailadd.$error" >
+		<div class="error" ng-message="required">
+			<i class="ion-information-circled"></i>Emailid is required!
+		</div>
+	  </div>
+	  <div ng-if="signup.emailadd.$valid" ng-messages="signup.password.$error" >
+		<div class="error" ng-message="required">
+			<i class="ion-information-circled"></i>Password is required!
+		</div>
+	  </div>
+
 <form name="signup" class="simple-form" ng-submit="save(formData)" required>
     <div class="list">
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
         <span class="input-label">  First Name</span>
-			<input type="text" ng-model="formData.firstname" placeholder= "First Name"  required>
+			<input type="text" name="userFirstName" ng-model="formData.firstname" placeholder= "First Name"  required>
 		</label>
 		<label class="item item-input item-floating-label">
         <span class="input-label">  LastName</span>
-			<input type="text" ng-model="formData.lastname" placeholder="Last Name"  required>
+			<input type="text" name="userLastName" ng-model="formData.lastname" placeholder="Last Name"  required>
 		</label>
     </ion-item>
 
 	<ion-item class="item-input" >
 		<label class="item item-input item-floating-label">
 		<span class="input-label">  MobileNo</span>
-		<input type="number" ng-model="formData.mobnum" placeholder= "Mobile Number"  ng-maxlength="10" ng-max-length-type="10"  required>
+		<input type="number" name="mobnum" ng-model="formData.mobnum" placeholder= "Mobile Number"  ng-minlength="10" ng-maxlength="10" ng-pattern="isMobilePhone()" required>
 		</label>
     </ion-item>
-
+<div class="panel-footer" align="right">
+    <div ng-messages="signup.mobnum.$error" >
+       <div ng-message="minlength" class="requiredStyle errorCls">Mob num must be over 10 characters</div>
+        <div class="help-block" ng-show="signup.name.$error.pattern">Text only, please.</div>
+       <div ng-message="maxlength" class="requiredStyle errorCls">Mob num must not exceed 10 characters</div>
+    </div>
+       </div>
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label" >
 			<span class="input-label">  Email Id</span>
-		<input type="email" ng-model="formData.emailadd" placeholder= "Email Id" required>
+		<input type="email" name="emailadd" ng-model="formData.emailadd" placeholder= "Email Id" ng-pattern="validator.isEmail()"  required>
 		</label>
 	</ion-item>
-
+<div class="panel-footer" align="right">
+    <div ng-messages="signup.emailadd.$error">
+        <div ng-message="email" class="requiredStyle errorCls">This field must be a valid email address.</div>
+        <div class="help-block" ng-show="signup.name.$error.pattern">Text only, please.</div>
+        <div class="help-block" ng-show="signup.emailadd.$error.emailadd">Not valid email!</div>
+    </div>
+       </div>
 	<ion-item class="item-input">
-		<label class="item item-input item-floating-label">
+		<label class="item item-input item-floating-label" >
 			<span class="input-label">  Password</span>
-		<input type="password" ng-model="formData.password" placeholder="Password" required ng-minlength="6" ng-maxlength="12" required>
+		<input type="password" name="password" ng-model="formData.password" placeholder="Password" ng-minlength="6" ng-maxlength="20" required>
 		</label>
 		<label class="item item-input item-floating-label">
 			<span class="input-label">  Confirm Password</span>
-			<input type="password" ng-model="formData.confirmpassword" placeholder= "Confirm Password" required>
+<input type="password" name="confirmpassword" ng-model="formData.confirmpassword" placeholder= "Confirm Password" required>
 		</label>
     </ion-item>
-
-    <ion-item class="item-input">
+<div class="panel-footer" align="right">
+    <div ng-messages="signup.password.$error">
+       <div ng-message="password">This field is required</div>
+       <div ng-message="minlength" class="requiredStyle errorCls">Password must be over 6-20 characters</div>
+       <div ng-message="maxlength" class="requiredStyle errorCls">Password must not exceed 20 characters</div>
+    </div>
+       </div>
+        <div class="panel-footer" align="right">
+             <div ng-if="signup.confirmpassword.$valid" >
+                <div class="error" ng-if="formData.password !== formData.confirmpassword" >
+           <i class="ion-information-circled"></i> Password doesnot Match!
+                 </div>
+            </div>
+        </div>
+<ion-item class="item-input">
          <label class="item item-radio item-floating-label">
             <input type="radio" ng-model="formData.male" name="group">
                <div class="item-content">
@@ -46,8 +97,7 @@
                </div>
                    <i class="radio-icon ion-checkmark"></i>
          </label>
-
-    <label class="item item-radio item-floating-label">
+            <label class="item item-radio item-floating-label">
       <input type="radio" ng-model="formData.female" name="group">
           <div class="item-content">
               <i class="icon ion-woman" ></i>
@@ -55,13 +105,15 @@
               <i class="radio-icon ion-checkmark"></i>
    </label>
 
-    <label class="item item-radio item-floating-label">
+ <label class="item item-radio item-floating-label">
       <input type="radio" ng-model="formData.transgender" name="group">
         <div class="item-content">
             <i class="icon ion-transgender"></i>
         </div>
             <i class="radio-icon ion-checkmark"></i>
    </label>
+
+
         </ion-item>
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
@@ -74,19 +126,23 @@
     </ion-item>
 
     <ion-item class="item-input">
-         <label class="item item-floating-label">
-         <ion-checkbox class="item-checkbox-left" ng-model="formData.termsyes"></ion-checkbox>
-         </label>
-         <a href="#" style="color:black">I accept the Terms of Service and Privacy Policy </a>
+     <label class="item item-input item-floating-label">
+         <span class="input-label"></span>
+       <ion-checkbox class="item-checkbox-left" name= "termsyes" ng-model="formData.termsyes" > </ion-checkbox>
+      </label>
+          <a href="#" style="color:black;">I accept the Terms of Service and Privacy Policy  </a>
      </ion-item>
 	</div>
-	<!-- <div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female || formData.transgender) && formData.termsyes)"> -->
+	<!--div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female ) && formData.termsyes)">
 		<button  class="button button-block button-positive" href="">SignUp</button>
-  <!-- </div> -->
+    </div-->
+
+ <button  class="button button-block button-assertive" ng-disabled="signup.$invalid" href="">SignUp</button>
+
     </form>
     </ion-content>
 
-<script id="otpscreen.html" type="text/ng-template">
+	<script id="otpscreen.html" type="text/ng-template">
      <ion-modal-view>
 
     <ion-header-bar class="bar-positive">

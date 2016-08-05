@@ -1,5 +1,5 @@
 angular.module('bnotifiedappctrls', [])
-.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal',function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal) {
+.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','imagesservicedb', function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, imagesservicedb) {
     //handle events and broadcasts such as error scenario to redirect user
    console.log('within AppCtrl current state -->'+JSON.stringify($state.current));
    $scope.$on('NoInternet' , function(event){
@@ -88,12 +88,12 @@ angular.module('bnotifiedappctrls', [])
   $scope.backButtonAction = function(){
         $ionicHistory.goBack();
   };
-  
+
   $rootScope.messagesdata = {
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 29%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 35%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -155,13 +155,18 @@ angular.module('bnotifiedappctrls', [])
      console.log("closing popup");
      myPopup.close();
   }
- };
+};
 
+  $scope.urlForImage = function(imageName) {
+    var trueOrigin = cordova.file.dataDirectory + imageName;
+    return trueOrigin;
+  }
   $scope.takeImage = function(){
     $scope.data = {
+      "filename" : "",
       "tag" : "",
       "description" : ""
-    }
+    };
     var options = {
          quality: 100,
          destinationType: Camera.DestinationType.FILE_URI,
@@ -172,34 +177,91 @@ angular.module('bnotifiedappctrls', [])
          //targetHeight: 250,
          popoverOptions: CameraPopoverOptions,
          mediaType: Camera.MediaType.PICTURE,
-         saveToPhotoAlbum: true,
-         correctOrientation : true
+         saveToPhotoAlbum: false
      };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+  		// 4
+  		onImageSuccess(imageData);
 
-     $cordovaCamera.getPicture(options).then(function(imageData) {
-         //$scope.srcImage = "data:image/jpeg;base64," + imageData;
-         $scope.srcImage = imageData;
-         $scope.data.tag = imageData;
-         $scope.openDocModal();
-     }, function(err) {
-       $rootScope.showPopup({title:'Error', template:"Camera couldn't capture the image, please try again !!"}, function(res){
-           //console.log('On alert ok ');
-       });
-     });
+  		function onImageSuccess(fileURI) {
+  			createFileEntry(fileURI);
+  		}
+
+  		function createFileEntry(fileURI) {
+  			window.resolveLocalFileSystemURL(fileURI, copyFile, fail);
+  		}
+
+  		// 5
+  		function copyFile(fileEntry) {
+  			var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
+  			var newName = makeid() + name;
+
+  			window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(fileSystem2) {
+  				fileEntry.copyTo(
+  					fileSystem2,
+  					newName,
+  					onCopySuccess,
+  					fail
+  				);
+  			},
+  			fail);
+  		}
+
+  		// 6
+  		function onCopySuccess(entry) {
+  			$scope.$apply(function () {
+          $scope.srcImage = entry.nativeURL;
+          $scope.data.filename = entry.fullPath.substr(entry.fullPath.lastIndexOf('/') + 1);
+  			});
+        $scope.openDocModal();
+  		}
+
+  		function fail(error) {
+  			$rootScope.showToast("Error displaying the captured photo, please try again","long","top");
+  		}
+
+  		function makeid() {
+  			var text = "";
+  			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  			for (var i=0; i < 5; i++) {
+  				text += possible.charAt(Math.floor(Math.random() * possible.length));
+  			}
+  			return text;
+  		}
+
+  	}, function(err) {
+  		console.log(err);
+  	});
   };
-  /*
+  $scope.saveCapturedImage = function(){
+      imagesservicedb.add({
+        "imgname":$scope.data.filename,
+        "imgtag" :$scope.data.tag,
+        "imgdesc":$scope.data.description,
+        "imgnativeurl" :$scope.srcImage,
+        "capturedate" : Date.now()
+      }).then(function(data){
+        $scope.closeDocModal();
+        $rootScope.showToast('Image captured successfully','long','top');
+      }).catch(function(error){
+        $rootScope.showPopup({'tutle':'Error','template':'Error encountered while capturing image to Database ['+ error.code + ' '+ error.message + ']'});
+        $rootScope.showToast("Image couldn't be captured, please try again",'long','top');
+      });
+  };
+
   $ionicModal.fromTemplateUrl('documentpic.html', {
   	scope: $scope,
   	animation: 'slide-in-up'
   }).then(function(modal) {
-    	$scope.modal = modal;
+    	$scope.documentmodal = modal;
   });
 	$scope.openDocModal = function() {
-    	$scope.modal.show();
+    	$scope.documentmodal.show();
   }
 	$scope.closeDocModal = function() {
-    	$scope.modal.hide();
-	} */
+    	$scope.documentmodal.hide();
+	}
 }])
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
     //$scope.mobilenumber = '';
@@ -357,6 +419,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
                       loginservice.setProfileData({"appregistrationid":data.appregistrationid, "jsonwebtoken":data.authtoken, "isdoctor":data.isdoctor});
                       $state.go('main.listedentities');
                   }).catch(function(error){
+                     console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
                       $rootScope.showPopup({
                         title:'System Error',
                         template:'Unable to login right now, please try again !!'
@@ -364,6 +427,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
                       });
                   });
               }).catch(function(error){
+                console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
                 $rootScope.showPopup({
                        title:'System Error',
                             template:'Unable to login right now, please try again !!'
@@ -379,6 +443,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
             }
 		}).catch(function(error){
       $rootScope.hideLoader();
+      console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
       if(error.status === 400){
         $rootScope.showPopup({
           title:'Invalid Credentials',
@@ -386,6 +451,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
         },function(res){
         });
       }else{
+        console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
         $rootScope.showPopup({
           title:'System Error',
           template:'Unable to login right now, please try again !!'
@@ -2817,4 +2883,54 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 	$scope.closeModal5 = function() {
     	$scope.modal5.hide();
 	}
+}])
+.controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb){
+  /*$scope.imagesarray = [{
+    'imgnativeurl':'../img/icon.png',
+    'imgtag' : 'test'
+  },{
+    'imgnativeurl':'../img/icon.png',
+    'imgtag' : 'test'
+  },{
+    'imgnativeurl':'../img/icon.png',
+    'imgtag' : 'test'
+  }];*/
+  $ionicModal.fromTemplateUrl('imageslist.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+      $scope.imageslist = modal;
+  });
+  $scope.openImagesModal = function(index) {
+    	$scope.activeSlide = index;
+      $scope.imageslist.show();
+  }
+  $scope.closeImagesModal = function() {
+      $scope.imageslist.hide();
+  }
+
+  $scope.$on("$ionicView.enter", function(event, data){
+    $scope.imagesarray = [];
+    console.log('within $ionicView.afterEnter');
+    imagesservicedb.query().then(function(response){
+        //$rootScope.showPopup({'title':'message','template':"Response object as json ["+ JSON.stringify(response) + "]"});
+        var result = DBA.getAll(response);
+        //$rootScope.showPopup({'title':'message','template':"result object as json ["+ JSON.stringify(result) + "]"});
+        if(result !== null && result.length > 0){
+          angular.forEach(result, function(value, key){
+              $scope.imagesarray.push({
+                "imgtag":value.imgtag,
+                "imgdescription" : value.imgdescription,
+                "imgnativeurl" : value.imgnativeurl,
+                "capturedate"  : value.capturedate
+              });
+          });
+        }else{
+          console.log('no images have been saved by the user');
+          $rootScope.showToast("No images available","long","top");
+        }
+    }).catch(function(error){
+        $rootScope.showToast("Couldn't display images for you","long","top");
+    });
+  });
 }]);

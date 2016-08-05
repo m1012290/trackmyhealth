@@ -32,11 +32,18 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }else{
         db = window.openDatabase("bnotified.db", "1.0", "Demo", -1);
     }
-
+    // App registrationtable
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text, isdoctor text)").then(function(result){
        console.log('Table created successfully with result as ['+ result.rows.length + ']');
     }).catch(function(error){
         console.log('Table creation failed with error as ['+ error + ']');
+    });
+
+    // App images uploaded Table
+    $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS tmhimagestable(imgname text, imgtag text, imgdescription text, imgnativeurl text, capturedate date)").then(function(result){
+      console.log('Table created successfully with result ['+ result.rows + ']');
+    }).catch(function(error){
+      console.log('Table creation failed with error as ['+ error + ']');
     });
     /*
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS notificationstable(notificationid text primary key not null, entityid integer, notificationtext text, notificationdatetime text, messageread text)").then(function(result){
@@ -297,6 +304,11 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       url:'/patientprfl',
       templateUrl : 'templates/patientprofile.html',
       controller : 'PatientprofileCtrl'
+  })
+  .state('patientimages',{
+      url:'/patientimages',
+      templateUrl : 'templates/patientimages.html',
+      controller : 'ImagesProfileCtrl'
   });
   $urlRouterProvider.otherwise('/landing');
   $ionicConfigProvider.scrolling.jsScrolling(true);

@@ -38,7 +38,8 @@
     "cordova-plugin-x-toast",
     "cordova-sqlite-storage",
     "hu.dpal.phonegap.plugins.PinDialog",
-    "phonegap-plugin-push"
+    "phonegap-plugin-push",
+    "cordova-plugin-file"
   ],
   "cordovaPlatforms": [
     "android"
