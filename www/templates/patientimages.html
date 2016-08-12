@@ -1,34 +1,42 @@
 <ion-view view-title="Images">
+    <ion-nav-buttons side="left">
+    <button class="button button-clear" ng-click="backButtonAction()">
+        <i class="ion-android-arrow-back icon-btn-customize"></i>
+    </button>
+</ion-nav-buttons>
 <ion-pane>
 	  <ion-header-bar class="bar-stable">
 		<h1 class="title">Images</h1>
 	  </ion-header-bar>
-	  <ion-content class="has-header padding">
-		  <br><br>
-		<div class="item item-divider">
-			<i class="ion-images"></i>
-			My Images
-		</div>
 
-    <ion-list>
-      <ion-item ng-repeat="image in imagesarray track by $index" class="item item-avatar item-remove-animate">
-        <a class="item item-list-detail">
+   <div class="bar bar-subheader">
+   <h2 class="title"><i class="ion-images"></i> My Images</h2>
+   </div>
+
+     <ion-content class="has-subheader padding">
+    <!--div ng-repeat="image in imagesarray track by $index" class="item item-avatar item-remove-animate"-->
+            <div ng-repeat="image in imagesarray track by $index"  class="list card">
+             <a class="item item-list-detail">
 				  <img ng-src="{{image.imgnativeurl}}" width="250 " height="250" style="display: block; margin: 0 auto;" ng-click="openImagesModal($index)"/>
         </a>
-        <span class="item-text-wrap">Tag : <p>{{image.imgtag}}</p></span>
-        <span class="item-text-wrap">Description : <p>{{image.imgdescription}}</p></span>
-        <span class="item-text-wrap">Captured Date : <p>{{image.capturedate}}</p> </span>
-       </ion-item>
-    </ion-list>
-	  </ion-content>
-	</ion-pane>
+
+                 <span class="item-text-wrap"><p> <strong>Tag : </strong>{{image.imgtag}}</p></span>
+    <span class="item-text-wrap"><p><strong> Description : </strong>{{image.imgdescription}}</p></span>
+    <span class="item-text-wrap"><p><strong>Captured Date : </strong> {{image.capturedate | date: "dd MMM yyyy" }}</p> </span>
+
+           </div>
+  </ion-content>
+    </ion-pane>
+
+
+
 <script id="imageslist.html" type="text/ng-template">
   <div class="modal image-modal transparent" ng-click="closeImagesModal()">
-      <!-- <ion-slide-box on-slide-changed="slideChanged(index)" show-pager="true" active-slide="activeSlide"> -->
-          <!-- <ion-slide ng-repeat="image in imagesarray"> -->
+       <!--ion-slide-box on-slide-changed="slideChanged(index)" show-pager="true" active-slide="activeSlide">
+          <ion-slide ng-repeat="image in imagesarray"-->
               <img ng-src="{{imagesarray[activeSlide].imgnativeurl}}" class="fullscreen-image"/>
-          <!-- </ion-slide> -->
-      <!-- </ion-slide-box> -->
+       <!--/ion-slide>
+   </ion-slide-box-->
   </div>
 </script>
 </ion-view>
