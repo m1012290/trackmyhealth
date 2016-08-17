@@ -4,12 +4,11 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista'])
-.run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope) {
+.run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', '$cordovaToast',function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope, $cordovaToast) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
       //StatusBar.styleDefault();
       StatusBar.backgroundColorByHexString('#d14836');
-
     }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -18,32 +17,32 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     var state = checkForInternetConnection($ionicPlatform);
 
     if(state === 'none'){
-           console.log('no internet connectivity hence the pop up ['+ state +']');
-           var alertPopup = ionicAlertPopup($ionicPopup);
-           alertPopup.then(function(res) {
-              alertPopup.close();
-           });
+      showToast($cordovaToast, 'No internet connectivity available', 'long', 'top');
     }
 
     if(window.cordova) {
-        // App syntax
-        console.log('Within OpenDB call');
         db = $cordovaSQLite.openDB({name:"bnotified.db"});
     }else{
         db = window.openDatabase("bnotified.db", "1.0", "Demo", -1);
     }
     // App registrationtable
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text, isdoctor text)").then(function(result){
-       console.log('Table created successfully with result as ['+ result.rows.length + ']');
+       showToast($cordovaToast, 'Registrationtable created successfully', 'long', 'top');
     }).catch(function(error){
-        console.log('Table creation failed with error as ['+ error + ']');
+       showToast($cordovaToast,'We are experiencing issue with initiating the app','long','top');
     });
 
     // App images uploaded Table
     $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS tmhimagestable(imgname text, imgtag text, imgdescription text, imgnativeurl text, capturedate date)").then(function(result){
-      console.log('Table created successfully with result ['+ result.rows + ']');
+      showToast($cordovaToast, 'Images table created successfully', 'long', 'top');
     }).catch(function(error){
-      console.log('Table creation failed with error as ['+ error + ']');
+      showToast($cordovaToast,'We are experiencing issue with initiating the app','long','top');
+    });
+
+    $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS tmhofflinestore(svckey text, svcvalue text, rcredate date, rupdate date)").then(function(result){
+
+    }).catch(function(error){
+      showToast($cordovaToast,'We are experiencing issue with initiating the app','long','top');
     });
     /*
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS notificationstable(notificationid text primary key not null, entityid integer, notificationtext text, notificationdatetime text, messageread text)").then(function(result){
@@ -109,15 +108,15 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
           // this is the actual push notification. its format depends on the data model from the push server
           console.log('printing event object when inline message is recieved ['+ JSON.stringify(event) + ']');
           console.log('printing notification object when inline message is recieved ['+ JSON.stringify(notification) + ']');
-          alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+      //    alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
           break;
 
         case 'error':
-          alert('GCM error = ' + notification.msg);
+        //  alert('GCM error = ' + notification.msg);
           break;
 
         default:
-          alert('An unknown GCM event has occurred');
+          //alert('An unknown GCM event has occurred');
           break;
       }
     });
@@ -161,17 +160,14 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
             console.log('Error encountered while retrieving registration token hence let registration happen['+ error + ']');
         });
     }
-
   });
-  //ionic.Platform.fullScreen(true, true);
-  //ionic.Platform.isFullScreen = true;
-
   window.addEventListener("offline", function(){
-    console.log('device went offline ');
+    /*console.log('device went offline ');
     var alertPopup = ionicAlertPopup($ionicPopup);
     alertPopup.then(function(res) {
         alertPopup.close();
-    });
+    });*/
+    showToast($cordovaToast, 'No internet connectivity available', 'long', 'top');
   }, false);
 
   $ionicPlatform.registerBackButtonAction(function(event) {
@@ -189,29 +185,10 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     //else if($state.current.name === 'landing')  {
         ionic.Platform.exitApp();
     //}
-  }else if($state.current.name === 'main.myhealth'){
-
   }else{
-        //console.log('have to return to previous view ['+ JSON.stringify($ionicHistory.viewHistory()) +']');
-        console.log('Printing backview object[' + JSON.stringify($ionicHistory.backView()) + ']');
         $ionicHistory.goBack();
   }
   }, 100);
-
-   /*$ionicPlatform.onHardwareBackButton(function(event){
-         console.log('Printing current state name -->'+ $state.current.name);
-        if($state.current.name === 'main.recentnotifications' || $state.current.name === 'main.listedentities'){
-            $ionicPopup.confirm({
-                title: 'Exit',
-                template: 'are you sure you want to exit?'
-            }).then(function(res) {
-                if (res) {
-                    ionic.Platform.exitApp();
-                }
-            })
-        }
-
-    });*/
 }])
 .config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider', function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
   $stateProvider
@@ -253,7 +230,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }*/
   })
   .state('main.listedentities', {
-    cache: true,
+    cache: false,
     url: '/listedentities',
     views: {
         'listed-entities': {
@@ -263,7 +240,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.allnotifications', {
-    cache: true,
+    cache: false,
     url: '/allnotifications/:hospitalid',
     views: {
         'all-notifications': {
@@ -273,7 +250,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.myhealth', {
-    cache: true,
+    cache: false,
     url: '/myhealth',
     views: {
         'my-health': {
@@ -283,7 +260,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.doctortab', {
-    cache: true,
+    cache: false,
     url: '/doctortab',
     views: {
         'doctor-tab': {
@@ -445,4 +422,11 @@ function ionicAlertPopup($ionicPopup){
            });
 
     return alertPopup;
+}
+function showToast($cordovaToast, message, duration, position){
+  $cordovaToast.show(message, duration, position).then(function(success){
+    //success
+  }, function(error){
+    //error
+  });
 }

@@ -2933,4 +2933,25 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
         $rootScope.showToast("Couldn't display images for you","long","top");
     });
   });
+
+   $scope.backButtonAction = function(){
+       $scope.shouldShowDelete = false;
+       $ionicHistory.goBack();
+    };
+      $scope.showFilterBar = function(){
+
+            filterBarInstance = $ionicFilterBar.show({
+              items:$scope.imagesarray,
+              update:function(filteredItemList){
+                  $scope.imagesarray = filteredItemList;
+              },
+              expression:function(filterText, value, index, array){
+                  return ( value.imgtag.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                          || value.capturedate.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                          || value.imgdescription.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+                                               )
+              }
+            });
+      };
+
 }]);

@@ -445,6 +445,22 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
    }
    return self;
 }])
+.factory('offlinestoredb',['$q','DBA',function($q, DBA){
+    var self = this;
+    self.add = function(offlinestoredets){
+       var parameters = [offlinestoredets.svckey, offlinestoredets.svcvalue, offlinestoredets.rcredate, offlinestoredets.rupdate];
+       return DBA.query("INSERT INTO tmhofflinestore(svckey, svcvalue, rcredate, rupdate) VALUES (?,?,?,?)", parameters);
+    };
+    self.query = function(key){
+        var parameters = [key];
+        return DBA.query("SELECT svckey, svcvalue, rcredate, rupdate from tmhofflinestore where svckey=?",parameters);
+    };
+    self.update = function(offlinestoredets){
+      var parameters = [offlinestoredets.svcvalue,offlinestoredets.rupdate, offlinestoredets.svckey];
+      return DBA.query("UPDATE tmhofflinestore set svcvalue=?, rupdate=? where svckey = ?", parameters);
+    };
+    return self;
+}])
 .factory('authservice',['$q', '$resource', 'NODE_SERVER_DETAILS', function($q, $resource, NODE_SERVER_DETAILS){
     var self = this;
     self.loginservice = function(mobilenumber, passcode, registrationtoken){
@@ -667,16 +683,66 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 
     return self;
 }])
-.factory('AuthInterceptor', ['$rootScope','$q','registrationdetsdb', 'DBA','AUTH_EVENTS',function ($rootScope, $q, registrationdetsdb, DBA, AUTH_EVENTS) {
+.factory('AuthInterceptor', ['$rootScope','$q','registrationdetsdb','offlinestoredb','DBA','AUTH_EVENTS','API_KEYS',function ($rootScope, $q, registrationdetsdb, offlinestoredb, DBA, AUTH_EVENTS, API_KEYS) {
   return {
     'responseError': function (response) {
-      console.log('error encountered');
+      console.log('error encountered within responseError after changes');
+      var deferred = $q.defer();
+      //console.log('printing navigator.connection.type ['+ JSON.stringify(window.navigator.connection) + ']');
+      if(response.config.url && response.config.url.search('v1') != -1){
+        var svckey = response.config.url.substr(response.config.url.indexOf('/v1'));
+        console.log('printing svckey ['+ svckey + ']');
+        if(window.cordova && window.navigator.connection){
+            console.log('printing connection type');
+            if(navigator.connection.type === 'none'){
+              offlinestoredb.query(svckey).then(function(result){
+                 //console.log('printing resuult length ['+ result.rows.length + ']');
+                 //console.log('printing resuult ['+ JSON.stringify(result.rows.item(0)) + ']');
+                 if(result.rows.length > 0){
+                   //console.log('printing the whole result object ['+ JSON.stringify(result) + ']');
+                   var data = DBA.getById(result);
+                   //console.log('pritning data value within responseerror ['+ angular.fromJson(data.svcvalue) +']');
+                   response.status = 200;
+                   response.data = angular.fromJson(data.svcvalue);
+                   deferred.resolve(response);
+                 }else{
+                  deferred.reject(response);
+                 }
+                 console.log('printing response object b4 returning within responseError ['+ JSON.stringify(response) + ']');
+              }).catch(function(error){
+                 deferred.reject(response);
+              });
+              $rootScope.showToast('No internet connection available', 'long', 'center');
+            }else{
+              deferred.reject(response);
+            }
+        }else{
+          offlinestoredb.query(svckey).then(function(result){
+             //console.log('printing resuult length ['+ result.rows.length + ']');
+             //console.log('printing resuult ['+ JSON.stringify(result.rows.item(0)) + ']');
+             if(result.rows.length > 0){
+               //console.log('printing the whole result object ['+ JSON.stringify(result) + ']');
+               var data = DBA.getById(result);
+               //console.log('pritning data value within responseerror ['+ angular.fromJson(data.svcvalue) +']');
+               response.status = 200;
+               response.data = angular.fromJson(data.svcvalue);
+               deferred.resolve(response);
+             }else{
+              deferred.reject(response);
+             }
+             console.log('printing response object b4 returning within responseError ['+ JSON.stringify(response) + ']');
+          }).catch(function(error){
+             deferred.reject(response);
+          });
+        }
+      }
       $rootScope.$broadcast({
         401: AUTH_EVENTS.notAuthenticated,
         403: AUTH_EVENTS.notAuthorized,
         419: AUTH_EVENTS.jsonwebtokenExpired
       }[response.status], response);
-      return $q.reject(response);
+      return deferred.promise;
+      /*return $q.reject(response);*/
     },
     // optional method
 
@@ -688,13 +754,15 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         //if(config.url && url.search('bnotified') != -1 && window.cordova){
         if(config.url && url.search('v1') != -1){
             //check if we do have an internet connectivity
+            /*
             if(window.cordova && window.navigator.connection){
                 if(navigator.connection.type === 'none'){
-                    $rootScope.showToast('Please check your internet connectivity !!', 'long', 'center');
-                    deferred.reject(config);
+                  $rootScope.showToast('Please check your internet connectivity !!', 'long', 'center');
+                  deferred.reject(config);
                 }
-            }
-            //config.headers['Accept-Encoding']='gzip';
+            }*/
+            console.log('printing url subsrtring ['+ url.substr(url.indexOf('/v1')) + ']');
+
             registrationdetsdb.query({}).then(function(response){
                 console.log('response rows fetched with pre-request ['+ response.rows.length + ']');
                 var result = DBA.getById(response);
@@ -703,8 +771,6 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
                     console.log('jsonwebtoken being passed is ['+ result.jsonwebtoken + ']');
                     config.headers['Authorization'] = result.jsonwebtoken;
                     console.log('printing config before leaving the request pre processing method ['+ JSON.stringify(config) + ']');
-                    //deferred.resolve(config);
-                    //return config;
                 }
                 deferred.resolve(config);
             }).catch(function(error){
@@ -716,6 +782,44 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
             return config;
         }
         return deferred.promise;
+    },
+    response : function(response){
+       var deferred = $q.defer();
+       console.log('witnin response callback b4 proceeding further ['+ JSON.stringify(response) +']');
+       if(response.config.url && response.config.url.search('v1') != -1){
+
+         var svckey = response.config.url.substr(response.config.url.indexOf('/v1'));
+         offlinestoredb.query(svckey).then(function(result){
+           console.log('printing result.rows.length ['+ result.rows.length + ']');
+
+           if( result.rows.length === 0 ){
+              //insert new record
+              offlinestoredb.add({"svckey":svckey,"svcvalue":angular.toJson(response.data), "rcredate":new Date(), "rupdate" : new Date()})
+              .then(function(storeresult){
+                  console.log('added the key ['+ svckey + '] successfully to store');
+              }).catch(function(error){
+                  console.log('error adding the key ['+ svckey + '] with error as ['+ error.toString() +']');
+              });
+           }else{
+             // update existing record
+             //offlinestoredets.svcvalue,offlinestoredets.rupdate, offlinestoredets.svckey
+             offlinestoredb.update({"svcvalue":angular.toJson(response.data),"rupdate":new Date(), "svckey":svckey})
+             .then(function(storeresult){
+                 //deferred.resolve(response);
+                 console.log('updated the key ['+ svckey + '] successfully to store');
+             }).catch(function(error){
+                 console.log('error updating the key ['+ svckey + '] with error as ['+ error.toString() +']');
+             });
+           }
+           deferred.resolve(response);
+         }).catch(function(error){
+           deferred.resolve(response);
+         });
+         //deferred.resolve(response);
+       }else{
+         return response;
+       }
+       return deferred.promise;
     }
   };
 }])

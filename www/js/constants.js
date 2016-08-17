@@ -13,7 +13,14 @@ angular.module('bnotifiedapp')
   server : 'bnotified-service-m1012290.c9users.io',
   protocol : 'https',
   port : 8080
-});
+})
+.constant('API_KEYS', returnAPIKeys);
+
+function returnAPIKeys(){
+  var apikeys = {};
+  apikeys['/v1/registered/hospitals/:patientid'] = 'hospitallist';  
+  return apikeys;
+}
 
 function returnNetworkStates(){
     var states = {};
