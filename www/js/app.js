@@ -27,14 +27,14 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
     // App registrationtable
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS registrationtable(mobilenumber integer, registrationtoken text, deviceuuid text, jsonwebtoken text, appregistrationid text, isdoctor text)").then(function(result){
-       showToast($cordovaToast, 'Registrationtable created successfully', 'long', 'top');
+       //showToast($cordovaToast, 'Registrationtable created successfully', 'long', 'top');
     }).catch(function(error){
        showToast($cordovaToast,'We are experiencing issue with initiating the app','long','top');
     });
 
     // App images uploaded Table
     $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS tmhimagestable(imgname text, imgtag text, imgdescription text, imgnativeurl text, capturedate date)").then(function(result){
-      showToast($cordovaToast, 'Images table created successfully', 'long', 'top');
+      //showToast($cordovaToast, 'Images table created successfully', 'long', 'top');
     }).catch(function(error){
       showToast($cordovaToast,'We are experiencing issue with initiating the app','long','top');
     });
@@ -230,7 +230,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }*/
   })
   .state('main.listedentities', {
-    cache: false,
+    cache: true,
     url: '/listedentities',
     views: {
         'listed-entities': {
@@ -240,7 +240,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.allnotifications', {
-    cache: false,
+    cache: true,
     url: '/allnotifications/:hospitalid',
     views: {
         'all-notifications': {
@@ -250,7 +250,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.myhealth', {
-    cache: false,
+    cache: true,
     url: '/myhealth',
     views: {
         'my-health': {
@@ -260,7 +260,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('main.doctortab', {
-    cache: false,
+    cache: true,
     url: '/doctortab',
     views: {
         'doctor-tab': {

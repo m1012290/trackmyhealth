@@ -2335,7 +2335,7 @@ $scope.myActiveSlide = 0;
   };
   //Cleanup the popover when we're done with it!
   $scope.$on('$destroy', function() {
-    $scope.popover.remove();
+    //$scope.popover.remove();
   });
   // Execute action on hide popover
   $scope.$on('popover.hidden', function() {
@@ -2884,7 +2884,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
     	$scope.modal5.hide();
 	}
 }])
-.controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb){
+.controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory){
   /*$scope.imagesarray = [{
     'imgnativeurl':'../img/icon.png',
     'imgtag' : 'test'
@@ -2938,7 +2938,8 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
        $scope.shouldShowDelete = false;
        $ionicHistory.goBack();
     };
-      $scope.showFilterBar = function(){
+    var filterBarInstance;
+    $scope.showFilterBar = function(){
 
             filterBarInstance = $ionicFilterBar.show({
               items:$scope.imagesarray,

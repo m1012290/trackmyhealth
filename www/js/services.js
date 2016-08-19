@@ -689,7 +689,8 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
       console.log('error encountered within responseError after changes');
       var deferred = $q.defer();
       //console.log('printing navigator.connection.type ['+ JSON.stringify(window.navigator.connection) + ']');
-      if(response.config.url && response.config.url.search('v1') != -1){
+      if((response.config.url && response.config.url.search('/v1/registered/') != -1)
+         || (response.config.url && response.config.url.search('/v1/login/') != -1)){
         var svckey = response.config.url.substr(response.config.url.indexOf('/v1'));
         console.log('printing svckey ['+ svckey + ']');
         if(window.cordova && window.navigator.connection){
@@ -735,6 +736,8 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
              deferred.reject(response);
           });
         }
+      }else{
+        deferred.reject(response);
       }
       $rootScope.$broadcast({
         401: AUTH_EVENTS.notAuthenticated,
@@ -750,7 +753,6 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
       // do something on success
         var deferred = $q.defer();
         var url = String(config.url);
-
         //if(config.url && url.search('bnotified') != -1 && window.cordova){
         if(config.url && url.search('v1') != -1){
             //check if we do have an internet connectivity
@@ -761,8 +763,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
                   deferred.reject(config);
                 }
             }*/
-            console.log('printing url subsrtring ['+ url.substr(url.indexOf('/v1')) + ']');
-
+            //console.log('printing url subsrtring ['+ url.substr(url.indexOf('/v1')) + ']');
             registrationdetsdb.query({}).then(function(response){
                 console.log('response rows fetched with pre-request ['+ response.rows.length + ']');
                 var result = DBA.getById(response);
@@ -784,10 +785,10 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         return deferred.promise;
     },
     response : function(response){
-       var deferred = $q.defer();
        console.log('witnin response callback b4 proceeding further ['+ JSON.stringify(response) +']');
-       if(response.config.url && response.config.url.search('v1') != -1){
-
+       if((response.config.url && response.config.url.search('/v1/registered/') != -1)
+          || (response.config.url && response.config.url.search('/v1/login/') != -1) ){
+         var deferred = $q.defer();
          var svckey = response.config.url.substr(response.config.url.indexOf('/v1'));
          offlinestoredb.query(svckey).then(function(result){
            console.log('printing result.rows.length ['+ result.rows.length + ']');
@@ -815,7 +816,6 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
          }).catch(function(error){
            deferred.resolve(response);
          });
-         //deferred.resolve(response);
        }else{
          return response;
        }
