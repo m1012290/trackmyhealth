@@ -14,8 +14,926 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
+
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+
+/* Seema: Following css elements are moved from stlye.css */
+
+
+html{
+  background: #eee;
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  min-height: 100%;
+
+  .padding{
+      padding:0px!important; /* important is needed here else it will get overridden*/
+  }
+
+  body{
+    font: 12px/20px'Trebuchet MS', Helvetica, sans-serif!important;
+    color: #404040;
+    background-image: radial-gradient(circle, #555555, #333333 80%);
+  }
+
+ }
+
+ span .circle-span.direct-chat-timestamp
+ {
+     padding-top: 12px;
+     font-weight: bold;
+     font-size: 20px;
+     background-color: #fff;
+     opacity:1
+ }
+
+ .circle-span
+ {
+      padding: 12px 5px 0px 5px;
+      font-weight: bold;
+      font-size: 20px;
+      opacity:1;
+      z-index: 100;
+ 			width: 40px;
+ 			height: 40px;
+ 			display: none;
+ 			position: absolute;
+ 			border-radius: 50%;
+ 			text-align: center;
+ 			line-height: 16px;
+ 			vertical-align: middle;
+ 			color: #ffffff;
+ 			display: block;
+ 			word-wrap: break-word;
+ 			left:5px;
+  }
+
+
+.tabs
+{
+  background-color: #fff;
+  border-color: #fff !important;
+}
+
+.tab-title
+{
+     color:#000 !important;
+}
+
+
+.tabs-striped
+{
+  &.tabs-background-positive
+  {
+      background-color: #fff;
+  }
+  &.tabs-color-light
+  {
+    .tab-item
+    {
+      &.tab-item-active,
+      &.tab-item.active,
+      &.tab-item.activated
+      {
+        border: 0 solid #fff;
+      }
+    }
+
+  }
+}
+
+.tabs-top.tabs-striped
+{
+  .tab-item
+  {
+    &.tab-item-active,
+    &.active,
+    &.activated
+    {
+      border-width: 0px 0px 4px 0px !important;
+      color:#4a4a4a!important;
+    }
+  }
+}
+
+.item
+{
+  h2
+  {
+      margin: 10px 10px 2px 0;
+      font-size: 15px;
+      font-weight: normal;
+  }
+
+  h3
+  {
+     margin: 12px 0 4px 0;
+     font-size: 16px;
+     padding-right: 5px;
+  }
+
+  &.item-avatar.item-remove-animate
+  {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+  }
+
+
+}
+
+.item-avatar
+{
+  & > span:first-child
+  {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  & > a span:first-child
+  {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+
+a
+{
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+div
+{
+  .list.card
+  {
+      padding-left:19px;
+      padding-top:10px;
+  }
+}
+
+
+.list
+{
+  &.card
+  {
+    padding-top:25px;
+  }
+
+  .item h2
+  {
+    font-size: 18px;
+  }
+
+  .item h4
+  {
+      font-size: 17px;
+      color:#33aaee;
+  }
+
+  .item-text-wrap p
+  {
+      font-size: 17px;
+      padding-left:17px
+  }
+
+}
+
+.bar
+{
+  .title
+  {
+      top:3px!important;
+  }
+
+  &.bar-positive
+  {
+    border-color: #d14836 !important;
+    background-color: #d14836 !important;
+    background-image: linear-gradient(0deg, #d14836, #d14836 50%, transparent 50%) !important;
+    color: #fff !important;
+    height:50px;
+  }
+}
+
+.icon-btn-customize
+{
+    margin-right: 15px;
+    font-size: 23px !important;
+}
+
+.ion-android-arrow-back
+{
+    font-size: 170% !important;
+    margin:10px 10px 0px 0px;
+}
+
+.landingOuter > div
+{
+    height:100%;
+}
+
+/*CSS for carousel images to make image resposive*/
+.img-responsive
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.slider-pager
+{
+  position: absolute;
+  top: 10px;
+  z-index: 1;
+  width: 100%;
+  height: 15px;
+  text-align: center;
+}
+
+.logBtnStyle
+{
+	position: absolute;
+  width: 102%;
+	bottom:0px;
+}
+
+/*landing css*/
+.container-responsive.logBtnStyle a
+{
+ display:block;
+}
+/*
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+.button
+{
+  &.button-block
+  {
+    margin-bottom: 0px !important;
+    background-color:#d14836 !important;
+    border-color: #d14836;
+
+    /*Seema tried out these
+    background-color:cornflowerblue  !important;
+    border-color: #444 !important;
+    color:white !important;
+    font-family:sans-serif;
+    font-size: 20px;*/
+
+    &.button-positive
+    {
+          margin-bottom: 0px !important;
+          background-color:#d14836 !important;
+          border-color: #d14836;
+    }
+  }
+}
+
+.pull-right
+{
+  float: right;
+}
+
+.item .item-content .icon.ion-transgender
+{
+   font-size:24px !important;
+}
+
+.ion-man
+{
+  &:after
+  {
+	   font-size: 35px;
+  }
+  &:before
+  {
+	   font-size: 35px;
+  }
+}
+
+.ion-woman
+{
+    &:before
+    {
+	     font-size: 35px;
+    }
+    &:after
+    {
+    	font-size: 35px;
+    }
+}
+
+.item-checkbox-left
+{
+   right:12px;
+}
+
+
+.customBtnStyle
+{
+  border: none!important;
+  color:#fff!important;
+	width:49%;
+	float:left!important;
+	clear:none;
+  background: #106194 !important;
+}
+
+
+/* Fix modal backdrop for smaller devices */
+@media (max-width: 679px)
+{
+  .active .modal-backdrop-bg
+  {
+      opacity: .5;
+  }
+  .modal-backdrop-bg
+  {
+      -webkit-transition: opacity 300ms ease-in-out;
+      transition: opacity 300ms ease-in-out;
+  }
+}
+
+h1
+{
+  font-size: 28px;
+}
+
+/*h2
+{
+  font-size: 18px;
+}
+*/
+.card .item:last-child,
+.list-inset .item:last-child
+{
+  margin-bottom: -5px;
+  margin-top: -5px;
+}
+
+.col
+{
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-box-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  display: block;
+  padding: 1px;
+  width: 100%;
+}
+
+.text
+{
+  &-muted
+  {
+    color: #bbb;
+  }
+  &-center
+  {
+    text-align: center;
+  }
+}
+
+/* for myhealth */
+
+.h-list .item-card .visits-block
+{
+  padding: 5px;
+  background: #fafafa;
+  border-bottom: 1px solid #ddd;
+  .timeline
+  {
+    display: table;
+    background: #f4f4f4;
+    border: 1px solid #eee;
+    border-top: 0;
+    margin: 1px;
+    -webkit-box-shadow: inset 0 1px 1px #eee, inset 0 -1px 2px #ddd;
+    -moz-box-shadow: inset 0 1px 1px #eee, inset 0 -1px 2px #ddd;
+    -o-box-shadow: inset 0 1px 1px #eee, inset 0 -1px 2px #ddd;
+    -ms-box-shadow: inset 0 1px 1px #eee, inset 0 -1px 2px #ddd;
+    box-shadow: inset 0 1px 1px #eee, inset 0 -1px 2px #ddd;
+    margin-bottom: -2px;
+    padding: 10px 5px;
+    padding-left: 0;
+    .row
+    {
+        display: table-row;
+        .left
+        {
+            display: table-cell;
+            width: 60px;
+            text-align: center;
+            position: relative;
+            &:before
+            {
+                content: '';
+                width: 2px;
+                height: calc(100% - 20px);
+                background: #aaa;
+                position: absolute;
+                left: calc(50% - 1px);
+                top: 20px;
+                z-index: 0;
+            }
+            .circle
+            {
+                display: inline-block;
+                background:  #d14836;
+                width: 46px;
+                height: 46px;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -o-border-radius: 50%;
+                -ms-border-radius: 50%;
+                border-radius: 50%;
+                color: #fff;
+                border: 1px solid  #d14836;
+                position: relative;
+                z-index: 1;
+                .day
+                {
+                    padding-top: 6px;
+                }
+            }
+        }
+        .right
+        {
+            width: 98%;
+            vertical-align: top;
+            display: table-cell;
+            .notification
+            {
+                background: #fff;
+                -webkit-border-radius: 8px;
+                -moz-border-radius: 8px;
+                -o-border-radius: 8px;
+                -ms-border-radius: 8px;
+                border-radius: 8px;
+                overflow: hidden;
+                border: 1px solid #ddd;
+                margin-bottom: 15px;
+                width: 100%;
+                .message
+                {
+                  color: #333;
+                  padding: 5px;
+                  border-bottom: 1px solid #ddd;
+                  border-width:thick;
+                  width: 100%
+                }
+            }
+        }
+        &:last-child
+        {
+          .left
+          {
+              &:after
+              {
+                  content: '';
+                  width: 6px;
+                  height: 6px;
+                  background: #fff;
+                  position: absolute;
+                  left: calc(50% - 5px);
+                  bottom: 20px;
+                  z-index: 0;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  -o-border-radius: 50%;
+                  -ms-border-radius: 50%;
+                  border-radius: 50%;
+                  border: 2px solid #d14836;
+              }
+              &:before
+              {
+                  height: calc(100% - 45px);
+              }
+            }
+        }
+      }
+    }
+  }
+/* for myhealth */
+
+.pull-center
+{
+	text-align: center;
+}
+
+
+.error
+{
+  padding: 10px 16px;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #555;
+  vertical-align: middle;
+}
+
+.error i
+{
+  font-size: 24px;
+  color: #B83E2C;
+  vertical-align: middle;
+}
+
+.errorCls
+{
+    color:#FF0000;
+    background-color:#fff;
+    width:100%;
+}
+
+.requiredStyle
+{
+    padding:5px;
+    height:30px;
+    margin-bottom:10px;
+}
+
+
+// Added for patientimages.html starts
+.image-list-thumb
+{
+    padding: 2px 2px 2px 2px;
+    height: 40%;
+}
+
+.image-modal
+{
+    width: 100% !important;
+    height: 100%;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.transparent
+{
+    background: transparent !important;
+}
+
+.fullscreen-image
+{
+    max-width: 100%;
+    max-height: 100%;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    overflow: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.slider
+{
+    width: 100%;
+    height: 100%;
+}
+// Added for patientimages.html ends
+
+// following added for popup msgs like: System Error during login
+
+.popup
+{
+    max-height: 110% ;
+    width: 70%;
+    height:auto;
+
+    &-head
+    {
+      background-color:#d14836 ;
+      h3
+      {
+        color:#fff!important;
+      }
+    }
+
+    &-title{
+      color: #009688;
+    }
+    &-body span
+    {
+      font-size:13px;
+      text-align: center!important;
+    	object-position: center;
+    }
+
+    &-buttons{
+      padding:10px 0px 0px 0px!important;
+      min-height: auto;
+      background-color: #d14836;
+    }
+
+    &-container .button-positive
+    {
+      border:1px solid #d7dada;-webkit-box-shadow: #B4B5B5 1px 1px 1px  ;-moz-box-shadow: #B4B5B5 1px 1px 1px ; box-shadow: #B4B5B5 1px 1px 1px  ; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 5px 5px 5px 5px; text-decoration:none; display:inline-block;text-shadow: 0px 0px 0 rgba(0,0,0,0.3);font-weight:bold; color: #031B30;
+      background-color: #f4f5f5; background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
+      background-image: -webkit-linear-gradient(top, #f4f5f5, #dfdddd);
+      background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
+      background-image: -ms-linear-gradient(top, #f4f5f5, #dfdddd);
+      background-image: -o-linear-gradient(top, #f4f5f5, #dfdddd);
+      background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
+
+      &:hover
+      {
+        color:#d14836;
+      }
+    }
+}
+
+.LandingbtnRight
+{
+    margin-left:14px;
+}
+
+.icon.ion-android-attach
+{
+    font-size: 18px;
+}
+
+hr
+{
+  border: 1px solid #cfebe8;
+  margin: 2px;
+  max-width: 500px;
+}
+
+.ion-ios-star
+{
+  &:before
+  {
+	   font-size: 30px;
+  }
+
+  &-outline:before
+  {
+	   font-size: 30px;
+  }
+}
+
+.deleteButton
+{
+    margin-right: 10px;
+}
+
+/* Retained for adding delete message functionality */
+
+.delete-msg-confirm-popup
+{
+    .popup-head
+    {
+        display: none;
+    }
+    .popup-buttons .button
+    {
+        margin-right: 0px
+    }
+    .button.button-positive
+    {
+        border-color: transparent;
+        background: none;
+        box-shadow: none;
+        color: #387ef5;
+        font-weight: initial;
+        font-size:16px;
+        font-stretch:normal;
+        font-style:normal;
+        font-variant:normal;
+        font-weight:normal;
+        text-shadow: none;
+    }
+    .button.button-positive:active
+    {
+        background: #e5e5e5;
+    }
+    .button.button-default
+    {
+        border-color: transparent;
+        background: none;
+        box-shadow: none;
+        color: #387ef5;
+    }
+    .button.button-default:active
+    {
+        background: #e5e5e5;
+    }
+    .popup
+    {
+        background: rgba(226, 226, 226, 0.88) !important;
+    }
+}
+
+.container-responsive.logBtnStyle a .button
+{
+    display:block;
+    width:1px;
+    float:left;
+    height:20px;
+}
+
+/* for all allnotifications */
+.notifyTimeCls
+{
+    margin-left: 5px;
+    float: left;
+}
+
+/* Not sure if following are used on no */
+/* Following attributes may be needed, need to be checked */
+/*
+.tabs-top > .tabs .tab-item.tab-item-active .badge,
+.tabs-top > .tabs .tab-item.active .badge,
+.tabs-top > .tabs .tab-item.activated .badge,
+.tabs.tabs-top .tab-item.tab-item-active .badge,
+.tabs.tabs-top .tab-item.active .badge,
+.tabs.tabs-top .tab-item.activated .badge
+{
+    right: 0%;
+    top: 11%;
+    font-size: 8px;
+}
+
+.tabs .tab-item .badge.badge-assertive,
+.badge.badge-assertive
+{
+    right: 0%;
+    top: 11%;
+    font-size: 8px;
+}
+
+.image
+{
+         width: 100%;
+         height: 600px;
+         background-size: contain;
+         background-repeat: no-repeat;
+         background-position: center, center;
+}
+
+
+/* following is not getting used at present but needed as color of the calender need to be changed but its getting picked from
+<script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script> in index.html
+.ionic_datepicker_popup .popup-body .selected_date_full
+{
+	 background-color: #d14836;
+}
+
+.ion-person:before
+{
+    font-size: 25px;
+}
+
+
+.h-list .item-card.active .item:after
+{
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 0;
+  width: 4px;
+  background: #4a90e2;
+}
+.h-list .item-card .info-block {
+  background: #fafafa;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  font-size: 14px;
+}
+.h-list .item-card .item {
+  height: 65px;
+  overflow: hidden;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  position: relative;
+}
+.h-list .item-card .item:hover {
+  background: #eee;
+}
+.h-list .item-card .item .close {
+  color: #e2073c;
+}
+.h-list .item-card .item .close-large {
+  color: #e2073c;
+  -webkit-transform: scale(1.4);
+  -moz-transform: scale(1.4);
+  -o-transform: scale(1.4);
+  -ms-transform: scale(1.4);
+  transform: scale(1.4);
+}
+.h-list .item-card .item .left {
+  padding: 15px 5px 15px 15px;
+  display: inline-block;
+}
+.h-list .item-card .item .left img {
+  max-width: 35px;
+  max-height: 35px;
+}
+.h-list .item-card .item .right {
+  padding: 15px 5px;
+  line-height: 35px;
+  display: inline-block;
+  vertical-align: top;
+  max-width: calc(100% - 122px);
+}
+.h-list .item-card .item .right.hospital {
+  color: #180942;
+}
+.h-list .item-card .item .info {
+  font-size: 25px;
+  color: #ccc;
+  padding: 19px 15px;
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  -ms-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+.h-list .item-card .item .info:focus,
+.h-list .item-card .item .info:hover {
+  color: #aaa;
+}
+
+.h-list .item-card .visits-block h5 {
+  margin: 0 0 6px 4px;
+}
+
+.h-list .item-card .visits-block .visits .visit {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 12px 10px;
+  margin-bottom: -1px;
+}
+.h-list .item-card .visits-block .visits .visit:focus,
+.h-list .item-card .visits-block .visits .visit:hover {
+  background: #f1f1f1;
+  cursor: pointer;
+}
+.h-list .item-card .visits-block .visits .visit .close {
+  color: #e2073c;
+  font-size: 20px;
+  margin-top: -3px;
+}
+.h-list .item-card .visits-block .timeline .row .right .notification .date {
+  margin-top: 4px;
+}
+.h-list .item-card .visits-block .timeline .row .right .notification .view-more {
+  cursor: pointer;
+  margin: 10px;
+}
+
+.h-list .item-card .visits-block .timeline .row .right .notification .view-more:hover {
+  color: #999;
+}
+
+/*doctortab
+
+.card .item .pull-left{
+color:#D14836;
+}
+.card .item .pull-right{
+  color:grey;
+}
+
+.list .card{
+    background-color: #f9f9f9;
+}
+/*
+/* Seema: from style.css till here. */
