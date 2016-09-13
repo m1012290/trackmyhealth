@@ -11,7 +11,7 @@
              <i class=" ion-search icon-btn-customize"></i>
             </button>
              <button class="button button-clear" ng-click="showAlert()">
-                 <i class="ion-android-options icon-btn-customize"></i>
+                 <i class="ion-funnel icon-btn-customize"></i>
            </button>
            <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
@@ -36,21 +36,27 @@
     <script id="mynotification.html" type="text/ng-template">
   <ion-modal-view>
        <ion-header-bar class="bar-positive">
-          <h1 class="title">Notifications </h1>
-                <button class="button button-clear button-primary" ng-click="closeModal5()">
+      <h1 class="title">Notifications </h1>
+            
+     <button class="button button-clear button-primary" ng-click="closeModal5()">
                     <i class="icon ion-android-close"></i>
                 </button>
-        </ion-header-bar>
+         </ion-header-bar>
+  
+         
+   
 <ion-content class="padding">
     <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
          <p><strong style="color:#d14836">{{note.notificationdate|date: "dd MMM yy"}}</strong>
                {{note.patientregprofiles.firstname}} {{note.patientregprofiles.lastname}} {{note.patientregprofiles.emailid}}</p>
-        <p>Reg.date : {{note.patientregprofiles.regdate | date: "dd MMM yy hh:mm a"}}</p>
+        <p>Reg.date : {{note.patientregprofiles.regdate | date: "dd MMM yy hh:mm a"}} </p>
         <p>Reg.type : {{note.patientregprofiles.regtype}}</p>
 
                <p><b>Notification :</b>{{note.notificationtext}} </p>
          <div class="pull-center">
-                <button class="button button-outline button-assertive" ng-click="downloaddocument(note.reporturl)">View Document</button>
+                <button class="button button-outline button-assertive" ng-if ="note.reporturl" ng-click="downloaddocument(note.reporturl)">View Document</button> 
+            <button class="button  button-assertive" ng-if ="note.reporturl" ng-click=""><i class="icon ion-android-attach"></i></button>
+             
             </div>
         </div>
 

@@ -90,31 +90,18 @@
             </div>
         </div>
 <ion-item class="item-input">
-         <label class="item item-radio item-floating-label">
-            <input type="radio" ng-model="formData.male" name="group">
-               <div class="item-content">
-                   <i class="icon ion-man" ></i>
-               </div>
-                   <i class="radio-icon ion-checkmark"></i>
-         </label>
-            <label class="item item-radio item-floating-label">
-      <input type="radio" ng-model="formData.female" name="group">
-          <div class="item-content">
-              <i class="icon ion-woman" ></i>
-           </div>
-              <i class="radio-icon ion-checkmark"></i>
-   </label>
-
- <label class="item item-radio item-floating-label">
-      <input type="radio" ng-model="formData.transgender" name="group">
-        <div class="item-content">
-            <i class="icon ion-transgender"></i>
-        </div>
-            <i class="radio-icon ion-checkmark"></i>
-   </label>
-
-
-        </ion-item>
+ 
+    <label class="item item-input item-floating-label">
+       <ion-radio ng-model="formData.male" ng-value="'A'" name="group"> <i class="icon ion-man" ></i></ion-radio>
+    </label>
+    <label class="item item-input item-floating-label">
+       <ion-radio ng-model="formData.female" ng-value="'B'" name="group"> <i class="icon ion-woman" ></i></ion-radio>
+    </label> 
+   <label class="item item-input item-floating-label">
+       <ion-radio ng-model="formData.transgender" ng-value="'C'" name="group"> <i class="icon ion-transgender"></i></ion-radio>
+    </label>
+   
+      </ion-item>
 	<ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 		<span class="input-label"></span>
@@ -126,12 +113,11 @@
     </ion-item>
 
     <ion-item class="item-input">
-     <label class="item item-input item-floating-label">
-         <span class="input-label"></span>
-       <ion-checkbox class="item-checkbox-left" name= "termsyes" ng-model="formData.termsyes" > </ion-checkbox>
-      </label>
-          <a href="#" style="color:black;">I accept the Terms of Service and Privacy Policy  </a>
-     </ion-item>
+     <label class="item item-input">
+       <ion-checkbox class="item-checkbox-left" name="termsyes" ng-model="formData.termsyes"> </ion-checkbox>
+      </label>I accept the &nbsp;
+    <a  href="#/termscondition" style="color:blue;">Terms of Service and Privacy Policy</a> 
+    </ion-item>
 	</div>
 	<!--div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female ) && formData.termsyes)">
 		<button  class="button button-block button-positive" href="">SignUp</button>

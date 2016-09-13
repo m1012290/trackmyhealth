@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista'])
+angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista','btford.socket-io', 'pdf'])
 .run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', '$cordovaToast',function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope, $cordovaToast) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
@@ -14,6 +14,9 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
+
+    ionic.Platform.isFullScreen = false;
+
     var state = checkForInternetConnection($ionicPlatform);
 
     if(state === 'none'){
@@ -172,7 +175,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
 
   $ionicPlatform.registerBackButtonAction(function(event) {
     console.log('printing state name-->'+$state.current.name);
-    if ($state.current.name === 'forgotpassword' || $state.current.name === 'main.recentnotifications' || $state.current.name === 'main.listedentities' || $state.current.name === 'landing') { // your check here
+    if ($state.current.name === 'forgotpassword' || $state.current.name === 'main.recentnotifications' || $state.current.name === 'main.listedentities' || $state.current.name === 'login') { // your check here
       /*$ionicPopup.confirm({
         title: 'Exit',
         template: 'are you sure you want to exit?'
@@ -189,14 +192,23 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
         $ionicHistory.goBack();
   }
   }, 100);
+  window.addEventListener('native.keyboardshow', function(){
+   document.body.classList.add('keyboard-open');
+ });
 }])
-.config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider', function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
+.config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider', '$sceDelegateProvider',function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider, $sceDelegateProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+      // Allow same origin resource loads.
+      'self',
+      // Allow loading from our assets domain.  Notice the difference between * and **.
+      'https://socketstest-m1012290.c9users.io:8080/echo'
+  ]);
   $stateProvider
-  .state('landing', {
+  /*.state('landing', {
     url: '/landing',
     templateUrl: 'templates/landing.html',
     controller: 'LandingCtrl'
-  })
+  })*/
   .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
@@ -207,6 +219,17 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     templateUrl: 'templates/signup.html',
     controller: 'SignUpCtrl'
   })
+.state('termscondition',{
+      url:'/termscondition',
+      templateUrl:'templates/termscondition.html',
+      controller:'termsCtrl'
+         
+         })
+  .state('about',{
+         url:'/about',
+         templateUrl:'templates/about.html',
+        controller:'aboutCtrl'
+         })
   .state('main', {
     url : '/main',
     abstract: true,
@@ -270,6 +293,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
   })
   .state('logout', {
+    cache:false,
     url: '/logout',
     controller: 'LogoutCtrl'
   })
@@ -287,7 +311,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       templateUrl : 'templates/patientimages.html',
       controller : 'ImagesProfileCtrl'
   });
-  $urlRouterProvider.otherwise('/landing');
+  $urlRouterProvider.otherwise('/login');
   $ionicConfigProvider.scrolling.jsScrolling(true);
   $ionicConfigProvider.navBar.alignTitle('left');
 }])

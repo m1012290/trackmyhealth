@@ -98,13 +98,14 @@
 
 #floating-menu li{
     position: absolute;
-    left: 0.5px;
+    left: 7px;
     top: 0.5px;
-    width: 98%;
-    height: 98%;
+    width: 70%;
+    height: 70%;
+    padding-bottom: 45px;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
-    padding: 0;
+   
     border: none;
     border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -128,7 +129,7 @@
     visibility: hidden;
     top: 0px;
     overflow: hidden;
-    right: 75px;
+    right: 55px;
     width: 100px;
     text-align: right;
     font-size: 12px;
@@ -160,20 +161,20 @@
 }
 
 #floating-menu.active > li:nth-child(1) {
-    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -70px;
+    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -60px;
 }
 #floating-menu.active > li:nth-child(2) {
-    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -140px;
+    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -120px;
 }
 #floating-menu.active > li:nth-child(3){
-    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -210px;
+    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -180px;
 }
 #floating-menu.active > li:nth-child(4){
-    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -280px;
+    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -240px;
 }
 #floating-menu.active > li:nth-child(5){
-    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -350px;
+    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -300px;
 }
 #floating-menu.active > li:nth-child(6){
-    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -420px;
+    transition-delay: 0ms; -webkit-transition-delay: 0ms; top: -360px;
 }

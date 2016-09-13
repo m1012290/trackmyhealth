@@ -1,28 +1,21 @@
 <ion-view>
+<ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
 
-  <ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
-
-    <ion-tab title="Hospitals" icon="ion-ios-grid-view" href="#/main/listedentities" nav-direction="forward">
+    <ion-tab title="Hospitals" icon="fa fa-hospital-o"  href="#/main/listedentities" nav-direction="forward" >
       <ion-nav-view name="listed-entities"></ion-nav-view>
     </ion-tab>
 
-    <ion-tab title="Visits" icon="ion-medkit" href="#/main/allnotifications/123" nav-direction="forward">
+    <ion-tab title="Visits" icon="fa fa-envelope " href="#/main/allnotifications/123" nav-direction="forward">
       <ion-nav-view name="all-notifications"></ion-nav-view>
     </ion-tab>
-
-    <ion-tab title="My Health" icon="ion-clipboard" href="#/main/myhealth" nav-direction="forward">
+       
+    <ion-tab title="My Health" icon="fa fa-file-text" href="#/main/myhealth" nav-direction="forward">
       <ion-nav-view name="my-health"></ion-nav-view>
     </ion-tab>
-
-    <ion-tab title="Doctor" icon="ion-network" href="#/main/doctortab" nav-direction="forward" ng-if="showDoctorsTab">
+      
+    <ion-tab title="Doctor" icon="fa fa-user-md " href="#/main/doctortab" nav-direction="forward" ng-if="showDoctorsTab" >
       <ion-nav-view name="doctor-tab"></ion-nav-view>
     </ion-tab>
-    <!--
-    <div class="tabs tabs-dark">
-        <a class="tab-item" href="#/main/listedentities"><i class="material-icons">local_hospital</i></a>
-        <a class="tab-item" href="#/main/allnotifications/123"><i class="material-icons">face</i></a>
-        <a class="tab-item" href="#/main/myhealth"><i class="material-icons">local_hospital</i></a>
-    </div> -->
-
+   
   </ion-tabs>
 </ion-view>

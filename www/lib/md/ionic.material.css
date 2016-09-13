@@ -467,10 +467,10 @@
 
 /* Button
 ==================================*/
-.button,
+
 .button.button-large,
 .button.button-flat,
-.bar .button,
+/*.bar .button,.button,*/
 .bar .button.button-large,
 .bar .button.button-flat {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -857,9 +857,9 @@
 .item-thumbnail-left > img:first-child, .item-thumbnail-left .item-image, .item-thumbnail-left .item-content > img:first-child, .item-thumbnail-left .item-content .item-image {
   border-radius: 50%; }
 
-.tab-item.activated {
-  height: calc(100% + 3px);
-  /* Stretch */ }
+/*.tab-item.activated {
+  height: calc(100% + 3px);*/
+  /* Stretch  }*/
 
 /* List
 ==================================*/

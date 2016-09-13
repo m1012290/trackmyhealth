@@ -11,7 +11,7 @@
              <i class=" ion-search icon-btn-customize"></i>
            </button>
              <button class="button button-clear" ng-click="showAlert()">
-                 <i class="ion-android-options icon-btn-customize"></i>
+                 <i class="ion-funnel icon-btn-customize"></i>
            </button>
            <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
@@ -49,7 +49,12 @@
         </div>
          <div class="col col-67 col-offset-20" ng-if="summary.weight.value !==''"><h2><b>{{summary.weight.value}}</b></h2></div>
         </div>
-
+        <div class="row">
+            <div class="col"><h4>VACCINATION</h4></div>
+        </div>
+        <div class="row" ng-if="summary.vaccination.value !== ''">
+            <div class="col"><h2><b>{{summary.vaccination.value}}</b></h2></div>
+        </div>
         <div class="row">
             <div class="col"><h4>MEDICATION</h4></div>
         </div>
@@ -62,12 +67,7 @@
         <div class="row" ng-if="summary.allergies.value !== ''">
             <div class="col"><h2><b>{{summary.allergies.value}}</b></h2></div>
         </div>
-              <div class="row">
-            <div class="col"><h4>VACCINATION</h4></div>
-        </div>
-        <div class="row" ng-if="summary.vaccination.value !== ''">
-            <div class="col"><h2><b>{{summary.vaccination.value}}</b></h2></div>
-        </div>
+             
 		</div>
 	</div>
 <div class="h-list">
@@ -129,7 +129,7 @@
 				      </div>
 				<label class="item item-input item-floating-label">
             	<span class="input-label">Weight</span>
-            	<input type="number" placeholder="Weight Ex : 63. KG" name="weight" ng-model="data.weight.value">
+            	<input type="number" placeholder="Weight Ex : 63. KG" name="weight"  ng-model="data.weight.value">
 				</label>
 		 		<label class="item item-input item-floating-label">
 			  	<span class="input-label">Notes</span>

@@ -93,7 +93,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 35%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -340,7 +340,32 @@ angular.module('bnotifiedappctrls', [])
   $scope.logindata=[];
 	$scope.forgot=[];
 
-	$ionicModal.fromTemplateUrl('my-modal4.html',{
+// first on loading of the landing page lets check if we have
+  //json web token available
+  $scope.$on("$ionicView.loaded", function(event, data){
+    $rootScope.showLoader();
+    registrationdetsdb.query({}).then(function(response){
+        var result = DBA.getById(response);
+        loginservice.logindets('', '').then(function(data){
+          $rootScope.hideLoader();
+          if(data.status === 'SUCCESS'){
+              loginservice.setProfileData({"appregistrationid":result.appregistrationid, "isdoctor":result.isdoctor});
+              $state.go('main.listedentities');
+          }else{
+            $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
+          }
+        }).catch(function(error){
+            $rootScope.hideLoader();
+            $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
+        });
+    }).catch(function(error){
+          $rootScope.hideLoader();
+          $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
+    });
+  });
+  
+  
+  $ionicModal.fromTemplateUrl('my-modal4.html',{
       scope: $scope,
     	animation: 'slide-in-up'
   	}).then(function(modal) {
@@ -413,8 +438,8 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
             if(data.status === 'SUCCESS'){
               $rootScope.hideLoader();
-              registrationdetsdb.query({}).then(function(response){
-                  var result = DBA.getById(response);
+              //registrationdetsdb.query({}).then(function(response){
+                  //var result = DBA.getById(response);
                   registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken, data.isdoctor).then(function(result){
                       loginservice.setProfileData({"appregistrationid":data.appregistrationid, "jsonwebtoken":data.authtoken, "isdoctor":data.isdoctor});
                       $state.go('main.listedentities');
@@ -426,14 +451,14 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
                       },function(res){
                       });
                   });
-              }).catch(function(error){
+              /*}).catch(function(error){
                 console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
                 $rootScope.showPopup({
                        title:'System Error',
                             template:'Unable to login right now, please try again !!'
                 },function(res){
                 });
-              });
+              });*/
             }else{
                 $rootScope.showPopup({
       					       title:'Invalid Login',
@@ -1260,8 +1285,8 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
 	//popup to show feedback
 	$scope.showPopup = function() {
 
-   // An elaborate, custom popup
-  	 var myPopup = $ionicPopup.show({
+        // An elaborate, custom popup
+  	var myPopup = $ionicPopup.show({
 		 template: '<ion-slide-box show-pager="false" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></ion-slide></ion-slide-box>',
 		 title: 'Feedback',
 		 scope: $scope
@@ -1272,8 +1297,6 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
 		  myPopup.close();
 	 }
 	};
-
-
 }])
 .controller('RecentEntitiesCtrl', ['$scope', '$rootScope','$state', '$stateParams', '$ionicPopup', 'notificationservice', function($scope, $rootScope, $state, $stateParams, $ionicPopup, notificationservice) {
     $scope.todaysdate = new Date();
@@ -1759,7 +1782,26 @@ $scope.closePopover = function() {
 
 
 	}])
-
+.controller('termsCtrl',['$scope','$state','$ionicHistory', function($scope, $state, $ionicHistory){
+      $scope.backButtonAction = function(){
+     $scope.shouldShowDelete = false;
+     $ionicHistory.goBack();
+  }; 
+    $scope.greeting = 'You must agree with the terms and conditions';
+      $scope.doGreeting = function(greeting) {
+        alert(greeting);
+      };  
+ $scope.close = function(){
+      $state.go('signup');
+    };
+  
+}])
+.controller('aboutCtrl',['$scope', '$ionicHistory',function($scope,$ionicHistory){
+      $scope.backButtonAction = function(){
+     $scope.shouldShowDelete = false;
+     $ionicHistory.goBack();
+  }; 
+}])
 .controller('NotificationsCtrl', ['$scope', '$rootScope', 'notificationservice','$stateParams', '$ionicPopup','$cordovaDialogs','$cordovaClipboard', 'DBA', '$ionicHistory', '$timeout','$ionicFilterBar','$ionicModal',function($scope, $rootScope, notificationservice, $stateParams, $ionicPopup, $cordovaDialogs, $cordovaClipboard, DBA, $ionicHistory,$timeout,$ionicFilterBar, $ionicModal){
 
     $scope.shouldShowReorder = false;
@@ -1946,7 +1988,7 @@ $scope.closePopover = function() {
 
     //Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function() {
-      $scope.modal.remove();
+      //$scope.modal.remove();
     });
     // Execute action on hide modal
     $scope.$on('modal.hide', function() {
@@ -2208,7 +2250,7 @@ $scope.closePopover = function() {
         });
     }
 }])
-.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover', function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover){
+.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover', 'socket','loginservice','$cordovaFile','$cordovaFileOpener2','$http',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover, socket, loginservice, $cordovaFile, $cordovaFileOpener2, $http){
 
   $ionicModal.fromTemplateUrl('filterpatientdetails.html',{
          scope: $scope,
@@ -2509,6 +2551,13 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     	$scope.modal.hide();
 	}
 
+  $ionicModal.fromTemplateUrl('pdf-viewer.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.pdfviewermodal = modal;
+    });
+
     /*$ionicModal.fromTemplateUrl('hospitaldetails.html', {
     	scope: $scope,
     	animation: 'slide-in-up'
@@ -2535,21 +2584,126 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 	$scope.closeModal6 = function() {
     	$scope.modalvisitdets.hide();
 	}*/
+  var profiledata = loginservice.getProfileData();
+  socket.on('connect', function(){
+    console.log('socket connected successfully');
+    socket.emit('appregistrationid', $scope.patientId);
+  });
+  socket.on('documentrecieved', function(data){
+
+      //var blob = b64toBlob(data, "application/pdf");
+      //var blobUrl = URL.createObjectURL(blob);
+      //$rootScope.showToast('blobURL is ['+ blobUrl + ']','long','center');
+      //alert('document with id['+ id + '] recieved');
+      /*
+      $cordovaFile.writeFile(cordova.file.dataDirectory, "testpdf.txt", data, true)
+      .then(function (success) {
+        //$rootScope.showToast('Successful write to the text file','long','center');
+        var databuffer = $cordovaFile.readAsArrayBuffer(cordova.file.dataDirectory, "testpdf.txt");
+
+        $cordovaFile.writeFile(cordova.file.dataDirectory, "testpdf.pdf",  , true)
+            .then(function(success){
+              $rootScope.showToast('Successful PDF write','long','center');
+              $cordovaFileOpener2.open("data:application/pdf;base64,["+ data + "]",'application/pdf'
+              ).then(function() {
+                  // file opened successfully
+                  $rootScope.showToast('Successfully opened the file','long','center');
+              }, function(err) {
+                  $rootScope.showToast('Error opening the file','long','center');
+              });
+            }, function(err){
+                  $rootScope.showToast('Error writing buffered data','long','center');
+            });
+      }, function (error) {
+          $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(error) +"]",'long','center');
+      });
+      */
+      //window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(filentry) {
+         //var blobvar = b64toBlob(data, "application/pdf");
+         //var decodedstring = $base64.decode(blob);
+         var uint8array = base64ToUint8Array(data);
+         var blob = new Blob([uint8array],{type:'application/pdf'});
+         //below 2 lines are working code commented for testing...
+         //$scope.pdfUrl = URL.createObjectURL(blob);
+         //$scope.pdfviewermodal.show();
+         /*
+         $rootScope.showPopup({title:'Decoded String', template:pdfurl}, function(res){
+
+         }); */
+         //var fileobj = $cordovaFile.readAsText(blob);
+         //fileobj.onloadend = function(data){
+         //$cordovaFile.readAsBinaryString(URL.createObjectURL(blob)).then(function(data){
+           $cordovaFile.writeFile(cordova.file.dataDirectory, "testpdf.pdf",blob, true).then(function(){
+              $rootScope.showToast("Write to PDF was successful",'long','center');
+              $cordovaFile.readAsArrayBuffer(cordova.file.dataDirectory, "testpdf.pdf").then(function(readdata){
+                 socket.emit('testrecievedpdf',readdata);
+              }, function(err){
+                  $rootScope.showToast("PDF read was successful",'long','center');
+              });
+              $cordovaFileOpener2.open(cordova.file.dataDirectory+"testpdf.pdf","application/pdf").then(function(){
+                  $rootScope.showToast("PDF read successful successful",'long','center');
+              }, function(err){
+                $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+              });
+           }, function(err){
+             $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+           });
+         //}, function(err){
+          //  $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+         //});
+  });
+  function b64toBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, {type: contentType});
+    return blob;
+  }
+
+  function base64ToUint8Array(base64) {
+    var raw = atob(base64);
+    var uint8Array = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) {
+      uint8Array[i] = raw.charCodeAt(i);
+    }
+    return uint8Array;
+  }
   $scope.downloaddocument = function(url){
-   console.log('printing url ['+ url +']');
+    var data = {
+      "id" : "id",
+      "documentname":"name"
+    };
+    socket.emit('documentrequest',data);
+    /* Commented as it is not being used..
+    console.log('printing url ['+ url +']');
     var options = {
       location: 'yes',
       clearcache: 'yes',
       toolbar: 'no'
     };
-
-   //document.addEventListener(function () {
+    //document.addEventListener(function () {
     $cordovaInAppBrowser.open(encodeURI(url), '_system', options)
       .then(function(event) {
         console.log('i m open');
       }).catch(function(event) {
         console.log('error opening');
-      });
+      }); */
 
     //}, false);
   }
@@ -2582,6 +2736,55 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
             }
           });
     };
+//feedback questions
+	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
+		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
+		{question : "The ease of obtaining the records and lab-reports",answer: ''},
+		{question: "Trackmyhealth app , has it been helpful?",answer: ''},
+		{question: "Is the app easy to use?",answer: ''}];
+
+	//ratings for feedback
+	$scope.ratingsObject = {
+        iconOn : 'ion-ios-star',
+        iconOff : 'ion-ios-star-outline',
+        iconOnColor: 'rgb(200, 200, 100)',
+        iconOffColor:  'rgb(200, 100, 100)',
+		rating: '',
+        minRating: 0 ,
+        callback: function(rating) {
+          $scope.ratingsCallback(rating);
+			return rating;
+        }
+      };
+
+	// ratings callback function , obtains the current slide and updates the object answer
+     $scope.ratingsCallback = function(rating) {
+        console.log('Selected rating is : ', rating);
+		$scope.i= $ionicSlideBoxDelegate.currentIndex();
+		console.log($scope.i);
+		$ionicSlideBoxDelegate.next();
+		$scope.questions[$scope.i].answer = rating;
+		console.log($scope.questions);
+		 if($scope.i === 4){
+		 $scope.closepopup()
+		 }
+	  };
+
+	//popup to show feedback
+	$scope.showMyPopup = function() {
+
+   // An elaborate, custom popup
+  	 var myPopup = $ionicPopup.show({
+		 template: '<ion-slide-box show-pager="false" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
+		 title: 'Feedback',
+		 scope: $scope
+	 })
+	  //popup close
+	 $scope.closepopup = function(){
+		  console.log("closing popup");
+		  myPopup.close();
+	 }
+	};
 }])
 .controller('ForgotPasswordCtrl', ['$scope', '$rootScope', '$state', '$stateParams','authservice','initiateotpgeneratesvc', 'securityquestions', function($scope, $rootScope, $state, $stateParams, authservice, initiateotpgeneratesvc, securityquestions){
     $scope.enableotp = false;
@@ -2788,7 +2991,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
         }
      }
 }])
-.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar){
+.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate){
      $scope.drvisitinfo=[];
      $scope.notinfo=[];
 
@@ -2880,9 +3083,58 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 	$scope.openModal5 = function() {
     	$scope.modal5.show();
     }
-	$scope.closeModal5 = function() {
-    	$scope.modal5.hide();
-	}
+        $scope.closeModal5 = function() {
+           $scope.modal5.hide();
+        }
+//feedback questions
+	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
+		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
+		{question : "The ease of obtaining the records and lab-reports",answer: ''},
+		{question: "Trackmyhealth app , has it been helpful?",answer: ''},
+		{question: "Is the app easy to use?",answer: ''}];
+
+	//ratings for feedback
+	$scope.ratingsObject = {
+        iconOn : 'ion-ios-star',
+        iconOff : 'ion-ios-star-outline',
+        iconOnColor: 'rgb(200, 200, 100)',
+        iconOffColor:  'rgb(200, 100, 100)',
+		rating: '',
+        minRating: 0 ,
+        callback: function(rating) {
+          $scope.ratingsCallback(rating);
+			return rating;
+        }
+      };
+
+	// ratings callback function , obtains the current slide and updates the object answer
+     $scope.ratingsCallback = function(rating) {
+        console.log('Selected rating is : ', rating);
+		$scope.i= $ionicSlideBoxDelegate.currentIndex();
+		console.log($scope.i);
+		$ionicSlideBoxDelegate.next();
+		$scope.questions[$scope.i].answer = rating;
+		console.log($scope.questions);
+		 if($scope.i === 4){
+		 $scope.closepopup()
+		 }
+	  };
+
+	//popup to show feedback
+	$scope.showMyPopup = function() {
+
+   // An elaborate, custom popup
+  	 var myPopup = $ionicPopup.show({
+		 template: '<ion-slide-box show-pager="false" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
+		 title: 'Feedback',
+		 scope: $scope
+	 })
+	  //popup close
+	 $scope.closepopup = function(){
+		  console.log("closing popup");
+		  myPopup.close();
+	 }
+	};
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory){
   /*$scope.imagesarray = [{
@@ -2954,5 +3206,4 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
               }
             });
       };
-
 }]);

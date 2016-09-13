@@ -111,6 +111,10 @@
                         {
                             "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileOpener2\"><param name=\"android-package\" value=\"io.github.pwlin.cordova.plugins.fileopener2.FileOpener2\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -132,6 +136,10 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
                             "count": 1
                         }
                     ],
@@ -262,6 +270,9 @@
             "PACKAGE_NAME": "com.ionicframework.bnotified987585"
         },
         "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.bnotified987585"
+        },
+        "cordova-plugin-file-opener2": {
             "PACKAGE_NAME": "com.ionicframework.bnotified987585"
         }
     },

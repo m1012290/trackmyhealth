@@ -13,7 +13,7 @@
              <i class=" ion-search icon-btn-customize"></i>
             </button>
              <button class="button button-clear" ng-click="filterdetails()">
-                 <i class="ion-android-options icon-btn-customize"></i>
+                 <i class="ion-funnel icon-btn-customize"></i>
              </button>
              <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
@@ -25,10 +25,10 @@
                     <p><strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong>       {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}} {{visit.hospitalid.hospitalname}}
                     </p>
                     <a href="#" ng-click="patientdetails(visit._id)">
-                         <button class="button button-clear pull-right"><i class="icon ion-arrow-right-b dark" ></i></button>
+                         <button class="button button-clear pull-right"><i class="icon ion-arrow-right-b assertive" ></i></button>
                     </a>
                     <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
-                    <p><b>Notification :</b>{{visit.notificationtext}} <a href="#" ng-click="visit.reporturl()" style="color:blue;">Report</a></p>
+                    <p><b>Notification :</b>{{visit.notificationtext}} <a href="#"><button class="button button-clear pull-right" ng-click="downloaddocument(visit.reporturl)" style="color:blue;"> Report</button></a></p>
                  </div>
             </ion-content>
 
@@ -56,8 +56,7 @@
         <div class="pull-center">
                 <button class="button button-outline button-assertive" ng-click="downloaddocument(note.reporturl)">View Document</button>
             </div>
-            </div>
-
+        </div>
     </div>
 
 </ion-content>
@@ -72,9 +71,72 @@
    <button class="button button-clear button-primary" ng-click="closeModal3()"><i class="icon ion-android-close"></i></button>
     </ion-header-bar>
 
- <ion-content >
+ <ion-content>
      <ion-slide-box active-slide="myActiveSlide">
-  <ion-slide>
+
+         <ion-slide>
+      <div class="list card" style=" padding-top:25px;">
+          <div class="item item-divider"> <h2><strong>Visit Details
+              </strong>
+      </h2></div>
+
+           <div class="item item-divider" >
+               <h4> IP Admission No :</h4></div>
+         <div class="item-text-wrap"><p>
+             {{visitdata.visitdetails.ipadmissionno}}</p>
+                 </div>
+ <div class="item item-divider">
+              <h4>Visit Type :</h4></div>
+        <div class="item-text-wrap"><p>
+            {{visitdata.visitdetails.visittype}}</p>
+          </div>
+
+      <div class="item item-divider">
+          <h4>Reason for visit :</h4></div>
+              <div class="item-text-wrap"><p>{{visitdata.visitdetails.diagnosticdets[0].reasonforvisit}}</p>
+               </div>
+
+       <div class="item item-divider">
+            <h4> Primary Diagnosis :</h4> </div>
+                <div class="item-text-wrap"><p> {{note.notificationtext}}</p>
+                 </div>
+
+    <div class="item item-divider">
+            <h4>Lab Tests :</h4></div>
+     <div class="item-text-wrap">
+         <p ng-repeat="labtest in visitdata.visitdetails.labtests track by $index" style="font-size: 15px;">{{labtest}}</p>
+                 </div>
+     <div class="item item-divider">
+            <h4> Ward Information :</h4></div>
+     <div class="item-text-wrap"><p>{{visitdata.visitdetails.wardinfo}}</p>
+                 </div>
+
+ </div></ion-slide>
+
+          <ion-slide>
+    <div class="list card" style=" padding-top:25px;">
+          <div class="item item-divider"> <h2><strong>Hospital Details </strong></h2></div>
+
+      <div class="item item-divider" >
+            <h4>Address :</h4></div>
+         <div class="item-text-wrap"><p> {{visitdata.hospitaldetails.hospitaladdress.addressline1}} {{visitdata.hospitaldetails.hospitaladdress.city}}  {{visitdata.hospitaldetails.hospitaladdress.state}} {{visitdata.hospitaldetails.hospitaladdress.country}}</p></div>
+
+     <div class="item item-divider">
+         <h4> Telephone Number :</h4>
+         </div>
+        <div class="item-text-wrap"><p>
+            {{visitdata.hospitaldetails.hospitaltelnumber}}</p></div>
+
+ <div class="item item-divider">
+          <h4> Departments :</h4></div>
+     <div class="item-text-wrap"><p ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}</p></div>
+
+ <div class="item item-divider">
+          <h4>   In House Labs :</h4></div>
+     <div class="item-text-wrap"><p>{{visitdata.hospitaldetails.inhouselab}}</p></div>
+</div></ion-slide>
+
+           <ion-slide>
        <div class="list card" style="padding-top:25px;">
           <div class="item item-divider"> <h2><strong>Patient Details </strong></h2></div>
             <div class="item item-divider"><h4>
@@ -109,69 +171,10 @@
     </div>
            </div>
       </ion-slide>
-         <ion-slide>
-    <div class="list card" style=" padding-top:25px;">
-          <div class="item item-divider"> <h2><strong>Hospital Details </strong></h2></div>
-
-      <div class="item item-divider" >
-            <h4>Address :</h4></div>
-         <div class="item-text-wrap"><p> {{visitdata.hospitaldetails.hospitaladdress.addressline1}} {{visitdata.hospitaldetails.hospitaladdress.city}}  {{visitdata.hospitaldetails.hospitaladdress.state}} {{visitdata.hospitaldetails.hospitaladdress.country}}</p></div>
-
-     <div class="item item-divider">
-         <h4> Telephone Number :</h4>
-         </div>
-        <div class="item-text-wrap"><p>
-            {{visitdata.hospitaldetails.hospitaltelnumber}}</p></div>
-
- <div class="item item-divider">
-          <h4> Departments :</h4></div>
-     <div class="item-text-wrap"><p ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}</p></div>
-
- <div class="item item-divider">
-          <h4>   In House Labs :</h4></div>
-     <div class="item-text-wrap"><p>{{visitdata.hospitaldetails.inhouselab}}</p></div>
-</div></ion-slide>
-         <ion-slide>
-      <div class="list card" style=" padding-top:25px;">
-          <div class="item item-divider"> <h2><strong>Visit Details </strong></h2></div>
-
-           <div class="item item-divider" >
-               <h4> IP Admission No :</h4></div>
-         <div class="item-text-wrap"><p>
-             {{visitdata.visitdetails.ipadmissionno}}</p>
-                 </div>
- <div class="item item-divider">
-              <h4>Visit Type :</h4></div>
-        <div class="item-text-wrap"><p>
-            {{visitdata.visitdetails.visittype}}</p>
-          </div>
-
-      <div class="item item-divider">
-          <h4>Reason for visit :</h4></div>
-              <div class="item-text-wrap"><p>{{visitdata.visitdetails.diagnosticdets[0].reasonforvisit}}</p>
-               </div>
-
-       <div class="item item-divider">
-            <h4> Primary Diagnosis :</h4> </div>
-                <div class="item-text-wrap"><p> {{note.notificationtext}}</p>
-                 </div>
-
-    <div class="item item-divider">
-            <h4>Lab Tests :</h4></div>
-     <div class="item-text-wrap">
-         <p ng-repeat="labtest in visitdata.visitdetails.labtests track by $index" style="font-size: 15px;">{{labtest}}</p>
-                 </div>
-     <div class="item item-divider">
-            <h4> Ward Information :</h4></div>
-     <div class="item-text-wrap"><p>{{visitdata.visitdetails.wardinfo}}</p>
-                 </div>
-
- </div></ion-slide>
      </ion-slide-box>
   </ion-content>
  </ion-modal-view>
 </script>
-
 <script id="filterpatientdetails.html" type="text/ng-template">
     <ion-modal-view>
         <ion-header-bar class="bar bar-positive">
@@ -221,4 +224,14 @@
         </ion-content>
             </ion-modal-view>
     </script>
+    <script id="pdf-viewer.html" type="text/ng-template">
+    <ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title">Invoice</h1>
+    </ion-header-bar>
+    <ion-content>
+        <ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
+    </ion-content>
+    </ion-modal-view>
+</script>
 </ion-view>
