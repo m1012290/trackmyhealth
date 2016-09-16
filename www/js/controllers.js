@@ -363,8 +363,8 @@ angular.module('bnotifiedappctrls', [])
           $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
     });
   });
-  
-  
+
+
   $ionicModal.fromTemplateUrl('my-modal4.html',{
       scope: $scope,
     	animation: 'slide-in-up'
@@ -1786,21 +1786,21 @@ $scope.closePopover = function() {
       $scope.backButtonAction = function(){
      $scope.shouldShowDelete = false;
      $ionicHistory.goBack();
-  }; 
+  };
     $scope.greeting = 'You must agree with the terms and conditions';
       $scope.doGreeting = function(greeting) {
         alert(greeting);
-      };  
+      };
  $scope.close = function(){
       $state.go('signup');
     };
-  
+
 }])
 .controller('aboutCtrl',['$scope', '$ionicHistory',function($scope,$ionicHistory){
       $scope.backButtonAction = function(){
      $scope.shouldShowDelete = false;
      $ionicHistory.goBack();
-  }; 
+  };
 }])
 .controller('NotificationsCtrl', ['$scope', '$rootScope', 'notificationservice','$stateParams', '$ionicPopup','$cordovaDialogs','$cordovaClipboard', 'DBA', '$ionicHistory', '$timeout','$ionicFilterBar','$ionicModal',function($scope, $rootScope, notificationservice, $stateParams, $ionicPopup, $cordovaDialogs, $cordovaClipboard, DBA, $ionicHistory,$timeout,$ionicFilterBar, $ionicModal){
 
@@ -2403,6 +2403,7 @@ registrationdetsdb.query({}).then(function(response){
       visitservice.getVisits($scope.patientId).then(function(data){
              console.log("obtaining visit info" + JSON.stringify(data) );
              $scope.visitinfo = data.data;
+             $scope.copyofvisitinfo = data.data;
              //Obtain unique patient names, hospital names, visit types available
 
           }).catch(function(error){
@@ -2554,128 +2555,42 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
   $ionicModal.fromTemplateUrl('pdf-viewer.html', {
         scope: $scope,
         animation: 'slide-in-up'
-    }).then(function (modal) {
+  }).then(function (modal) {
         $scope.pdfviewermodal = modal;
-    });
-
-    /*$ionicModal.fromTemplateUrl('hospitaldetails.html', {
-    	scope: $scope,
-    	animation: 'slide-in-up'
-  	}).then(function(modal) {
-    	$scope.modalhospitaldets = modal;
-  	});
-	$scope.openModal4 = function() {
-    	$scope.modalhospitaldets.show();
-    }
-	$scope.closeModal4 = function() {
-    	$scope.modalhospitaldets.hide();
-	}
-
-
- $ionicModal.fromTemplateUrl('visitdetails.html', {
-    	scope: $scope,
-    	animation: 'slide-in-up'
-  	}).then(function(modal) {
-    	$scope.modalvisitdets = modal;
-  	});
-	$scope.openModal6 = function() {
-    	$scope.modalvisitdets.show();
-  }
-	$scope.closeModal6 = function() {
-    	$scope.modalvisitdets.hide();
-	}*/
+  });
   var profiledata = loginservice.getProfileData();
   socket.on('connect', function(){
     console.log('socket connected successfully');
     socket.emit('appregistrationid', $scope.patientId);
   });
   socket.on('documentrecieved', function(data){
-
-      //var blob = b64toBlob(data, "application/pdf");
-      //var blobUrl = URL.createObjectURL(blob);
-      //$rootScope.showToast('blobURL is ['+ blobUrl + ']','long','center');
-      //alert('document with id['+ id + '] recieved');
-      /*
-      $cordovaFile.writeFile(cordova.file.dataDirectory, "testpdf.txt", data, true)
-      .then(function (success) {
-        //$rootScope.showToast('Successful write to the text file','long','center');
-        var databuffer = $cordovaFile.readAsArrayBuffer(cordova.file.dataDirectory, "testpdf.txt");
-
-        $cordovaFile.writeFile(cordova.file.dataDirectory, "testpdf.pdf",  , true)
-            .then(function(success){
-              $rootScope.showToast('Successful PDF write','long','center');
-              $cordovaFileOpener2.open("data:application/pdf;base64,["+ data + "]",'application/pdf'
-              ).then(function() {
-                  // file opened successfully
-                  $rootScope.showToast('Successfully opened the file','long','center');
-              }, function(err) {
-                  $rootScope.showToast('Error opening the file','long','center');
-              });
-            }, function(err){
-                  $rootScope.showToast('Error writing buffered data','long','center');
-            });
-      }, function (error) {
-          $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(error) +"]",'long','center');
-      });
-      */
-      //window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(filentry) {
-         //var blobvar = b64toBlob(data, "application/pdf");
-         //var decodedstring = $base64.decode(blob);
-         var uint8array = base64ToUint8Array(data);
+         //console.log('printing data object recieved ['+ data + ']');
+         var datarecieved = JSON.parse(data);
+         console.log('printing parsed data recieved ['+ data + ']');
+         var uint8array = base64ToUint8Array(datarecieved.data);
          var blob = new Blob([uint8array],{type:'application/pdf'});
          //below 2 lines are working code commented for testing...
-         //$scope.pdfUrl = URL.createObjectURL(blob);
-         //$scope.pdfviewermodal.show();
-         /*
-         $rootScope.showPopup({title:'Decoded String', template:pdfurl}, function(res){
+         $scope.pdfUrl = URL.createObjectURL(blob);
+         $scope.pdfviewermodal.show();
+         console.log('blob length ['+ blob.length + ']');
+         window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
 
-         }); */
-         //var fileobj = $cordovaFile.readAsText(blob);
-         //fileobj.onloadend = function(data){
-         //$cordovaFile.readAsBinaryString(URL.createObjectURL(blob)).then(function(data){
-           $cordovaFile.writeFile(cordova.file.dataDirectory, "testpdf.pdf",blob, true).then(function(){
-              $rootScope.showToast("Write to PDF was successful",'long','center');
-              $cordovaFile.readAsArrayBuffer(cordova.file.dataDirectory, "testpdf.pdf").then(function(readdata){
-                 socket.emit('testrecievedpdf',readdata);
-              }, function(err){
-                  $rootScope.showToast("PDF read was successful",'long','center');
+            dir.getDir("TracMyHealth",{create:true}, function(direntry){
+              var filename = "labreport_"+(new Date()).getTime()+".pdf";
+              direntry.getFile(filename, {create:true}, function(file) {
+                console.log("File created succesfully.");
+                file.createWriter(function(fileWriter) {
+                    console.log("Writing content to file");
+                    fileWriter.write(blob);
+                    $rootScope.showToast("Report has also been downloaded to your device",'long','center');
+                }, function(err){
+                    $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+                });
               });
-              $cordovaFileOpener2.open(cordova.file.dataDirectory+"testpdf.pdf","application/pdf").then(function(){
-                  $rootScope.showToast("PDF read successful successful",'long','center');
-              }, function(err){
-                $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
-              });
-           }, function(err){
-             $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
-           });
-         //}, function(err){
-          //  $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
-         //});
+            });
+         });
+
   });
-  function b64toBlob(b64Data, contentType, sliceSize) {
-    contentType = contentType || '';
-    sliceSize = sliceSize || 512;
-
-    var byteCharacters = atob(b64Data);
-    var byteArrays = [];
-
-    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-      var byteNumbers = new Array(slice.length);
-      for (var i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-
-      var byteArray = new Uint8Array(byteNumbers);
-
-      byteArrays.push(byteArray);
-    }
-
-    var blob = new Blob(byteArrays, {type: contentType});
-    return blob;
-  }
-
   function base64ToUint8Array(base64) {
     var raw = atob(base64);
     var uint8Array = new Uint8Array(raw.length);
@@ -2690,32 +2605,13 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
       "documentname":"name"
     };
     socket.emit('documentrequest',data);
-    /* Commented as it is not being used..
-    console.log('printing url ['+ url +']');
-    var options = {
-      location: 'yes',
-      clearcache: 'yes',
-      toolbar: 'no'
-    };
-    //document.addEventListener(function () {
-    $cordovaInAppBrowser.open(encodeURI(url), '_system', options)
-      .then(function(event) {
-        console.log('i m open');
-      }).catch(function(event) {
-        console.log('error opening');
-      }); */
-
-    //}, false);
   }
   $rootScope.$on('$cordovaInAppBrowser:loadstart', function(e, event){
       console.log('load started');
   });
-
-
   $rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, event){
       console.log('load error');
   });
-
   $rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
       console.log('load exit');
   });
