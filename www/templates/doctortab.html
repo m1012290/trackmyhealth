@@ -10,14 +10,14 @@
             <button class="button button-clear" ng-click="showFilterBar()">
              <i class=" ion-search icon-btn-customize"></i>
             </button>
-             <button class="button button-clear" ng-click="showAlert()">
+              <button class="button button-clear" ng-click="filterdetails()">
                  <i class="ion-funnel icon-btn-customize"></i>
            </button>
            <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
             </button>
     </ion-nav-buttons>
-    <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
+    <ion-content scroll-sista="header">
 
            <div class="list card item-text-wrap" ng-repeat=" visitdet in drvisitinfo track by $index" >
                <p><strong style="color:#d14836">{{visitdet.notificationdate|date: "dd MMM yy"}}</strong>
@@ -32,18 +32,6 @@
   </div>
 
            </ion-content>
-
-    <script id="mynotification.html" type="text/ng-template">
-  <ion-modal-view>
-       <ion-header-bar class="bar-positive">
-      <h1 class="title">Notifications </h1>
-
-     <button class="button button-clear button-primary" ng-click="closeModal5()">
-                    <i class="icon ion-android-close"></i>
-                </button>
-         </ion-header-bar>
-
-
 
 <ion-content class="padding">
     <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
@@ -62,5 +50,40 @@
 
 </ion-content>
 </ion-modal-view>
-</script>
+<script id="filterDoctortabdetails.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar class="bar bar-positive">
+            <h1 class="title">Filter</h1>
+            <button class="button button-clear button-primary" ng-click="closeModalfilter()"><i class="icon ion-android-close"></i></button>
+        </ion-header-bar>
+        <ion-content>
+                <ion-item class="item-input">
+                <span class="input-label">Hospital Name</span>
+                <label class="item-input">
+                    <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames">
+                    </select>
+                </label>
+            </ion-item>
+            <ion-item class="item-input">
+          		<label class="item item-input">
+          		<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
+          	</label>
+          </ion-item>
+          <div class="pull-center">
+            <button class="button button-outline button-assertive" ng-click="filterapply(sample)">Apply</button>
+		      </div>
+        </ion-content>
+            </ion-modal-view>
+          </script>
+          <script id="pdf-viewer.html" type="text/ng-template">
+            <ion-modal-view>
+              <ion-header-bar>
+                <h1 class="title">Invoice</h1>
+              </ion-header-bar>
+              <ion-content>
+                <ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
+              </ion-content>
+            </ion-modal-view>
+          </script>
+
 </ion-view>
