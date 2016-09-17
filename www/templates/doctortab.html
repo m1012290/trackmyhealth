@@ -17,7 +17,7 @@
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
             </button>
     </ion-nav-buttons>
-    <ion-content scroll-sista="header">
+    <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
 
            <div class="list card item-text-wrap" ng-repeat=" visitdet in drvisitinfo track by $index" >
                <p><strong style="color:#d14836">{{visitdet.notificationdate|date: "dd MMM yy"}}</strong>
