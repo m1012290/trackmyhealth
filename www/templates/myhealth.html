@@ -25,7 +25,7 @@
     <ion-floating-item icon="ion-waterdrop" ng-click="openModal1()" on-tap="tracker('Blood Pressure', 'Blood Pressure')" button-color= "#d14836" iconColor="#fff" text="Blood Pressure" ></ion-floating-item>
     <ion-floating-item icon="ion-stats-bars" ng-click="openModal1()" on-tap="tracker('Blood Sugar', 'Blood Sugar')" button-color= "#d14836" iconColor="#fff" text="Blood Sugar" ></ion-floating-item>
 </ion-floating-menu>
-<ion-content scroll-sista="header">
+<ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
   <div class="card">
 		<div class="item item-body">
         <div class="row">
@@ -67,7 +67,7 @@
         <div class="row" ng-if="summary.allergies.value !== ''">
             <div class="col"><h2><b>{{summary.allergies.value}}</b></h2></div>
         </div>
-             
+
 		</div>
 	</div>
 <div class="h-list">

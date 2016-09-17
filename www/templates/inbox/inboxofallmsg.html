@@ -20,7 +20,7 @@
              </button>
     </ion-nav-buttons>
 
-<ion-content scroll-sista="header">
+<ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
                 <div class="list card item-text-wrap" ng-repeat=" visit in visitinfo track by $index" >
                     <p><strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong>       {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}} {{visit.hospitalid.hospitalname}}
                     </p>

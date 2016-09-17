@@ -17,7 +17,7 @@
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
             </button>
     </ion-nav-buttons>
-    <ion-content scroll-sista="header">
+    <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
 
            <div class="list card item-text-wrap" ng-repeat=" visitdet in drvisitinfo track by $index" >
                <p><strong style="color:#d14836">{{visitdet.notificationdate|date: "dd MMM yy"}}</strong>
@@ -37,14 +37,14 @@
   <ion-modal-view>
        <ion-header-bar class="bar-positive">
       <h1 class="title">Notifications </h1>
-            
+
      <button class="button button-clear button-primary" ng-click="closeModal5()">
                     <i class="icon ion-android-close"></i>
                 </button>
          </ion-header-bar>
-  
-         
-   
+
+
+
 <ion-content class="padding">
     <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
          <p><strong style="color:#d14836">{{note.notificationdate|date: "dd MMM yy"}}</strong>
@@ -54,9 +54,9 @@
 
                <p><b>Notification :</b>{{note.notificationtext}} </p>
          <div class="pull-center">
-                <button class="button button-outline button-assertive" ng-if ="note.reporturl" ng-click="downloaddocument(note.reporturl)">View Document</button> 
+                <button class="button button-outline button-assertive" ng-if ="note.reporturl" ng-click="downloaddocument(note.reporturl)">View Document</button>
             <button class="button  button-assertive" ng-if ="note.reporturl" ng-click=""><i class="icon ion-android-attach"></i></button>
-             
+
             </div>
         </div>
 
