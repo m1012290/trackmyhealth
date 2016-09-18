@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista','btford.socket-io', 'pdf'])
-.run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', '$cordovaToast',function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope, $cordovaToast) {
+.run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', '$cordovaToast','$cordovaSplashscreen',function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope, $cordovaToast, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
       //StatusBar.styleDefault();
@@ -24,7 +24,8 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
     }
 
     if(window.cordova) {
-        db = $cordovaSQLite.openDB({name:"bnotified.db"});
+      $cordovaSplashscreen.hide();
+      db = $cordovaSQLite.openDB({name:"bnotified.db"});
     }else{
         db = window.openDatabase("bnotified.db", "1.0", "Demo", -1);
     }
@@ -223,7 +224,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
       url:'/termscondition',
       templateUrl:'templates/termscondition.html',
       controller:'termsCtrl'
-         
+
          })
   .state('about',{
          url:'/about',
