@@ -3,35 +3,41 @@
     <div class="container-responsive">
       <img src="img/pulse7.jpg" class="image-responsive"/>
        </div>
-    	  <!--div ng-if="signin.passcode.$valid " ng-messages="signin.user.$error">
+    	 
+    <div ng-if="signin.passcode.$invalid && signin.user.$invalid">
+     <div class="error" ng-messages="signin.user.$error" ng-show="signin.user.$touched ">
+         <div ng-message="required"><i class="ion-information-circled"></i> Please fill all fields.</div>
+    </div>
+    </div>
+      <div ng-if="signin.passcode.$valid " ng-messages="signin.user.$error">
 		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i>User Emailid/Mobile Number is required!
+			<i class="ion-information-circled"></i> User Emailid/Mobile Number is required!
 		</div>
 	  </div>
 	  <div ng-if="signin.user.$valid " ng-messages="signin.passcode.$error">
 		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i>Password is required!
+			<i class="ion-information-circled"></i> Password is required!
 		</div>
-	  </div-->
+	  </div>
     <div id="grid">
 	 <form  name="signin" ng-submit="login(logindata)"  required>
      <div class="list">
-          <br>
-  <label class="item item-input">
+         
+ <label class="item item-input">
     <span class="input-label dark"><i class="ion-person"></i> </span>
    <input type="text" name="user" ng-model="logindata.email" placeholder="User EmailId/Mobile Num" required>
   </label>
-         <hr class="style-one">
-        <br>
-
+      <hr>
+       
+         
   <label class="item item-input">
     <span class="input-label dark"><i class="ion-locked"></i> </span>
-  <input type="password"  name="passcode" ng-model="logindata.passcode" ng-minlength="6" ng-maxlength="20" placeholder="Password" required>
-  </label><hr class="style-one">
-</div>
-   <br>
+  <input type="password"  name="passcode"  ng-model="logindata.passcode" ng-minlength="6" ng-maxlength="20" placeholder="Password" required>
+         </label>   
+<hr>
+ </div>
         <div>
-            <button class="button button-block button-raised button-positive"  type="submit">LOGIN</button>
+        <button class="button button-block button-raised button-positive"  type="submit">LOGIN</button>
          </div>
 		 </form>
     <br>
@@ -41,7 +47,7 @@
          <div class="pull-right">
              <a class="button button-clear button-flat button-assertive" href="" ng-click="openModal4()">Forgot password</a>
          </div>
-         </div>
+    </div>
 
 
 </ion-content>

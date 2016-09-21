@@ -1,8 +1,13 @@
+
 <ion-view view-title="doctor-tab" name="doctortab">
-        <ion-nav-title>
-<span class="circle-span direct-chat-timestamp">
-    <i class="icon ion-ios-pulse-strong assertive"></i></span>
-         </ion-nav-title>
+        <ion-nav-title align-title="left">
+            <span class="circle-span direct-chat-timestamp">
+           <i class="icon ion-ios-pulse-strong assertive"></i>
+           </span>
+   <!--span class="circle-span direct-chat-timestamp">
+     <img src="img/icon.png" class="img-responsive"/>
+    </span-->
+    </ion-nav-title>
         <ion-nav-buttons side="right" >
           <button class="button button-clear" ng-click="takeImage()">
                <i class=" ion-camera icon-btn-customize"></i>
@@ -17,7 +22,7 @@
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
             </button>
     </ion-nav-buttons>
-    <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
+    <ion-content scroll-sista="header">
 
            <div class="list card item-text-wrap" ng-repeat=" visitdet in drvisitinfo track by $index" >
                <p><strong style="color:#d14836">{{visitdet.notificationdate|date: "dd MMM yy"}}</strong>
@@ -27,32 +32,37 @@
                          <button class="button button-clear pull-right"><i class="icon ion-arrow-right-b assertive" ></i></button>
                     </a>
                <p><b>Notification :</b>{{visitdet.notificationtext}}</p>
-
-
-  </div>
-
+             </div>
            </ion-content>
 
-<ion-content class="padding">
-    <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
-         <p><strong style="color:#d14836">{{note.notificationdate|date: "dd MMM yy"}}</strong>
-               {{note.patientregprofiles.firstname}} {{note.patientregprofiles.lastname}} {{note.patientregprofiles.emailid}}</p>
-        <p>Reg.date : {{note.patientregprofiles.regdate | date: "dd MMM yy hh:mm a"}} </p>
-        <p>Reg.type : {{note.patientregprofiles.regtype}}</p>
+       <script id="mynotification.html" type="text/ng-template">
+             <ion-modal-view>
+                  <ion-header-bar class="bar-positive">
+                     <h1 class="title">Notifications </h1>
+                     <button class="button button-clear button-primary" ng-click="closeModal5()">
+                                <i class="icon ion-android-close"></i>
+                     </button>
+                  </ion-header-bar>
+                <ion-content class="padding">
+                  <div class="list card primary-bg" ng-repeat="note in notinfo track by $index">
+                    <p><strong style="color:#d14836">{{note.notificationdate|date: "dd MMM yy"}}</strong>
+                      {{note.patientregprofiles.firstname}} {{note.patientregprofiles.lastname}} {{note.patientregprofiles.emailid}}</p>
+                      <p>Reg.date : {{note.patientregprofiles.regdate | date: "dd MMM yy hh:mm a"}} </p>
+                      <p>Reg.type : {{note.patientregprofiles.regtype}}</p>
+                      <p><b>Notification :</b>{{note.notificationtext}} </p>
+                      <div class="pull-center">
+                        <button class="button button-outline button-assertive" ng-if ="note.reporturl" ng-click="downloaddocument(note.reporturl)">View Document</button>
+                        <button class="button  button-assertive" ng-if ="note.reporturl" ng-click=""><i class="icon ion-arrow-down-a"></i></button>
+                      </div>
+                  </div>
+                </ion-content>
+              </ion-modal-view>
+        </script>
 
-               <p><b>Notification :</b>{{note.notificationtext}} </p>
-         <div class="pull-center">
-                <button class="button button-outline button-assertive" ng-if ="note.reporturl" ng-click="downloaddocument(note.reporturl)">View Document</button>
-            <button class="button  button-assertive" ng-if ="note.reporturl" ng-click=""><i class="icon ion-android-attach"></i></button>
-
-            </div>
-        </div>
-
-</ion-content>
-</ion-modal-view>
 <script id="filterDoctortabdetails.html" type="text/ng-template">
     <ion-modal-view>
         <ion-header-bar class="bar bar-positive">
+            <br>
             <h1 class="title">Filter</h1>
             <button class="button button-clear button-primary" ng-click="closeModalfilter()"><i class="icon ion-android-close"></i></button>
         </ion-header-bar>
@@ -64,13 +74,13 @@
                     </select>
                 </label>
             </ion-item>
-            <ion-item class="item-input">
-          		<label class="item item-input">
-          		<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
-          	</label>
-          </ion-item>
+            <br>
+           <ion-item class="item-input">
+          	<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
+            </ion-item>
+            <br>
           <div class="pull-center">
-            <button class="button button-outline button-assertive" ng-click="filterapply(sample)">Apply</button>
+            <button class="button button-assertive" ng-click="filterapply(sample)">Apply</button>
 		      </div>
         </ion-content>
             </ion-modal-view>
