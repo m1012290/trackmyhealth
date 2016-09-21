@@ -187,8 +187,10 @@
 
 .bar.bar-header .button + .title {
   text-align: left;
-  left: 35px;
-  line-height: 46px; }
+left: 35px;
+ line-height: 46px;
+position: fixed;
+   float: none !important; }
 
 /* Button Bar
 ==================================*/
@@ -1514,7 +1516,7 @@
 /* Uncomment if you want images to fade in after the card
 
   .animate-ripple .in .item-bg-image img:last-child,
-  .animate-ripple .in .item-bg-image img:last-child { 
+  .animate-ripple .in .item-bg-image img:last-child {
     opacity: 0;
   }
 
@@ -1536,7 +1538,7 @@
     transform: scale3d(1, 1, 1);
   }
   .animate-ripple .in .item-bg-image img:last-child,
-  .animate-ripple .in .item-bg-image img:last-child { 
+  .animate-ripple .in .item-bg-image img:last-child {
     opacity: 0;
   }
 
