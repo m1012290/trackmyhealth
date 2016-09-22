@@ -1027,9 +1027,12 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 }])
 .factory('socket',function(socketFactory){
  //Create socket and connect to http://cat.socket.io
- var myIoSocket = io.connect('https://socketioserver-m1012290.c9users.io:8080');
-  	mySocket = socketFactory({
-    	ioSocket: myIoSocket
-  	});
+ var mySocket = null;
+ if(typeof io !== 'undefined'){
+    var myIoSocket = io.connect('https://socketioserver-m1012290.c9users.io:8080');
+    	mySocket = socketFactory({
+      	ioSocket: myIoSocket
+    });
+  }
 	return mySocket;
 });

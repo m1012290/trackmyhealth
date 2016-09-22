@@ -2254,7 +2254,7 @@ $scope.closePopover = function() {
 }])
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover', 'socket','loginservice','$cordovaFile','$cordovaFileOpener2','$http',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover, socket, loginservice, $cordovaFile, $cordovaFileOpener2, $http){
 
-
+$rootScope.showLoader();
   $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
          scope: $scope,
          animation: 'slide-in-up'
@@ -2415,6 +2415,7 @@ $scope.shouldShowReorder = false;
 	//$scope.patientId = "5751377e4f09030255c59a8b";
   $scope.notinfo =[];
   $scope.visitinfo=[];
+
 registrationdetsdb.query({}).then(function(response){
       var result = DBA.getById(response);
       $scope.patientId = result.appregistrationid;
@@ -2422,11 +2423,13 @@ registrationdetsdb.query({}).then(function(response){
       if($stateParams.hospitalid === '123'){
       visitservice.getVisits($scope.patientId).then(function(data){
              console.log("obtaining visit info" + JSON.stringify(data) );
+             $rootScope.hideLoader();
              $scope.visitinfo = data.data;
              $scope.copyofvisitinfo = data.data;
              //Obtain unique patient names, hospital names, visit types available
 
           }).catch(function(error){
+            $rootScope.hideLoader();
               var popupalert = $ionicPopup.alert({
                   title: "Error",
                   template: "Sorry unable to obatin your visit information"
@@ -2437,9 +2440,11 @@ registrationdetsdb.query({}).then(function(response){
       }else{
           visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
               console.log("obtaining visit info" + data );
+              $rootScope.hideLoader();
               $scope.visitinfo = data.data;
               console.log($scope.visitinfo);
           }).catch(function(error){
+            $rootScope.hideLoader();
               var popupalert = $ionicPopup.alert({
                   title: "Error",
                   template: "Sorry unable to obatin your visit information"
@@ -2450,6 +2455,7 @@ registrationdetsdb.query({}).then(function(response){
       }
 
   }).catch(function(err){
+        $rootScope.hideLoader();
         $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
         console.log('on ok click');
         });
@@ -2579,38 +2585,39 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
         $scope.pdfviewermodal = modal;
   });
   var profiledata = loginservice.getProfileData();
-  socket.on('connect', function(){
-    console.log('socket connected successfully');
-    socket.emit('appregistrationid', $scope.patientId);
-  });
-  socket.on('documentrecieved', function(data){
-         //console.log('printing data object recieved ['+ data + ']');
-         var datarecieved = JSON.parse(data);
-         console.log('printing parsed data recieved ['+ data + ']');
-         var uint8array = base64ToUint8Array(datarecieved.data);
-         var blob = new Blob([uint8array],{type:'application/pdf'});
-         //below 2 lines are working code commented for testing...
-         $scope.pdfUrl = URL.createObjectURL(blob);
-         $scope.pdfviewermodal.show();
-         console.log('blob length ['+ blob.length + ']');
-         window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
+  if(socket !== null){
+    socket.on('connect', function(){
+      console.log('socket connected successfully');
+      socket.emit('appregistrationid', $scope.patientId);
+    });
+    socket.on('documentrecieved', function(data){
+           //console.log('printing data object recieved ['+ data + ']');
+           var datarecieved = JSON.parse(data);
+           console.log('printing parsed data recieved ['+ data + ']');
+           var uint8array = base64ToUint8Array(datarecieved.data);
+           var blob = new Blob([uint8array],{type:'application/pdf'});
+           //below 2 lines are working code commented for testing...
+           $scope.pdfUrl = URL.createObjectURL(blob);
+           $scope.pdfviewermodal.show();
+           console.log('blob length ['+ blob.length + ']');
+           window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
 
-            dir.getDir("TracMyHealth",{create:true}, function(direntry){
-              var filename = "labreport_"+(new Date()).getTime()+".pdf";
-              direntry.getFile(filename, {create:true}, function(file) {
-                console.log("File created succesfully.");
-                file.createWriter(function(fileWriter) {
-                    console.log("Writing content to file");
-                    fileWriter.write(blob);
-                    $rootScope.showToast("Report has also been downloaded to your device",'long','center');
-                }, function(err){
-                    $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+              dir.getDir("TracMyHealth",{create:true}, function(direntry){
+                var filename = "labreport_"+(new Date()).getTime()+".pdf";
+                direntry.getFile(filename, {create:true}, function(file) {
+                  console.log("File created succesfully.");
+                  file.createWriter(function(fileWriter) {
+                      console.log("Writing content to file");
+                      fileWriter.write(blob);
+                      $rootScope.showToast("Report has also been downloaded to your device",'long','center');
+                  }, function(err){
+                      $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+                  });
                 });
               });
-            });
-         });
-
-  });
+           });
+       });
+  }
   function base64ToUint8Array(base64) {
     var raw = atob(base64);
     var uint8Array = new Uint8Array(raw.length);
