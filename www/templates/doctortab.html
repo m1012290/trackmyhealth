@@ -1,12 +1,12 @@
 
 <ion-view view-title="doctor-tab" name="doctortab">
-        <ion-nav-title align-title="left">
-            <span class="circle-span direct-chat-timestamp">
+       <ion-nav-title align-title="left">
+            <!--span class="circle-span direct-chat-timestamp">
            <i class="icon ion-ios-pulse-strong assertive"></i>
-           </span>
-   <!--span class="circle-span direct-chat-timestamp">
+           </span-->
+   <span class="circle-span direct-chat-timestamp">
      <img src="img/icon.png" class="img-responsive"/>
-    </span-->
+    </span>
     </ion-nav-title>
         <ion-nav-buttons side="right" >
           <button class="button button-clear" ng-click="takeImage()">
@@ -27,7 +27,7 @@
            <div class="list card item-text-wrap" ng-repeat=" visitdet in drvisitinfo track by $index" >
                <p><strong style="color:#d14836">{{visitdet.notificationdate|date: "dd MMM yy"}}</strong>
                    {{visitdet.hospitalid.hospitalemailid}} {{visitdet.hospitalid.hospitalname}}
-                   <button class="button-clear pull-right"><i class="icon pull-right ion-android-attach dark" ng-click="downloaddocument(visitdet.reporturl)"></i> </button></p>
+                   <!--button class="button-clear pull-right"><i class="icon pull-right ion-android-attach dark" ng-click="downloaddocument(visitdet.reporturl)"></i> </button--></p>
                 <a href="#" ng-click="notification(visitdet.patientregprofiles, visitdet.visitid)">
                          <button class="button button-clear pull-right"><i class="icon ion-arrow-right-b assertive" ></i></button>
                     </a>
@@ -60,9 +60,9 @@
         </script>
 
 <script id="filterDoctortabdetails.html" type="text/ng-template">
+
     <ion-modal-view>
         <ion-header-bar class="bar bar-positive">
-            <br>
             <h1 class="title">Filter</h1>
             <button class="button button-clear button-primary" ng-click="closeModalfilter()"><i class="icon ion-android-close"></i></button>
         </ion-header-bar>
@@ -74,17 +74,19 @@
                     </select>
                 </label>
             </ion-item>
-            <br>
-           <ion-item class="item-input">
-          	<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
-            </ion-item>
-            <br>
+            <ion-item class="item-input">
+<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
+
+          </ion-item>
+          <br>
           <div class="pull-center">
-            <button class="button button-assertive" ng-click="filterapply(sample)">Apply</button>
-		      </div>
+            <button class="button button-assertive" ng-click="filterapply()">Apply</button> 
+            <button class="button button-assertive" ng-click="filterResetAll()">Reset All</button>
+          </div>
         </ion-content>
             </ion-modal-view>
           </script>
+
           <script id="pdf-viewer.html" type="text/ng-template">
             <ion-modal-view>
               <ion-header-bar>

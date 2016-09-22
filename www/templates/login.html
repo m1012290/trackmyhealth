@@ -30,10 +30,14 @@
       <hr>
        
          
-  <label class="item item-input">
+   <label class="item item-input ">
     <span class="input-label dark"><i class="ion-locked"></i> </span>
-  <input type="password"  name="passcode"  ng-model="logindata.passcode" ng-minlength="6" ng-maxlength="20" placeholder="Password" required>
-         </label>   
+  <input type="{{inputType}}"  name="passcode"  ng-model="logindata.passcode" ng-minlength="6" ng-maxlength="20" placeholder="Password" required>
+ <input type="checkbox" id="checkbox" ng-model="passwordCheckbox" ng-click="hideShowPassword()" />
+      <label  for="checkbox" ng-if="passwordCheckbox"><i class="icon ion-eye assertive"> <button class="button button-clear"></button></i></label>
+      <label for="checkbox" ng-if="!passwordCheckbox"><i class="icon ion-eye-disabled "> <button class="button btton-clear"></button></i> </label>   
+     </label> 
+       
 <hr>
  </div>
         <div>

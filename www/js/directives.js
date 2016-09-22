@@ -206,7 +206,6 @@
 	};
 }]); */
 .directive('tabsSwipable', ['$ionicGesture', '$ionicTabsDelegate',function($ionicGesture, $ionicTabsDelegate){
-
 return {
   restrict: 'A',
   require: 'ionTabs',
@@ -221,7 +220,7 @@ return {
 
          selectedTabIndex = $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).selectedIndex(); // Gets the currently displayed tab index.
 
-         if ( selectedTabIndex >= 0 && selectedTabIndex <= maxTabIndex - 1 ) {
+         if ( selectedTabIndex >= 0 && selectedTabIndex <= maxTabIndex + 1 ) {
            $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).select(selectedTabIndex + 1);
          }
        }, tabsCtrl.$element);
@@ -234,7 +233,7 @@ return {
 
          selectedTabIndex = $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).selectedIndex(); // Gets the currently displayed tab index.
 
-         if ( selectedTabIndex <= 2 && selectedTabIndex >= maxTabIndex - 1 ) {
+         if ( selectedTabIndex <= 3 && selectedTabIndex >= maxTabIndex - 1 ) {
 
            $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).select(selectedTabIndex - 1);
 

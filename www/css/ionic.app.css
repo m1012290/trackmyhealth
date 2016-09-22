@@ -19772,9 +19772,9 @@ div .list.card {
 
 /*CSS for carousel images to make image resposive*/
 .img-responsive {
-  display: block;
-  width: 100%;
-  height: 100%; }
+  display: inline-block;
+  width: 75%;
+  height: 75%; }
 
 .image-responsive {
   display: block;
@@ -20100,6 +20100,12 @@ h1 {
 .ion-ios-star-outline:before {
   font-size: 30px; }
 
+.ion-arrow-right-b {
+  font-size: 25px; }
+
+.fa-star-half-o:before {
+  font-size: 25px; }
+
 .deleteButton {
   margin-right: 10px; }
 
@@ -20192,6 +20198,14 @@ hr.style-one {
 .ion-locked:before {
   font-size: 23px;
   padding-left: 45px; }
+
+.ion-eye:before {
+  font-size: 30px;
+  position: inherit; }
+
+.ion-eye-disabled:before {
+  font-size: 30px;
+  position: inherit; }
 
 textarea,
 input[type="text"],

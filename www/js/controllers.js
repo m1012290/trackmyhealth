@@ -485,6 +485,16 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       }
 		});
 	}
+        // Set the default value of inputType
+  $scope.inputType = 'password';
+  
+  // Hide & show password function
+  $scope.hideShowPassword = function(){
+    if ($scope.inputType == 'password')
+      $scope.inputType = 'text';
+    else
+      $scope.inputType = 'password';
+  };
 }])
 .controller('SignUpCtrl',['$scope', '$rootScope','$state', 'ionicDatePicker', '$filter', 'signupservice', '$ionicModal', '$ionicPopup', function($scope, $rootScope, $state, ionicDatePicker, $filter, signupservice, $ionicModal, $ionicPopup){
 
@@ -2252,10 +2262,10 @@ $scope.closePopover = function() {
         });
     }
 }])
-.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover', 'socket','loginservice','$cordovaFile','$cordovaFileOpener2','$http',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover, socket, loginservice, $cordovaFile, $cordovaFileOpener2, $http){
+.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','$cordovaFileOpener2','$http',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, $cordovaFileOpener2, $http){
 
 
-  $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
+ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
          scope: $scope,
          animation: 'slide-in-up'
      }).then(function(modal){
@@ -2267,6 +2277,75 @@ $scope.closePopover = function() {
      $scope.closeModalfilter = function(){
          $scope.filtermodal.hide();
      }
+     $scope.filterapply = function(){
+           var filteredkey=0;
+           if($scope.backupvisitinfo == undefined)
+           {
+             $scope.backupvisitinfo = angular.copy($scope.visitinfo);
+           }
+           else
+           {
+               $scope.visitinfo=angular.copy($scope.backupvisitinfo);
+           }
+           console.log($scope.appliedfilters);
+           angular.forEach($scope.visitinfo,function (visitdata,key){
+               var filtervalue = false;
+               if((($scope.appliedfilters.patientnameselected === '') || ($scope.appliedfilters.patientnameselected === (visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname).toLowerCase()))
+               && (($scope.appliedfilters.visittypeselected === '') || ($scope.appliedfilters.visittypeselected === visitdata.visitid.visittype.toLowerCase()))
+               && (($scope.appliedfilters.hospitalnameselected === '') || ($scope.appliedfilters.hospitalnameselected === visitdata.hospitalid.hospitalname.toLowerCase()))
+               && (($scope.appliedfilters.docswithattachment === false) || (visitdata.reporturl !== undefined))
+               )
+               {
+
+                   console.log("filter call");
+                   console.log('   ',visitdata.patientregprofiles.firstname,visitdata.patientregprofiles.lastname,',',visitdata.visitid.visittype,',',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
+                    $scope.visitinfo[filteredkey]=visitdata;
+                   filteredkey++;
+                   filtervalue = true;
+                 }
+                 else
+                 {
+                   console.log("Not filtered");
+                   console.log(visitdata.patientregprofiles.firstname,visitdata.patientregprofiles.lastname,',',visitdata.visitid.visittype,',',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
+                 }
+               });
+               $scope.closeModalfilter();
+               $scope.visitinfo.length=filteredkey;
+             }
+     //Filters applied
+     $scope.appliedfilters = {
+       "patientnameselected" : ""
+       ,"visittypeselected"  : ""
+       ,"hospitalnameselected" : ""
+       ,"docswithattachment" : false
+     };
+     $scope.filtersavailable = {
+       "patientnames"   : []
+       ,"visittypes"    : []
+       ,"hospitalnames" : []
+     };
+     $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
+         scope: $scope,
+         animation: 'slide-in-up'
+     }).then(function(modal){
+         $scope.filtermodal = modal;
+     });
+     $scope.openModalfilter = function(){
+          $scope.filtermodal.show();
+     }
+     $scope.closeModalfilter = function(){
+         $scope.filtermodal.hide();
+     }
+
+     $scope.filterResetAll = function(){
+       $scope.appliedfilters.patientnameselected="";
+       $scope.appliedfilters.visittypeselected="";
+       $scope.appliedfilters.hospitalnameselected="";
+       $scope.appliedfilters.docswithattachment=false;
+       $scope.visitinfo=angular.copy($scope.backupvisitinfo);
+       $scope.openModalfilter();
+     }
+
      $scope.filterapply = function(){
            var filteredkey=0;
            if($scope.backupvisitinfo == undefined)
@@ -2315,13 +2394,14 @@ $scope.closePopover = function() {
        ,"hospitalnames" : []
      };
      $scope.filterdetails = function(visitid){
-              angular.forEach($scope.visitinfo, function(visitdata, key){
-
+              if($scope.visitinfo.length !== 0){
+                angular.forEach($scope.visitinfo, function(visitdata, key1){
                 if($scope.filtersavailable.patientnames.length === 0){
+                  $scope.filtersavailable.patientnames.push("");
                   $scope.filtersavailable.patientnames.push((visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname).toLowerCase());
                 }else{
                   var namefound = false;
-                  angular.forEach($scope.filtersavailable.patientnames, function(value, key){
+                  angular.forEach($scope.filtersavailable.patientnames, function(value, key2){
                      if(value === (visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname).toLowerCase() ){
                         namefound = true;
                      }
@@ -2333,10 +2413,11 @@ $scope.closePopover = function() {
 
 
                 if($scope.filtersavailable.visittypes.length === 0){
+                  $scope.filtersavailable.visittypes.push("");
                   $scope.filtersavailable.visittypes.push(visitdata.visitid.visittype.toLowerCase());
                 }else{
                   var typefound = false;
-                  angular.forEach($scope.filtersavailable.visittypes, function(value, key){
+                  angular.forEach($scope.filtersavailable.visittypes, function(value, key2){
                      if(value === visitdata.visitid.visittype.toLowerCase() ){
                         typefound = true;
                      }
@@ -2349,11 +2430,12 @@ $scope.closePopover = function() {
 
               if($scope.filtersavailable.hospitalnames.length === 0)
               {
+                $scope.filtersavailable.hospitalnames.push("");
                 $scope.filtersavailable.hospitalnames.push((visitdata.hospitalid.hospitalname).toLowerCase());
               }else
               {
                   var namefound = false;
-                  angular.forEach($scope.filtersavailable.hospitalnames, function(value, key){
+                  angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
                   if(value === (visitdata.hospitalid.hospitalname).toLowerCase() ){
                       console.log('   ',visitdata.visitid,visitdata.hospitalid.hospitalname);
                       namefound = true;
@@ -2365,10 +2447,18 @@ $scope.closePopover = function() {
               }
             }
           });
-
-             $scope.openModalfilter();
-
+          
+          $scope.openModalfilter();
+        }
+        else{
+          //No data to filter show error msg
+          //no need to open modal
+          $rootScope.showPopup({title:'Error', template:"No data to filter"});
+        }
        }
+
+
+
 
 
 
@@ -2651,13 +2741,12 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
             }
           });
     };
-//feedback questions
+ //feedback questions
 	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
 		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
 		{question : "The ease of obtaining the records and lab-reports",answer: ''},
 		{question: "Trackmyhealth app , has it been helpful?",answer: ''},
 		{question: "Is the app easy to use?",answer: ''}];
-
 	//ratings for feedback
 	$scope.ratingsObject = {
         iconOn : 'ion-ios-star',
@@ -2671,26 +2760,29 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 			return rating;
         }
       };
-
+    
 	// ratings callback function , obtains the current slide and updates the object answer
      $scope.ratingsCallback = function(rating) {
-        console.log('Selected rating is : ', rating);
-		$scope.i= $ionicSlideBoxDelegate.currentIndex();
-		console.log($scope.i);
-		$ionicSlideBoxDelegate.next();
+          console.log('Selected rating is : ', rating);
+		$scope.i= $ionicSlideBoxDelegate.$getByHandle('feedbackdata').currentIndex();
+       console.log($scope.i);
+		$ionicSlideBoxDelegate.$getByHandle('feedbackdata').next();
+         console.log($scope.i);
+
 		$scope.questions[$scope.i].answer = rating;
 		console.log($scope.questions);
 		 if($scope.i === 4){
 		 $scope.closepopup()
 		 }
 	  };
+    
 
 	//popup to show feedback
 	$scope.showMyPopup = function() {
 
    // An elaborate, custom popup
   	 var myPopup = $ionicPopup.show({
-		 template: '<ion-slide-box show-pager="false" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
+		 template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
 		 title: 'Feedback',
 		 scope: $scope
 	 })
@@ -2700,6 +2792,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 		  myPopup.close();
 	 }
 	};
+
 }])
 .controller('ForgotPasswordCtrl', ['$scope', '$rootScope', '$state', '$stateParams','authservice','initiateotpgeneratesvc', 'securityquestions', function($scope, $rootScope, $state, $stateParams, authservice, initiateotpgeneratesvc, securityquestions){
     $scope.enableotp = false;
@@ -2909,7 +3002,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 
 .controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate){
 
-  $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{
+ $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{
          scope: $scope,
          animation: 'slide-in-up'
      }).then(function(modal){
@@ -2922,6 +3015,14 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
      $scope.closeModalfilter = function(){
          $scope.filtermodal.hide();
      }
+
+     $scope.filterResetAll = function(){
+       $scope.appliedfilters.hospitalnameselected="";
+       $scope.appliedfilters.docswithattachment=false;
+       $scope.drvisitinfo=angular.copy($scope.backupdrvisitinfo);
+       $scope.openModalfilter();
+     }
+
      $scope.filterapply = function(){
            var filteredkey=0;
 
@@ -2968,14 +3069,14 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
      };
 
      $scope.filterdetails = function(visitid){
-
-              angular.forEach($scope.drvisitinfo, function(visitdata, key){
-
+          if($scope.drvisitinfo.length !== 0){
+              angular.forEach($scope.drvisitinfo, function(visitdata, key1){
                 if($scope.filtersavailable.hospitalnames.length === 0){
+                  $scope.filtersavailable.hospitalnames.push("");
                   $scope.filtersavailable.hospitalnames.push((visitdata.hospitalid.hospitalname).toLowerCase());
                 }else{
                   var namefound = false;
-                  angular.forEach($scope.filtersavailable.hospitalnames, function(value, key){
+                  angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
                      if(value === (visitdata.hospitalid.hospitalname).toLowerCase() ){
                        console.log('   ',visitdata.visitid,visitdata.hospitalid.hospitalname);
                         namefound = true;
@@ -2987,12 +3088,17 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                      console.log('   ',visitdata.visitid,visitdata.hospitalid.hospitalname);
                   }
                 }
-              });
+            });
+            $scope.openModalfilter();
+          }
+          else {
+              //No data to filter show error msg
+              //no need to open modal
+              $rootScope.showPopup({title:'Error', template:"No data to filter"});
 
-              $scope.openModalfilter();
-
-       }
-
+          }
+     }
+       
      $scope.drvisitinfo=[];
      $scope.notinfo=[];
 
@@ -3038,6 +3144,8 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
         console.log('on ok click');
         });
   });
+
+
 
 
   $scope.downloaddocument = function(url){
