@@ -9,7 +9,7 @@
     </ion-nav-title>
 
 <ion-nav-buttons side="right">
-            <button class="button button-clear" ng-click="takeImage()">
+            <button class="button button-clear" ng-click="selectImageSource()">
                  <i class=" ion-camera icon-btn-customize"></i>
             </button>
             <button class="button button-clear" ng-click="showFilterBar()">
@@ -24,16 +24,16 @@
     </ion-nav-buttons>
 
 <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
-   
-    <div class="list card item-text-wrap" ng-repeat=" visit in visitinfo track by $index" >    
+
+    <div class="list card item-text-wrap" ng-repeat=" visit in visitinfo track by $index" >
 <p> <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup()"></i>
     <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}} {{visit.hospitalid.hospitalname}} &nbsp;&nbsp; <a href="#" ng-click="patientdetails(visit._id)"><i class="icon ion-arrow-right-b assertive " ></i></a></p>
-        
+
 <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
-                     
+
                     <p><b>Notification :</b>{{visit.notificationtext}} <a href="#"><button class="button button-clear pull-right" ng-if="visit.reporturl" ng-click="downloaddocument(visit.reporturl)" style="color:blue;"> Report</button></a></p>
                  </div>
-    
+
  </ion-content>
 
 
@@ -209,14 +209,14 @@
                 </label>
             </ion-item>
             <ion-item class="item-input">
-          		
+
           		<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
-         
+
           </ion-item>
 
           <br>
           <div class="pull-center">
-            <button class="button button-assertive" ng-click="filterapply()">Apply</button> 
+            <button class="button button-assertive" ng-click="filterapply()">Apply</button>
             <button class="button button-assertive" ng-click="filterResetAll()">Reset All</button>
           </div>
 

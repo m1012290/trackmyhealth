@@ -44,6 +44,7 @@
     "cordova-plugin-x-socialsharing@5.0.9",
     "cordova-plugin-x-toast@2.2.3",
     "cordova-plugin-file@4.2.0",
+    "cordova-plugin-mediascanner",
     {
       "locator": "https://github.com/phonegap-build/PushPlugin.git",
       "id": "com.phonegap.plugins.PushPlugin@2.5.0"

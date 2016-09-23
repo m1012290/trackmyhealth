@@ -1,5 +1,5 @@
 angular.module('bnotifiedappctrls', [])
-.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','imagesservicedb', function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, imagesservicedb) {
+.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb', function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb) {
     //handle events and broadcasts such as error scenario to redirect user
    console.log('within AppCtrl current state -->'+JSON.stringify($state.current));
    $scope.$on('NoInternet' , function(event){
@@ -161,7 +161,29 @@ angular.module('bnotifiedappctrls', [])
     var trueOrigin = cordova.file.dataDirectory + imageName;
     return trueOrigin;
   }
-  $scope.takeImage = function(){
+  $scope.selectImageSource = function(){
+    $scope.hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: 'Take photo' },
+        { text: 'Photo from library' }
+      ],
+      titleText: 'Add images',
+      cancelText: 'Cancel',
+      buttonClicked: function(index) {
+        $scope.takeImage(index);
+      }
+    });
+  }
+
+  $scope.takeImage = function(type){
+    $scope.hideSheet();
+    $scope.source;
+    if(type === 0){
+      $scope.source = Camera.PictureSourceType.CAMERA;
+    }
+    if(type === 1){
+      $scope.source = Camera.PictureSourceType.SAVEDPHOTOALBUM;
+    }
     $scope.data = {
       "filename" : "",
       "tag" : "",
@@ -170,17 +192,25 @@ angular.module('bnotifiedappctrls', [])
     var options = {
          quality: 100,
          destinationType: Camera.DestinationType.FILE_URI,
-         sourceType: Camera.PictureSourceType.CAMERA,
+         sourceType: $scope.source,
          allowEdit: false,
          encodingType: Camera.EncodingType.JPEG,
          //targetWidth: 250,
          //targetHeight: 250,
-         popoverOptions: CameraPopoverOptions,
          mediaType: Camera.MediaType.PICTURE,
          saveToPhotoAlbum: false
-     };
+    };
     $cordovaCamera.getPicture(options).then(function(imageData) {
-  		// 4
+      if($scope.source === 2){
+        $scope.$apply(function () {
+          $scope.srcImage = imageData;
+          $scope.data.filename = imageData.substr(imageUrl.lastIndexOf('/') + 1);
+          $scope.data.tag = imageData;
+          $scope.data.description = filename;
+        });
+        $scope.openDocModal();
+      }else{
+      // 4
   		onImageSuccess(imageData);
 
   		function onImageSuccess(fileURI) {
@@ -195,7 +225,7 @@ angular.module('bnotifiedappctrls', [])
   		function copyFile(fileEntry) {
   			var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
   			var newName = makeid() + name;
-
+        /*
   			window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(fileSystem2) {
   				fileEntry.copyTo(
   					fileSystem2,
@@ -204,15 +234,41 @@ angular.module('bnotifiedappctrls', [])
   					fail
   				);
   			},
-  			fail);
-  		}
+  			fail); */
+        /* window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+            console.log('fileSystem object ['+ JSON.stringify(fileSystem) + ']');
+        }); */
+        //window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
 
+          window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Pictures", function(dir) {
+             dir.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
+               fileEntry.copyTo(
+                 direntry,
+                 newName,
+                 onCopySuccess,
+                 function(err) {
+                    $rootScope.showToast("Copy to TracMyHealth directory failed","long","top");
+                 }
+               );
+             }, fail);
+          },fail);
+        }
+  		}
   		// 6
   		function onCopySuccess(entry) {
   			$scope.$apply(function () {
           $scope.srcImage = entry.nativeURL;
           $scope.data.filename = entry.fullPath.substr(entry.fullPath.lastIndexOf('/') + 1);
   			});
+        cordova.plugins.MediaScannerPlugin.scanFile(entry.nativeURL, function(){
+          $rootScope.showToast("Mediascannerplugin scan was successful","long","top");
+        }, function(err){
+          $rootScope.showPopup({
+            "title":"error",
+            "template":"Error while scanning the media path["+ entry.nativeURL + "] and error ["+ err + "]"
+          });
+          $rootScope.showToast("Mediascannerplugin scan was failure","long","top");
+        });
         $scope.openDocModal();
   		}
 
