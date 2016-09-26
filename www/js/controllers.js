@@ -1180,28 +1180,124 @@ if($scope.formData.doctor == true){
 	}])*/
 .controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal, $ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
 
-  /* $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 23%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/patientprfl" >Patient Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/feedback">feedback</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">logout</a><a class="item" on-tap="closePopover()" style="padding-bottom: 5px;padding-top: 5px;" href="#/logout">About</a></div></ion-content></ion-popover-view>',
-  {
-    scope: $scope
-  });
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };
-  $scope.closePopover = function() {
-    $scope.popover.hide();
-  };
-  //Cleanup the popover when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.popover.remove();
-  });
-  // Execute action on hide popover
-  $scope.$on('popover.hidden', function() {
-    // Execute action
-  });
-  // Execute action on remove popover
-  $scope.$on('popover.removed', function() {
-    // Execute action
-  }); */
+  $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{
+         scope: $scope,
+         animation: 'slide-in-up'
+     }).then(function(modal){
+         $scope.filtermodal = modal;
+     });
+
+     $scope.openModalfilter = function(){
+         $scope.filtermodal.show();
+     }
+     $scope.closeModalfilter = function(){
+         $scope.filtermodal.hide();
+     }
+
+     $scope.filterResetAll = function(){
+       $scope.appliedfilters.hospitalnameselected="All";
+       $scope.hospitalslist=angular.copy($scope.backuphosvisitinfo);
+       $scope.openModalfilter();
+     }
+
+
+     $scope.filterapply = function(){
+           var filteredkey=0;
+           var allHospitals=false;
+
+           console.log($scope.appliedfilters);
+           if(($scope.hospitalslist.length != 0) || ($scope.backuphosvisitinfo != undefined)){
+              if(angular.equals($scope.appliedfilters.hospitalnameselected,"All"))
+                  allHospitals=true;
+
+
+              if(allHospitals==true)
+              {
+                if($scope.backuphosvisitinfo != undefined)
+                {
+                  //No need to apply filter all to be displayed
+                  $scope.hospitalslist=angular.copy($scope.backuphosvisitinfo);
+                }
+                //If no backupdrvisitinfo leave visitinfo as is.
+              }
+              else{
+                //fillter need to be applied
+                if($scope.backuphosvisitinfo == undefined){
+                  //this if condition may never arise may need to be deleted
+                  $scope.backuphosvisitinfo = angular.copy($scope.hospitalslist);
+                }
+                else{
+                  $scope.hospitalslist=angular.copy($scope.backuphosvisitinfo);
+                }
+
+                angular.forEach($scope.hospitalslist,function (visitdata,key){
+                  if((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalname))
+                    {
+                        console.log("filter call");
+                        console.log('   ',visitdata.hospitalname);
+                        $scope.hospitalslist[filteredkey]=visitdata;
+                        filteredkey++;
+                  }//end of if
+                  else{
+                       console.log("Not filtered");
+                       console.log(visitdata.hospitalname);
+                  }
+                })//end of forEach
+                $scope.hospitalslist.length=filteredkey;
+              }//end of else
+            }
+            else{
+              //No data to filter show error msg
+              //no need to open modal
+              $rootScope.showPopup({title:'Error', template:"No data to filter"});
+            }
+            $scope.closeModalfilter();
+      }//end of filterapply
+
+     //Filters applied
+     $scope.appliedfilters = {
+       "hospitalnameselected" : "All"
+
+     };
+     $scope.filtersavailable = {
+       "hospitalnames" : []
+     };
+
+
+     $scope.filterdetails = function(visitid){
+         if(($scope.backuphosvisitinfo != undefined) || (($scope.hospitalslist != undefined ) && ($scope.hospitalslist.length != 0 ))){
+           if($scope.backuphosvisitinfo == undefined)
+               $scope.backuphosvisitinfo=angular.copy($scope.hospitalslist);
+
+           angular.forEach($scope.backuphosvisitinfo, function(visitdata, key1){
+              if($scope.filtersavailable.hospitalnames.length === 0){
+                  $scope.filtersavailable.hospitalnames.push("All");
+                  $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
+                  console.log("Available Hospitals:");
+                  console.log('      ',"All, ",visitdata.hospitalname);
+              }else{
+                  var namefound = false;
+                  angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
+                     if(angular.equals(value, visitdata.hospitalname)){
+                        namefound = true;
+                     }
+                  });
+                  if(!namefound){
+                     $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
+                     console.log('     ',visitdata.hospitalname);
+                  }
+                }
+            });
+            $scope.openModalfilter();
+          }
+          else{
+              //No data to filter show error msg
+              //no need to open modal
+              $rootScope.showPopup({title:'Error', template:"No data to filter"});
+
+          }
+     }//end of filterdetails
+
   $scope.openPopover = function($event) {
     console.log('printing openPopOver Withinin EntitiesCtrl');
     $scope.$parent.openPopover($event);
