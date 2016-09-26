@@ -3314,7 +3314,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 	 }
 	};
 }])
-.controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory){
+.controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
   /*$scope.imagesarray = [{
     'imgnativeurl':'../img/icon.png',
     'imgtag' : 'test'
@@ -3345,6 +3345,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
     imagesservicedb.query().then(function(response){
         //$rootScope.showPopup({'title':'message','template':"Response object as json ["+ JSON.stringify(response) + "]"});
         var result = DBA.getAll(response);
+
         //$rootScope.showPopup({'title':'message','template':"result object as json ["+ JSON.stringify(result) + "]"});
         if(result !== null && result.length > 0){
           angular.forEach(result, function(value, key){
@@ -3355,6 +3356,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
                 "capturedate"  : value.capturedate
               });
           });
+          $scope.imagesarray = orderBy($scope.imagesarray, 'capturedate',true);
         }else{
           console.log('no images have been saved by the user');
           $rootScope.showToast("No images available","long","top");
