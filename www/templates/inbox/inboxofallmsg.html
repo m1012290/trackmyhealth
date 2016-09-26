@@ -3,21 +3,22 @@
             <!--span class="circle-span direct-chat-timestamp">
            <i class="icon ion-ios-pulse-strong assertive"></i>
            </span-->
+
    <span class="circle-span direct-chat-timestamp">
      <img src="img/icon.png" class="img-responsive"/>
     </span>
     </ion-nav-title>
 
 <ion-nav-buttons side="right">
-            <button class="button button-clear" ng-click="selectImageSource()">
+           <button class="button button-clear" ng-click="filterdetails()">
+              <i class="ion-funnel icon-btn-customize"></i>
+           </button>
+           <button class="button button-clear" ng-click="selectImageSource()">
                  <i class=" ion-camera icon-btn-customize"></i>
             </button>
             <button class="button button-clear" ng-click="showFilterBar()">
              <i class=" ion-search icon-btn-customize"></i>
             </button>
-             <button class="button button-clear" ng-click="filterdetails()">
-                 <i class="ion-funnel icon-btn-customize"></i>
-             </button>
              <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
              </button>
@@ -214,12 +215,13 @@
 
           </ion-item>
 
+          <div class="pull-right">
+              <button class="button-small button-assertive" ng-click="filterResetAll()">Reset All fields</button>
+          </div>
           <br>
           <div class="pull-center">
             <button class="button button-assertive" ng-click="filterapply()">Apply</button>
-            <button class="button button-assertive" ng-click="filterResetAll()">Reset All</button>
           </div>
-
         </ion-content>
             </ion-modal-view>
     </script>

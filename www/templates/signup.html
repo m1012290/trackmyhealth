@@ -1,28 +1,33 @@
 <ion-view view-title="Sign Up" >
      <ion-content class="padding">
-           <div ng-if="signup.password.$valid" ng-messages="signup.userFirstName.$error" >
+           <div ng-if="signup.confirmpassword.$valid" ng-messages="signup.userFirstName.$error" >
 			<div class="error" ng-message="required">
-				<i class="ion-information-circled"></i>Firstname is required!
+				<i class="ion-information-circled"></i> Firstname is required!
 			</div>
 		  </div>
 	  <div ng-if="signup.userFirstName.$valid" ng-messages="signup.userLastName.$error" >
 		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i>Lastname is required!
+			<i class="ion-information-circled"></i> Lastname is required!
 		</div>
 	  </div>
-	  <div ng-if="signup.userLastName.$valid" ng-messages="signup.mobnum.$error" >
+    <div ng-if="signup.userLastName.$valid" ng-messages="signup.cntrynum.$error" >
+    <div class="error" ng-message="required">
+      <i class="ion-information-circled"></i> Country Code is required!
+    </div>
+    </div>
+	  <div ng-if="signup.cntrynum.$valid" ng-messages="signup.mobnum.$error" >
 		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i>Mobile no. is required!
+			<i class="ion-information-circled"></i> Mobile no. is required!
 		</div>
 	  </div>
 	  <div ng-if="signup.mobnum.$valid" ng-messages="signup.emailadd.$error" >
 		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i>Emailid is required!
+			<i class="ion-information-circled"></i> Emailid is required!
 		</div>
 	  </div>
 	  <div ng-if="signup.emailadd.$valid" ng-messages="signup.password.$error" >
 		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i>Password is required!
+			<i class="ion-information-circled"></i> Password is required!
 		</div>
 	  </div>
 
@@ -40,14 +45,24 @@
     </ion-item>
 
 	<ion-item class="item-input" >
+        <label class="item item-input item-floating-label">
+		<span class="input-label">  Country code</span>
+		<input limit-to="2" type="number" name="cntrynum" ng-model="formData.cntrynum" placeholder= "Ex : +91" ng-maxlength="2" ng-pattern="isMobilePhone()" required>
+		</label>
+
 		<label class="item item-input item-floating-label">
 		<span class="input-label">  MobileNo</span>
 		<input type="number" name="mobnum" ng-model="formData.mobnum" placeholder= "Mobile Number"  ng-minlength="10" ng-maxlength="10" ng-pattern="isMobilePhone()" required>
 		</label>
     </ion-item>
+    <div class="panel-footer" align="right">
+        <div ng-messages="signup.cntrynum.$error" >
+           <div ng-message="maxlength" class="requiredStyle errorCls">country must not exceed 2 digits</div>
+        </div>
+           </div>
 <div class="panel-footer" align="right">
-    <div ng-messages="signup.mobnum.$error" >
-       <div ng-message="minlength" class="requiredStyle errorCls">Mob num must be over 10 characters</div>
+    <div ng-show="signup.cntrynum.$valid" ng-messages="signup.mobnum.$error" >
+       <div ng-message="minlength" class="requiredStyle errorCls">Mob num must have 10 characters  </div>
         <div class="help-block" ng-show="signup.name.$error.pattern">Text only, please.</div>
        <div ng-message="maxlength" class="requiredStyle errorCls">Mob num must not exceed 10 characters</div>
     </div>
@@ -60,7 +75,7 @@
 	</ion-item>
 <div class="panel-footer" align="right">
     <div ng-messages="signup.emailadd.$error">
-        <div ng-message="email" class="requiredStyle errorCls">This field must be a valid email address.</div>
+        <div ng-message="email" class="requiredStyle errorCls">This field must be a valid email address</div>
         <div class="help-block" ng-show="signup.name.$error.pattern">Text only, please.</div>
         <div class="help-block" ng-show="signup.emailadd.$error.emailadd">Not valid email!</div>
     </div>
@@ -78,31 +93,30 @@
 <div class="panel-footer" align="right">
     <div ng-messages="signup.password.$error">
        <div ng-message="password">This field is required</div>
-       <div ng-message="minlength" class="requiredStyle errorCls">Password must be over 6-20 characters</div>
+       <div ng-message="minlength" class="requiredStyle errorCls">Password must have 6-20 characters</div>
        <div ng-message="maxlength" class="requiredStyle errorCls">Password must not exceed 20 characters</div>
     </div>
        </div>
         <div class="panel-footer" align="right">
-             <div ng-if="signup.confirmpassword.$valid" >
-                <div class="error" ng-if="formData.password !== formData.confirmpassword" >
-           <i class="ion-information-circled"></i> Password doesnot Match!
+             <div ng-show="signup.password.$valid" ng-if="signup.confirmpassword.$valid" >
+                <div class="requiredStyle errorCls" ng-if="formData.password !== formData.confirmpassword" > Password doesnot Match!
                  </div>
             </div>
         </div>
 <ion-item class="item-input">
- 
+
     <label class="item item-input item-floating-label">
        <ion-radio ng-model="formData.male" ng-value="'A'" name="group"> <i class="icon ion-man" ></i></ion-radio>
     </label>
     <label class="item item-input item-floating-label">
        <ion-radio ng-model="formData.female" ng-value="'B'" name="group"> <i class="icon ion-woman" ></i></ion-radio>
-    </label> 
+    </label>
    <label class="item item-input item-floating-label">
        <ion-radio ng-model="formData.transgender" ng-value="'C'" name="group"> <i class="icon ion-transgender"></i></ion-radio>
     </label>
-   
+
       </ion-item>
-	<ion-item class="item-input">
+	<!--ion-item class="item-input">
 		<label class="item item-input item-floating-label">
 		<span class="input-label"></span>
 		<ion-checkbox class="item-checkbox-left" ng-model="formData.doctor">I am a doctor</ion-checkbox>
@@ -110,13 +124,13 @@
 		<label ng-if="formData.doctor" class="item item-floating-label">
 		<input type="number" ng-model="formData.licenceNo" placeholder="Licence No" required>
 		</label>
-    </ion-item>
+    </ion-item-->
 
     <ion-item class="item-input">
      <label class="item item-input">
        <ion-checkbox class="item-checkbox-left" name="termsyes" ng-model="formData.termsyes"> </ion-checkbox>
-      </label>I accept the &nbsp;
-    <a  href="#/termscondition" style="color:blue;">Terms of Service and Privacy Policy</a> 
+      </label> I accept the &nbsp;
+    <a  href="#/termscondition" style="color:blue;">Terms of Service and Privacy Policy</a>
     </ion-item>
 	</div>
 	<!--div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female ) && formData.termsyes)">
