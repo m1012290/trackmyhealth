@@ -19843,7 +19843,7 @@ $dark:                            #444 !default;
   font-size: 35px; }
 
 .item-checkbox-left {
-  right: 12px; }
+  right: 28px; }
 
 .customBtnStyle {
   border: none !important;
@@ -19985,28 +19985,42 @@ h1 {
 .pull-center {
   text-align: center; }
 
-.error {
+/*.error
+{
   padding: 10px 16px;
   font-family: "Arial Black", Gadget, sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   color: #555;
-  vertical-align: middle; }
+  vertical-align: middle;
+}
 
-.error i {
+.error i
+{
   font-size: 24px;
   color: #B83E2C;
-  vertical-align: middle; }
+  vertical-align: middle;
+}
 
-.errorCls {
-  color: #FF0000;
-  background-color: #fff;
-  width: 100%; }
+.errorCls
+{
+    color:#FF0000;
+    background-color:#fff;
+    width:100%;
 
-.requiredStyle {
-  padding: 5px;
-  height: 30px;
-  margin-bottom: 10px; }
+}
+
+.requiredStyle
+{
+    padding:5px;
+    height:30px;
+    margin-bottom:10px;
+
+}*/
+.radio-content {
+  /* show the checkmark icon when its checked */
+  visibility: visible;
+  padding-top: 5px !important; }
 
 .image-list-thumb {
   padding: 2px 2px 2px 2px;
@@ -20229,8 +20243,16 @@ input[type="color"] {
   color: #000;
   font-weight: normal;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 17px;
   line-height: 16px; }
+
+.input-label {
+  display: table;
+  padding: 7px 10px 7px 0px;
+  max-width: 80px;
+  width: 35%;
+  color: #444;
+  font-size: 16px; }
 
 .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated i {
   display: block;
@@ -20280,7 +20302,9 @@ input[type="color"] {
   text-transform: full-width;
   color: #fff;
   vertical-align: middle;
-  background-color: #ec4545; }
+  background-color: #ee4545;
+  margin-left: 7%;
+  margin-right: 7%; }
 
 .error i {
   font-size: 19px;
@@ -20296,7 +20320,8 @@ input[type="color"] {
   padding: 1px;
   height: 1px;
   margin-bottom: 1px;
-  font-size: 14px; }
+  font-size: 14px;
+  padding-right: 15px !important; }
 
 hr {
   height: 1px;
