@@ -2416,7 +2416,7 @@ $scope.closePopover = function() {
         });
     }
 }])
-.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','$cordovaFileOpener2','$http',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, $cordovaFileOpener2, $http){
+.controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','feedbackservice',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, feedbackservice){
 
 $rootScope.showLoader();
 $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
@@ -2431,7 +2431,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.closeModalfilter = function(){
        $scope.filtermodal.hide();
    }
-
    $scope.appliedfilters = {
      "patientnameselected" : "All"
      ,"visittypeselected"  : "All"
@@ -2884,56 +2883,78 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
             }
           });
     };
- //feedback questions
-	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
+
+  //feedback questions
+  /*
+  $scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
 		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
 		{question : "The ease of obtaining the records and lab-reports",answer: ''},
 		{question: "Trackmyhealth app , has it been helpful?",answer: ''},
-		{question: "Is the app easy to use?",answer: ''}];
+		{question: "Is the app easy to use?",answer: ''}];*/
 	//ratings for feedback
-	$scope.ratingsObject = {
+	   $scope.ratingsObject = {
         iconOn : 'ion-ios-star',
         iconOff : 'ion-ios-star-outline',
         iconOnColor: 'rgb(200, 200, 100)',
         iconOffColor:  'rgb(200, 100, 100)',
-		rating: '',
+		    rating: '',
         minRating: 0 ,
         callback: function(rating) {
           $scope.ratingsCallback(rating);
-			return rating;
+			    return rating;
         }
-      };
+     };
 
-	// ratings callback function , obtains the current slide and updates the object answer
-     $scope.ratingsCallback = function(rating) {
-          console.log('Selected rating is : ', rating);
-		$scope.i= $ionicSlideBoxDelegate.$getByHandle('feedbackdata').currentIndex();
-       console.log($scope.i);
-		$ionicSlideBoxDelegate.$getByHandle('feedbackdata').next();
-         console.log($scope.i);
-
-		$scope.questions[$scope.i].answer = rating;
-		console.log($scope.questions);
-		 if($scope.i === 4){
-		 $scope.closepopup()
-		 }
-	  };
 
 
 	//popup to show feedback
-	$scope.showMyPopup = function() {
+	$scope.showMyPopup = function(hospitalid, visitid, patientregprofileid) {
+    $scope.feedbackanswers  = {};
+ // ratings callback function , obtains the current slide and updates the object answer
+    $scope.ratingsCallback = function(rating) {
+       console.log('Selected rating is : ', rating);
+       $scope.i= $ionicSlideBoxDelegate.$getByHandle('feedbackdata').currentIndex();
 
-   // An elaborate, custom popup
-  	 var myPopup = $ionicPopup.show({
-		 template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
-		 title: 'Feedback',
-		 scope: $scope
-	 })
-	  //popup close
-	 $scope.closepopup = function(){
-		  console.log("closing popup");
-		  myPopup.close();
-	 }
+       console.log($scope.i);
+       $ionicSlideBoxDelegate.$getByHandle('feedbackdata').next();
+       console.log($scope.i);
+       $scope.feedbackanswers[$scope.i] = rating;
+       if($scope.i === $scope.questions.length - 1){
+           //call service to save the feedback data..
+           console.log('printing $scope.feedbackanswers ['+ JSON.stringify($scope.feedbackanswers) + ']');
+           var feedbackresponse = [];
+           angular.forEach($scope.questions,function(question, key){
+              if($scope.feedbackanswers[key] !== "undefined"){
+                  feedbackresponse.push({
+                    "id" : question._id,
+                    "answer":$scope.feedbackanswers[key]
+                  });
+              }
+           });
+           feedbackservice.save(hospitalid,patientregprofileid,visitid,{"feedbackdets":feedbackresponse}).then(function(data){
+              $rootScope.showToast('Thank you for your valuable feedback','long','top');
+           }).catch(function(error){
+             $rootScope.showToast('Error saving feedback, please retry again','short','center');
+           });
+           $scope.closepopup();
+       }
+    };
+    feedbackservice.feedbackQueries(hospitalid).then(function(data){
+        $scope.questions = data.data[0].questions;
+        // An elaborate, custom popup
+       	 var myPopup = $ionicPopup.show({
+     		 template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
+     		 title: 'Feedback',
+     		 scope: $scope
+        });
+     	  //popup close
+     	 $scope.closepopup = function(){
+     		  console.log("closing popup");
+     		  myPopup.close();
+     	 }
+    }).catch(function(error){
+       $rootScope.showToast("Error displaying feedqueries, please try again later",'long','top')
+    });
 	};
 
 }])

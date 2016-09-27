@@ -136,7 +136,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
 		},
 		registerDoctor: function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,licence,smsotp,emailotp,pw){
 			var deferred= $q.defer();
-			var resource= $resource (" https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/doctor");
+			var resource= $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registration/register/doctor");
 			resource.save({regdets:{
 				firstname:firstname,
 				lastname:lastname,
@@ -935,33 +935,32 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
     }
 
 }])
-.factory('feedbackform', ['$q', '$resource', function($q, $resource){
+.factory('feedbackservice', ['$q', '$resource', function($q, $resource){
 	var self = this;
-	var feedbacks;
-	self.feedbacks = function(){[
-		{
-			question: "How was the service at the hospital reception?",
-			answer: ''
-		},
-		{
-			question: "The care and attention of the staff(nurses and doctors)",
-			answer: ''
-		},
-		{
-			question : "The ease of obtaining the records and lab-reports",
-			answer: ''
-		},
-		{
-			question: "Trackmyhealth app , has it been helpful?",
-			answer: ''
-		},
-		{
-			question: "Is the app easy to use?",
-			answer: ''
-		}
-		]
-		return feedbacks;}
-	return self;
+	var feedbackobj = {};
+	feedbackobj.feedbackQueries = function(hospitalid){
+      var deferred = $q.defer();
+      var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/hospitals/:hospitalid/feedback/queries");
+      resource.get({hospitalid:hospitalid}, function(data){
+          deferred.resolve(data);
+      },function(error){
+          deferred.reject(error);
+      });
+      return deferred.promise;
+  };
+
+  feedbackobj.save = function(hospitalid,patientid,visitid,feedbackdets){
+      var deferred = $q.defer();
+      var resource = $resource("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:hospitalid/:patientid/feedback/:visitid",
+      {hospitalid:hospitalid,patientid:patientid,visitid:visitid});
+      resource.save(feedbackdets,function(data){
+        deferred.resolve(data);
+      },function(error){
+        deferred.reject(error);
+      });
+      return deferred.promise;
+  };
+	return feedbackobj;
 }])
 .factory('forgotpwdservice', ['$q','$resource',function($q,$resource){
     return{
