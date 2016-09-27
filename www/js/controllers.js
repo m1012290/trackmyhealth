@@ -395,9 +395,10 @@ angular.module('bnotifiedappctrls', [])
 
 }])
 .controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
+$scope.$on("$ionicView.beforeEnter",function(event, data){
   $scope.logindata=[];
 	$scope.forgot=[];
-
+});
 // first on loading of the landing page lets check if we have
   //json web token available
   $scope.$on("$ionicView.loaded", function(event, data){
@@ -3053,7 +3054,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(response){
         $rootScope.hideLoader();
         $scope.closePopover();
-        $state.go('login',{}, {reload: true});
+        $state.go('login');
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
