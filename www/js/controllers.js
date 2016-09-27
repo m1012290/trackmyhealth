@@ -1619,6 +1619,57 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
 }])
 .controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb','$ionicPopover','$ionicFilterBar',function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb, $ionicPopover, $ionicFilterBar) {
 
+  $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
+           scope: $scope,
+           animation: 'slide-in-up'
+       }).then(function(modal){
+           $scope.filtermodal = modal;
+       });
+
+       $scope.openModalfilter = function(){
+           $scope.filtermodal.show();
+       }
+       $scope.closeModalfilter = function(){
+           $scope.filtermodal.hide();
+       }
+
+       $scope.filtersavailable = [ "All", "Blood Sugar", "Blood Pressure","Weight", "Vaccination","Medication", "Allergies"] ;
+
+
+      $scope.filterdetails = function(visitid){
+           if(($scope.backuphealthvisitinfo != undefined) || (($scope.trackername != undefined ) && ($scope.trackername.length != 0 ))){
+             if($scope.backuphealthvisitinfo == undefined)
+                 $scope.backuphealthvisitinfo=angular.copy($scope.trackername);
+
+          /*   angular.forEach($scope.backupdrvisitinfo, function(visitdata, key1){
+                if($scope.filtersavailable.hospitalnames.length === 0){
+                    $scope.filtersavailable.hospitalnames.push("All");
+                    $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
+                    console.log("Available Hospitals:");
+                    console.log('      ',"All, ",visitdata.hospitalid.hospitalname);
+                }else{
+                    var namefound = false;
+                    angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
+                       if(angular.equals(value, visitdata.hospitalid.hospitalname)){
+                          namefound = true;
+                       }
+                    });
+                    if(!namefound){
+                       $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
+                       console.log('     ',visitdata.hospitalid.hospitalname);
+                    }
+                  }
+              });*/
+              $scope.openModalfilter();
+            }
+            else{
+                //No data to filter show error msg
+                //no need to open modal
+                $rootScope.showPopup({title:'Error', template:"No data to filter"});
+
+            }
+       }//end of filterdetails*/
+
 
 $scope.openPopover = function($event) {
   $scope.$parent.openPopover($event);
@@ -1934,7 +1985,7 @@ $scope.closePopover = function() {
 	$scope.showPopup = function() {
 
    // An elaborate, custom popup
-  	 var myPopup = $ionicPopup.show({
+  	   var myPopup = $ionicPopup.show({
 		 template: '<ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)"><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></ion-slide></ion-slide-box>',
 		 title: 'Feedback',
 		 scope: $scope
@@ -3028,6 +3079,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 
 .controller('LogoutCtrl', ['$scope','$rootScope','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $state, $ionicHistory, registrationdetsdb){
     //deleting the jsonwebtoken as there is a logout request by the user..
+
     $rootScope.showLoader();
     registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(response){
         $rootScope.hideLoader();
