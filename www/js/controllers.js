@@ -1627,6 +1627,70 @@ $scope.openPopover = function($event) {
 $scope.closePopover = function() {
   $scope.$parent.closePopover();
 };
+
+$ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
+           scope: $scope,
+           animation: 'slide-in-up'
+       }).then(function(modal){
+           $scope.filtermodal = modal;
+       });
+
+
+       $scope.openModalfilter = function(){
+           $scope.filtermodal.show();
+       }
+       $scope.closeModalfilter = function(){
+           $scope.filtermodal.hide();
+       }
+
+       $scope.filtersavailable = {
+         "vitals" : ["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
+       };
+
+
+       $scope.appliedfilters = {
+         "vitals" : "All"
+       };
+
+
+      $scope.filterdetails = function(visitid){
+/*
+           if(($scope.backuphealthvisitinfo != undefined) || (($scope.trackername != undefined ) && ($scope.trackername.length != 0 ))){
+             if($scope.backuphealthvisitinfo == undefined)
+                 $scope.backuphealthvisitinfo=angular.copy($scope.trackername);
+
+             angular.forEach($scope.backupdrvisitinfo, function(visitdata, key1){
+                if($scope.filtersavailable.hospitalnames.length === 0){
+                    $scope.filtersavailable.hospitalnames.push("All");
+                    $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
+                    console.log("Available Hospitals:");
+                    console.log('      ',"All, ",visitdata.hospitalid.hospitalname);
+                }else{
+                    var namefound = false;
+                    angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
+                       if(angular.equals(value, visitdata.hospitalid.hospitalname)){
+                          namefound = true;
+                       }
+                    });
+                    if(!namefound){
+                       $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
+                       console.log('     ',visitdata.hospitalid.hospitalname);
+                    }
+                  }
+              });*/
+              $scope.openModalfilter();
+              /*
+            }
+            else{
+                //No data to filter show error msg
+                //no need to open modal
+                $rootScope.showPopup({title:'Error', template:"No data to filter"});
+
+            }
+            */
+       }//end of filterdetails*/
+
+
   $scope.patientId = '';
   $scope.healthdetails = [];
   $scope.filterBarInstance;
@@ -2454,7 +2518,8 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
 
-         //console.log($scope.appliedfilters);
+debugger;
+         console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
             if(angular.equals($scope.appliedfilters.patientnameselected,"All"))
