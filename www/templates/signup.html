@@ -133,9 +133,7 @@
     <a  href="#/termscondition" style="color:blue;">Terms of Service and Privacy Policy</a>
     </ion-item>
 	</div>
-	<!--div ng-if="(formData.firstname && formData.lastname && formData.mobnum && formData.emailadd && formData.password && formData.confirmpassword &&( formData.male || formData.female ) && formData.termsyes)">
-		<button  class="button button-block button-positive" href="">SignUp</button>
-    </div-->
+
 
  <button  class="button button-block button-assertive" ng-disabled="signup.$invalid" href="">SignUp</button>
 
@@ -146,7 +144,7 @@
      <ion-modal-view>
 
     <ion-header-bar class="bar-positive">
-		  <h1 class="title">Email and Sms OTP</h1>
+		  <h1 class="title">Email and SMS OTP</h1>
         <button class="button button-clear button-primary" ng-click="closeModal2()"><i class="icon ion-android-close"></i></button>
     </ion-header-bar>
 
@@ -154,7 +152,7 @@
 		<form name="otp">
 		<ion-list>
 		<ion-item class="item item-input item-floating-label">
-            <span class="input-label">Sms OTP</span>
+            <span class="input-label">SMS OTP</span>
             <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="security.otpsms" required/>
 		</ion-item>
 		<ion-item class="item item-input item-floating-label">
