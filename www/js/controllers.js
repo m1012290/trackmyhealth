@@ -93,7 +93,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showConfirm()" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -320,6 +320,49 @@ angular.module('bnotifiedappctrls', [])
 	$scope.closeDocModal = function() {
     	$scope.documentmodal.hide();
 	}
+
+  $scope.showConfirm = function() {
+
+ var confirmPopup = $ionicPopup.confirm({
+
+    title: 'Logout ?',
+
+    template: 'Are you sure you want to Logout ?',
+
+ });
+
+ confirmPopup.then(function(res) {
+
+    if (res) {
+$rootScope.showLoader();
+
+
+  registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(response){
+      $rootScope.hideLoader();
+      $scope.closePopover();
+      $state.go('login',{}, {reload: true});
+      $ionicHistory.nextViewOptions({
+          disableBack: true
+      });
+      $ionicHistory.clearCache();
+      $rootScope.showToast('Logout completed successfully', null, 'bottom');
+  }).catch(function(error){
+      $rootScope.hideLoader();
+      $scope.closePopover();
+      $rootScope.showToast('Logout failed, Please try again later !!', null, 'bottom');
+  });
+       console.log('You clicked on "OK" button');
+
+    } else {
+
+       console.log('You clicked on "Cancel" button');
+
+    }
+
+ });
+};
+
+
 }])
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
     //$scope.mobilenumber = '';
@@ -398,6 +441,8 @@ angular.module('bnotifiedappctrls', [])
 $scope.$on("$ionicView.beforeEnter",function(event, data){
   $scope.logindata=[];
 	$scope.forgot=[];
+  // Set the default value of inputType
+$scope.inputType = 'password';
 });
 // first on loading of the landing page lets check if we have
   //json web token available
@@ -544,8 +589,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       }
 		});
 	}
-        // Set the default value of inputType
-  $scope.inputType = 'password';
+
 
   // Hide & show password function
   $scope.hideShowPassword = function(){

@@ -24,7 +24,7 @@
 
     <div class="list card item-text-wrap" ng-repeat=" visit in visitinfo track by $index" >
 <p> <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)"></i>
-    <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}} {{visit.hospitalid.hospitalname}} &nbsp;&nbsp; <a href="#" ng-click="patientdetails(visit._id)"><i class="icon ion-arrow-right-b assertive " ></i></a></p>
+    <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i> &nbsp;&nbsp; <a href="#" ng-click="patientdetails(visit._id)"><i class="icon ion-arrow-right-b assertive " ></i></a></p>
 
 <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 
