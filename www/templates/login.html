@@ -33,8 +33,7 @@
    <label class="item item-input ">
     <span class="input-label dark"><i class="ion-locked"></i> </span>
   <input type="{{inputType}}"  name="passcode" id="checkbox"  ng-model="logindata.passcode"  ng-minlength="6" ng-maxlength="20" placeholder="Password" required>
-
-        <label for="checkbox" ng-if="!passwordCheckbox"><i class="icon ion-eye dark" ng-click="hideShowPassword()"></i></label>
+                <label for="checkbox" ng-if="!passwordCheckbox"><i class="icon ion-eye dark" ng-click="hideShowPassword()"></i></label>
      </label>
 
 <hr>
@@ -123,7 +122,7 @@
             </div>
         </div>
 					<ion-item class="item item-input item-floating-label">
-            <span class="input-label">Sms OTP</span>
+            <span class="input-label">SMS OTP</span>
             <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="forgot.smsotp" required/>
 		</ion-item>
 		<ion-item class="item item-input item-floating-label">
