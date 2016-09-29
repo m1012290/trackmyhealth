@@ -328,53 +328,7 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
 .config(['$httpProvider', function ($httpProvider) {
   $httpProvider.interceptors.push('AuthInterceptor');
 }])
-/*
-.filter('groupByDayMonthYear', ['$parse',function($parse) {
-		var dividers = {};
 
-		return function(input) {
-            //console.log('filter called with input [' + JSON.stringify(input) + ']');
-			if (!input || !input.length) return;
-
-			var output = [],
-				previousDate,
-				currentDate;
-
-			for (var i = 0, ii = input.length; i < ii && (item = input[i]); i++) {
-                //console.log('printing item value ['+ JSON.stringify(item) + ']');
-                //console.log('item.CreatedAt ['+ item.createdAt +']');
-				currentDate = moment.utc(item.createdAt);
-                //console.log('current date as UTC ['+ currentDate.format('DDMMYYYY') + ']');
-                //console.log('previous date ['+ previousDate.format('DDMMYYYY') + ']');
-                //console.log('currentDate is same as Previous Date ['+ currentDate.isSame(previousDate) + ']');
-                if (!previousDate ||
-					!(currentDate.format('DDMMYYYY') === previousDate.format('DDMMYYYY'))) {
-                    //console.log('inside if printing divider');
-					var dividerId = currentDate.format('DDMMYYYY');
-					//console.log('dividerId is ['+ dividerId + ']');
-					if (!dividers[dividerId]) {
-						console.log('inside if ');
-                        dividers[dividerId] = {
-							isDivider: true,
-							_id: dividerId,
-							divider: currentDate.format('DD MMMM YYYY')
-						};
-					}
-					//console.log('printing dividers[dividerId ['+ JSON.stringify(dividers[dividerId]) + ']');
-                    output.push(dividers[dividerId]);
-                    //console.log('printing output ['+ JSON.stringify(output) +']');
-				}
-                //console.log('item being pushed is ['+ JSON.stringify(item) + ']');
-				output.push(item);
-
-				previousDate = currentDate;
-			}
-            //console.log('printing output ['+ JSON.stringify(output) + ']');
-			return output;
-		};
-
-}]);
-*/
 .filter('groupByDayMonthYear', ['$parse',function($parse) {
 		var dividers = {};
 

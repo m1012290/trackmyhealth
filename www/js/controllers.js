@@ -93,7 +93,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showConfirm()" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -320,6 +320,49 @@ angular.module('bnotifiedappctrls', [])
 	$scope.closeDocModal = function() {
     	$scope.documentmodal.hide();
 	}
+
+  $scope.showConfirm = function() {
+
+ var confirmPopup = $ionicPopup.confirm({
+
+    title: 'Logout ?',
+
+    template: 'Are you sure you want to Logout ?',
+
+ });
+
+ confirmPopup.then(function(res) {
+
+    if (res) {
+$rootScope.showLoader();
+
+
+  registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(response){
+      $rootScope.hideLoader();
+      $scope.closePopover();
+      $state.go('login',{}, {reload: true});
+      $ionicHistory.nextViewOptions({
+          disableBack: true
+      });
+      $ionicHistory.clearCache();
+      $rootScope.showToast('Logout completed successfully', null, 'bottom');
+  }).catch(function(error){
+      $rootScope.hideLoader();
+      $scope.closePopover();
+      $rootScope.showToast('Logout failed, Please try again later !!', null, 'bottom');
+  });
+       console.log('You clicked on "OK" button');
+
+    } else {
+
+       console.log('You clicked on "Cancel" button');
+
+    }
+
+ });
+};
+
+
 }])
 .controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
     //$scope.mobilenumber = '';
@@ -398,6 +441,8 @@ angular.module('bnotifiedappctrls', [])
 $scope.$on("$ionicView.beforeEnter",function(event, data){
   $scope.logindata=[];
 	$scope.forgot=[];
+  // Set the default value of inputType
+$scope.inputType = 'password';
 });
 // first on loading of the landing page lets check if we have
   //json web token available
@@ -544,8 +589,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       }
 		});
 	}
-        // Set the default value of inputType
-  $scope.inputType = 'password';
+
 
   // Hide & show password function
   $scope.hideShowPassword = function(){
@@ -1620,13 +1664,96 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
 }])
 .controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb','$ionicPopover','$ionicFilterBar',function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb, $ionicPopover, $ionicFilterBar) {
 
+  $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
+           scope: $scope,
+           animation: 'slide-in-up'
+       }).then(function(modal){
+           $scope.filtermodal = modal;
+       });
 
-$scope.openPopover = function($event) {
-  $scope.$parent.openPopover($event);
-};
-$scope.closePopover = function() {
-  $scope.$parent.closePopover();
-};
+
+       $scope.openModalfilter = function(){
+           $scope.filtermodal.show();
+       }
+       $scope.closeModalfilter = function(){
+           $scope.filtermodal.hide();
+       }
+
+       $scope.filtersavailable = {
+            "vitals" : ["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
+          };
+
+
+          $scope.appliedfilters = {
+            "vitals" : "All"
+          };
+
+
+         $scope.filterdetails = function(visitid){
+
+              if(($scope.backupHealthdetails != undefined) || (($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 ))){
+                if($scope.backupHealthdetails == undefined)
+                    $scope.backupHealthdetails=angular.copy($scope.healthdetails);
+                 $scope.openModalfilter();
+               }
+               else{
+                   //No data to filter show error msg
+                   //no need to open modal
+                   $rootScope.showPopup({title:'Error', template:"No data to filter"});
+
+               }
+          }//end of filterdetails*/
+
+          $scope.filterapply = function(){
+                var filteredkey=0;
+                var allVitals=false;
+
+                console.log($scope.appliedfilters);
+
+                if(($scope.backupHealthdetails != undefined) && ($scope.backupHealthdetails.length != 0)){
+                   if(angular.equals($scope.appliedfilters.vitals,"All"))
+                       allVitals=true;
+
+                   if(allVitals==true)
+                   {
+                       //No need to apply filter all to be displayed
+                       console.log("Display all, No filering!!!");
+                       $scope.healthdetails=angular.copy($scope.backupHealthdetails);
+                   }
+                   else{
+                     console.log("filter call");
+
+
+                     /*"Blood Sugar"
+                     "Blood Pressure"
+                     "Vaccination"
+                     "Medication"
+                     "Allergies"
+                     */
+
+                     //Weight
+                     angular.forEach($scope.backupHealthdetails,function (healthdata,key){
+                       if(healthdata.medicalprofile[0].profile[0].weight.value != 0){
+                            console.log("Filterd:",key, healthdata.medicalprofile[0].profile[0].weight.value);
+                             $scope.healthdetails[filteredkey]=healthdata;
+                             filteredkey++;
+                       }//end of if
+                       else{
+                            console.log("Not filtered");
+                            console.log('   ',key);
+                       }
+                     })//end of forEach
+                     $scope.healthdetails.length=filteredkey;
+                 }//end of else
+               }//end of if
+               else{
+                 //No data to filter show error msg
+                 //no need to open modal
+                 $rootScope.showPopup({title:'Error', template:"No data to filter"});
+               }
+               $scope.closeModalfilter();
+           }//end of filterapply
+
   $scope.patientId = '';
   $scope.healthdetails = [];
   $scope.filterBarInstance;
@@ -1935,7 +2062,7 @@ $scope.closePopover = function() {
 	$scope.showPopup = function() {
 
    // An elaborate, custom popup
-  	 var myPopup = $ionicPopup.show({
+  	   var myPopup = $ionicPopup.show({
 		 template: '<ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)"><ion-slide ng-repeat="quest in questions"><h4>{{quest.question}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></ion-slide></ion-slide-box>',
 		 title: 'Feedback',
 		 scope: $scope
@@ -2454,7 +2581,8 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
 
-         //console.log($scope.appliedfilters);
+debugger;
+         console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
             if(angular.equals($scope.appliedfilters.patientnameselected,"All"))
@@ -3050,6 +3178,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 
 .controller('LogoutCtrl', ['$scope','$rootScope','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $state, $ionicHistory, registrationdetsdb){
     //deleting the jsonwebtoken as there is a logout request by the user..
+
     $rootScope.showLoader();
     registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(response){
         $rootScope.hideLoader();
