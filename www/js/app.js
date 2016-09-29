@@ -104,7 +104,16 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
             //alert('registration ID = ' + notification.regid);
               console.log('data registration id ['+ notification.regid + ']');
               registration_token = notification.regid;
-              registrationdetsdb.add({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
+              registrationdetsdb.query({}).then(function(result){
+                  var result = DBA.getById(result);
+                  if(result.rows.length ===0){
+                    registrationdetsdb.add({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
+                  }else{
+                    registrationdetsdb.updRegTokenUUID({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
+                  }
+              }).catch(function(err){
+                  console.log('error updating/inserting registrationtoken to registrationtable');
+              });
           }
           break;
 

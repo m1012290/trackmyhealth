@@ -338,7 +338,7 @@ angular.module('bnotifiedappctrls', [])
             $scope.mobilenumber += value;
         }
       }
-    };*/
+
     $scope.clearFormFields = function(){
         $scope.registrationdets.mobilenumber = '';
     };

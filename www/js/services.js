@@ -371,6 +371,7 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
           $cordovaSQLite.execute(db, query, parameters)
             .then(function (result) {
               console.log('successfully queried result using ['+ query + ']');
+              console.log('printing result object ['+ JSON.stringify(result) + ']');
               q.resolve(result);
             }, function (error) {
               console.warn('Error encountered while performing query');
@@ -405,6 +406,14 @@ angular.module('bnotifiedappsvcs', ['ngResource'])
     self.add = function(registrationdets){
         var parameters = [registrationdets.mobilenumber, registrationdets.registrationtoken, registrationdets.deviceuuid];
         return DBA.query("INSERT INTO registrationtable (mobilenumber, registrationtoken, deviceuuid) VALUES (?,?,?)", parameters);
+    };
+    self.updRegTokenUUID = function(registrationdets){
+        var parameters = [registrationdets.mobilenumber, registrationdets.registrationtoken, registrationdets.deviceuuid];
+        return DBA.query("UPDATE registrationtable set mobilenumber = (?), registrationtoken= (?), deviceuuid=(?)", parameters);
+    };
+    self.addAppRegId = function(registrationdets){
+        var parameters = [registrationdets.jsonwebtoken, registrationdets.appregistrationid, registrationdets.isdoctor];
+        return DBA.query("INSERT INTO registrationtable (jsonwebtoken,appregistrationid,isdoctor) VALUES (?,?,?)", parameters);
     };
     self.updateMobileNumber = function(registrationdets) {
         var parameters = [registrationdets.mobilenumber];
