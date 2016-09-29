@@ -1626,6 +1626,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
        }).then(function(modal){
            $scope.filtermodal = modal;
        });
+       
 
        $scope.openModalfilter = function(){
            $scope.filtermodal.show();
