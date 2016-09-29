@@ -26,7 +26,7 @@
 <p> <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup()"></i>
     <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}
 
-<b style="color:gray"> {{visit.hospitalid.hospitalname}}</b> &nbsp;&nbsp; <a href="#" ng-click="patientdetails(visit._id)"><i class="icon ion-arrow-right-b assertive " ></i></a></p>
+<i style="font-style: italic"> {{visit.hospitalid.hospitalname}}</i> &nbsp;&nbsp; <a href="#" ng-click="patientdetails(visit._id)"><i class="icon ion-arrow-right-b assertive " ></i></a></p>
 
 <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 

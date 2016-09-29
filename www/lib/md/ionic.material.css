@@ -187,7 +187,7 @@
 
 .bar.bar-header .button + .title {
   text-align: left;
-left: 35px;
+  left: 48px; !important;
  line-height: 46px;
 position: fixed;
    float: none !important; }
