@@ -1626,66 +1626,6 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
        }).then(function(modal){
            $scope.filtermodal = modal;
        });
-       
-
-       $scope.openModalfilter = function(){
-           $scope.filtermodal.show();
-       }
-       $scope.closeModalfilter = function(){
-           $scope.filtermodal.hide();
-       }
-
-       $scope.filtersavailable = [ "All", "Blood Sugar", "Blood Pressure","Weight", "Vaccination","Medication", "Allergies"] ;
-
-
-      $scope.filterdetails = function(visitid){
-           if(($scope.backuphealthvisitinfo != undefined) || (($scope.trackername != undefined ) && ($scope.trackername.length != 0 ))){
-             if($scope.backuphealthvisitinfo == undefined)
-                 $scope.backuphealthvisitinfo=angular.copy($scope.trackername);
-
-          /*   angular.forEach($scope.backupdrvisitinfo, function(visitdata, key1){
-                if($scope.filtersavailable.hospitalnames.length === 0){
-                    $scope.filtersavailable.hospitalnames.push("All");
-                    $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                    console.log("Available Hospitals:");
-                    console.log('      ',"All, ",visitdata.hospitalid.hospitalname);
-                }else{
-                    var namefound = false;
-                    angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
-                       if(angular.equals(value, visitdata.hospitalid.hospitalname)){
-                          namefound = true;
-                       }
-                    });
-                    if(!namefound){
-                       $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                       console.log('     ',visitdata.hospitalid.hospitalname);
-                    }
-                  }
-              });*/
-              $scope.openModalfilter();
-            }
-            else{
-                //No data to filter show error msg
-                //no need to open modal
-                $rootScope.showPopup({title:'Error', template:"No data to filter"});
-
-            }
-       }//end of filterdetails*/
-
-
-$scope.openPopover = function($event) {
-  $scope.$parent.openPopover($event);
-};
-$scope.closePopover = function() {
-  $scope.$parent.closePopover();
-};
-
-$ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
-           scope: $scope,
-           animation: 'slide-in-up'
-       }).then(function(modal){
-           $scope.filtermodal = modal;
-       });
 
 
        $scope.openModalfilter = function(){
@@ -1696,52 +1636,79 @@ $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
        }
 
        $scope.filtersavailable = {
-         "vitals" : ["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
-       };
+            "vitals" : ["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
+          };
 
 
-       $scope.appliedfilters = {
-         "vitals" : "All"
-       };
+          $scope.appliedfilters = {
+            "vitals" : "All"
+          };
 
 
-      $scope.filterdetails = function(visitid){
-/*
-           if(($scope.backuphealthvisitinfo != undefined) || (($scope.trackername != undefined ) && ($scope.trackername.length != 0 ))){
-             if($scope.backuphealthvisitinfo == undefined)
-                 $scope.backuphealthvisitinfo=angular.copy($scope.trackername);
+         $scope.filterdetails = function(visitid){
 
-             angular.forEach($scope.backupdrvisitinfo, function(visitdata, key1){
-                if($scope.filtersavailable.hospitalnames.length === 0){
-                    $scope.filtersavailable.hospitalnames.push("All");
-                    $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                    console.log("Available Hospitals:");
-                    console.log('      ',"All, ",visitdata.hospitalid.hospitalname);
-                }else{
-                    var namefound = false;
-                    angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
-                       if(angular.equals(value, visitdata.hospitalid.hospitalname)){
-                          namefound = true;
+              if(($scope.backupHealthdetails != undefined) || (($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 ))){
+                if($scope.backupHealthdetails == undefined)
+                    $scope.backupHealthdetails=angular.copy($scope.healthdetails);
+                 $scope.openModalfilter();
+               }
+               else{
+                   //No data to filter show error msg
+                   //no need to open modal
+                   $rootScope.showPopup({title:'Error', template:"No data to filter"});
+
+               }
+          }//end of filterdetails*/
+
+          $scope.filterapply = function(){
+                var filteredkey=0;
+                var allVitals=false;
+
+                console.log($scope.appliedfilters);
+
+                if(($scope.backupHealthdetails != undefined) && ($scope.backupHealthdetails.length != 0)){
+                   if(angular.equals($scope.appliedfilters.vitals,"All"))
+                       allVitals=true;
+
+                   if(allVitals==true)
+                   {
+                       //No need to apply filter all to be displayed
+                       console.log("Display all, No filering!!!");
+                       $scope.healthdetails=angular.copy($scope.backupHealthdetails);
+                   }
+                   else{
+                     console.log("filter call");
+
+
+                     /*"Blood Sugar"
+                     "Blood Pressure"
+                     "Vaccination"
+                     "Medication"
+                     "Allergies"
+                     */
+
+                     //Weight
+                     angular.forEach($scope.backupHealthdetails,function (healthdata,key){
+                       if(healthdata.medicalprofile[0].profile[0].weight.value != 0){
+                            console.log("Filterd:",key, healthdata.medicalprofile[0].profile[0].weight.value);
+                             $scope.healthdetails[filteredkey]=healthdata;
+                             filteredkey++;
+                       }//end of if
+                       else{
+                            console.log("Not filtered");
+                            console.log('   ',key);
                        }
-                    });
-                    if(!namefound){
-                       $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                       console.log('     ',visitdata.hospitalid.hospitalname);
-                    }
-                  }
-              });*/
-              $scope.openModalfilter();
-              /*
-            }
-            else{
-                //No data to filter show error msg
-                //no need to open modal
-                $rootScope.showPopup({title:'Error', template:"No data to filter"});
-
-            }
-            */
-       }//end of filterdetails*/
-
+                     })//end of forEach
+                     $scope.healthdetails.length=filteredkey;
+                 }//end of else
+               }//end of if
+               else{
+                 //No data to filter show error msg
+                 //no need to open modal
+                 $rootScope.showPopup({title:'Error', template:"No data to filter"});
+               }
+               $scope.closeModalfilter();
+           }//end of filterapply
 
   $scope.patientId = '';
   $scope.healthdetails = [];
