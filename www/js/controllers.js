@@ -364,79 +364,7 @@ $rootScope.showLoader();
 
 
 }])
-.controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
-    //$scope.mobilenumber = '';
-    $scope.errordescription = '';
-    $scope.registrationdets = {
-      mobilenumber : ''
-    };
-    /*$scope.options = {
-    rightControl: '<i class="icon ion-backspace-outline"></i></button>',
-    onKeyPress: function(value, source) {
-        $scope.errordescription = '';
-        if (source === 'RIGHT_CONTROL') {
-            $scope.mobilenumber = $scope.mobilenumber.substr(0, $scope.mobilenumber.length - 1);
-        }
-        else if (source === 'NUMERIC_KEY') {
-            $scope.mobilenumber += value;
-        }
-      }
 
-    $scope.clearFormFields = function(){
-        $scope.registrationdets.mobilenumber = '';
-    };
-    $scope.continuebtn = function(){
-        //check for internet connectivity before doing anything
-        var available = internetservice.isInternetAvailable();
-        if(!available){ return ; } //no internet connectivity
-
-        $rootScope.showLoader();
-
-        //validate mobile number length --
-        if($scope.registrationdets.mobilenumber.length === '' || $scope.registrationdets.mobilenumber.length > 10 ||  $scope.registrationdets.mobilenumber.length < 10         ){
-            //error scenario
-            $rootScope.hideLoader();
-
-            $scope.errordescription = 'Invalid mobile number';
-            $scope.registrationdets.mobilenumber = '';
-        }else{//call node service to validate if mobile number is registered on the platform
-            authservice.validateMobileNumber($scope.registrationdets.mobilenumber).then(function(data){
-                console.log('successful call to node service to validate mobile number ['+ JSON.stringify(data) +']');
-                if(data.status == 'SUCCESS'){
-                    $state.go('password', {mobilenumber:$scope.registrationdets.mobilenumber}); //goto security details and password screen
-                }else{
-                    $rootScope.hideLoader();
-                    //$scope.errordescription = data.errorDescription;
-                    $rootScope.showPopup({title:'Error', template:data.errorDescription}, function(res){
-                        console.log('On alert ok ');
-                    });
-                    $scope.registrationdets.mobilenumber = '';
-                }
-            }).catch(function(error){
-                $rootScope.hideLoader();
-
-
-                $scope.registrationdets.mobilenumber = '';
-                if(error.status === 400){
-                    $rootScope.showPopup({title:'Error', template:"Please check the mobile number entered"}, function(res){
-                    });
-                }
-                if(error.status === 401){
-                    $rootScope.showPopup({title:'Error', template:"Mobile number is not registered, please register"}, function(res){
-                    });
-                }
-                if(error.status === 500){
-                    $rootScope.showPopup({title:'Error', template:"We couldn't validate mobile number right now, Please try again"}, function(res){
-                    });
-                }
-
-                /*$rootScope.showPopup({title:'Error', template:"Couldn't validate mobile number right now, Please try again!"}, function(res){
-                });*/
-            });
-        }
-    };
-
-}])
 .controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
 $scope.$on("$ionicView.beforeEnter",function(event, data){
   $scope.logindata=[];
@@ -1680,79 +1608,78 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
        }
 
        $scope.filtersavailable = {
-            "vitals" : ["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
-          };
+            "vitals":["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
+       };
 
+       $scope.appliedfilters = {
+            "vitals":"All"
+            ,"bloodsugarFilter":true
+            ,"bloodpressureFilter":true
+            ,"vaccinationFilter":true
+            ,"medicationFilter":true
+            ,"allergiesFilter":true
+            ,"weightFilter":true
+        };
 
-          $scope.appliedfilters = {
-            "vitals" : "All"
-          };
+        $scope.filterdetails = function(visitid){
+           if(($scope.healthdetails != undefined ) || ($scope.healthdetails.length != 0 )){
+             $scope.openModalfilter();
+           }
+           else{
+               //No data to filter show error msg
+               //no need to open modal
+               $rootScope.showPopup({title:'Error', template:"No data to filter"});
+           }
+        }
 
+        $scope.filterapply = function(){
+          console.log('Enter: ',$scope.appliedfilters);
+debugger;
+              if(($scope.healthdetails != undefined) || ($scope.healthdetails.length != 0)){
+                if(angular.equals($scope.appliedfilters.vitals,"All")){
+                    $scope.appliedfilters.bloodsugarFilter=true;
+                    $scope.appliedfilters.bloodpressureFilter=true;
+                    $scope.appliedfilters.vaccinationFilter=true;
+                    $scope.appliedfilters.medicationFilter=true;
+                    $scope.appliedfilters.allergiesFilter=true;
+                    $scope.appliedfilters.weightFilter=true;
+                  }
+                  else {
+                    $scope.appliedfilters.bloodsugarFilter=false;
+                    $scope.appliedfilters.bloodpressureFilter=false;
+                    $scope.appliedfilters.vaccinationFilter=false;
+                    $scope.appliedfilters.medicationFilter=false;
+                    $scope.appliedfilters.allergiesFilter=false;
+                    $scope.appliedfilters.weightFilter=false;
 
-         $scope.filterdetails = function(visitid){
-
-              if(($scope.backupHealthdetails != undefined) || (($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 ))){
-                if($scope.backupHealthdetails == undefined)
-                    $scope.backupHealthdetails=angular.copy($scope.healthdetails);
-                 $scope.openModalfilter();
-               }
-               else{
-                   //No data to filter show error msg
-                   //no need to open modal
-                   $rootScope.showPopup({title:'Error', template:"No data to filter"});
-
-               }
-          }//end of filterdetails*/
-
-          $scope.filterapply = function(){
-                var filteredkey=0;
-                var allVitals=false;
-
-                console.log($scope.appliedfilters);
-
-                if(($scope.backupHealthdetails != undefined) && ($scope.backupHealthdetails.length != 0)){
-                   if(angular.equals($scope.appliedfilters.vitals,"All"))
-                       allVitals=true;
-
-                   if(allVitals==true)
-                   {
-                       //No need to apply filter all to be displayed
-                       console.log("Display all, No filering!!!");
-                       $scope.healthdetails=angular.copy($scope.backupHealthdetails);
-                   }
-                   else{
-                     console.log("filter call");
-
-
-                     /*"Blood Sugar"
-                     "Blood Pressure"
-                     "Vaccination"
-                     "Medication"
-                     "Allergies"
-                     */
-
-                     //Weight
-                     angular.forEach($scope.backupHealthdetails,function (healthdata,key){
-                       if(healthdata.medicalprofile[0].profile[0].weight.value != 0){
-                            console.log("Filterd:",key, healthdata.medicalprofile[0].profile[0].weight.value);
-                             $scope.healthdetails[filteredkey]=healthdata;
-                             filteredkey++;
-                       }//end of if
-                       else{
-                            console.log("Not filtered");
-                            console.log('   ',key);
-                       }
-                     })//end of forEach
-                     $scope.healthdetails.length=filteredkey;
-                 }//end of else
-               }//end of if
-               else{
-                 //No data to filter show error msg
-                 //no need to open modal
-                 $rootScope.showPopup({title:'Error', template:"No data to filter"});
-               }
-               $scope.closeModalfilter();
-           }//end of filterapply
+                    if(angular.equals($scope.appliedfilters.vitals,"Blood Sugar")){
+                        $scope.appliedfilters.bloodsugarFilter=true;
+                    }
+                    if(angular.equals($scope.appliedfilters.vitals,"Blood Pressure")){
+                        $scope.appliedfilters.bloodpressureFilter=true;
+                    }
+                    if(angular.equals($scope.appliedfilters.vitals,"Allergies")){
+                        $scope.appliedfilters.allergiesFilter=true;
+                    }
+                    if(angular.equals($scope.appliedfilters.vitals,"Medication")){
+                        $scope.appliedfilters.medicationFilter=true;
+                    }
+                    if(angular.equals($scope.appliedfilters.vitals,"Vaccination")){
+                        $scope.appliedfilters.vaccinationFilter=true;
+                    }
+                    if(angular.equals($scope.appliedfilters.vitals,"Weight")){
+                        $scope.appliedfilters.weightFilter=true;
+                    }
+                 }
+              }
+              else{
+                  //No data to filter show error msg
+                  //no need to open modal
+                  $rootScope.showPopup({title:'Error', template:"No data to filter"});
+              }
+              console.log('Exit:  ',$scope.appliedfilters);
+              $scope.closeModalfilter();
+        }//end of filterapply
 
   $scope.patientId = '';
   $scope.healthdetails = [];
@@ -2636,7 +2563,6 @@ debugger;
             //no need to open modal
             $rootScope.showPopup({title:'Error', template:"No data to filter"});
           }
-
 
             $scope.closeModalfilter();
           }//end of filterapply
