@@ -91,14 +91,14 @@
                                 <div class="notification">
                                     <div class="message">
                                       <div ng-repeat="medicalprofiledata in details.medicalprofile">
-                                        <p ng-show="appliedfilters.weightFilter != false && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''"><strong>Weight : {{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
+                                         <p ng-show="appliedfilters.weightFilter != false && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''"><strong>Weight : {{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
                                          <p ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''"><strong>Random Blood Sugar(rbs) : {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
                                          <p ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''"><strong>Post Pandrial Blood Sugar(ppbs) : {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
                                          <p ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''"><strong>Fasting Blood Sugar(fbs) : {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
                                          <p ng-show="appliedfilters.bloodpressureFilter != false && medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== ''"><strong>Blood Pressure : {{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} MM HG</strong></p>
                                          <p ng-show="appliedfilters.allergiesFilter != false && medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''"><strong>Allergies : {{medicalprofiledata.profile[0].allergies.value}}</strong></p>
                                          <p ng-show="appliedfilters.medicationFilter != false && medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''"><strong>Medication : {{medicalprofiledata.profile[0].medication.value}}</strong> </p>
-                                         <p ng-show="appliedfilters.vaccinationFilter != false &&medicalprofiledata.profile[0].vaccination.value !== null && medicalprofiledata.profile[0].vaccination.value !== ''"><strong>Vaccination : {{medicalprofiledata.profile[0].vaccination.value}}</strong> </p>
+                                         <p ng-show="appliedfilters.vaccinationFilter != false && medicalprofiledata.profile[0].vaccination.value !== null && medicalprofiledata.profile[0].vaccination.value !== ''"><strong>Vaccination : {{medicalprofiledata.profile[0].vaccination.value}}</strong> </p>
                                     </div>
 				                      </div>
                         </div>
@@ -254,28 +254,26 @@
 
    <ion-modal-view>
        <ion-header-bar class="bar bar-positive">
-           <h1 class="title">Filter</h1>
+           <h1 class="title">My Health Filter</h1>
            <button class="button button-clear button-primary" ng-click="closeModalfilter()"><i class="icon ion-android-close"></i></button>
        </ion-header-bar>
        <ion-content>
-               <ion-item class="item-input">
-               <span class="input-label">Filter By</span>
-               <label class="item-input">
-                   <select ng-model="appliedfilters.vitals" ng-options="hsname for hsname in filtersavailable.vitals">
-                   </select>
-               </label>
-           </ion-item>
-
-         <!--div class="pull-right">
-             <button class="button-small button-assertive" ng-click="filterResetAll()">Reset All fields</button>
-         </div-->
-         <br>
-         <div class="pull-center">
-           <button class="button button-assertive" ng-click="filterapply()">Apply</button>
+         <div class="list">
+           <ion-checkbox ng-repeat="item in healthFilterList"
+                         ng-model="item.checked"
+                         ng-checked="item.checked"
+                         ng-change="filterChange(item,$index)">
+             {{ item.text }}
+           </ion-checkbox>
          </div>
+           <div class="pull-right">
+               <button class="button-small button-assertive" ng-click="filterResetAll()">Reset All fields</button>
+           </div>
+           <br>
+           <div class="pull-center">
+             <button class="button button-assertive" ng-click="filterapply()">Apply</button>
+           </div>
        </ion-content>
-           </ion-modal-view>
-         </script>
-
-
+     </ion-modal-view>
+   </script>
 </ion-view>

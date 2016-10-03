@@ -1607,12 +1607,26 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            $scope.filtermodal.hide();
        }
 
-       $scope.filtersavailable = {
-            "vitals":["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
-       };
+       $scope.filterResetAll = function(){
+
+          angular.forEach($scope.healthFilterList, function (listItem,key){
+                 listItem.checked=false;
+          });
+
+          /*from above loop all varible will also get unchecked, mark it checked again.
+           Otherwise we will end up adding a overhead of if check
+          */
+          $scope.healthFilterList[0].checked=true;
+          $scope.appliedfilters.bloodsugarFilter=true;
+          $scope.appliedfilters.bloodpressureFilter=true;
+          $scope.appliedfilters.vaccinationFilter=true;
+          $scope.appliedfilters.medicationFilter=true;
+          $scope.appliedfilters.allergiesFilter=true;
+          $scope.appliedfilters.weightFilter=true;
+       }
 
        $scope.appliedfilters = {
-            "vitals":"All"
+            "allVitals":true
             ,"bloodsugarFilter":true
             ,"bloodpressureFilter":true
             ,"vaccinationFilter":true
@@ -1620,6 +1634,96 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
             ,"allergiesFilter":true
             ,"weightFilter":true
         };
+
+  $scope.healthFilterList = [
+      { text: "All", checked: true},
+      { text: "Blood Sugar", checked: false},
+      { text: "Blood Pressure", checked: false},
+      { text: "Vaccination", checked: false},
+      { text: "Medication", checked: false},
+      { text: "Allergies", checked: false},
+      { text: "Weight", checked: false}
+  ];
+
+$scope.filterChange=function(item,index){
+    var allVitals=0,bloodsugarFilter=1,bloodpressureFilter=2,vaccinationFilter=3,medicationFilter=4,allergiesFilter=5,weightFilter=6;
+
+    if(index>allVitals && $scope.healthFilterList[allVitals].checked == true){
+        if(item.checked){
+            $scope.healthFilterList[allVitals].checked=false;
+            $scope.appliedfilters.bloodsugarFilter=false;
+            $scope.appliedfilters.bloodpressureFilter=false;
+            $scope.appliedfilters.vaccinationFilter=false;
+            $scope.appliedfilters.medicationFilter=false;
+            $scope.appliedfilters.allergiesFilter=false;
+            $scope.appliedfilters.weightFilter=false;
+        }
+    }
+
+    switch (index) {
+      case allVitals :
+          if(item.checked == true){
+              angular.forEach($scope.healthFilterList, function (listItem,key){
+                    listItem.checked=false;
+              });
+              /*from above loop all varible will also get unchecked, mark it checked again.
+              Otherwise we will end up adding a overhead of if check
+              */
+              item.checked=true;
+              $scope.appliedfilters.bloodsugarFilter=true;
+              $scope.appliedfilters.bloodpressureFilter=true;
+              $scope.appliedfilters.vaccinationFilter=true;
+              $scope.appliedfilters.medicationFilter=true;
+              $scope.appliedfilters.allergiesFilter=true;
+              $scope.appliedfilters.weightFilter=true;
+          }else {
+            $scope.appliedfilters.bloodsugarFilter=false;
+            $scope.appliedfilters.bloodpressureFilter=false;
+            $scope.appliedfilters.vaccinationFilter=false;
+            $scope.appliedfilters.medicationFilter=false;
+            $scope.appliedfilters.allergiesFilter=false;
+            $scope.appliedfilters.weightFilter=false;
+          }
+          break;
+      case bloodsugarFilter :
+          if(item.checked == true)
+              $scope.appliedfilters.bloodsugarFilter=true;
+          else
+            $scope.appliedfilters.bloodsugarFilter=false;
+          break;
+      case bloodpressureFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.bloodpressureFilter=true;
+          else
+              $scope.appliedfilters.bloodpressureFilter=false;
+          break;
+      case vaccinationFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.vaccinationFilter=true;
+          else
+              $scope.appliedfilters.vaccinationFilter=false;
+          break;
+      case medicationFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.medicationFilter=true;
+          else
+              $scope.appliedfilters.medicationFilter=false;
+          break;
+      case allergiesFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.allergiesFilter=true;
+          else
+              $scope.appliedfilters.allergiesFilter=false;
+          break;
+      case weightFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.weightFilter=true;
+          else
+              $scope.appliedfilters.weightFilter=false;
+          break;
+      default:
+    }
+  }
 
         $scope.filterdetails = function(visitid){
            if(($scope.healthdetails != undefined ) || ($scope.healthdetails.length != 0 )){
@@ -1633,53 +1737,17 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
         }
 
         $scope.filterapply = function(){
-          console.log('Enter: ',$scope.appliedfilters);
-debugger;
-              if(($scope.healthdetails != undefined) || ($scope.healthdetails.length != 0)){
-                if(angular.equals($scope.appliedfilters.vitals,"All")){
-                    $scope.appliedfilters.bloodsugarFilter=true;
-                    $scope.appliedfilters.bloodpressureFilter=true;
-                    $scope.appliedfilters.vaccinationFilter=true;
-                    $scope.appliedfilters.medicationFilter=true;
-                    $scope.appliedfilters.allergiesFilter=true;
-                    $scope.appliedfilters.weightFilter=true;
-                  }
-                  else {
-                    $scope.appliedfilters.bloodsugarFilter=false;
-                    $scope.appliedfilters.bloodpressureFilter=false;
-                    $scope.appliedfilters.vaccinationFilter=false;
-                    $scope.appliedfilters.medicationFilter=false;
-                    $scope.appliedfilters.allergiesFilter=false;
-                    $scope.appliedfilters.weightFilter=false;
+              console.log('Enter: ',$scope.appliedfilters);
 
-                    if(angular.equals($scope.appliedfilters.vitals,"Blood Sugar")){
-                        $scope.appliedfilters.bloodsugarFilter=true;
-                    }
-                    if(angular.equals($scope.appliedfilters.vitals,"Blood Pressure")){
-                        $scope.appliedfilters.bloodpressureFilter=true;
-                    }
-                    if(angular.equals($scope.appliedfilters.vitals,"Allergies")){
-                        $scope.appliedfilters.allergiesFilter=true;
-                    }
-                    if(angular.equals($scope.appliedfilters.vitals,"Medication")){
-                        $scope.appliedfilters.medicationFilter=true;
-                    }
-                    if(angular.equals($scope.appliedfilters.vitals,"Vaccination")){
-                        $scope.appliedfilters.vaccinationFilter=true;
-                    }
-                    if(angular.equals($scope.appliedfilters.vitals,"Weight")){
-                        $scope.appliedfilters.weightFilter=true;
-                    }
-                 }
-              }
-              else{
+              if(($scope.healthdetails == undefined) || ($scope.healthdetails.length == 0)){
                   //No data to filter show error msg
                   //no need to open modal
                   $rootScope.showPopup({title:'Error', template:"No data to filter"});
               }
-              console.log('Exit:  ',$scope.appliedfilters);
-              $scope.closeModalfilter();
-        }//end of filterapply
+              else{
+                  $scope.closeModalfilter();
+              }
+        }
 
   $scope.patientId = '';
   $scope.healthdetails = [];
@@ -2508,7 +2576,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
 
-debugger;
          console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
@@ -3102,7 +3169,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     }
 }])
 
-.controller('LogoutCtrl', ['$scope','$rootScope','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $state, $ionicHistory, registrationdetsdb){
+.controller('LogoutCtrl', ['$scope','$rootScope','$route','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $route, $state, $ionicHistory, registrationdetsdb){
     //deleting the jsonwebtoken as there is a logout request by the user..
 
     $rootScope.showLoader();
@@ -3110,6 +3177,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
         $rootScope.hideLoader();
         $scope.closePopover();
         $state.go('login');
+        $route.reload();
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
