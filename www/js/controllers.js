@@ -1634,7 +1634,6 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
 
         $scope.filterapply = function(){
           console.log('Enter: ',$scope.appliedfilters);
-debugger;
               if(($scope.healthdetails != undefined) || ($scope.healthdetails.length != 0)){
                 if(angular.equals($scope.appliedfilters.vitals,"All")){
                     $scope.appliedfilters.bloodsugarFilter=true;
@@ -2507,8 +2506,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.filterapply = function(){
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
-
-debugger;
          console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
