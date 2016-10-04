@@ -1617,6 +1617,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            Otherwise we will end up adding a overhead of if check
           */
           $scope.healthFilterList[0].checked=true;
+
           $scope.appliedfilters.bloodsugarFilter=true;
           $scope.appliedfilters.bloodpressureFilter=true;
           $scope.appliedfilters.vaccinationFilter=true;
@@ -1744,10 +1745,9 @@ $scope.filterChange=function(item,index){
                   //no need to open modal
                   $rootScope.showPopup({title:'Error', template:"No data to filter"});
               }
-              else{
-                  $scope.closeModalfilter();
-              }
-        }
+              $scope.closeModalfilter();
+
+         }
 
   $scope.patientId = '';
   $scope.healthdetails = [];
@@ -2575,7 +2575,13 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.filterapply = function(){
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
+<<<<<<< HEAD
 
+||||||| merged common ancestors
+
+debugger;
+=======
+>>>>>>> b912eceb6c485c5356c7ac2c34c511de0f5b43df
          console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
