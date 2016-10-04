@@ -2575,13 +2575,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.filterapply = function(){
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
-<<<<<<< HEAD
-
-||||||| merged common ancestors
-
-debugger;
-=======
->>>>>>> b912eceb6c485c5356c7ac2c34c511de0f5b43df
          console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
