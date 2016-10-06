@@ -9815,22 +9815,6 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
-/*
-To customize the look and feel of Ionic, you can override the variables
-in ionic's _variables.scss file.
-
-For example, you might change some of the default colors:
-
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
-$calm:                            #11c1f3 !default;
-$balanced:                        #33cd5f !default;
-$energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
-$royal:                           #886aea !default;
-$dark:                            #444 !default;
-*/
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
@@ -19678,6 +19662,20 @@ span .circle-span.direct-chat-timestamp {
 .tab-title {
   color: #000 !important; }
 
+.bar.bar-header .button + .title {
+  text-align: left;
+  left: 48px !important;
+  line-height: 46px;
+  position: fixed;
+  float: none !important; }
+
+div .title.title-left.header-item {
+  text-align: left;
+  left: 48px !important;
+  line-height: 46px;
+  position: fixed;
+  float: none !important; }
+
 .tabs-striped.tabs-background-positive {
   background-color: #fff; }
 
@@ -19797,27 +19795,10 @@ div .list.card {
 .container-responsive.logBtnStyle a {
   display: block; }
 
-/*
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
-$calm:                            #11c1f3 !default;
-$balanced:                        #33cd5f !default;
-$energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
-$royal:                           #886aea !default;
-$dark:                            #444 !default;
-*/
 .button.button-block {
   margin-bottom: 0px !important;
   background-color: #d14836 !important;
-  border-color: #d14836;
-  /*Seema tried out these
-    background-color:cornflowerblue  !important;
-    border-color: #444 !important;
-    color:white !important;
-    font-family:sans-serif;
-    font-size: 20px;*/ }
+  border-color: #d14836; }
   .button.button-block.button-positive {
     margin-bottom: 0px !important;
     background-color: #d14836 !important;
@@ -19984,38 +19965,6 @@ h1 {
 .pull-center {
   text-align: center; }
 
-/*.error
-{
-  padding: 10px 16px;
-  font-family: "Arial Black", Gadget, sans-serif;
-  font-size: 11px;
-  text-transform: uppercase;
-  color: #555;
-  vertical-align: middle;
-}
-
-.error i
-{
-  font-size: 24px;
-  color: #B83E2C;
-  vertical-align: middle;
-}
-
-.errorCls
-{
-    color:#FF0000;
-    background-color:#fff;
-    width:100%;
-
-}
-
-.requiredStyle
-{
-    padding:5px;
-    height:30px;
-    margin-bottom:10px;
-
-}*/
 .radio-content {
   /* show the checkmark icon when its checked */
   visibility: visible;
@@ -20268,13 +20217,6 @@ input[type="color"] {
   font-weight: 500;
   font-size: 18px; }
 
-/*
-.platform-android .header-item.title {
-    transition-duration: 0ms;
-}
-.platform-android .header-item .buttons .right-buttons .button .ion-android-more-vertical {
-    transition-duration: 0ms;
-}*/
 .pdf-controls {
   width: 100%;
   display: block;
@@ -20342,158 +20284,5 @@ p {
   padding-left: 45px;
   color: #d14836; }
 
-/* Not sure if following are used on no */
-/* Following attributes may be needed, need to be checked */
-/*
-.tabs-top > .tabs .tab-item.tab-item-active .badge,
-.tabs-top > .tabs .tab-item.active .badge,
-.tabs-top > .tabs .tab-item.activated .badge,
-.tabs.tabs-top .tab-item.tab-item-active .badge,
-.tabs.tabs-top .tab-item.active .badge,
-.tabs.tabs-top .tab-item.activated .badge
-{
-    right: 0%;
-    top: 11%;
-    font-size: 8px;
-}
-
-.tabs .tab-item .badge.badge-assertive,
-.badge.badge-assertive
-{
-    right: 0%;
-    top: 11%;
-    font-size: 8px;
-}
-
-
-
-/* following is not getting used at present but needed as color of the calender need to be changed but its getting picked from
-<script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script> in index.html
-.ionic_datepicker_popup .popup-body .selected_date_full
-{
-	 background-color: #d14836;
-}
-
-.ion-person:before
-{
-    font-size: 25px;
-}
-
-
-.h-list .item-card.active .item:after
-{
-  content: '';
-  position: absolute;
-  top: 0;
-  height: 100%;
-  left: 0;
-  width: 4px;
-  background: #4a90e2;
-}
-.h-list .item-card .info-block {
-  background: #fafafa;
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-  font-size: 14px;
-}
-.h-list .item-card .item {
-  height: 65px;
-  overflow: hidden;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-  position: relative;
-}
-.h-list .item-card .item:hover {
-  background: #eee;
-}
-.h-list .item-card .item .close {
-  color: #e2073c;
-}
-.h-list .item-card .item .close-large {
-  color: #e2073c;
-  -webkit-transform: scale(1.4);
-  -moz-transform: scale(1.4);
-  -o-transform: scale(1.4);
-  -ms-transform: scale(1.4);
-  transform: scale(1.4);
-}
-.h-list .item-card .item .left {
-  padding: 15px 5px 15px 15px;
-  display: inline-block;
-}
-.h-list .item-card .item .left img {
-  max-width: 35px;
-  max-height: 35px;
-}
-.h-list .item-card .item .right {
-  padding: 15px 5px;
-  line-height: 35px;
-  display: inline-block;
-  vertical-align: top;
-  max-width: calc(100% - 122px);
-}
-.h-list .item-card .item .right.hospital {
-  color: #180942;
-}
-.h-list .item-card .item .info {
-  font-size: 25px;
-  color: #ccc;
-  padding: 19px 15px;
-  cursor: pointer;
-  -webkit-transition: all 0.2s ease-in;
-  -moz-transition: all 0.2s ease-in;
-  -o-transition: all 0.2s ease-in;
-  -ms-transition: all 0.2s ease-in;
-  transition: all 0.2s ease-in;
-}
-.h-list .item-card .item .info:focus,
-.h-list .item-card .item .info:hover {
-  color: #aaa;
-}
-
-.h-list .item-card .visits-block h5 {
-  margin: 0 0 6px 4px;
-}
-
-.h-list .item-card .visits-block .visits .visit {
-  background: #fff;
-  border: 1px solid #eee;
-  padding: 12px 10px;
-  margin-bottom: -1px;
-}
-.h-list .item-card .visits-block .visits .visit:focus,
-.h-list .item-card .visits-block .visits .visit:hover {
-  background: #f1f1f1;
-  cursor: pointer;
-}
-.h-list .item-card .visits-block .visits .visit .close {
-  color: #e2073c;
-  font-size: 20px;
-  margin-top: -3px;
-}
-.h-list .item-card .visits-block .timeline .row .right .notification .date {
-  margin-top: 4px;
-}
-.h-list .item-card .visits-block .timeline .row .right .notification .view-more {
-  cursor: pointer;
-  margin: 10px;
-}
-
-.h-list .item-card .visits-block .timeline .row .right .notification .view-more:hover {
-  color: #999;
-}
-
-/*doctortab
-
-.card .item .pull-left{
-color:#D14836;
-}
-.card .item .pull-right{
-  color:grey;
-}
-
-.list .card{
-    background-color: #f9f9f9;
-}
-/*
-/* Seema: from style.css till here. */
+body {
+  cursor: url("http://ionicframework.com/img/finger.png"), auto; }

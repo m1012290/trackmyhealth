@@ -367,12 +367,16 @@ $rootScope.showLoader();
 
 .controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
 $scope.$on("$ionicView.beforeEnter",function(event, data){
-  $scope.logindata=[];
+
+  $scope.logindata={
+    "email" : "",
+    "passcode" : ""
+  };
 	$scope.forgot=[];
   // Set the default value of inputType
 $scope.inputType = 'password';
 });
-// first on loading of the landing page lets check if we have
+  // first on loading of the landing page lets check if we have
   //json web token available
   $scope.$on("$ionicView.loaded", function(event, data){
     $rootScope.showLoader();
@@ -465,7 +469,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       $state.go('signup');
   };
 	$scope.login =function(logindata){
-		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
+	  //	$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
 		$rootScope.showLoader();
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
             if(data.status === 'SUCCESS'){
@@ -517,7 +521,6 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       }
 		});
 	}
-
 
   // Hide & show password function
   $scope.hideShowPassword = function(){
@@ -1652,6 +1655,7 @@ $scope.filterChange=function(item,index){
     if(index>allVitals && $scope.healthFilterList[allVitals].checked == true){
         if(item.checked){
             $scope.healthFilterList[allVitals].checked=false;
+            $scope.appliedfilters.allVitals=false;
             $scope.appliedfilters.bloodsugarFilter=false;
             $scope.appliedfilters.bloodpressureFilter=false;
             $scope.appliedfilters.vaccinationFilter=false;
@@ -1671,6 +1675,7 @@ $scope.filterChange=function(item,index){
               Otherwise we will end up adding a overhead of if check
               */
               item.checked=true;
+              $scope.appliedfilters.allVitals=true;
               $scope.appliedfilters.bloodsugarFilter=true;
               $scope.appliedfilters.bloodpressureFilter=true;
               $scope.appliedfilters.vaccinationFilter=true;
@@ -1678,6 +1683,7 @@ $scope.filterChange=function(item,index){
               $scope.appliedfilters.allergiesFilter=true;
               $scope.appliedfilters.weightFilter=true;
           }else {
+            $scope.appliedfilters.allVitals=false;
             $scope.appliedfilters.bloodsugarFilter=false;
             $scope.appliedfilters.bloodpressureFilter=false;
             $scope.appliedfilters.vaccinationFilter=false;
@@ -1747,7 +1753,7 @@ $scope.filterChange=function(item,index){
               }
               $scope.closeModalfilter();
 
-         }
+        }
 
   $scope.patientId = '';
   $scope.healthdetails = [];
@@ -1972,6 +1978,7 @@ $scope.filterChange=function(item,index){
         "notes" : ""
      }
   };
+
   $scope.$on("$ionicView.loaded", function(event, data){
     $ionicModal.fromTemplateUrl('medicalprofile.html', {
       scope: $scope,
@@ -3626,4 +3633,17 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
               }
             });
       };
-}]);
+}])
+.filter('customformat', function() {
+    return function(x) {
+        var i, c, txt = "";
+        for (i = 0; i < x.length; i++) {
+            c = x[i];
+            if (i % 2 == 0) {
+                c = c.toUpperCase();
+            }
+            txt += c;
+        }
+        return txt;
+    };
+});

@@ -78,16 +78,32 @@
                 </div>
                   <div class="visits-block text-muted">
 
-                <div class="visits" >
+                <div class="visits">
                     <div class="timeline">
                       <div class="row"  ng-repeat="details in healthdetails track by $index">
-                        <div class="left">
+                        <div class="left" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+                        || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
+                        || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
+                        || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)
+                        || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && appliedfilters.vaccinationFilter != false)
+                        || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        )">
                            <div class="circle">
                                <div class="day">{{details.createdat.day}}</div>
                                <div class="month"><small>{{details.medicalprofile[0].recorddate|date:"MMM"}}</small></div>
                            </div>
                         </div>
-                        <div class="right" >
+                        <div class="right" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+                        || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
+                        || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
+                        || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)
+                        || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && appliedfilters.vaccinationFilter != false)
+                        || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        )">
                                 <div class="notification">
                                     <div class="message">
                                       <div ng-repeat="medicalprofiledata in details.medicalprofile">
