@@ -3,17 +3,20 @@
     <div class="container-responsive">
       <img src="img/pulse7.jpg" class="image-responsive"/>
        </div>
-
+    <!--
     <div ng-if="signin.passcode.$invalid && signin.user.$invalid">
      <div class="error" ng-messages="signin.user.$error" ng-show="signin.user.$touched ">
          <div ng-message="required"><i class="ion-information-circled"></i> Please fill all fields.</div>
     </div>
+  </div>-->
+    <div ng-if="signin.user.$invalid" ng-messages="signin.user.$error">
+  		<div class="error" ng-message="required">
+  			<i class="ion-information-circled"></i> Email or Mobile Number is required!
+  		</div>
+      <div class="error" ng-message="validemailmobile">
+        <i class="ion-information-circled"></i> Invalid email or mobile number
+  	  </div>
     </div>
-      <div ng-if="signin.passcode.$valid " ng-messages="signin.user.$error">
-		<div class="error" ng-message="required">
-			<i class="ion-information-circled"></i> User Emailid/Mobile Number is required!
-		</div>
-	  </div>
 	  <div ng-if="signin.user.$valid " ng-messages="signin.passcode.$error">
 		<div class="error" ng-message="required">
 			<i class="ion-information-circled"></i> Password is required!
@@ -24,8 +27,8 @@
      <div class="list">
 
  <label class="item item-input">
-    <span class="input-label dark"><i class="ion-person"></i> </span>
-   <input type="text" name="user" ng-model="logindata.email" placeholder="User EmailId/Mobile Num" required>
+   <span class="input-label dark"><i class="ion-person"></i> </span>
+   <input type="text" name="user" ng-model="logindata.email" placeholder="Email or Mobile Number" required validemailmobile>
   </label>
       <hr>
 

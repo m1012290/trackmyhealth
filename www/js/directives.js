@@ -178,7 +178,7 @@
         );
     }
 }])
- 
+
 /*countrycode limitto 2 digit*/
 .directive("limitTo", [function() {
     return {
@@ -228,6 +228,21 @@ return {
   }
 };
 }])
+.directive("validemailmobile", function() {
+    return {
+        restrict: "A",
+        require: "ngModel",
+        link: function(scope, element, attributes, ngModel) {
+            ngModel.$validators.validemailmobile = function(modelValue) {
+                if(validator.isNumeric(modelValue)){
+                   return validator.isMobilePhone(modelValue, 'en-IN');
+                }else{
+                   return validator.isEmail(modelValue);
+                }
+            }
+        }
+    };
+})
 .directive('formattedDate', function(dateFilter) {
   return {
     require: 'ngModel',
