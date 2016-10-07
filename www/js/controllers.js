@@ -367,12 +367,16 @@ $rootScope.showLoader();
 
 .controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
 $scope.$on("$ionicView.beforeEnter",function(event, data){
-  $scope.logindata=[];
+
+  $scope.logindata={
+    "email" : "",
+    "passcode" : ""
+  };
 	$scope.forgot=[];
   // Set the default value of inputType
 $scope.inputType = 'password';
 });
-// first on loading of the landing page lets check if we have
+  // first on loading of the landing page lets check if we have
   //json web token available
   $scope.$on("$ionicView.loaded", function(event, data){
     $rootScope.showLoader();
@@ -465,7 +469,7 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       $state.go('signup');
   };
 	$scope.login =function(logindata){
-		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
+	  //	$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
 		$rootScope.showLoader();
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
             if(data.status === 'SUCCESS'){
@@ -517,7 +521,6 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       }
 		});
 	}
-
 
   // Hide & show password function
   $scope.hideShowPassword = function(){
@@ -1642,6 +1645,7 @@ $scope.filterChange=function(item,index){
     if(index>allVitals && $scope.healthFilterList[allVitals].checked == true){
         if(item.checked){
             $scope.healthFilterList[allVitals].checked=false;
+            $scope.appliedfilters.allVitals=false;
             $scope.appliedfilters.bloodsugarFilter=false;
             $scope.appliedfilters.bloodpressureFilter=false;
             $scope.appliedfilters.vaccinationFilter=false;
@@ -1660,6 +1664,7 @@ $scope.filterChange=function(item,index){
               $scope.healthFilterList[medicationFilter].checked=false;
               $scope.healthFilterList[allergiesFilter].checked=false;
               $scope.healthFilterList[weightFilter].checked=false;
+              $scope.appliedfilters.allVitals=true;
               $scope.appliedfilters.bloodsugarFilter=true;
               $scope.appliedfilters.bloodpressureFilter=true;
               $scope.appliedfilters.vaccinationFilter=true;
@@ -1667,6 +1672,7 @@ $scope.filterChange=function(item,index){
               $scope.appliedfilters.allergiesFilter=true;
               $scope.appliedfilters.weightFilter=true;
           }else {
+            $scope.appliedfilters.allVitals=false;
             $scope.appliedfilters.bloodsugarFilter=false;
             $scope.appliedfilters.bloodpressureFilter=false;
             $scope.appliedfilters.vaccinationFilter=false;
@@ -1734,18 +1740,19 @@ $scope.filterChange=function(item,index){
                   $scope.closeModalfilter();
               }
               else{
-                if(($scope.appliedfilters.bloodsugarFilter!=false) ||
-                  ($scope.appliedfilters.bloodpressureFilter!=false) ||
-                  ($scope.appliedfilters.vaccinationFilter!=false) ||
-                  ($scope.appliedfilters.medicationFilter!=false) ||
-                  ($scope.appliedfilters.allergiesFilter!=false) ||
-                  ($scope.appliedfilters.weightFilter!=false))
-                      $scope.closeModalfilter();
-                else{
-                    $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
+                if(($scope.appliedfilters.bloodsugarFilter == false) &&
+                  ($scope.appliedfilters.bloodpressureFilter== false) &&
+                  ($scope.appliedfilters.vaccinationFilter == false) &&
+                  ($scope.appliedfilters.medicationFilter == false) &&
+                  ($scope.appliedfilters.allergiesFilter== false) &&
+                  ($scope.appliedfilters.weightFilter == false)){
+                      $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
+                }
+                else {
+                  $scope.closeModalfilter();
                 }
               }
-         }
+        }
 
   $scope.patientId = '';
   $scope.healthdetails = [];
@@ -1970,6 +1977,7 @@ $scope.filterChange=function(item,index){
         "notes" : ""
      }
   };
+
   $scope.$on("$ionicView.loaded", function(event, data){
     $ionicModal.fromTemplateUrl('medicalprofile.html', {
       scope: $scope,
@@ -3197,12 +3205,14 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
      $ionicHistory.goBack();
   };
 
-  $scope.$on("$ionicView.beforeEnter", function(event, data){
+  $scope.$on("$ionicView.afterEnter", function(event, data){
+    $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
         //alternateemailid alternatemobilenum doctorlicenseno
         var result = DBA.getById(response);
         $scope.patientId = result.appregistrationid;
         patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+             $rootScope.hideLoader();
              $scope.originalresponse = data.data;
              $scope.patientprofiledata = {
                 "firstname" : data.data.firstname,
