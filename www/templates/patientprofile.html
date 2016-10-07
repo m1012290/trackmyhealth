@@ -22,7 +22,7 @@
    <div class="item item-text-wrap">
     Please contact your Hospital to update Your Licence Number
    </div>
-		<ion-checkbox ng-model="patientprofiledata.doctor" ng-value="patientprofiledata.doctor" ng-readonly="true">Doctor</ion-checkbox>
+		<ion-checkbox ng-if="patientprofiledata.doctor" ng-model="patientprofiledata.doctor" ng-value="patientprofiledata.doctor" ng-disabled="true">Doctor</ion-checkbox>
     <div ng-if="patientprofiledata.doctor" readonly>
       <label class="item item-input item-floating-label">
           <span class="input-label">Licence Number</span>

@@ -3217,12 +3217,14 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
      $ionicHistory.goBack();
   };
 
-  $scope.$on("$ionicView.beforeEnter", function(event, data){
+  $scope.$on("$ionicView.afterEnter", function(event, data){
+    $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
         //alternateemailid alternatemobilenum doctorlicenseno
         var result = DBA.getById(response);
         $scope.patientId = result.appregistrationid;
         patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+             $rootScope.hideLoader();
              $scope.originalresponse = data.data;
              $scope.patientprofiledata = {
                 "firstname" : data.data.firstname,
