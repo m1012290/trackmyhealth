@@ -17,9 +17,12 @@
         <i class="ion-information-circled"></i> Invalid email or mobile number
   	  </div>
     </div>
-	  <div ng-if="signin.user.$valid " ng-messages="signin.passcode.$error">
+	  <div ng-if="signin.user.$valid" ng-messages="signin.passcode.$error">
 		<div class="error" ng-message="required">
 			<i class="ion-information-circled"></i> Password is required!
+		</div>
+    <div class="error" ng-message="minlength">
+			<i class="ion-information-circled"></i> Password must be minimum 6 characters!
 		</div>
 	  </div>
     <div id="grid">
@@ -33,7 +36,7 @@
       <hr>
 
 
-   <label class="item item-input ">
+  <label class="item item-input ">
     <span class="input-label dark"><i class="ion-locked"></i> </span>
   <input type="{{inputType}}"  name="passcode" id="checkbox"  ng-model="logindata.passcode"  ng-minlength="6" ng-maxlength="20" placeholder="Password" required>
                 <label for="checkbox" ng-if="!passwordCheckbox"><i class="icon ion-eye dark" ng-click="hideShowPassword()"></i></label>
@@ -41,7 +44,7 @@
 
 <hr>
  </div>
-        <div>
+        <div ng-if="signin.user.$valid && signin.passcode.$valid">
         <button class="button button-block button-raised button-positive"  type="submit">LOGIN</button>
          </div>
 		 </form>
