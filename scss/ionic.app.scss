@@ -1,9 +1,7 @@
 /*
 To customize the look and feel of Ionic, you can override the variables
 in ionic's _variables.scss file.
-
 For example, you might change some of the default colors:
-
 $light:                           #fff !default;
 $stable:                          #f8f8f8 !default;
 $positive:                        #387ef5 !default;
@@ -20,7 +18,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
+@import url('http://twitter.github.com/bootstrap/assets/css/bootstrap.css');
 
 
 // The path for our ionicons font files, relative to the built CSS in www/css
@@ -371,6 +369,12 @@ div
    right:28px;
 }
 
+.item-checkbox-filter
+{
+  padding-left: 0px;
+  border-style:hidden;
+  position:inherit;
+}
 
 .customBtnStyle
 {
@@ -871,13 +875,23 @@ input[type="color"] {
   font-size: 17px;
   line-height: 16px;
 }
-.input-label {
+
+  .input-label {
   display: table;
-  padding: 7px 10px 7px 0px;
+  padding: 7px 5px 7px 0px;
   max-width: 80px;
   width: 35%;
   color: #444;
   font-size: 16px; }
+
+  .input-label-filter {
+  display: table;
+  padding: 7px 5px 7px 0px;
+  max-width:none;
+  width: 40%;
+  color: #444;
+  font-size: 16px; }
+
 .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated i
 {
     display: block;

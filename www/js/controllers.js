@@ -1178,11 +1178,9 @@ if($scope.formData.doctor == true){
            var filteredkey=0;
            var allHospitals=false;
 
-           console.log($scope.appliedfilters);
            if(($scope.hospitalslist.length != 0) || ($scope.backuphosvisitinfo != undefined)){
               if(angular.equals($scope.appliedfilters.hospitalnameselected,"All"))
                   allHospitals=true;
-
 
               if(allHospitals==true)
               {
@@ -1206,15 +1204,9 @@ if($scope.formData.doctor == true){
                 angular.forEach($scope.hospitalslist,function (visitdata,key){
                   if((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalname))
                     {
-                        console.log("filter call");
-                        console.log('   ',visitdata.hospitalname);
                         $scope.hospitalslist[filteredkey]=visitdata;
                         filteredkey++;
                   }//end of if
-                  else{
-                       console.log("Not filtered");
-                       console.log(visitdata.hospitalname);
-                  }
                 })//end of forEach
                 $scope.hospitalslist.length=filteredkey;
               }//end of else
@@ -1222,7 +1214,7 @@ if($scope.formData.doctor == true){
             else{
               //No data to filter show error msg
               //no need to open modal
-              $rootScope.showPopup({title:'Error', template:"No data to filter"});
+              $rootScope.showPopup({title:'Filter Error: 5', template:"No data to filter"});
             }
             $scope.closeModalfilter();
       }//end of filterapply
@@ -1237,7 +1229,7 @@ if($scope.formData.doctor == true){
      };
 
 
-     $scope.filterdetails = function(visitid){
+     $scope.filterDetails = function(visitid){
          if(($scope.backuphosvisitinfo != undefined) || (($scope.hospitalslist != undefined ) && ($scope.hospitalslist.length != 0 ))){
            if($scope.backuphosvisitinfo == undefined)
                $scope.backuphosvisitinfo=angular.copy($scope.hospitalslist);
@@ -1246,8 +1238,6 @@ if($scope.formData.doctor == true){
               if($scope.filtersavailable.hospitalnames.length === 0){
                   $scope.filtersavailable.hospitalnames.push("All");
                   $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
-                  console.log("Available Hospitals:");
-                  console.log('      ',"All, ",visitdata.hospitalname);
               }else{
                   var namefound = false;
                   angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
@@ -1257,7 +1247,6 @@ if($scope.formData.doctor == true){
                   });
                   if(!namefound){
                      $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
-                     console.log('     ',visitdata.hospitalname);
                   }
                 }
             });
@@ -1266,7 +1255,7 @@ if($scope.formData.doctor == true){
           else{
               //No data to filter show error msg
               //no need to open modal
-              $rootScope.showPopup({title:'Error', template:"No data to filter"});
+              $rootScope.showPopup({title:'Filter Error: 1', template:"No data to filter"});
 
           }
      }//end of filterdetails
@@ -1599,7 +1588,6 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            $scope.filtermodal = modal;
        });
 
-
        $scope.openModalfilter = function(){
            $scope.filtermodal.show();
        }
@@ -1607,16 +1595,18 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            $scope.filtermodal.hide();
        }
 
+       var allVitals=0,bloodsugarFilter=1,bloodpressureFilter=2,vaccinationFilter=3,medicationFilter=4,allergiesFilter=5,weightFilter=6;
+
        $scope.filterResetAll = function(){
 
-          angular.forEach($scope.healthFilterList, function (listItem,key){
-                 listItem.checked=false;
-          });
+          $scope.healthFilterList[allVitals].checked=true;
 
-          /*from above loop all varible will also get unchecked, mark it checked again.
-           Otherwise we will end up adding a overhead of if check
-          */
-          $scope.healthFilterList[0].checked=true;
+          $scope.healthFilterList[bloodsugarFilter].checked=false;
+          $scope.healthFilterList[bloodpressureFilter].checked=false;
+          $scope.healthFilterList[vaccinationFilter].checked=false;
+          $scope.healthFilterList[medicationFilter].checked=false;
+          $scope.healthFilterList[allergiesFilter].checked=false;
+          $scope.healthFilterList[weightFilter].checked=false;
 
           $scope.appliedfilters.bloodsugarFilter=true;
           $scope.appliedfilters.bloodpressureFilter=true;
@@ -1646,8 +1636,8 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
       { text: "Weight", checked: false}
   ];
 
+
 $scope.filterChange=function(item,index){
-    var allVitals=0,bloodsugarFilter=1,bloodpressureFilter=2,vaccinationFilter=3,medicationFilter=4,allergiesFilter=5,weightFilter=6;
 
     if(index>allVitals && $scope.healthFilterList[allVitals].checked == true){
         if(item.checked){
@@ -1664,13 +1654,12 @@ $scope.filterChange=function(item,index){
     switch (index) {
       case allVitals :
           if(item.checked == true){
-              angular.forEach($scope.healthFilterList, function (listItem,key){
-                    listItem.checked=false;
-              });
-              /*from above loop all varible will also get unchecked, mark it checked again.
-              Otherwise we will end up adding a overhead of if check
-              */
-              item.checked=true;
+              $scope.healthFilterList[bloodsugarFilter].checked=false;
+              $scope.healthFilterList[bloodpressureFilter].checked=false;
+              $scope.healthFilterList[vaccinationFilter].checked=false;
+              $scope.healthFilterList[medicationFilter].checked=false;
+              $scope.healthFilterList[allergiesFilter].checked=false;
+              $scope.healthFilterList[weightFilter].checked=false;
               $scope.appliedfilters.bloodsugarFilter=true;
               $scope.appliedfilters.bloodpressureFilter=true;
               $scope.appliedfilters.vaccinationFilter=true;
@@ -1727,26 +1716,35 @@ $scope.filterChange=function(item,index){
   }
 
         $scope.filterdetails = function(visitid){
-           if(($scope.healthdetails != undefined ) || ($scope.healthdetails.length != 0 )){
+           if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
              $scope.openModalfilter();
            }
            else{
                //No data to filter show error msg
                //no need to open modal
-               $rootScope.showPopup({title:'Error', template:"No data to filter"});
+               $rootScope.showPopup({title:'Filter Error: 3', template:"No data to filter"});
            }
         }
 
         $scope.filterapply = function(){
-              console.log('Enter: ',$scope.appliedfilters);
-
               if(($scope.healthdetails == undefined) || ($scope.healthdetails.length == 0)){
                   //No data to filter show error msg
                   //no need to open modal
-                  $rootScope.showPopup({title:'Error', template:"No data to filter"});
+                  $rootScope.showPopup({title:'Filter Error: 7', template:"No data to filter"});
+                  $scope.closeModalfilter();
               }
-              $scope.closeModalfilter();
-
+              else{
+                if(($scope.appliedfilters.bloodsugarFilter!=false) ||
+                  ($scope.appliedfilters.bloodpressureFilter!=false) ||
+                  ($scope.appliedfilters.vaccinationFilter!=false) ||
+                  ($scope.appliedfilters.medicationFilter!=false) ||
+                  ($scope.appliedfilters.allergiesFilter!=false) ||
+                  ($scope.appliedfilters.weightFilter!=false))
+                      $scope.closeModalfilter();
+                else{
+                    $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
+                }
+              }
          }
 
   $scope.patientId = '';
@@ -2575,7 +2573,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.filterapply = function(){
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
-         console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
             if(angular.equals($scope.appliedfilters.patientnameselected,"All"))
@@ -2611,15 +2608,9 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
                     && ((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalid.hospitalname))
                     && ((allVisittypes == true) || angular.equals($scope.appliedfilters.visittypeselected,visitdata.visitid.visittype))
                     && (( docswithattachment == false) || (visitdata.reporturl !== undefined))){
-                      console.log("filter call");
-                      console.log('   ',visitdata.patientregprofiles.firstname,visitdata.patientregprofiles.lastname,',',visitdata.visitid.visittype,',',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
                       $scope.visitinfo[filteredkey]=visitdata;
                       filteredkey++;
                 }//end of if
-                else{
-                     console.log("Not filtered");
-                     console.log(visitdata.patientregprofiles.firstname,visitdata.patientregprofiles.lastname,',',visitdata.visitid.visittype,',',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
-                }
               })//end of forEach
               $scope.visitinfo.length=filteredkey;
             }//end of else
@@ -2627,9 +2618,8 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
           else{
             //No data to filter show error msg
             //no need to open modal
-            $rootScope.showPopup({title:'Error', template:"No data to filter"});
+            $rootScope.showPopup({title:'Filter Error:6', template:"No data to Filter"});
           }
-
             $scope.closeModalfilter();
           }//end of filterapply
 
@@ -2692,8 +2682,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
             {
                 $scope.filtersavailable.hospitalnames.push("All");
                 $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                console.log('Hospital names');
-                console.log('      ',"All",visitdata.hospitalid.hospitalname);
             }else
             {
                 var namefound = false;
@@ -2704,7 +2692,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
                 });
                 if(!namefound){
                     $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                    console.log('      ',visitdata.hospitalid.hospitalname);
                 }
             }
         });
@@ -2714,7 +2701,7 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
       else{
         //No data to filter show error msg
         //no need to open modal
-        $rootScope.showPopup({title:'Error', template:"No data to filter"});
+        $rootScope.showPopup({title:'Filter Error: 2', template:"No data to Filter"});
       }
     }//end of filterdetails
 
@@ -3314,7 +3301,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              var filteredkey=0;
              var allHospitals=false, docswithattachment=true;
 
-             console.log($scope.appliedfilters);
              if(($scope.drvisitinfo.length != 0) || ($scope.backupdrvisitinfo != undefined)){
                 if(angular.equals($scope.appliedfilters.hospitalnameselected,"All"))
                     allHospitals=true;
@@ -3343,15 +3329,9 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                   angular.forEach($scope.drvisitinfo,function (visitdata,key){
                     if(((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalid.hospitalname))
                       && (( docswithattachment == false) || (visitdata.reporturl !== undefined))){
-                          console.log("filter call");
-                          console.log('   ',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
                           $scope.drvisitinfo[filteredkey]=visitdata;
                           filteredkey++;
                     }//end of if
-                    else{
-                         console.log("Not filtered");
-                         console.log(visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
-                    }
                   })//end of forEach
                   $scope.drvisitinfo.length=filteredkey;
                 }//end of else
@@ -3359,7 +3339,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
               else{
                 //No data to filter show error msg
                 //no need to open modal
-                $rootScope.showPopup({title:'Error', template:"No data to filter"});
+                $rootScope.showPopup({title:'Filter Error: 8', template:"No data to filter"});
               }
               $scope.closeModalfilter();
         }//end of filterapply
@@ -3383,8 +3363,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                 if($scope.filtersavailable.hospitalnames.length === 0){
                     $scope.filtersavailable.hospitalnames.push("All");
                     $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                    console.log("Available Hospitals:");
-                    console.log('      ',"All, ",visitdata.hospitalid.hospitalname);
                 }else{
                     var namefound = false;
                     angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
@@ -3394,7 +3372,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                     });
                     if(!namefound){
                        $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                       console.log('     ',visitdata.hospitalid.hospitalname);
                     }
                   }
               });
@@ -3403,7 +3380,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
             else{
                 //No data to filter show error msg
                 //no need to open modal
-                $rootScope.showPopup({title:'Error', template:"No data to filter"});
+                $rootScope.showPopup({title:'Filter Error: 4', template:"No data to filter"});
 
             }
        }//end of filterdetails
