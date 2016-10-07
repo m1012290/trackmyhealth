@@ -1,21 +1,15 @@
 <ion-view view-title="User Profile">
-<ion-nav-buttons side="left">
-    <button class="button button-clear" ng-click="backButtonAction()">
-        <i class="ion-android-arrow-back icon-btn-customize"></i>
-    </button>
-</ion-nav-buttons>
 <ion-content  class="padding" scroll-sista="subheader">
 <div class="list card subheader" style="background-color: #dd4b39;">
-      <div class="item item-avatar">
-        <span class="circle-span" style="background-color:black;">{{patientprofiledata.firstname|limitTo:1}}</span>
+
           <ion-item style="color:#FFF">
             <h2><strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2> <hr>
               {{patientprofiledata.gender}}<br>
                {{patientprofiledata.emailid}}<br>
               {{patientprofiledata.mobilenumber}}
           </ion-item>
-        </div>
 </div>
+
 <form name="patienprfl" class="simple-form" required>
 <div class="list">
   <div class="card" ng-if="patientprofiledata.doctor">
@@ -48,9 +42,11 @@
   </label>
 
   </div>
+</div>
   <div class="pull-center">
 			<button class="button button-outline button-assertive" ng-click="save(formData)">Submit</button>
 	</div>
+
   </form>
 </ion-content>
 </ion-view>
