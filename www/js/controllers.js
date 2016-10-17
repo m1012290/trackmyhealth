@@ -1616,20 +1616,17 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
         };
 
   $scope.healthFilterList = [
-      { text: "All", checked: true},
-      { text: "Blood Sugar", checked: false},
-      { text: "Blood Pressure", checked: false},
-      { text: "Vaccination", checked: false},
-      { text: "Medication", checked: false},
-      { text: "Allergies", checked: false},
-      { text: "Weight", checked: false}
+      { text: "Blood Sugar", checked: true},
+      { text: "Blood Pressure", checked: true},
+      { text: "Vaccination", checked: true},
+      { text: "Medication", checked: true},
+      { text: "Allergies", checked: true},
+      { text: "Weight", checked: true}
   ];
 
-       var allVitals=0,bloodsugarFilter=1,bloodpressureFilter=2,vaccinationFilter=3,medicationFilter=4,allergiesFilter=5,weightFilter=6;
+       var bloodsugarFilter=0,bloodpressureFilter=1,vaccinationFilter=2,medicationFilter=3,allergiesFilter=4,weightFilter=5;
 
        $scope.filterResetAll = function(){
-
-          $scope.healthFilterList[allVitals].checked=true;
 
           $scope.healthFilterList[bloodsugarFilter].checked=false;
           $scope.healthFilterList[bloodpressureFilter].checked=false;
@@ -1638,7 +1635,28 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
           $scope.healthFilterList[allergiesFilter].checked=false;
           $scope.healthFilterList[weightFilter].checked=false;
 
+          $scope.appliedfilters.allVitals=false;
+          $scope.appliedfilters.bloodsugarFilter=false;
+          $scope.appliedfilters.bloodpressureFilter=false;
+          $scope.appliedfilters.vaccinationFilter=false;
+          $scope.appliedfilters.medicationFilter=false;
+          $scope.appliedfilters.allergiesFilter=false;
+          $scope.appliedfilters.weightFilter=false;
+
+          $scope.appliedfilters.isFilterApplied=true;
+       }
+
+       $scope.filterSetAll = function(){
+
+          $scope.healthFilterList[bloodsugarFilter].checked=true;
+          $scope.healthFilterList[bloodpressureFilter].checked=true;
+          $scope.healthFilterList[vaccinationFilter].checked=true;
+          $scope.healthFilterList[medicationFilter].checked=true;
+          $scope.healthFilterList[allergiesFilter].checked=true;
+          $scope.healthFilterList[weightFilter].checked=true;
+
           $scope.appliedfilters.allVitals=true;
+
           $scope.appliedfilters.bloodsugarFilter=true;
           $scope.appliedfilters.bloodpressureFilter=true;
           $scope.appliedfilters.vaccinationFilter=true;
@@ -1650,87 +1668,60 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
        }
 
 
-
-$scope.filterChange=function(item,index){
-
-    if(index>allVitals && $scope.healthFilterList[allVitals].checked == true){
-        if(item.checked){
-            $scope.healthFilterList[allVitals].checked=false;
-            $scope.appliedfilters.allVitals=false;
-            $scope.appliedfilters.bloodsugarFilter=false;
-            $scope.appliedfilters.bloodpressureFilter=false;
-            $scope.appliedfilters.vaccinationFilter=false;
-            $scope.appliedfilters.medicationFilter=false;
-            $scope.appliedfilters.allergiesFilter=false;
-            $scope.appliedfilters.weightFilter=false;
+       $scope.filterChange=function(item,index){
+         switch (index) {
+           case bloodsugarFilter :
+              if(item.checked == true)
+                $scope.appliedfilters.bloodsugarFilter=true;
+              else
+                $scope.appliedfilters.bloodsugarFilter=false;
+              break;
+          case bloodpressureFilter:
+              if(item.checked == true)
+                $scope.appliedfilters.bloodpressureFilter=true;
+              else
+                $scope.appliedfilters.bloodpressureFilter=false;
+              break;
+          case vaccinationFilter:
+            if(item.checked == true)
+                $scope.appliedfilters.vaccinationFilter=true;
+            else
+                $scope.appliedfilters.vaccinationFilter=false;
+            break;
+          case medicationFilter:
+            if(item.checked == true)
+                $scope.appliedfilters.medicationFilter=true;
+            else
+                $scope.appliedfilters.medicationFilter=false;
+            break;
+          case allergiesFilter:
+            if(item.checked == true)
+                $scope.appliedfilters.allergiesFilter=true;
+            else
+                $scope.appliedfilters.allergiesFilter=false;
+            break;
+          case weightFilter:
+            if(item.checked == true)
+                $scope.appliedfilters.weightFilter=true;
+            else
+                $scope.appliedfilters.weightFilter=false;
+            break;
         }
-    }
 
-    switch (index) {
-      case allVitals :
-          if(item.checked == true){
-              $scope.healthFilterList[bloodsugarFilter].checked=false;
-              $scope.healthFilterList[bloodpressureFilter].checked=false;
-              $scope.healthFilterList[vaccinationFilter].checked=false;
-              $scope.healthFilterList[medicationFilter].checked=false;
-              $scope.healthFilterList[allergiesFilter].checked=false;
-              $scope.healthFilterList[weightFilter].checked=false;
+        if($scope.appliedfilters.bloodsugarFilter==true &&
+          $scope.appliedfilters.bloodpressureFilter==true &&
+          $scope.appliedfilters.vaccinationFilter==true &&
+          $scope.appliedfilters.medicationFilter==true &&
+          $scope.appliedfilters.allergiesFilter==true &&
+          $scope.appliedfilters.weightFilter==true){
+              $scope.appliedfilters.isFilterApplied=false;
               $scope.appliedfilters.allVitals=true;
-              $scope.appliedfilters.bloodsugarFilter=true;
-              $scope.appliedfilters.bloodpressureFilter=true;
-              $scope.appliedfilters.vaccinationFilter=true;
-              $scope.appliedfilters.medicationFilter=true;
-              $scope.appliedfilters.allergiesFilter=true;
-              $scope.appliedfilters.weightFilter=true;
-          }else {
+        }
+        else {
             $scope.appliedfilters.allVitals=false;
-            $scope.appliedfilters.bloodsugarFilter=false;
-            $scope.appliedfilters.bloodpressureFilter=false;
-            $scope.appliedfilters.vaccinationFilter=false;
-            $scope.appliedfilters.medicationFilter=false;
-            $scope.appliedfilters.allergiesFilter=false;
-            $scope.appliedfilters.weightFilter=false;
-          }
-          break;
-      case bloodsugarFilter :
-          if(item.checked == true)
-              $scope.appliedfilters.bloodsugarFilter=true;
-          else
-            $scope.appliedfilters.bloodsugarFilter=false;
-          break;
-      case bloodpressureFilter:
-          if(item.checked == true)
-              $scope.appliedfilters.bloodpressureFilter=true;
-          else
-              $scope.appliedfilters.bloodpressureFilter=false;
-          break;
-      case vaccinationFilter:
-          if(item.checked == true)
-              $scope.appliedfilters.vaccinationFilter=true;
-          else
-              $scope.appliedfilters.vaccinationFilter=false;
-          break;
-      case medicationFilter:
-          if(item.checked == true)
-              $scope.appliedfilters.medicationFilter=true;
-          else
-              $scope.appliedfilters.medicationFilter=false;
-          break;
-      case allergiesFilter:
-          if(item.checked == true)
-              $scope.appliedfilters.allergiesFilter=true;
-          else
-              $scope.appliedfilters.allergiesFilter=false;
-          break;
-      case weightFilter:
-          if(item.checked == true)
-              $scope.appliedfilters.weightFilter=true;
-          else
-              $scope.appliedfilters.weightFilter=false;
-          break;
-      default:
-    }
-  }
+            $scope.appliedfilters.isFilterApplied=true;
+        }
+      }
 
         $scope.filterdetails = function(visitid){
            if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
@@ -1748,7 +1739,6 @@ $scope.filterChange=function(item,index){
                   //No data to filter show error msg
                   //no need to open modal
                   $rootScope.showPopup({title:'Filter Error: 7', template:"No data to filter"});
-                  $scope.appliedfilters.isFilterApplied=false;
                   $scope.closeModalfilter();
               }
               else{
@@ -1761,10 +1751,6 @@ $scope.filterChange=function(item,index){
                       $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
                 }
                 else {
-                  if($scope.appliedfilters.allVitals)
-                      $scope.appliedfilters.isFilterApplied=false;
-                  else
-                      $scope.appliedfilters.isFilterApplied=true;
                   $scope.closeModalfilter();
                 }
               }
