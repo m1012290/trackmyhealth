@@ -365,16 +365,19 @@ $rootScope.showLoader();
 
 }])
 
-.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
+.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA','$ionicHistory',function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA, $ionicHistory) {
 $scope.$on("$ionicView.beforeEnter",function(event, data){
-
   $scope.logindata={
     "email" : "",
     "passcode" : ""
   };
 	$scope.forgot=[];
   // Set the default value of inputType
-$scope.inputType = 'password';
+  $scope.inputType = 'password';
+});
+$scope.$on("$ionicView.afterEnter",function(event, data){
+    $ionicHistory.clearHistory();
+		$ionicHistory.clearCache();
 });
   // first on loading of the landing page lets check if we have
   //json web token available
