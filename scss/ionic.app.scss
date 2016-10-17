@@ -256,12 +256,6 @@ div
   }
 }
 
-.icon-btn-customize
-{
-    margin-right: 15px;
-    font-size: 23px !important;
-}
-
 .ion-android-arrow-back
 {
     font-size: 170% !important;
@@ -798,6 +792,7 @@ padding-top: 5px!important;}
     margin-right: 15px;
     font-size: 27px !important;
 }
+
 .ion-funnel:before
 {
     font-size: 23px ;
@@ -987,6 +982,12 @@ p
     padding-left: 45px;
     color: #d14836
 }
-body {
-  cursor: url('http://ionicframework.com/img/finger.png'), auto;
+
+@keyframes blink {
+  50% { color: #fff; }
+  50% { color: transparent; }
+}
+
+.blink {
+  animation: blink 1s linear infinite;
 }

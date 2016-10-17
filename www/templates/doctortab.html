@@ -7,7 +7,14 @@
     </ion-nav-title>
        <ion-nav-buttons side="right" >
           <button class="button button-clear" ng-click="filterdetails()">
-             <i class="ion-funnel icon-btn-customize"></i>
+            <div ng-switch on="appliedfilters.isFilterApplied">
+              <div ng-switch-when="true"
+                   <i class="ion-funnel icon-btn-customize blink"></i>
+               </div>
+              <div ng-switch-default>
+                   <i class="ion-funnel icon-btn-customize"></i>
+              </div>
+            </div>
        </button>
        <button class="button button-clear" ng-click="selectImageSource()">
                <i class=" ion-camera icon-btn-customize"></i>
