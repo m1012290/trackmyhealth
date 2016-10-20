@@ -93,7 +93,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showConfirm()" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height:250px;    width:170px;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showConfirm()" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -436,9 +436,15 @@ $scope.$on("$ionicView.afterEnter",function(event, data){
                     })
                 }
             }).catch(function(error){
-                if(error.status === 404){
+                if(error.status === 400){
+                  $rootScope.showPopup({
+                   title:'Error',
+                   template:"Please check Email and Mobile number"
+                 },function(res){
+                   console.log("error to save");
+                 });
                     console.log("mobile no doesn't please register ")
-                      $scope.closeModal4();
+                      //$scope.closeModal4();
                 }
             });
     };
@@ -458,11 +464,12 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
 				}
 			}).catch(function(error){
 				console.log(error);
-				var popupalert= $ionicPopup.alert({
-					template:"Sorry unable to save the new password"
-				}).then(function(res){
-					console.log("error to save");
-				})
+        $rootScope.showPopup({
+          title:'OTP Error',
+          template:"Please enter correct OTP"
+        },function(res){
+          console.log("error to save");
+        });
 			});
 		}
 
@@ -3545,7 +3552,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
   /*$scope.imagesarray = [{
-    'imgnativeurl':'../img/icon.png',
+    'imgnativeurl':'../img/icon.jpg',
     'imgtag' : 'test'
   },{
     'imgnativeurl':'../img/icon.png',
