@@ -431,7 +431,7 @@ angular.module('jett.ionic.filter.bar', ['ionic']);
             expression: null,
             comparator: null,
             debounce: true,
-            delay: 300,
+            delay: 1000,
             cancelText: 'Cancel',
             cancelOnStateChange: true,
             container: $body,
@@ -559,7 +559,12 @@ angular.module('jett.ionic.filter.bar', ['ionic']);
               scope.update(filteredItems, filterText);
               scope.scrollItemsTop();
             });
+
+            ionic.requestAnimationFrame(function(){
+            hideKeyboard();
+            });
           };
+
 
           // registerBackButtonAction returns a callback to deregister the action
           scope.$deregisterBackButton = $ionicPlatform.registerBackButtonAction(
