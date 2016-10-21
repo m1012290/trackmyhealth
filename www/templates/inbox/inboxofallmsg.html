@@ -188,6 +188,10 @@
     <ion-modal-view>
         <ion-header-bar class="bar bar-positive">
             <h1 class="title">Filter Visit Information</h1>
+            <button class="button button-clear button-primary" ng-click="filterCancel()">
+                <i class="icon ion-android-close">
+                </i>
+            </button>
         </ion-header-bar>
         <ion-content>
           <br>
@@ -207,13 +211,13 @@
               </select>
           </span>
           <span class="item-input">
-              <label class="input-label-filter">With Attachments?</label>
-              <ion-checkbox class="item-checkbox-filter" ng-model="appliedfilters.docswithattachment">
+              <label class="input-label-filter">Attachments?</label>
+              <ion-checkbox class="item-checkbox-filter" style="position:relative;right:20px" ng-model="appliedfilters.docswithattachment">
               </ion-checkbox>
               </label>
           </span>
           <div class="pull-right">
-              <button class="button-small button-assertive" ng-click="filterResetAll()">Reset All fields</button>
+              <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterResetAll()">Reset All</button>
           </div>
           <br>
           <br>

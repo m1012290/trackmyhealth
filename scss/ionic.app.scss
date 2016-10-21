@@ -983,6 +983,7 @@ p
     color: #d14836
 }
 
+// filter blinking
 @keyframes blink {
   50% { color: #fff; }
   50% { color: transparent; }
@@ -990,4 +991,24 @@ p
 
 .blink {
   animation: blink 1s linear infinite;
+}
+
+//landscape width change for actionsheet
+ .action-sheet-wrapper {
+    max-width: 100%;
+}
+
+.button-mini {
+  border-color:transparent;
+  border-image:none;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+  vertical-align: top;
+  text-align: center;
+  font-size: 13px;
+  line-height: 30px;
+
 }

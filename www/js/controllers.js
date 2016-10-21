@@ -1181,7 +1181,10 @@ if($scope.formData.doctor == true){
      }
 
      $scope.appliedfilters = {
-       "hospitalnameselected" : "All"
+       "backup":{
+         "hospitalnameselected" : "All"
+         ,"isFilterApplied": false}
+       ,"hospitalnameselected" : "All"
        ,"isFilterApplied": false
      };
 
@@ -1191,11 +1194,15 @@ if($scope.formData.doctor == true){
 
      $scope.filterResetAll = function(){
        $scope.appliedfilters.hospitalnameselected="All";
-       $scope.hospitalslist=angular.copy($scope.backuphosvisitinfo);
        $scope.appliedfilters.isFilterApplied= false;
-       $scope.openModalfilter();
      }
 
+     $scope.filterCancel = function(){
+          //keep a backup copy of previous filter incase of cancel press
+          $scope.appliedfilters.hospitalnameselected=$scope.appliedfilters.backup.hospitalnameselected;
+          $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
+          $scope.closeModalfilter();
+     }
 
      $scope.filterapply = function(){
            var filteredkey=0;
@@ -1240,7 +1247,7 @@ if($scope.formData.doctor == true){
               //No data to filter show error msg
               //no need to open modal
               $scope.appliedfilters.isFilterApplied= false;
-              $rootScope.showPopup({title:'Filter Error: 5', template:"No data to filter"});
+              $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
             }
             $scope.closeModalfilter();
       }//end of filterapply
@@ -1249,7 +1256,6 @@ if($scope.formData.doctor == true){
          if(($scope.backuphosvisitinfo != undefined) || (($scope.hospitalslist != undefined ) && ($scope.hospitalslist.length != 0 ))){
            if($scope.backuphosvisitinfo == undefined)
                $scope.backuphosvisitinfo=angular.copy($scope.hospitalslist);
-
            angular.forEach($scope.backuphosvisitinfo, function(visitdata, key1){
               if($scope.filtersavailable.hospitalnames.length === 0){
                   $scope.filtersavailable.hospitalnames.push("All");
@@ -1266,12 +1272,15 @@ if($scope.formData.doctor == true){
                   }
                 }
             });
+            //Keep a copy of previous filter values for backup in case of cancel press
+            $scope.appliedfilters.backup.hospitalnameselected=$scope.appliedfilters.hospitalnameselected;
+            $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             $scope.openModalfilter();
           }
           else{
               //No data to filter show error msg
               //no need to open modal
-              $rootScope.showPopup({title:'Filter Error: 1', template:"No data to filter"});
+              $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
 
           }
      }//end of filterdetails
@@ -1612,7 +1621,15 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
        }
 
        $scope.appliedfilters = {
-            "allVitals":true
+            "backup":{"allVitals":true
+                      ,"bloodsugarFilter":true
+                      ,"bloodpressureFilter":true
+                      ,"vaccinationFilter":true
+                      ,"medicationFilter":true
+                      ,"allergiesFilter":true
+                      ,"weightFilter":true
+                      ,"isFilterApplied":false}
+            ,"allVitals":true
             ,"bloodsugarFilter":true
             ,"bloodpressureFilter":true
             ,"vaccinationFilter":true
@@ -1623,13 +1640,34 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
         };
 
   $scope.healthFilterList = [
-      { text: "Blood Sugar", checked: true},
-      { text: "Blood Pressure", checked: true},
-      { text: "Vaccination", checked: true},
-      { text: "Medication", checked: true},
-      { text: "Allergies", checked: true},
-      { text: "Weight", checked: true}
-  ];
+      { text: "Blood Sugar", checked: true, backupchecked: true},
+      { text: "Blood Pressure", checked: true, backupchecked: true},
+      { text: "Vaccination", checked: true, backupchecked: true},
+      { text: "Medication", checked: true, backupchecked: true},
+      { text: "Allergies", checked: true, backupchecked: true},
+      { text: "Weight", checked: true, backupchecked: true}
+    ];
+
+    $scope.filterCancel = function(){
+          //copy previous filter values from backup in case of cancel press
+          $scope.appliedfilters.allVitals=$scope.appliedfilters.backup.allVitals;
+          $scope.appliedfilters.bloodsugarFilter=$scope.appliedfilters.backup.bloodsugarFilter;
+          $scope.appliedfilters.bloodpressureFilter=$scope.appliedfilters.backup.bloodpressureFilter;
+          $scope.appliedfilters.vaccinationFilter=$scope.appliedfilters.backup.vaccinationFilter;
+          $scope.appliedfilters.medicationFilter=$scope.appliedfilters.backup.medicationFilter;
+          $scope.appliedfilters.allergiesFilter=$scope.appliedfilters.backup.allergiesFilter;
+          $scope.appliedfilters.weightFilter=$scope.appliedfilters.backup.weightFilter;
+          $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
+
+          $scope.healthFilterList[bloodsugarFilter].checked=$scope.healthFilterList[bloodsugarFilter].backupchecked;
+          $scope.healthFilterList[bloodpressureFilter].checked=$scope.healthFilterList[bloodpressureFilter].backupchecked;
+          $scope.healthFilterList[vaccinationFilter].checked=$scope.healthFilterList[vaccinationFilter].backupchecked;
+          $scope.healthFilterList[medicationFilter].checked=$scope.healthFilterList[medicationFilter].backupchecked;
+          $scope.healthFilterList[allergiesFilter].checked=$scope.healthFilterList[allergiesFilter].backupchecked;
+          $scope.healthFilterList[weightFilter].checked=$scope.healthFilterList[weightFilter].backupchecked;
+
+          $scope.closeModalfilter();
+      }
 
        var bloodsugarFilter=0,bloodpressureFilter=1,vaccinationFilter=2,medicationFilter=3,allergiesFilter=4,weightFilter=5;
 
@@ -1732,12 +1770,30 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
 
         $scope.filterdetails = function(visitid){
            if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
+
+             //keep a copy of previous filter values for backup in case of cancel press
+             $scope.appliedfilters.backup.allVitals=$scope.appliedfilters.allVitals;
+             $scope.appliedfilters.backup.bloodsugarFilter=$scope.appliedfilters.bloodsugarFilter;
+             $scope.appliedfilters.backup.bloodpressureFilter=$scope.appliedfilters.bloodpressureFilter;
+             $scope.appliedfilters.backup.vaccinationFilter=$scope.appliedfilters.vaccinationFilter;
+             $scope.appliedfilters.backup.medicationFilter=$scope.appliedfilters.medicationFilter;
+             $scope.appliedfilters.backup.allergiesFilter=$scope.appliedfilters.allergiesFilter;
+             $scope.appliedfilters.backup.weightFilter=$scope.appliedfilters.weightFilter;
+             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
+
+             $scope.healthFilterList[bloodsugarFilter].backupchecked=$scope.healthFilterList[bloodsugarFilter].checked;
+             $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
+             $scope.healthFilterList[vaccinationFilter].backupchecked=$scope.healthFilterList[vaccinationFilter].checked;
+             $scope.healthFilterList[medicationFilter].backupchecked=$scope.healthFilterList[medicationFilter].checked;
+             $scope.healthFilterList[allergiesFilter].backupchecked=$scope.healthFilterList[allergiesFilter].checked;
+             $scope.healthFilterList[weightFilter].backupchecked=$scope.healthFilterList[weightFilter].checked;
+
              $scope.openModalfilter();
            }
            else{
                //No data to filter show error msg
                //no need to open modal
-               $rootScope.showPopup({title:'Filter Error: 3', template:"No data to filter"});
+               $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
            }
         }
 
@@ -1745,7 +1801,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
               if(($scope.healthdetails == undefined) || ($scope.healthdetails.length == 0)){
                   //No data to filter show error msg
                   //no need to open modal
-                  $rootScope.showPopup({title:'Filter Error: 7', template:"No data to filter"});
+                  $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
                   $scope.closeModalfilter();
               }
               else{
@@ -2571,7 +2627,12 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    }
 
    $scope.appliedfilters = {
-     "patientnameselected" : "All"
+     "backup":{"patientnameselected" : "All"
+                ,"visittypeselected"  : "All"
+                ,"hospitalnameselected" : "All"
+                ,"docswithattachment" : false
+                ,"isFilterApplied" : false}
+     ,"patientnameselected" : "All"
      ,"visittypeselected"  : "All"
      ,"hospitalnameselected" : "All"
      ,"docswithattachment" : false
@@ -2584,14 +2645,23 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
      ,"hospitalnames" : []
    };
 
+   $scope.filterCancel = function(){
+      //copy from backup of previous filter in case of cancel press
+      $scope.appliedfilters.patientnameselected=$scope.appliedfilters.backup.patientnameselected;
+      $scope.appliedfilters.visittypeselected=$scope.appliedfilters.backup.visittypeselected;
+      $scope.appliedfilters.hospitalnameselected=$scope.appliedfilters.backup.hospitalnameselected;
+      $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
+      $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
+
+      $scope.closeModalfilter();
+   }
+
    $scope.filterResetAll = function(){
      $scope.appliedfilters.patientnameselected="All";
      $scope.appliedfilters.visittypeselected="All";
      $scope.appliedfilters.hospitalnameselected="All";
      $scope.appliedfilters.docswithattachment=false;
      $scope.appliedfilters.isFilterApplied=false;
-     $scope.visitinfo=angular.copy($scope.backupvisitinfo);
-     $scope.openModalfilter();
    }
 
    $scope.filterapply = function(){
@@ -2645,7 +2715,7 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
             //No data to filter show error msg
             //no need to open modal
             $scope.appliedfilters.isFilterApplied=false;
-            $rootScope.showPopup({title:'Filter Error:6', template:"No data to Filter"});
+            $rootScope.showPopup({title:'Filter Error', template:"No data to Filter"});
           }
             $scope.closeModalfilter();
           }//end of filterapply
@@ -2708,13 +2778,20 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
                 }
             }
         });
+        //keep a backup copy of previous filter incase of cancel press
+        $scope.appliedfilters.backup.patientnameselected=$scope.appliedfilters.patientnameselected;
+        $scope.appliedfilters.backup.visittypeselected=$scope.appliedfilters.visittypeselected;
+        $scope.appliedfilters.backup.hospitalnameselected=$scope.appliedfilters.hospitalnameselected;
+        $scope.appliedfilters.backup.docswithattachment=$scope.appliedfilters.docswithattachment;
+        $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
+
         //display filter modal
         $scope.openModalfilter();
       }
       else{
         //No data to filter show error msg
         //no need to open modal
-        $rootScope.showPopup({title:'Filter Error: 2', template:"No data to Filter"});
+        $rootScope.showPopup({title:'Filter Error', template:"No data to Filter"});
       }
     }//end of filterdetails
 
@@ -3306,7 +3383,10 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 
        //Filters applied
        $scope.appliedfilters = {
-         "hospitalnameselected" : "All"
+         "backup":{"hospitalnameselected" : "All"
+                  ,"docswithattachment" : false
+                  ,"isFilterApplied": false}
+         ,"hospitalnameselected" : "All"
          ,"docswithattachment" : false
          ,"isFilterApplied": false
        };
@@ -3314,12 +3394,18 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
          "hospitalnames" : []
        };
 
+       $scope.filterCancel = function(){
+          //copy of backup filter values in case of cancel press
+          $scope.appliedfilters.hospitalnameselected=$scope.appliedfilters.backup.hospitalnameselected;
+          $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
+          $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
+          $scope.closeModalfilter();
+       }
+
        $scope.filterResetAll = function(){
          $scope.appliedfilters.hospitalnameselected="All";
          $scope.appliedfilters.docswithattachment=false;
-         $scope.drvisitinfo=angular.copy($scope.backupdrvisitinfo);
          $scope.appliedfilters.isFilterApplied=false;
-         $scope.openModalfilter();
        }
 
 
@@ -3367,7 +3453,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
               else{
                 //No data to filter show error msg
                 //no need to open modal
-                $rootScope.showPopup({title:'Filter Error: 8', template:"No data to filter"});
+                $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
                 $scope.appliedfilters.isFilterApplied=false;
               }
               $scope.closeModalfilter();
@@ -3394,12 +3480,17 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                     }
                   }
               });
+              //keep a copy of backup filter values in case of cancel press
+              $scope.appliedfilters.backup.hospitalnameselected=$scope.appliedfilters.hospitalnameselected;
+              $scope.appliedfilters.backup.docswithattachment=$scope.appliedfilters.docswithattachment;
+              $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
+
               $scope.openModalfilter();
             }
             else{
                 //No data to filter show error msg
                 //no need to open modal
-                $rootScope.showPopup({title:'Filter Error: 4', template:"No data to filter"});
+                $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
 
             }
        }//end of filterdetails
@@ -3552,7 +3643,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
   /*$scope.imagesarray = [{
-    'imgnativeurl':'../img/icon.jpg',
+    'imgnativeurl':'../img/icon.png',
     'imgtag' : 'test'
   },{
     'imgnativeurl':'../img/icon.png',

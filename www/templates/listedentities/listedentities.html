@@ -91,7 +91,12 @@
    <ion-modal-view>
        <ion-header-bar class="bar bar-positive">
            <h1 class="title">Filter Hospitals</h1>
+           <button class="button button-clear button-primary" ng-click="filterCancel()">
+                <i class="icon ion-android-close">
+                </i>
+            </button>
        </ion-header-bar>
+
        <ion-content>
          <br>
          <span class="item-input">
@@ -99,8 +104,9 @@
                  <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames">
                  </select>
          </span>
+         <br>
          <div class="pull-right">
-             <button class="button-small button-assertive" ng-click="filterResetAll()">Reset All fields</button>
+           <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterResetAll()">Reset All</button>
          </div>
          <br>
          <br>
