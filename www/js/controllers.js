@@ -1309,21 +1309,15 @@ if($scope.formData.doctor == true){
                 console.log("hospital list data" + data );
                 $scope.listedentities = data;
                 //before the data value lets take out duplicate hospitals from the list
-                 var arrayofhospitals =[];
+                 var uniquehospitalset ={};
+                 var arrayofhospitals = [];
                 _.each($scope.listedentities.data, function(hospitaldata, key, list){
-                    if(arrayofhospitals.length ===0){
-                      arrayofhospitals.push(hospitaldata);
-                    }else{
-                      _.each(arrayofhospitals, function(hospitaladded, key, list){
-                          if(hospitaladded._id !== hospitaldata._id){
-                              arrayofhospitals.push(hospitaldata);
-                          }
-                      });
-                    }
+                    uniquehospitalset[hospitaldata._id] = hospitaldata;
                 });
+                angular.forEach(uniquehospitalset, function(value, key) {
+                    this.push(value);
+                }, arrayofhospitals);
                 $scope.hospitalslist = arrayofhospitals;
-                //$scope.hospitalslist = $scope.listedentities.data;
-
           }else{
                 $rootScope.hideLoader();
                 $rootScope.showPopup({
