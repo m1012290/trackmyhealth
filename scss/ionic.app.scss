@@ -1,9 +1,7 @@
 /*
 To customize the look and feel of Ionic, you can override the variables
 in ionic's _variables.scss file.
-
 For example, you might change some of the default colors:
-
 $light:                           #fff !default;
 $stable:                          #f8f8f8 !default;
 $positive:                        #387ef5 !default;
@@ -20,7 +18,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
+@import url('http://twitter.github.com/bootstrap/assets/css/bootstrap.css');
 
 
 // The path for our ionicons font files, relative to the built CSS in www/css
@@ -95,7 +93,7 @@ html{
 }
 .bar.bar-header .button + .title {
     text-align: left;
-    left: 48px!important;
+    left: 48px !important;
     line-height: 46px;
     position: fixed;
     float: none !important;
@@ -371,6 +369,12 @@ div
    right:28px;
 }
 
+.item-checkbox-filter
+{
+  padding-left: 0px;
+  border-style:hidden;
+  position:inherit;
+}
 
 .customBtnStyle
 {
@@ -407,11 +411,19 @@ h1
   font-size: 18px;
 }
 */
+.my-nav {
+  list-style-type: disc;
+  padding-left: 4px;
+}
+
 .card .item:last-child,
 .list-inset .item:last-child
 {
-  margin-bottom: -5px;
-  margin-top: -5px;
+  margin-bottom: -15px;
+  margin-top: -20px;
+  max-width: 100%;
+     overflow-x: hidden;
+
 }
 
 .col
@@ -423,8 +435,9 @@ h1
   -ms-flex: 1;
   flex: 1;
   display: block;
-  padding: 1px;
+  padding: 0.01px;
   width: 100%;
+
 }
 
 .text
@@ -519,6 +532,7 @@ h1
                 border: 1px solid #ddd;
                 margin-bottom: 15px;
                 width: 100%;
+
                 .message
                 {
                   color: #333;
@@ -559,8 +573,18 @@ h1
       }
     }
   }
-/* for myhealth */
 
+/* for myhealth */
+.row {
+
+    padding: 0.1px;
+    width: 100%;
+    padding-left: 5px;
+  }
+  .row + .row {
+    margin-top: -3px;
+    padding-top: 0;
+}
 .pull-center
 {
 	text-align: center;
@@ -632,7 +656,7 @@ padding-top: 5px!important;}
 
     &-head
     {
-      background-color:#d14836 ;
+      background-color:#f7f4f4 ;
       h3
       {
         color:#fff!important;
@@ -652,7 +676,8 @@ padding-top: 5px!important;}
     &-buttons{
       padding:10px 0px 0px 0px!important;
       min-height: auto;
-      background-color: #d14836;
+     background-color: #f7f4f4!important;
+}
     }
 
     &-container .button-positive
@@ -815,6 +840,7 @@ hr.style-one {
   background-color: #d14836;
 
 }
+
 .ion-person:before
 {
     font-size: 25px;
@@ -846,6 +872,7 @@ hr.style-one {
 
 }
 
+
 textarea,
 input[type="text"],
 input[type="password"],
@@ -862,22 +889,32 @@ input[type="search"],
 input[type="tel"],
 input[type="color"] {
   display: block;
-  padding-top: 2px;
-  padding-left: 0;
-  height: 34px;
+  padding-top: 0px !important;
+  padding-left: 0px;
+  height: 25px;
   color: #000;
   font-weight:normal;
   vertical-align: middle;
-  font-size: 17px;
-  line-height: 16px;
+  font-size: 16px;
+  line-height: 17px;
 }
-.input-label {
+
+  .input-label {
   display: table;
-  padding: 7px 10px 7px 0px;
+  padding: 7px 5px 7px 0px;
   max-width: 80px;
   width: 35%;
   color: #444;
   font-size: 16px; }
+
+  .input-label-filter {
+  display: table;
+  padding: 7px 5px 7px 0px;
+  max-width:none;
+  width: 40%;
+  color: #444;
+  font-size: 16px; }
+
 .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated i
 {
     display: block;
@@ -972,4 +1009,9 @@ p
     font-size: 23px;
     padding-left: 45px;
     color: #d14836
+}
+
+
+body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
