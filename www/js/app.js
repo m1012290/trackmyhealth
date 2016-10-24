@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista','btford.socket-io', 'pdf'])
+angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 'ionnumerickeypad', 'ngCordova', 'ionMdInput', 'ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista','btford.socket-io', 'pdf','rzModule'])
 .run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', '$cordovaToast','$cordovaSplashscreen',function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope, $cordovaToast, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
@@ -104,7 +104,16 @@ angular.module('bnotifiedapp', ['ionic','bnotifiedappctrls','bnotifiedappsvcs', 
             //alert('registration ID = ' + notification.regid);
               console.log('data registration id ['+ notification.regid + ']');
               registration_token = notification.regid;
-              registrationdetsdb.add({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
+              registrationdetsdb.query({}).then(function(result){
+                  var result = DBA.getById(result);
+                  if(result.rows.length ===0){
+                    registrationdetsdb.add({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
+                  }else{
+                    registrationdetsdb.updRegTokenUUID({mobilenumber:0, registrationtoken:notification.regid, deviceuuid:device.uuid});
+                  }
+              }).catch(function(err){
+                  console.log('error updating/inserting registrationtoken to registrationtable');
+              });
           }
           break;
 

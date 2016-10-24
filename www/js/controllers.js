@@ -93,7 +93,7 @@ angular.module('bnotifiedappctrls', [])
      badgeCount: ''
   }
 
-  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 43%;    width:40%;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showConfirm()" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
+  $scope.popover = $ionicPopover.fromTemplate('<ion-popover-view style=" top: 45px; left: 190px;  margin-left: 10px;    opacity: 1;    height: 250px;    width:170px;"><ion-content><div class="list" ><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/about">About</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientprfl" >User Profile</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" href="#/patientimages" >Uploaded Images</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showPopup()">Rate the app</a><a class="item" on-tap="closePopover()" style="padding-bottom: 12px;padding-top: 12px;" ng-click="showConfirm()" href="#/logout">Logout</a></div></ion-content></ion-popover-view>',{
     scope: $scope
   });
   $scope.openPopover = function($event) {
@@ -364,88 +364,24 @@ $rootScope.showLoader();
 
 
 }])
-.controller('MobileNumberCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams) {
-    //$scope.mobilenumber = '';
-    $scope.errordescription = '';
-    $scope.registrationdets = {
-      mobilenumber : ''
-    };
-    /*$scope.options = {
-    rightControl: '<i class="icon ion-backspace-outline"></i></button>',
-    onKeyPress: function(value, source) {
-        $scope.errordescription = '';
-        if (source === 'RIGHT_CONTROL') {
-            $scope.mobilenumber = $scope.mobilenumber.substr(0, $scope.mobilenumber.length - 1);
-        }
-        else if (source === 'NUMERIC_KEY') {
-            $scope.mobilenumber += value;
-        }
-      }
-    };*/
-    $scope.clearFormFields = function(){
-        $scope.registrationdets.mobilenumber = '';
-    };
-    $scope.continuebtn = function(){
-        //check for internet connectivity before doing anything
-        var available = internetservice.isInternetAvailable();
-        if(!available){ return ; } //no internet connectivity
 
-        $rootScope.showLoader();
-
-        //validate mobile number length --
-        if($scope.registrationdets.mobilenumber.length === '' || $scope.registrationdets.mobilenumber.length > 10 ||  $scope.registrationdets.mobilenumber.length < 10         ){
-            //error scenario
-            $rootScope.hideLoader();
-
-            $scope.errordescription = 'Invalid mobile number';
-            $scope.registrationdets.mobilenumber = '';
-        }else{//call node service to validate if mobile number is registered on the platform
-            authservice.validateMobileNumber($scope.registrationdets.mobilenumber).then(function(data){
-                console.log('successful call to node service to validate mobile number ['+ JSON.stringify(data) +']');
-                if(data.status == 'SUCCESS'){
-                    $state.go('password', {mobilenumber:$scope.registrationdets.mobilenumber}); //goto security details and password screen
-                }else{
-                    $rootScope.hideLoader();
-                    //$scope.errordescription = data.errorDescription;
-                    $rootScope.showPopup({title:'Error', template:data.errorDescription}, function(res){
-                        console.log('On alert ok ');
-                    });
-                    $scope.registrationdets.mobilenumber = '';
-                }
-            }).catch(function(error){
-                $rootScope.hideLoader();
-
-
-                $scope.registrationdets.mobilenumber = '';
-                if(error.status === 400){
-                    $rootScope.showPopup({title:'Error', template:"Please check the mobile number entered"}, function(res){
-                    });
-                }
-                if(error.status === 401){
-                    $rootScope.showPopup({title:'Error', template:"Mobile number is not registered, please register"}, function(res){
-                    });
-                }
-                if(error.status === 500){
-                    $rootScope.showPopup({title:'Error', template:"We couldn't validate mobile number right now, Please try again"}, function(res){
-                    });
-                }
-
-                /*$rootScope.showPopup({title:'Error', template:"Couldn't validate mobile number right now, Please try again!"}, function(res){
-                });*/
-            });
-        }
-    };
-
-}])
-.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
+.controller('LoginCtrl', ['$scope','$rootScope','internetservice','$ionicHistory', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA', function($scope, $rootScope, internetservice,$ionicHistory, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA) {
 $scope.$on("$ionicView.beforeEnter",function(event, data){
-  $scope.logindata=[];
+
+  $scope.logindata={
+    "email" : "",
+    "passcode" : ""
+  };
 	$scope.forgot=[];
   // Set the default value of inputType
 $scope.inputType = 'password';
 });
-// first on loading of the landing page lets check if we have
+  // first on loading of the landing page lets check if we have
   //json web token available
+  $scope.$on("$ionicView.afterEnter",function(event, data){
+    $ionicHistory.clearHistory();
+ 		$ionicHistory.clearCache();
+  });
   $scope.$on("$ionicView.loaded", function(event, data){
     $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
@@ -468,76 +404,90 @@ $scope.inputType = 'password';
     });
   });
 
-
   $ionicModal.fromTemplateUrl('my-modal4.html',{
-      scope: $scope,
-    	animation: 'slide-in-up'
-  	}).then(function(modal) {
-    	$scope.modal = modal;
-  	});
-	$scope.openModal4 = function() {
-		$scope.modal.show();
-	};
+        scope: $scope,
+      	animation: 'slide-in-up'
+    	}).then(function(modal) {
+      	$scope.modal = modal;
+    	});
+  	$scope.openModal4 = function() {
+  		$scope.modal.show();
+  	};
 
-  	$scope.closeModal4 = function() {
-    	$scope.modal.hide();
-	};
+    	$scope.closeModal4 = function() {
+      	$scope.modal.hide();
+  	};
 
-	$scope.save=function(dets){
-        console.log("calling the forgot password service");
-		    $scope.forgotpass = true;
-        forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
-            console.log( data);
-                if(data.status === "SUCCESS"){
-                    console.log("mobile no exists generate otp now");
-                    $scope.pass=true;
-                    var mobnum= $scope.forgot.mobNo.toString();
-                    signupservice.generateOtp($scope.forgot.emailId, mobnum ).then(function(data){
-                                if(data.status === "SUCCESS"){
-                                    console.log("The otp is generated");
-                                }
-                            }).catch(function(error){
-                        console.log("The Otp is not generated");
-                    })
-                }
-            }).catch(function(error){
-                if(error.status === 404){
-                    console.log("mobile no doesn't please register ")
-                      $scope.closeModal4();
-                }
-            });
+  	$scope.save=function(dets){
+          console.log("calling the forgot password service");
+  		    $scope.forgotpass = true;
+          forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
+              console.log( data);
+                  if(data.status === "SUCCESS"){
+                      console.log("mobile no exists generate otp now");
+                      $scope.pass=true;
+                      var mobnum= $scope.forgot.mobNo.toString();
+                      signupservice.generateOtp($scope.forgot.emailId, mobnum ).then(function(data){
+                                  if(data.status === "SUCCESS"){
+                                      console.log("The otp is generated");
+                                  }
+                              }).catch(function(error){
+                          console.log("The Otp is not generated");
+                      })
+                  }
+              }).catch(function(error){
+                  if(error.status === 404){
+                   $rootScope.showPopup({
+                      title:'Error',
+                      template:"Please check your details"
+                    },function(res){
+                      console.log("error to save");
+                    });
+                      console.log("mobile no doesn't please register ")
+                        $scope.closeModal4();
+                  }
+              });
+      };
+
+  	$scope.newpassword= function(chg){
+  		console.log("changing the pasword");
+  $scope.forgot.push({emailId : chg.emailId, mobNo : chg.mobNo, password: chg.password, confirmpwd: chg.confirmpwd, smsotp: chg.smsotp, emailotp: chg.emailotp});
+  			console.log($scope.forgot);
+  		if($scope.forgot.password === $scope.forgot.confirmpwd){
+  			console.log("CHECKING passwords");
+  forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.forgot.password, $scope.forgot.smsotp, $scope.forgot.emailotp,$scope.forgotpass).then(function(data){
+  				console.log(data);
+  				if(data.status === "SUCCESS"){
+              $rootScope.showToast("Password saved successfully",'long','top');
+  					console.log("password saved successfully");
+  					$scope.closeModal4();
+  					$state.go('main.listedentities');
+  				}
+  			}).catch(function(error){
+  				console.log(error);
+          $rootScope.showPopup({
+            title:'OTP Error',
+            template:"Please enter correct OTP"
+          },function(res){
+            console.log("error to save");
+          });
+  			});
+  		}
+
+  	}
+    $scope.signup=function(){
+        $state.go('signup');
     };
 
-	$scope.newpassword= function(chg){
-		console.log("changing the pasword");
-$scope.forgot.push({emailId : chg.emailId, mobNo : chg.mobNo, password: chg.password, confirmpwd: chg.confirmpwd, smsotp: chg.smsotp, emailotp: chg.emailotp});
-			console.log($scope.forgot);
-		if($scope.forgot.password === $scope.forgot.confirmpwd){
-			console.log("CHECKING passwords");
-forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.forgot.password, $scope.forgot.smsotp, $scope.forgot.emailotp,$scope.forgotpass).then(function(data){
-				console.log(data);
-				if(data.status === "SUCCESS"){
-					console.log("password saved successfully");
-					$scope.closeModal4();
-					$state.go('main.listedentities');
-				}
-			}).catch(function(error){
-				console.log(error);
-				var popupalert= $ionicPopup.alert({
-					template:"Sorry unable to save the new password"
-				}).then(function(res){
-					console.log("error to save");
-				})
-			});
-		}
 
-	}
 
-  $scope.signup=function(){
-      $state.go('signup');
-  };
+
+
+
+
+
 	$scope.login =function(logindata){
-		$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
+	  //	$scope.logindata.push({email: logindata.email, passcode: logindata.passcode});
 		$rootScope.showLoader();
 		loginservice.logindets($scope.logindata.email, $scope.logindata.passcode).then(function(data){
             if(data.status === 'SUCCESS'){
@@ -589,7 +539,6 @@ forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.fo
       }
 		});
 	}
-
 
   // Hide & show password function
   $scope.hideShowPassword = function(){
@@ -1250,11 +1199,9 @@ if($scope.formData.doctor == true){
            var filteredkey=0;
            var allHospitals=false;
 
-           console.log($scope.appliedfilters);
            if(($scope.hospitalslist.length != 0) || ($scope.backuphosvisitinfo != undefined)){
               if(angular.equals($scope.appliedfilters.hospitalnameselected,"All"))
                   allHospitals=true;
-
 
               if(allHospitals==true)
               {
@@ -1278,15 +1225,9 @@ if($scope.formData.doctor == true){
                 angular.forEach($scope.hospitalslist,function (visitdata,key){
                   if((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalname))
                     {
-                        console.log("filter call");
-                        console.log('   ',visitdata.hospitalname);
                         $scope.hospitalslist[filteredkey]=visitdata;
                         filteredkey++;
                   }//end of if
-                  else{
-                       console.log("Not filtered");
-                       console.log(visitdata.hospitalname);
-                  }
                 })//end of forEach
                 $scope.hospitalslist.length=filteredkey;
               }//end of else
@@ -1294,7 +1235,7 @@ if($scope.formData.doctor == true){
             else{
               //No data to filter show error msg
               //no need to open modal
-              $rootScope.showPopup({title:'Error', template:"No data to filter"});
+              $rootScope.showPopup({title:'Filter Error: 5', template:"No data to filter"});
             }
             $scope.closeModalfilter();
       }//end of filterapply
@@ -1309,7 +1250,7 @@ if($scope.formData.doctor == true){
      };
 
 
-     $scope.filterdetails = function(visitid){
+     $scope.filterDetails = function(visitid){
          if(($scope.backuphosvisitinfo != undefined) || (($scope.hospitalslist != undefined ) && ($scope.hospitalslist.length != 0 ))){
            if($scope.backuphosvisitinfo == undefined)
                $scope.backuphosvisitinfo=angular.copy($scope.hospitalslist);
@@ -1318,8 +1259,6 @@ if($scope.formData.doctor == true){
               if($scope.filtersavailable.hospitalnames.length === 0){
                   $scope.filtersavailable.hospitalnames.push("All");
                   $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
-                  console.log("Available Hospitals:");
-                  console.log('      ',"All, ",visitdata.hospitalname);
               }else{
                   var namefound = false;
                   angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
@@ -1329,7 +1268,6 @@ if($scope.formData.doctor == true){
                   });
                   if(!namefound){
                      $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
-                     console.log('     ',visitdata.hospitalname);
                   }
                 }
             });
@@ -1338,7 +1276,7 @@ if($scope.formData.doctor == true){
           else{
               //No data to filter show error msg
               //no need to open modal
-              $rootScope.showPopup({title:'Error', template:"No data to filter"});
+              $rootScope.showPopup({title:'Filter Error: 1', template:"No data to filter"});
 
           }
      }//end of filterdetails
@@ -1671,7 +1609,6 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            $scope.filtermodal = modal;
        });
 
-
        $scope.openModalfilter = function(){
            $scope.filtermodal.show();
        }
@@ -1679,80 +1616,161 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            $scope.filtermodal.hide();
        }
 
-       $scope.filtersavailable = {
-            "vitals" : ["All","Blood Sugar","Blood Pressure","Weight","Vaccination","Medication","Allergies"]
-          };
+       var allVitals=0,bloodsugarFilter=1,bloodpressureFilter=2,vaccinationFilter=3,medicationFilter=4,allergiesFilter=5,weightFilter=6;
+
+       $scope.filterResetAll = function(){
+
+          $scope.healthFilterList[allVitals].checked=true;
+
+          $scope.healthFilterList[bloodsugarFilter].checked=false;
+          $scope.healthFilterList[bloodpressureFilter].checked=false;
+          $scope.healthFilterList[vaccinationFilter].checked=false;
+          $scope.healthFilterList[medicationFilter].checked=false;
+          $scope.healthFilterList[allergiesFilter].checked=false;
+          $scope.healthFilterList[weightFilter].checked=false;
+
+          $scope.appliedfilters.bloodsugarFilter=true;
+          $scope.appliedfilters.bloodpressureFilter=true;
+          $scope.appliedfilters.vaccinationFilter=true;
+          $scope.appliedfilters.medicationFilter=true;
+          $scope.appliedfilters.allergiesFilter=true;
+          $scope.appliedfilters.weightFilter=true;
+       }
+
+       $scope.appliedfilters = {
+            "allVitals":true
+            ,"bloodsugarFilter":true
+            ,"bloodpressureFilter":true
+            ,"vaccinationFilter":true
+            ,"medicationFilter":true
+            ,"allergiesFilter":true
+            ,"weightFilter":true
+        };
+
+  $scope.healthFilterList = [
+      { text: "All", checked: true},
+      { text: "Blood Sugar", checked: false},
+      { text: "Blood Pressure", checked: false},
+      { text: "Vaccination", checked: false},
+      { text: "Medication", checked: false},
+      { text: "Allergies", checked: false},
+      { text: "Weight", checked: false}
+  ];
 
 
-          $scope.appliedfilters = {
-            "vitals" : "All"
-          };
+$scope.filterChange=function(item,index){
 
+    if(index>allVitals && $scope.healthFilterList[allVitals].checked == true){
+        if(item.checked){
+            $scope.healthFilterList[allVitals].checked=false;
+            $scope.appliedfilters.allVitals=false;
+            $scope.appliedfilters.bloodsugarFilter=false;
+            $scope.appliedfilters.bloodpressureFilter=false;
+            $scope.appliedfilters.vaccinationFilter=false;
+            $scope.appliedfilters.medicationFilter=false;
+            $scope.appliedfilters.allergiesFilter=false;
+            $scope.appliedfilters.weightFilter=false;
+        }
+    }
 
-         $scope.filterdetails = function(visitid){
+    switch (index) {
+      case allVitals :
+          if(item.checked == true){
+              $scope.healthFilterList[bloodsugarFilter].checked=false;
+              $scope.healthFilterList[bloodpressureFilter].checked=false;
+              $scope.healthFilterList[vaccinationFilter].checked=false;
+              $scope.healthFilterList[medicationFilter].checked=false;
+              $scope.healthFilterList[allergiesFilter].checked=false;
+              $scope.healthFilterList[weightFilter].checked=false;
+              $scope.appliedfilters.allVitals=true;
+              $scope.appliedfilters.bloodsugarFilter=true;
+              $scope.appliedfilters.bloodpressureFilter=true;
+              $scope.appliedfilters.vaccinationFilter=true;
+              $scope.appliedfilters.medicationFilter=true;
+              $scope.appliedfilters.allergiesFilter=true;
+              $scope.appliedfilters.weightFilter=true;
+          }else {
+            $scope.appliedfilters.allVitals=false;
+            $scope.appliedfilters.bloodsugarFilter=false;
+            $scope.appliedfilters.bloodpressureFilter=false;
+            $scope.appliedfilters.vaccinationFilter=false;
+            $scope.appliedfilters.medicationFilter=false;
+            $scope.appliedfilters.allergiesFilter=false;
+            $scope.appliedfilters.weightFilter=false;
+          }
+          break;
+      case bloodsugarFilter :
+          if(item.checked == true)
+              $scope.appliedfilters.bloodsugarFilter=true;
+          else
+            $scope.appliedfilters.bloodsugarFilter=false;
+          break;
+      case bloodpressureFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.bloodpressureFilter=true;
+          else
+              $scope.appliedfilters.bloodpressureFilter=false;
+          break;
+      case vaccinationFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.vaccinationFilter=true;
+          else
+              $scope.appliedfilters.vaccinationFilter=false;
+          break;
+      case medicationFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.medicationFilter=true;
+          else
+              $scope.appliedfilters.medicationFilter=false;
+          break;
+      case allergiesFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.allergiesFilter=true;
+          else
+              $scope.appliedfilters.allergiesFilter=false;
+          break;
+      case weightFilter:
+          if(item.checked == true)
+              $scope.appliedfilters.weightFilter=true;
+          else
+              $scope.appliedfilters.weightFilter=false;
+          break;
+      default:
+    }
+  }
 
-              if(($scope.backupHealthdetails != undefined) || (($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 ))){
-                if($scope.backupHealthdetails == undefined)
-                    $scope.backupHealthdetails=angular.copy($scope.healthdetails);
-                 $scope.openModalfilter();
-               }
-               else{
-                   //No data to filter show error msg
-                   //no need to open modal
-                   $rootScope.showPopup({title:'Error', template:"No data to filter"});
+        $scope.filterdetails = function(visitid){
+           if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
+             $scope.openModalfilter();
+           }
+           else{
+               //No data to filter show error msg
+               //no need to open modal
+               $rootScope.showPopup({title:'Filter Error: 3', template:"No data to filter"});
+           }
+        }
 
-               }
-          }//end of filterdetails*/
-
-          $scope.filterapply = function(){
-                var filteredkey=0;
-                var allVitals=false;
-
-                console.log($scope.appliedfilters);
-
-                if(($scope.backupHealthdetails != undefined) && ($scope.backupHealthdetails.length != 0)){
-                   if(angular.equals($scope.appliedfilters.vitals,"All"))
-                       allVitals=true;
-
-                   if(allVitals==true)
-                   {
-                       //No need to apply filter all to be displayed
-                       console.log("Display all, No filering!!!");
-                       $scope.healthdetails=angular.copy($scope.backupHealthdetails);
-                   }
-                   else{
-                     console.log("filter call");
-
-
-                     /*"Blood Sugar"
-                     "Blood Pressure"
-                     "Vaccination"
-                     "Medication"
-                     "Allergies"
-                     */
-
-                     //Weight
-                     angular.forEach($scope.backupHealthdetails,function (healthdata,key){
-                       if(healthdata.medicalprofile[0].profile[0].weight.value != 0){
-                            console.log("Filterd:",key, healthdata.medicalprofile[0].profile[0].weight.value);
-                             $scope.healthdetails[filteredkey]=healthdata;
-                             filteredkey++;
-                       }//end of if
-                       else{
-                            console.log("Not filtered");
-                            console.log('   ',key);
-                       }
-                     })//end of forEach
-                     $scope.healthdetails.length=filteredkey;
-                 }//end of else
-               }//end of if
-               else{
-                 //No data to filter show error msg
-                 //no need to open modal
-                 $rootScope.showPopup({title:'Error', template:"No data to filter"});
-               }
-               $scope.closeModalfilter();
-           }//end of filterapply
+        $scope.filterapply = function(){
+              if(($scope.healthdetails == undefined) || ($scope.healthdetails.length == 0)){
+                  //No data to filter show error msg
+                  //no need to open modal
+                  $rootScope.showPopup({title:'Filter Error: 7', template:"No data to filter"});
+                  $scope.closeModalfilter();
+              }
+              else{
+                if(($scope.appliedfilters.bloodsugarFilter == false) &&
+                  ($scope.appliedfilters.bloodpressureFilter== false) &&
+                  ($scope.appliedfilters.vaccinationFilter == false) &&
+                  ($scope.appliedfilters.medicationFilter == false) &&
+                  ($scope.appliedfilters.allergiesFilter== false) &&
+                  ($scope.appliedfilters.weightFilter == false)){
+                      $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
+                }
+                else {
+                  $scope.closeModalfilter();
+                }
+              }
+        }
 
   $scope.patientId = '';
   $scope.healthdetails = [];
@@ -1825,19 +1843,124 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
       });
   };
 
-
-  $scope.data ={
+ $scope.data ={
        "weight" : {
           "value" : "",
-          "notes" : ""
+          "notes" : "",
+            options: {
+        floor: 0,
+        ceil: 500,
+        step: 1,
+        showTicks: 50
+    
+    }
        },
        "bloodsugar" : {
          "rbs" : "",
          "ppbs": "",
          "fbs" : "",
-         "notes" :""
+         "notes" :"",
+            options: {
+      floor: 0,
+      ceil: 400,
+      step: 1
+    }
        },
        "bloodpressure" :{
+         "systolic" : "",
+         "diastolic": "",
+           options: {
+        floor: 0,
+        ceil: 300,
+        step: 1
+    }
+       },
+       "medication" : {
+         "value" : "",
+         "notes" : ""
+       },
+       "allergies" : {
+         "value" : "",
+         "notes" : ""
+       },
+       "vaccination" : {
+        "value" : "",
+        "notes" : ""
+       }
+  };
+
+
+  $scope.tracker = function(trackername, title){
+      $scope.trackername = trackername;
+      $scope.title = title;
+  };
+  $scope.tdate= new Date();
+  //function to capture vitals as entered by the user
+	$scope.create = function() {
+       
+      //check if the values are entered by user to proceed further to save the data
+     if(($scope.data.weight.value === '' || $scope.data.weight.value === 0)
+         && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
+         && ($scope.data.bloodsugar.ppbs === '' || $scope.data.bloodsugar.ppbs === 0)
+         && ($scope.data.bloodsugar.rbs === '' || $scope.data.bloodsugar.rbs === 0)
+         && ($scope.data.bloodpressure.systolic === '' || $scope.data.bloodpressure.systolic ===  0 )
+         && ($scope.data.bloodpressure.diastolic === '' || $scope.data.bloodpressure.diastolic === 0 )
+         && $scope.data.medication.value === ''
+         && $scope.data.allergies.value === ''
+         && $scope.data.vaccination.value === ''
+        )
+     {
+             $rootScope.showToast('There was no data entered to be saved','long','top');
+         
+        $scope.closeModal1();
+      }else { 
+	     var details =[];
+          var medicalprofiledatatosave = {};
+          medicalprofiledatatosave["weight"] = {};
+          medicalprofiledatatosave["weight"]["value"] = $scope.data.weight.value;
+          medicalprofiledatatosave["weight"]["notes"] = $scope.data.weight.notes;
+          /*if($scope.data.bloodsugar.rbs !== 0){
+              medicalprofiledatatosave["bloodsugar"] = {};
+              medicalprofiledatatosave["bloodsugar"]["rbs"] = $scope.data.bloodsugar.rbs;
+          }*/
+          medicalprofiledatatosave["bloodsugar"] = {};
+           if($scope.data.bloodsugar.rbs !== 0){
+              if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
+                  medicalprofiledatatosave["bloodsugar"] = {};
+              }
+              medicalprofiledatatosave["bloodsugar"]["rbs"] = $scope.data.bloodsugar.rbs;
+          }
+          if($scope.data.bloodsugar.ppbs !== 0){
+              if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
+                  medicalprofiledatatosave["bloodsugar"] = {};
+              }
+              medicalprofiledatatosave["bloodsugar"]["ppbs"] = $scope.data.bloodsugar.ppbs;
+          }
+          if($scope.data.bloodsugar.fbs !== 0){
+               if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
+                  medicalprofiledatatosave["bloodsugar"] = {};
+              }
+              medicalprofiledatatosave["bloodsugar"]["fbs"] = $scope.data.bloodsugar.fbs;
+          }
+      
+          medicalprofiledatatosave["bloodpressure"] = {};
+          medicalprofiledatatosave["bloodpressure"]["systolic"] = $scope.data.bloodpressure.systolic;
+          medicalprofiledatatosave["bloodpressure"]["diastolic"] = $scope.data.bloodpressure.diastolic;
+          medicalprofiledatatosave["medication"] = {}
+          medicalprofiledatatosave["medication"]["value"] = $scope.data.medication.value;
+          medicalprofiledatatosave["medication"]["notes"] = $scope.data.medication.notes;
+          medicalprofiledatatosave["allergies"] = {}
+          medicalprofiledatatosave["allergies"]["value"] = $scope.data.allergies.value;
+          medicalprofiledatatosave["allergies"]["notes"] = $scope.data.allergies.notes;
+           medicalprofiledatatosave["vaccination"] = {}
+          medicalprofiledatatosave["vaccination"]["value"] = $scope.data.vaccination.value;
+          medicalprofiledatatosave["vaccination"]["notes"] = $scope.data.vaccination.notes;
+
+       $rootScope.showLoader();
+       var medicalprofile = {
+    //     "data": $scope.data,
+          "data" : medicalprofiledatatosave
+       /*"bloodpressure" :{
          "systolic" : "",
          "diastolic": ""
        },
@@ -1853,34 +1976,12 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
         "value" : "",
         "notes" : ""
        }
-  };
-  $scope.tracker = function(trackername, title){
-      $scope.trackername = trackername;
-      $scope.title = title;
-  };
-  $scope.tdate= new Date();
-  //function to capture vitals as entered by the user
-	$scope.create = function() {
-      //check if the values are entered by user to proceed further to save the data
-      if($scope.data.weight.value === ''
-         && $scope.data.bloodsugar.fbs === ''
-         && $scope.data.bloodsugar.ppbs === ''
-         && $scope.data.bloodsugar.rbs === ''
-         && $scope.data.bloodpressure.systolic === ''
-         && $scope.data.bloodpressure.diastolic === ''
-         && $scope.data.medication.value === ''
-         && $scope.data.allergies.value === ''
-         && $scope.data.vaccination.value === '')
-      {
-        $rootScope.showToast('There was no data entered to be saved','long','top');
-        $scope.closeModal1();
-      }else{
-	     var details =[];
-       $rootScope.showLoader();
-       var medicalprofile = {
-         "data": $scope.data,
+       }*/,
          "createdat" : $scope.tdate
        };
+        
+        
+
        medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
              //console.log(data);
              if(data.status == 'SUCCESS'){
@@ -1891,7 +1992,8 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                 	if(data.status === 'SUCCESS'){
                     	console.log('data obtained['+ JSON.stringify(data) + ']');
                       $scope.healthdetails = data.data;
-                      if(data.summary !== ''){
+                      if(data.summary !== '' && data.summary !== 0 ){
+                        
                         $scope.summary = data.summary;
                       }
                   }
@@ -1911,18 +2013,34 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
       		$scope.data={
              "weight" : {
                 "value" : "",
-                "notes" : ""
+                "notes" : "",
+                  options: {
+        floor: 0,
+        ceil: 500,
+        step: 1,
+         showTicks: 50
+    }
              },
              "bloodsugar" : {
-               "rbs" : "",
-               "ppbs": "",
-               "fbs" : "",
-               "notes" :""
-             },
+         "rbs" : "",
+         "ppbs": "",
+         "fbs" : "",
+         "notes" :"",
+            options: {
+      floor: 0,
+      ceil: 400,
+      step: 1
+    }
+       },
              "bloodpressure" :{
-               "systolic" : "",
-               "diastolic": ""
-             },
+         "systolic" : "",
+         "diastolic": "",
+           options: {
+        floor: 0,
+        ceil: 300,
+        step: 1
+    }
+       },
              "medication" : {
                "value" : "",
                "notes" : ""
@@ -1962,7 +2080,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
      },
      "bloodpressure" :{
        "systolic" : "",
-       "diastolic": ""
+      "diastolic": ""
      },
      "medication" : {
        "value" : "",
@@ -1977,14 +2095,15 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
         "notes" : ""
      }
   };
+
   $scope.$on("$ionicView.loaded", function(event, data){
-    $ionicModal.fromTemplateUrl('medicalprofile.html', {
+  $ionicModal.fromTemplateUrl('medicalprofile.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
       $scope.modal = modal;
     });
-    $scope.openModal1 = function(){
+   $scope.openModal1 = function(){
       $scope.modal.show();
     };
     $rootScope.showLoader();
@@ -2001,7 +2120,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            $rootScope.hideLoader();
            console.log('data obtained['+ JSON.stringify(data) + ']');
            $scope.healthdetails = data.data;
-           if(data.summary !== ''){
+           if(data.summary !== '' && data.summary !== 0){
             $scope.summary = data.summary;
            }
          }
@@ -2580,9 +2699,6 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.filterapply = function(){
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
-
-debugger;
-         console.log($scope.appliedfilters);
          if(($scope.visitinfo.length != 0) || ($scope.backupvisitinfo != undefined)){
 
             if(angular.equals($scope.appliedfilters.patientnameselected,"All"))
@@ -2618,15 +2734,9 @@ debugger;
                     && ((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalid.hospitalname))
                     && ((allVisittypes == true) || angular.equals($scope.appliedfilters.visittypeselected,visitdata.visitid.visittype))
                     && (( docswithattachment == false) || (visitdata.reporturl !== undefined))){
-                      console.log("filter call");
-                      console.log('   ',visitdata.patientregprofiles.firstname,visitdata.patientregprofiles.lastname,',',visitdata.visitid.visittype,',',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
                       $scope.visitinfo[filteredkey]=visitdata;
                       filteredkey++;
                 }//end of if
-                else{
-                     console.log("Not filtered");
-                     console.log(visitdata.patientregprofiles.firstname,visitdata.patientregprofiles.lastname,',',visitdata.visitid.visittype,',',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
-                }
               })//end of forEach
               $scope.visitinfo.length=filteredkey;
             }//end of else
@@ -2634,10 +2744,8 @@ debugger;
           else{
             //No data to filter show error msg
             //no need to open modal
-            $rootScope.showPopup({title:'Error', template:"No data to filter"});
+            $rootScope.showPopup({title:'Filter Error:6', template:"No data to Filter"});
           }
-
-
             $scope.closeModalfilter();
           }//end of filterapply
 
@@ -2700,8 +2808,6 @@ debugger;
             {
                 $scope.filtersavailable.hospitalnames.push("All");
                 $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                console.log('Hospital names');
-                console.log('      ',"All",visitdata.hospitalid.hospitalname);
             }else
             {
                 var namefound = false;
@@ -2712,7 +2818,6 @@ debugger;
                 });
                 if(!namefound){
                     $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                    console.log('      ',visitdata.hospitalid.hospitalname);
                 }
             }
         });
@@ -2722,7 +2827,7 @@ debugger;
       else{
         //No data to filter show error msg
         //no need to open modal
-        $rootScope.showPopup({title:'Error', template:"No data to filter"});
+        $rootScope.showPopup({title:'Filter Error: 2', template:"No data to Filter"});
       }
     }//end of filterdetails
 
@@ -3176,7 +3281,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     }
 }])
 
-.controller('LogoutCtrl', ['$scope','$rootScope','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $state, $ionicHistory, registrationdetsdb){
+.controller('LogoutCtrl', ['$scope','$rootScope','$route','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $route, $state, $ionicHistory, registrationdetsdb){
     //deleting the jsonwebtoken as there is a logout request by the user..
 
     $rootScope.showLoader();
@@ -3184,6 +3289,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
         $rootScope.hideLoader();
         $scope.closePopover();
         $state.go('login');
+        $route.reload();
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
@@ -3217,12 +3323,14 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
      $ionicHistory.goBack();
   };
 
-  $scope.$on("$ionicView.beforeEnter", function(event, data){
+  $scope.$on("$ionicView.afterEnter", function(event, data){
+    $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
         //alternateemailid alternatemobilenum doctorlicenseno
         var result = DBA.getById(response);
         $scope.patientId = result.appregistrationid;
         patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+             $rootScope.hideLoader();
              $scope.originalresponse = data.data;
              $scope.patientprofiledata = {
                 "firstname" : data.data.firstname,
@@ -3321,7 +3429,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              var filteredkey=0;
              var allHospitals=false, docswithattachment=true;
 
-             console.log($scope.appliedfilters);
              if(($scope.drvisitinfo.length != 0) || ($scope.backupdrvisitinfo != undefined)){
                 if(angular.equals($scope.appliedfilters.hospitalnameselected,"All"))
                     allHospitals=true;
@@ -3350,15 +3457,9 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                   angular.forEach($scope.drvisitinfo,function (visitdata,key){
                     if(((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalid.hospitalname))
                       && (( docswithattachment == false) || (visitdata.reporturl !== undefined))){
-                          console.log("filter call");
-                          console.log('   ',visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
                           $scope.drvisitinfo[filteredkey]=visitdata;
                           filteredkey++;
                     }//end of if
-                    else{
-                         console.log("Not filtered");
-                         console.log(visitdata.hospitalid.hospitalname,',',visitdata.reporturl);
-                    }
                   })//end of forEach
                   $scope.drvisitinfo.length=filteredkey;
                 }//end of else
@@ -3366,7 +3467,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
               else{
                 //No data to filter show error msg
                 //no need to open modal
-                $rootScope.showPopup({title:'Error', template:"No data to filter"});
+                $rootScope.showPopup({title:'Filter Error: 8', template:"No data to filter"});
               }
               $scope.closeModalfilter();
         }//end of filterapply
@@ -3390,8 +3491,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                 if($scope.filtersavailable.hospitalnames.length === 0){
                     $scope.filtersavailable.hospitalnames.push("All");
                     $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                    console.log("Available Hospitals:");
-                    console.log('      ',"All, ",visitdata.hospitalid.hospitalname);
                 }else{
                     var namefound = false;
                     angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
@@ -3401,7 +3500,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                     });
                     if(!namefound){
                        $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
-                       console.log('     ',visitdata.hospitalid.hospitalname);
                     }
                   }
               });
@@ -3410,7 +3508,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
             else{
                 //No data to filter show error msg
                 //no need to open modal
-                $rootScope.showPopup({title:'Error', template:"No data to filter"});
+                $rootScope.showPopup({title:'Filter Error: 4', template:"No data to filter"});
 
             }
        }//end of filterdetails
