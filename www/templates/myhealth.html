@@ -26,7 +26,6 @@
        <i class="ion-android-more-vertical icon-btn-customize" ></i>
   </button>
 </ion-nav-buttons>
-
 <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
   <div class="card responsive">
 		<div class="item item-body">
@@ -76,13 +75,44 @@
   <div class="h-list">
           <div class="item-card active">
 
-                    <div class="visits-block text-muted">
-
-                  <div class="visits">
-                      <div class="timeline">
-                        <div class="row"  ng-repeat="details in healthdetails track by $index">
-
-                          <div class="right" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+<div class="visits-block text-muted">
+                    <div class="timeline">
+                      <div class="row"  ng-repeat="details in healthdetails track by $index">
+                      <div class="right" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+                        || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
+                        || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
+                        || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)
+                        || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && appliedfilters.vaccinationFilter != false)
+                        || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        )">
+						<div class="left" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+                        || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
+                        || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
+                        || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)
+                        || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && appliedfilters.vaccinationFilter != false)
+                        || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
+                        )">
+                           <div class="circle">
+                               <div class="day">{{details.createdat.day}}</div>
+                               <div class="month"><small>{{details.medicalprofile[0].recorddate|date:"MMM"}}</small></div>
+                           </div>
+                        </div>
+                                <div class="notification">
+                                    <div class="message">
+                                      <div ng-repeat="medicalprofiledata in details.medicalprofile">
+                                         <p ng-show="appliedfilters.weightFilter != false && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''"><strong>Weight : {{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
+                                         <p ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''"><strong>Random Blood Sugar(rbs) : {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
+                                         <p ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''"><strong>Post Pandrial Blood Sugar(ppbs) : {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
+                                         <p ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''"><strong>Fasting Blood Sugar(fbs) : {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
+                                         <p ng-show="appliedfilters.bloodpressureFilter != false && medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== ''"><strong>Blood Pressure : {{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} MM HG</strong></p>
+                                         <p ng-show="appliedfilters.allergiesFilter != false && medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''"><strong>Allergies : {{medicalprofiledata.profile[0].allergies.value}}</strong></p>
+                                         <p ng-show="appliedfilters.medicationFilter != false && medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''"><strong>Medication : {{medicalprofiledata.profile[0].medication.value}}</strong> </p>
+                                         <p ng-show="appliedfilters.vaccinationFilter != false && medicalprofiledata.profile[0].vaccination.value !== null && medicalprofiledata.profile[0].vaccination.value !== ''"><strong>Vaccination : {{medicalprofiledata.profile[0].vaccination.value}}</strong> </p>
+                                    <div class="right" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
                           || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
                           || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
                           || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)

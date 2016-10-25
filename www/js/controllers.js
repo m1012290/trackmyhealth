@@ -2097,25 +2097,13 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
       "medication" : {
         "value" : "",
         "notes" : ""
+		"value" : "",
+        "notes" : ""
       },
       "allergies" : {
         "value" : "",
         "notes" : ""
-      },
-      "vaccination" : {
-         "value" : "",
-         "notes" : ""
-      }
-   };
-
-   $scope.$on("$ionicView.loaded", function(event, data){
-   $ionicModal.fromTemplateUrl('medicalprofile.html', {
-       scope: $scope,
-       animation: 'slide-in-up'
-     }).then(function(modal) {
-       $scope.modal = modal;
-     });
-    $scope.openModal1 = function(){
+    });    $scope.openModal1 = function(){
        $scope.modal.show();
      };
      $rootScope.showLoader();
