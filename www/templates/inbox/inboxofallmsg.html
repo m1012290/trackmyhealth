@@ -6,8 +6,15 @@
     </ion-nav-title>
 
 <ion-nav-buttons side="right">
-           <button class="button button-clear" ng-click="filterdetails()">
-              <i class="ion-funnel icon-btn-customize"></i>
+           <button class="button button-clear"  ng-click="filterdetails()">
+             <div ng-switch on="appliedfilters.isFilterApplied">
+               <div ng-switch-when="true"
+                    <i class="ion-funnel icon-btn-customize blink"></i>
+                </div>
+               <div ng-switch-default>
+                    <i class="ion-funnel icon-btn-customize"></i>
+               </div>
+             </div>
            </button>
            <button class="button button-clear" ng-click="selectImageSource()">
                  <i class=" ion-camera icon-btn-customize"></i>
@@ -180,46 +187,45 @@
 <script id="filterPatientDetails.html" type="text/ng-template">
     <ion-modal-view>
         <ion-header-bar class="bar bar-positive">
-            <h1 class="title">Filter</h1>
-            <button class="button button-clear button-primary" ng-click="closeModalfilter()"><i class="icon ion-android-close"></i></button>
+            <h1 class="title">Filter Visit Information</h1>
+            <button class="button button-clear button-primary" ng-click="filterCancel()">
+                <i class="icon ion-android-close">
+                </i>
+            </button>
         </ion-header-bar>
         <ion-content>
-            <ion-item class="item-input">
-                <span class="input-label">Patient Name</span>
-                <label class="item-input">
-                  <select ng-model="appliedfilters.patientnameselected" ng-options="pname for pname in filtersavailable.patientnames">
-                    </select>
-                </label>
-            </ion-item>
-              <ion-item class="item-input">
-                 <span class="input-label">Visit Type</span>
-                 <label class="item-input">
-                    <select ng-model="appliedfilters.visittypeselected" ng-options="visittype for visittype in filtersavailable.visittypes">
-                    </select>
-                  </label>
-            </ion-item>
-            <ion-item class="item-input">
-                <span class="input-label">Hospital Name</span>
-                <label class="item-input">
-                    <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames">
-                    </select>
-                </label>
-            </ion-item>
-            <ion-item class="item-input">
-
-          		<ion-checkbox class="item-checkbox-left" ng-model="appliedfilters.docswithattachment">Documents with attachments</ion-checkbox>
-
-          </ion-item>
-
+          <br>
+          <span class="item-input">
+              <label class="input-label-filter">Patient Name</label>
+              <select ng-model="appliedfilters.patientnameselected" ng-options="pname for pname in filtersavailable.patientnames">
+              <select>
+          </span>
+          <span class="item-input">
+              <label class="input-label-filter">Visit Type</label>
+              <select ng-model="appliedfilters.visittypeselected" ng-options="visittype for visittype in filtersavailable.visittypes">
+              </select>
+          </span>
+          <span class="item-input">
+              <label class="input-label-filter">Hospital Name</label>
+              <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames">
+              </select>
+          </span>
+          <span class="item-input">
+              <label class="input-label-filter">Attachments?</label>
+              <ion-checkbox class="item-checkbox-filter" style="position:relative;right:20px" ng-model="appliedfilters.docswithattachment">
+              </ion-checkbox>
+              </label>
+          </span>
           <div class="pull-right">
-              <button class="button-small button-assertive" ng-click="filterResetAll()">Reset All fields</button>
+              <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterResetAll()">Reset All</button>
           </div>
           <br>
+          <br>
           <div class="pull-center">
-            <button class="button button-assertive" ng-click="filterapply()">Apply</button>
+              <button class="button button-assertive" ng-click="filterapply()">Apply</button>
           </div>
         </ion-content>
-            </ion-modal-view>
+      </ion-modal-view>
     </script>
 <script id="pdf-viewer.html" type="text/ng-template">
     <ion-modal-view>
