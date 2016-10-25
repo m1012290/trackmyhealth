@@ -405,19 +405,13 @@ h1
   font-size: 18px;
 }
 */
-.my-nav {
-  list-style-type: disc;
-  padding-left: 4px;
-}
-
 .card .item:last-child,
 .list-inset .item:last-child
 {
   margin-bottom: -15px;
-  margin-top: -20px;
-  max-width: 100%;
-     overflow-x: hidden;
-
+ margin-top: -20px;
+ max-width: 100%;
+    overflow-x: hidden;
 }
 
 .col
@@ -429,9 +423,8 @@ h1
   -ms-flex: 1;
   flex: 1;
   display: block;
-  padding: 0.01px;
+   padding: 0.01px;
   width: 100%;
-
 }
 
 .text
@@ -526,7 +519,6 @@ h1
                 border: 1px solid #ddd;
                 margin-bottom: 15px;
                 width: 100%;
-
                 .message
                 {
                   color: #333;
@@ -567,8 +559,12 @@ h1
       }
     }
   }
-
 /* for myhealth */
+
+.pull-center
+{
+	text-align: center;
+}
 .row {
 
     padding: 0.1px;
@@ -579,11 +575,6 @@ h1
     margin-top: -3px;
     padding-top: 0;
 }
-.pull-center
-{
-	text-align: center;
-}
-
 
 
 
@@ -650,7 +641,7 @@ padding-top: 5px!important;}
 
     &-head
     {
-      background-color:#f7f4f4 ;
+      background-color:#d14836 ;
       h3
       {
         color:#fff!important;
@@ -670,8 +661,7 @@ padding-top: 5px!important;}
     &-buttons{
       padding:10px 0px 0px 0px!important;
       min-height: auto;
-     background-color: #f7f4f4!important;
-}
+      background-color: #d14836;
     }
 
     &-container .button-positive
@@ -835,7 +825,6 @@ hr.style-one {
   background-color: #d14836;
 
 }
-
 .ion-person:before
 {
     font-size: 25px;
@@ -867,7 +856,6 @@ hr.style-one {
 
 }
 
-
 textarea,
 input[type="text"],
 input[type="password"],
@@ -884,14 +872,14 @@ input[type="search"],
 input[type="tel"],
 input[type="color"] {
   display: block;
-  padding-top: 0px !important;
-  padding-left: 0px;
-  height: 25px;
+  padding-top: 2px;
+  padding-left: 0;
+  height: 34px;
   color: #000;
   font-weight:normal;
   vertical-align: middle;
-  font-size: 16px;
-  line-height: 17px;
+  font-size: 17px;
+  line-height: 16px;
 }
 
   .input-label {
@@ -1004,7 +992,9 @@ p
     font-size: 23px;
     padding-left: 45px;
     color: #d14836
-}// filter blinking
+}
+
+// filter blinking
 @keyframes blink {
   50% { color: #fff; }
   50% { color: transparent; }
