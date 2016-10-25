@@ -1873,271 +1873,282 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
   };
 
   $scope.data ={
-        "weight" : {
-           "value" : "",
-           "notes" : "",
-             options: {
-         floor: 0,
-         ceil: 500,
-         step: 1,
-         showTicks: 50
-
-     }
-        },
-        "bloodsugar" : {
-          "rbs" : "",
-          "ppbs": "",
-          "fbs" : "",
-          "notes" :"",
-             options: {
-       floor: 0,
-       ceil: 400,
-       step: 1
-     }
-        },
-        "bloodpressure" :{
-          "systolic" : "",
-          "diastolic": "",
-            options: {
-         floor: 0,
-         ceil: 300,
-         step: 1
-     }
-        },
-        "medication" : {
-          "value" : "",
-          "notes" : ""
-        },
-        "allergies" : {
-          "value" : "",
-          "notes" : ""
-        },
-        "vaccination" : {
-         "value" : "",
-         "notes" : ""
-        }
-   };
-
-
-   $scope.tracker = function(trackername, title){
-       $scope.trackername = trackername;
-       $scope.title = title;
-   };
-   $scope.tdate= new Date();
-   //function to capture vitals as entered by the user
- 	$scope.create = function() {
-
-       //check if the values are entered by user to proceed further to save the data
-      if(($scope.data.weight.value === '' || $scope.data.weight.value === 0)
-          && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
-          && ($scope.data.bloodsugar.ppbs === '' || $scope.data.bloodsugar.ppbs === 0)
-          && ($scope.data.bloodsugar.rbs === '' || $scope.data.bloodsugar.rbs === 0)
-          && ($scope.data.bloodpressure.systolic === '' || $scope.data.bloodpressure.systolic ===  0 )
-          && ($scope.data.bloodpressure.diastolic === '' || $scope.data.bloodpressure.diastolic === 0 )
-          && $scope.data.medication.value === ''
-          && $scope.data.allergies.value === ''
-          && $scope.data.vaccination.value === ''
-         )
-      {
-              $rootScope.showToast('There was no data entered to be saved','long','top');
-
-         $scope.closeModal1();
-       }else {
- 	     var details =[];
-           var medicalprofiledatatosave = {};
-           medicalprofiledatatosave["weight"] = {};
-           medicalprofiledatatosave["weight"]["value"] = $scope.data.weight.value;
-           medicalprofiledatatosave["weight"]["notes"] = $scope.data.weight.notes;
-           /*if($scope.data.bloodsugar.rbs !== 0){
-               medicalprofiledatatosave["bloodsugar"] = {};
-               medicalprofiledatatosave["bloodsugar"]["rbs"] = $scope.data.bloodsugar.rbs;
-           }*/
-           medicalprofiledatatosave["bloodsugar"] = {};
-            if($scope.data.bloodsugar.rbs !== 0){
-               if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
-                   medicalprofiledatatosave["bloodsugar"] = {};
-               }
-               medicalprofiledatatosave["bloodsugar"]["rbs"] = $scope.data.bloodsugar.rbs;
-           }
-           if($scope.data.bloodsugar.ppbs !== 0){
-               if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
-                   medicalprofiledatatosave["bloodsugar"] = {};
-               }
-               medicalprofiledatatosave["bloodsugar"]["ppbs"] = $scope.data.bloodsugar.ppbs;
-           }
-           if($scope.data.bloodsugar.fbs !== 0){
-                if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
-                   medicalprofiledatatosave["bloodsugar"] = {};
-               }
-               medicalprofiledatatosave["bloodsugar"]["fbs"] = $scope.data.bloodsugar.fbs;
-           }
-
-           medicalprofiledatatosave["bloodpressure"] = {};
-           medicalprofiledatatosave["bloodpressure"]["systolic"] = $scope.data.bloodpressure.systolic;
-           medicalprofiledatatosave["bloodpressure"]["diastolic"] = $scope.data.bloodpressure.diastolic;
-           medicalprofiledatatosave["medication"] = {}
-           medicalprofiledatatosave["medication"]["value"] = $scope.data.medication.value;
-           medicalprofiledatatosave["medication"]["notes"] = $scope.data.medication.notes;
-           medicalprofiledatatosave["allergies"] = {}
-           medicalprofiledatatosave["allergies"]["value"] = $scope.data.allergies.value;
-           medicalprofiledatatosave["allergies"]["notes"] = $scope.data.allergies.notes;
-            medicalprofiledatatosave["vaccination"] = {}
-           medicalprofiledatatosave["vaccination"]["value"] = $scope.data.vaccination.value;
-           medicalprofiledatatosave["vaccination"]["notes"] = $scope.data.vaccination.notes;
-
-        $rootScope.showLoader();
-        var medicalprofile = {
-     //     "data": $scope.data,
-           "data" : medicalprofiledatatosave,
-          "createdat" : $scope.tdate
-        };
-
-
-
-        medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
-              //console.log(data);
-              if(data.status == 'SUCCESS'){
-                 $rootScope.hideLoader();
-                 $rootScope.showToast('Medical profile data saved successfully',null,'top');
- 			          console.log("Records saved successfully");
-                 medicalprofileservice.getdetails($scope.patientId).then(function(data){
-                 	if(data.status === 'SUCCESS'){
-                     	console.log('data obtained['+ JSON.stringify(data) + ']');
-                       $scope.healthdetails = data.data;
-                       if(data.summary !== '' && data.summary !== 0 ){
-
-                         $scope.summary = data.summary;
-                       }
-                   }
-               }).catch(function(error){
-                   $rootScope.hideLoader();
-                   console.log('pritning error reason ['+ JSON.stringify(error) + ']');
- 				      });
-               $scope.closeModal1();
-              }}).catch(function(error){
- 		   		$rootScope.hideLoader();
-   		   			if(error.status === 404){
-                 console.log(" patientid passed is invalid");
-           		}else if(error.status ===500){
-                 console.log("internal server processing error at server side");
-   					  }
-            });
-       		$scope.data={
-              "weight" : {
-                 "value" : "",
-                 "notes" : "",
-                   options: {
-         floor: 0,
-         ceil: 500,
-         step: 1,
+         "weight" : {
+            "value" : "",
+            "notes" : "",
+              options: {
+          floor: 0,
+          ceil: 500,
+          step: 1,
           showTicks: 50
-     }
-              },
-              "bloodsugar" : {
-          "rbs" : "",
-          "ppbs": "",
-          "fbs" : "",
-          "notes" :"",
+
+      }
+         },
+         "bloodsugar" : {
+           "rbs" : "",
+           "ppbs": "",
+           "fbs" : "",
+           "notes" :"",
+              options: {
+        floor: 0,
+        ceil: 400,
+        step: 1
+      }
+         },
+         "bloodpressure" :{
+           "systolic" : "",
+           "diastolic": "",
              options: {
-       floor: 0,
-       ceil: 400,
-       step: 1
-     }
-        },
-              "bloodpressure" :{
-          "systolic" : "",
-          "diastolic": "",
-            options: {
-         floor: 0,
-         ceil: 300,
-         step: 1
-     }
-        },
-              "medication" : {
-                "value" : "",
-                "notes" : ""
-              },
-              "allergies" : {
-                "value" : "",
-                "notes" : ""
-              },
-              "vaccination" : {
+          floor: 0,
+          ceil: 300,
+          step: 1
+      }
+         },
+         "medication" : {
+           "value" : "",
+           "notes" : ""
+         },
+         "allergies" : {
+           "value" : "",
+           "notes" : ""
+         },
+         "vaccination" : {
+          "value" : "",
+          "notes" : ""
+         }
+    };
+
+
+    $scope.tracker = function(trackername, title){
+        $scope.trackername = trackername;
+        $scope.title = title;
+    };
+    $scope.tdate= new Date();
+    //function to capture vitals as entered by the user
+  	$scope.create = function() {
+
+        //check if the values are entered by user to proceed further to save the data
+       if(($scope.data.weight.value === '' || $scope.data.weight.value === 0)
+           && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
+           && ($scope.data.bloodsugar.ppbs === '' || $scope.data.bloodsugar.ppbs === 0)
+           && ($scope.data.bloodsugar.rbs === '' || $scope.data.bloodsugar.rbs === 0)
+           && ($scope.data.bloodpressure.systolic === '' || $scope.data.bloodpressure.systolic ===  0 )
+           && ($scope.data.bloodpressure.diastolic === '' || $scope.data.bloodpressure.diastolic === 0 )
+           && $scope.data.medication.value === ''
+           && $scope.data.allergies.value === ''
+           && $scope.data.vaccination.value === ''
+          )
+       {
+               $rootScope.showToast('There was no data entered to be saved','long','top');
+
+          $scope.closeModal1();
+        }else {
+  	     var details =[];
+            var medicalprofiledatatosave = {};
+            medicalprofiledatatosave["weight"] = {};
+            medicalprofiledatatosave["weight"]["value"] = $scope.data.weight.value;
+            medicalprofiledatatosave["weight"]["notes"] = $scope.data.weight.notes;
+            /*if($scope.data.bloodsugar.rbs !== 0){
+                medicalprofiledatatosave["bloodsugar"] = {};
+                medicalprofiledatatosave["bloodsugar"]["rbs"] = $scope.data.bloodsugar.rbs;
+            }*/
+            medicalprofiledatatosave["bloodsugar"] = {};
+             if($scope.data.bloodsugar.rbs !== 0){
+                if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
+                    medicalprofiledatatosave["bloodsugar"] = {};
+                }
+                medicalprofiledatatosave["bloodsugar"]["rbs"] = $scope.data.bloodsugar.rbs;
+            }
+            if($scope.data.bloodsugar.ppbs !== 0){
+                if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
+                    medicalprofiledatatosave["bloodsugar"] = {};
+                }
+                medicalprofiledatatosave["bloodsugar"]["ppbs"] = $scope.data.bloodsugar.ppbs;
+            }
+            if($scope.data.bloodsugar.fbs !== 0){
+                 if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
+                    medicalprofiledatatosave["bloodsugar"] = {};
+                }
+                medicalprofiledatatosave["bloodsugar"]["fbs"] = $scope.data.bloodsugar.fbs;
+            }
+
+            medicalprofiledatatosave["bloodpressure"] = {};
+            medicalprofiledatatosave["bloodpressure"]["systolic"] = $scope.data.bloodpressure.systolic;
+            medicalprofiledatatosave["bloodpressure"]["diastolic"] = $scope.data.bloodpressure.diastolic;
+            medicalprofiledatatosave["medication"] = {}
+            medicalprofiledatatosave["medication"]["value"] = $scope.data.medication.value;
+            medicalprofiledatatosave["medication"]["notes"] = $scope.data.medication.notes;
+            medicalprofiledatatosave["allergies"] = {}
+            medicalprofiledatatosave["allergies"]["value"] = $scope.data.allergies.value;
+            medicalprofiledatatosave["allergies"]["notes"] = $scope.data.allergies.notes;
+             medicalprofiledatatosave["vaccination"] = {}
+            medicalprofiledatatosave["vaccination"]["value"] = $scope.data.vaccination.value;
+            medicalprofiledatatosave["vaccination"]["notes"] = $scope.data.vaccination.notes;
+
+         $rootScope.showLoader();
+         var medicalprofile = {
+      //     "data": $scope.data,
+            "data" : medicalprofiledatatosave,
+           "createdat" : $scope.tdate
+         };
+
+
+
+         medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
+               //console.log(data);
+               if(data.status == 'SUCCESS'){
+                  $rootScope.hideLoader();
+                  $rootScope.showToast('Medical profile data saved successfully',null,'top');
+  			          console.log("Records saved successfully");
+                  medicalprofileservice.getdetails($scope.patientId).then(function(data){
+                  	if(data.status === 'SUCCESS'){
+                      	console.log('data obtained['+ JSON.stringify(data) + ']');
+                        $scope.healthdetails = data.data;
+                        if(data.summary !== '' && data.summary !== 0 ){
+
+                          $scope.summary = data.summary;
+                        }
+                    }
+                }).catch(function(error){
+                    $rootScope.hideLoader();
+                    console.log('pritning error reason ['+ JSON.stringify(error) + ']');
+  				      });
+                $scope.closeModal1();
+               }}).catch(function(error){
+  		   		$rootScope.hideLoader();
+    		   			if(error.status === 404){
+                  console.log(" patientid passed is invalid");
+            		}else if(error.status ===500){
+                  console.log("internal server processing error at server side");
+    					  }
+             });
+        		$scope.data={
+               "weight" : {
+                  "value" : "",
+                  "notes" : "",
+                    options: {
+          floor: 0,
+          ceil: 500,
+          step: 1,
+           showTicks: 50
+      }
+               },
+               "bloodsugar" : {
+           "rbs" : "",
+           "ppbs": "",
+           "fbs" : "",
+           "notes" :"",
+              options: {
+        floor: 0,
+        ceil: 400,
+        step: 1
+      }
+         },
+               "bloodpressure" :{
+           "systolic" : "",
+           "diastolic": "",
+             options: {
+          floor: 0,
+          ceil: 300,
+          step: 1
+      }
+         },
+               "medication" : {
                  "value" : "",
                  "notes" : ""
-               }
-           };
-       }//$scope.timeLineForm.$setPristine();
- 	};
- 	$scope.closeModal1 = function() {
-     	$scope.modal.hide();
-   };
-   $scope.$on("$ionicView.beforeLeave", function(event, data){
-   });
+               },
+               "allergies" : {
+                 "value" : "",
+                 "notes" : ""
+               },
+               "vaccination" : {
+                  "value" : "",
+                  "notes" : ""
+                }
+            };
+        }//$scope.timeLineForm.$setPristine();
+  	};
+  	$scope.closeModal1 = function() {
+      	$scope.modal.hide();
+    };
+    $scope.$on("$ionicView.beforeLeave", function(event, data){
+    });
 
-   $scope.$on("$ionicView.enter", function(event, data){
-     console.log('within $ionicView.afterEnter');
-   });
+    $scope.$on("$ionicView.enter", function(event, data){
+      console.log('within $ionicView.afterEnter');
+    });
 
-   $scope.healthdetails = [];
-   $scope.summary = {
-      "weight" : {
+    $scope.healthdetails = [];
+    $scope.summary = {
+       "weight" : {
+          "value" : "",
+          "notes" : ""
+       },
+       "bloodsugar" : {
+         "rbs" : "",
+         "ppbs": "",
+         "fbs" : "",
+         "notes" :""
+       },
+       "bloodpressure" :{
+         "systolic" : "",
+        "diastolic": ""
+       },
+       "medication" : {
          "value" : "",
          "notes" : ""
-      },
-      "bloodsugar" : {
-        "rbs" : "",
-        "ppbs": "",
-        "fbs" : "",
-        "notes" :""
-      },
-      "bloodpressure" :{
-        "systolic" : "",
-       "diastolic": ""
-      },
-      "medication" : {
-        "value" : "",
-        "notes" : ""
-		"value" : "",
-        "notes" : ""
-      },
-      "allergies" : {
-        "value" : "",
-        "notes" : ""
-    });    $scope.openModal1 = function(){
-       $scope.modal.show();
-     };
-     $rootScope.showLoader();
-     registrationdetsdb.query({}).then(function(response){
-        var result = DBA.getById(response);
-        //$scope.data.patientId = result.appregistrationid;
-        $scope.patientId = result.appregistrationid;
+       },
+       "allergies" : {
+         "value" : "",
+         "notes" : ""
+       },
+       "vaccination" : {
+          "value" : "",
+          "notes" : ""
+       }
+    };
 
-        //Invoke retrieve medicalprofile service in order to display history data if any available
-        medicalprofileservice.getdetails($scope.patientId).then(function(data){
-                console.log("obtaining medical details" + data);
-            //$scope.details=data;
-          if(data.status === 'SUCCESS'){
-            $rootScope.hideLoader();
-            console.log('data obtained['+ JSON.stringify(data) + ']');
-            $scope.healthdetails = data.data;
-            if(data.summary !== '' && data.summary !== 0){
-             $scope.summary = data.summary;
-            }
-          }
-        }).catch(function(error){
-            $rootScope.hideLoader();
-            var alertPopUp = $ionicPopup.alert({
-                title:"There is no medical history available currently"
-            });
+    $scope.$on("$ionicView.loaded", function(event, data){
+    $ionicModal.fromTemplateUrl('medicalprofile.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+     $scope.openModal1 = function(){
+        $scope.modal.show();
+      };
+      $rootScope.showLoader();
+      registrationdetsdb.query({}).then(function(response){
+         var result = DBA.getById(response);
+         //$scope.data.patientId = result.appregistrationid;
+         $scope.patientId = result.appregistrationid;
+
+         //Invoke retrieve medicalprofile service in order to display history data if any available
+         medicalprofileservice.getdetails($scope.patientId).then(function(data){
+                 console.log("obtaining medical details" + data);
+             //$scope.details=data;
+           if(data.status === 'SUCCESS'){
+             $rootScope.hideLoader();
+             console.log('data obtained['+ JSON.stringify(data) + ']');
+             $scope.healthdetails = data.data;
+             if(data.summary !== '' && data.summary !== 0){
+              $scope.summary = data.summary;
+             }
+           }
+         }).catch(function(error){
+             $rootScope.hideLoader();
+             var alertPopUp = $ionicPopup.alert({
+                 title:"There is no medical history available currently"
+             });
+         });
+      }).catch(function(error){
+        $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+        console.log('on ok click');
         });
-     }).catch(function(error){
-       $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-       console.log('on ok click');
-       });
-     });
-   });
- }])
-
+      });
+    });
+  }])
 .controller('FeedbackCtrl', ['$scope', '$state', '$ionicPopup', '$ionicSlideBoxDelegate', 'feedbackform', function($scope, $state, $ionicPopup, $ionicSlideBoxDelegate, feedbackform){
 
 	$scope.temp = [];
@@ -3690,16 +3701,7 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 	};
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
-  /*$scope.imagesarray = [{
-    'imgnativeurl':'../img/icon.png',
-    'imgtag' : 'test'
-  },{
-    'imgnativeurl':'../img/icon.png',
-    'imgtag' : 'test'
-  },{
-    'imgnativeurl':'../img/icon.png',
-    'imgtag' : 'test'
-  }];*/
+
   $ionicModal.fromTemplateUrl('imageslist.html', {
     scope: $scope,
     animation: 'slide-in-up'
