@@ -443,9 +443,10 @@ h1
 
 .h-list .item-card .visits-block
 {
-  padding: 5px;
+  padding: 1px;
   background: #fafafa;
   border-bottom: 1px solid #ddd;
+  width: 100%;
   .timeline
   {
     display: table;
@@ -461,6 +462,7 @@ h1
     margin-bottom: -2px;
     padding: 10px 5px;
     padding-left: 0;
+    width: 100%;
     .row
     {
         display: table-row;
@@ -514,11 +516,12 @@ h1
                 -moz-border-radius: 8px;
                 -o-border-radius: 8px;
                 -ms-border-radius: 8px;
-                border-radius: 8px;
+                border-radius: 3px;
                 overflow: hidden;
                 border: 1px solid #ddd;
                 margin-bottom: 15px;
                 width: 100%;
+                margin-left: 25px;
                 .message
                 {
                   color: #333;
@@ -636,7 +639,7 @@ padding-top: 5px!important;}
 .popup
 {
     max-height: 110% ;
-    width: 70%;
+    width: 100%;
     height:auto;
 
     &-head
@@ -661,7 +664,7 @@ padding-top: 5px!important;}
     &-buttons{
       padding:10px 0px 0px 0px!important;
       min-height: auto;
-      background-color: #d14836;
+      background-color: #f5f5f5;
     }
 
     &-container .button-positive
@@ -729,7 +732,8 @@ padding-top: 5px!important;}
     }
     .popup-buttons .button
     {
-        margin-right: 0px
+        margin-right: 0px;
+
     }
     .button.button-positive
     {
