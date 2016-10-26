@@ -32,7 +32,7 @@
 
 <div class="row">
     <div class="col col-50"><h3><b>Blood Pressure</b><button class="button button-small button-clear"  ng-click="openModal1()" on-tap="tracker('Blood Pressure', 'Blood Pressure')"><i class="icon ion-edit assertive"   text="Blood Pressure" ></i></button></h3>
- <div class="row" ng-if="summary.bloodpressure.systolic !==''">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}}</div>
+ <div class="row" ng-if="summary.bloodpressure.systolic !=='' && summary.bloodpressure.systolic !== 0">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}}</div>
 </div>
     <div class="col"><h3><b>Weight</b><button class="button button-small button-clear"  ng-click="openModal1()" on-tap="tracker('Weight', 'Weight')"><i class="icon ion-edit assertive" text="Weight" ></i></button></h3>
 <div class="row" ng-if="summary.weight.value !=='' && summary.weight.value !==0 ">	{{summary.weight.value}}</div>
@@ -79,7 +79,7 @@
 
                   <div class="visits">
                       <div class="timeline">
-                        <div class="row"  ng-repeat="details in healthdetails track by $index">
+                        <div class="row"  ng-repeat="details in healthdetails track by $index ">
 
                           <div class="right" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
                           || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
@@ -101,15 +101,15 @@
                           )">
 
                                  <!--div class="day">{{details.createdat.day}}</div-->
-                                          <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy"}}</div>
+                                          <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy, h:mm a"}} </div>
                                               <!--h3 style="text-align:center;"><strong>{{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy"}}</strong></h3-->
 
                           </button>
                                   <div class="notification">
 
                                       <div class="message">
-                                        <div ng-repeat="medicalprofiledata in details.medicalprofile">
-                                           <p class="item-text-wrap" ng-show="appliedfilters.weightFilter != false  && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
+                                        <div ng-repeat="medicalprofiledata in details.medicalprofile | orderBy:'-timestamp'">
+                                           <p  class="item-text-wrap" ng-show="appliedfilters.weightFilter != false  && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.rbs && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''">Random Blood Sugar(rbs) :<strong> {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''">Post Pandrial Blood Sugar(ppbs) :<strong> {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.fbs && medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''">Fasting Blood Sugar(fbs) :<strong> {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
