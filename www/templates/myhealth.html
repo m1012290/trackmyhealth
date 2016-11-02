@@ -8,7 +8,7 @@
 <ion-nav-buttons side="right" >
   <button class="button button-clear" ng-click="filterdetails()">
     <div ng-switch on="appliedfilters.isFilterApplied">
-      <div ng-switch-when="true"
+      <div ng-switch-when="true">
            <i class="ion-funnel icon-btn-customize blink"></i>
        </div>
       <div ng-switch-default>
@@ -77,11 +77,10 @@
 
                     <div class="visits-block text-muted">
 
-                  <div class="visits">
                       <div class="timeline">
                         <div class="row"  ng-repeat="details in healthdetails track by $index">
 
-                          <div class="right" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+                          <div class="right" ng-show="((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
                           || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
                           || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
                           || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)
@@ -90,7 +89,7 @@
                           || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
                           || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
                           )">
-                               <button class="button button-small button-assertive" ng-show="appliedfilters.allVitals != false ? true : ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
+                               <button class="button button-small button-assertive" ng-show="((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
                           || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
                           || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
                           || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && appliedfilters.medicationFilter != false)
@@ -123,7 +122,6 @@
                       </div>
                   </div>
                </div>
-            </div>
         </div>
      </div>
       </div>
@@ -287,8 +285,7 @@
            <ion-checkbox style="font-size: 16px"
                          ng-repeat="item in healthFilterList"
                          ng-model="item.checked"
-                         ng-checked="item.checked"
-                         ng-change="filterChange(item,$index)">
+                         ng-checked="item.checked">
              {{ item.text }}
            </ion-checkbox>
 
