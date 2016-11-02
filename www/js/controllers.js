@@ -1883,14 +1883,26 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
       }
          },
          "bloodpressure" :{
-           "systolic" : "",
-           "diastolic": "",
-             options: {
-          floor: 0,
-          ceil: 300,
-          step: 1
-      }
-         },
+     "systolic" : "",
+     "diastolic": "",
+       options: {
+    floor: 30,
+    ceil: 250,
+    step: 1,
+
+   translate: function(value, sliderId, label) {
+switch (label) {
+  case 'model':
+    return 'systolic : &nbsp;' + value;
+  case 'high':
+    return 'diastolic : &nbsp;' + value;
+  default:
+    return  + value
+}
+}
+}
+   },
+
          "medication" : {
            "value" : "",
            "notes" : ""
@@ -1978,10 +1990,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
             "data" : medicalprofiledatatosave,
            "createdat" : $scope.tdate
          };
-
-
-
-         medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
+               medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
                //console.log(data);
                if(data.status == 'SUCCESS'){
                   $rootScope.hideLoader();
@@ -1994,6 +2003,8 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                         if(data.summary !== '' && data.summary !== 0 ){
 
                           $scope.summary = data.summary;
+                         debugger;
+                         console.log($scope.summary);
                         }
                     }
                 }).catch(function(error){
@@ -2035,9 +2046,19 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
            "systolic" : "",
            "diastolic": "",
              options: {
-          floor: 0,
-          ceil: 300,
-          step: 1
+          floor: 30,
+          ceil: 250,
+          step: 1,
+ translate: function(value, sliderId, label) {
+      switch (label) {
+        case 'model':
+          return 'systolic : &nbsp;' + value;
+        case 'high':
+          return 'diastolic : &nbsp;' + value;
+        default:
+          return + value
+      }
+    }
       }
          },
                "medication" : {
@@ -2103,6 +2124,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
         $scope.modal = modal;
       });
      $scope.openModal1 = function(){
+         $scope.tdate= new Date();
         $scope.modal.show();
       };
       $rootScope.showLoader();
@@ -2121,6 +2143,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
              $scope.healthdetails = data.data;
              if(data.summary !== '' && data.summary !== 0){
               $scope.summary = data.summary;
+      console.log($scope.summary);
              }
            }
          }).catch(function(error){
@@ -2677,6 +2700,8 @@ $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
    $scope.closeModalfilter = function(){
        $scope.filtermodal.hide();
    }
+
+
 
    $scope.appliedfilters = {
      "backup":{"patientnameselected" : "All"
@@ -3427,6 +3452,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
            $scope.filtermodal.hide();
        }
 
+
        //Filters applied
        $scope.appliedfilters = {
          "backup":{"hospitalnameselected" : "All"
@@ -3637,6 +3663,8 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
         $scope.closeModal5 = function() {
            $scope.modal5.hide();
         }
+
+
 //feedback questions
 	$scope.questions=[{question: "How was the service at the hospital reception?",answer: ''},
 		{question: "The care and attention of the staff(nurses and doctors)",answer: ''},
