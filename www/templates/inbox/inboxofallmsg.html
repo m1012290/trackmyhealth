@@ -35,8 +35,7 @@
 
 <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 
-                    <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-if="visit.reporturl" ng-click="downloaddocument(visit.reporturl)" style="color:blue;"> Report</button></p>
-                 </div>
+                    <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-if="visit.reporturl" ng-click="downloaddocument(visit)" style="color:blue;"> Report</button></p>                 </div>
 
  </ion-content>
 

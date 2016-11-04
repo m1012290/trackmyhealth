@@ -1814,7 +1814,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   &&  typeof profiledata.profile[0].bloodsugar.ppbs !== 'undefined'
                   &&  profiledata.profile[0].bloodsugar.ppbs !== ''
                   && profiledata.profile[0].bloodsugar.ppbs !== null
-                  && profiledata.profile[0].bloodsugar.fbs.toString().indexOf(filterText.toString()) !== -1)
+                  && profiledata.profile[0].bloodsugar.ppbs.toString().indexOf(filterText.toString()) !== -1)
               ||
               (typeof profiledata.profile[0].bloodsugar !== 'undefined'
                   &&  typeof profiledata.profile[0].bloodsugar.rbs !== 'undefined'
@@ -1842,7 +1842,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   && profiledata.profile[0].bloodpressure.systolic !== null
                   && profiledata.profile[0].bloodpressure.systolic.toString().indexOf(filterText.toString()) !== -1)
               ||
-              (typeof profiledata.profile[0].bloodpressure !== 'undefined'
+            (typeof profiledata.profile[0].bloodpressure !== 'undefined'
                   &&  profiledata.profile[0].bloodpressure.diastolic !== ''
                   && profiledata.profile[0].bloodpressure.diastolic !== null
                   && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
@@ -1890,9 +1890,9 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
    translate: function(value, sliderId, label) {
 switch (label) {
   case 'model':
-    return 'systolic : &nbsp;' + value;
-  case 'high':
     return 'diastolic : &nbsp;' + value;
+      case 'high':
+  return 'systolic : &nbsp;' + value;
   default:
     return  + value
 }
@@ -2000,7 +2000,7 @@ switch (label) {
                         if(data.summary !== '' && data.summary !== 0 ){
 
                           $scope.summary = data.summary;
-                         debugger;
+
                          console.log($scope.summary);
                         }
                     }
@@ -2049,9 +2049,9 @@ switch (label) {
  translate: function(value, sliderId, label) {
       switch (label) {
         case 'model':
-          return 'systolic : &nbsp;' + value;
+            return 'diastolic : &nbsp;' + value;
         case 'high':
-          return 'diastolic : &nbsp;' + value;
+          return 'systolic : &nbsp;' + value;
         default:
           return + value
       }
@@ -2685,14 +2685,14 @@ switch (label) {
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','feedbackservice',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, feedbackservice){
 
 $rootScope.showLoader();
-$ionicModal.fromTemplateUrl('filterPatientDetails.html',{
-       scope: $scope,
-       animation: 'slide-in-up'
-   }).then(function(modal){
-       $scope.filtermodal = modal;
-   });
    $scope.openModalfilter = function(){
-        $scope.filtermodal.show();
+     $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal){
+            $scope.filtermodal = modal;
+            $scope.filtermodal.show();
+        });
    }
    $scope.closeModalfilter = function(){
        $scope.filtermodal.hide();
@@ -3078,35 +3078,44 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
   if(socket !== null){
     socket.on('connect', function(){
       console.log('socket connected successfully');
-      socket.emit('appregistrationid', $scope.patientId);
+      socket.emit('appregistrationid',$scope.patientId);
     });
     socket.on('documentrecieved', function(data){
            //console.log('printing data object recieved ['+ data + ']');
-           var datarecieved = JSON.parse(data);
+           var datarecieved = data;
            console.log('printing parsed data recieved ['+ data + ']');
-           var uint8array = base64ToUint8Array(datarecieved.data);
-           var blob = new Blob([uint8array],{type:'application/pdf'});
-           //below 2 lines are working code commented for testing...
-           $scope.pdfUrl = URL.createObjectURL(blob);
-           $scope.pdfviewermodal.show();
-           console.log('blob length ['+ blob.length + ']');
-           window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
-
-              dir.getDir("TracMyHealth",{create:true}, function(direntry){
-                var filename = "labreport_"+(new Date()).getTime()+".pdf";
-                direntry.getFile(filename, {create:true}, function(file) {
-                  console.log("File created succesfully.");
-                  file.createWriter(function(fileWriter) {
-                      console.log("Writing content to file");
-                      fileWriter.write(blob);
-                      $rootScope.showToast("Report has also been downloaded to your device",'long','center');
-                  }, function(err){
-                      $rootScope.showToast("Couldn't downloaded the report, please try again with error ["+ JSON.stringify(err) +"]",'long','center');
+           if(data && data === 'ERROR'){
+             $rootScope.hideLoader();
+             $rootScope.showToast('Document is unavailable/error retrieving the document, please try again later', 'long','center');
+           }else{
+             $rootScope.hideLoader();
+             try{
+             var uint8array = base64ToUint8Array(datarecieved);
+             var blob = new Blob([uint8array],{type:'application/pdf'});
+             //below 2 lines are working code commented for testing...
+             $scope.pdfUrl = URL.createObjectURL(blob);
+             $scope.pdfviewermodal.show();
+             console.log('blob length ['+ blob.length + ']');
+             window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
+             //window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
+                dir.getDir("TracMyHealth",{create:true}, function(direntry){
+                  var filename = "labreport_"+(new Date()).getTime()+".pdf";
+                  direntry.getFile(filename, {create:true}, function(file) {
+                    console.log("File created succesfully.");
+                    file.createWriter(function(fileWriter) {
+                        console.log("Writing content to file");
+                        fileWriter.write(blob);
+                        $rootScope.showToast("Report has also been downloaded to your device",'long','center');
+                    }, function(err){
+                        $rootScope.showToast("Couldn't download the report, please try again",'long','center');
+                    });
                   });
                 });
-              });
-           });
-
+             });
+           }catch(error){
+             $rootScope.showToast("Couldn't download the report, please try again",'long','center');
+           }
+         }
     });
   }
   function base64ToUint8Array(base64) {
@@ -3117,10 +3126,13 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
     }
     return uint8Array;
   }
-  $scope.downloaddocument = function(url){
+  $scope.downloaddocument = function(visit){
+    $rootScope.showLoader();
     var data = {
-      "id" : "id",
-      "documentname":"name"
+      "visitid" : visit.visitid.visitid,
+      "appregistrationid" : visit.visitid.patientregno,
+      "labrefno" : visit.visitid.labrefno,
+      "hospitalroutingkey" : visit.hospitalid.hospitalroutingkey[0]
     };
     socket.emit('documentrequest',data);
   }
@@ -3579,7 +3591,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              expression:function(filterText, value, index, array){
                  return ( value.notificationtext.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
                          || value.hospitalid.hospitalname.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
-                         || value.notificationdate.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
                          || value.hospitalid.hospitaltelnumber.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
                                                )
              }

@@ -1020,7 +1020,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 
       fetchvisit: function(doctorid, patientid, visitid){
 			var deferred = $q.defer();
-			var resource = $resource (" https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:doctorid/:patientid/visits/:visitid/notifications");
+			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:doctorid/:patientid/visits/:visitid/notifications");
 			resource.get({ doctorid: doctorid, patientid: patientid, visitid: visitid }, function(data){
 				console.log( "doctor service call is successful ["+ JSON.stringify(data) + "]");
 				deferred.resolve(data);
@@ -1037,10 +1037,14 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
  //Create socket and connect to http://cat.socket.io
  var mySocket = null;
  if(typeof io !== 'undefined'){
-    var myIoSocket = io.connect('https://socketioserver-m1012290.c9users.io:8080');
+    console.log('io is not undefined');
+    //var myIoSocket = io.connect( "https://socketioserver-m1012290.c9users.io:8080", { secure: true, transports: [ "flashsocket","polling","websocket" ] } );
+    var myIoSocket = io.connect( "https://bnotified-service-m1012290.c9users.io:8080" );
+    //var myIoSocket = io.connect('https://bnotified-service-m1012290.c9users.io:8080');
     	mySocket = socketFactory({
       	ioSocket: myIoSocket
     });
   }
+
 	return mySocket;
 });
