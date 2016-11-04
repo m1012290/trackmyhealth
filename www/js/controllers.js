@@ -1170,9 +1170,9 @@ if($scope.formData.doctor == true){
 
      $scope.appliedfilters = {
        "backup":{
-         "hospitalnameselected" : "All"
+         "hospitalnameselected" : []
          ,"isFilterApplied": false}
-       ,"hospitalnameselected" : "All"
+       ,"hospitalnameselected" : []
        ,"isFilterApplied": false
      };
 
@@ -1181,13 +1181,16 @@ if($scope.formData.doctor == true){
      };
 
      $scope.filterResetAll = function(){
-       $scope.appliedfilters.hospitalnameselected="All";
-       $scope.appliedfilters.isFilterApplied= false;
+       $scope.appliedfilters.hospitalnameselected=angular.copy("");
+     }
+
+     $scope.filterSetAll = function(){
+       $scope.appliedfilters.hospitalnameselected=angular.copy($scope.filtersavailable.hospitalnames);
      }
 
      $scope.filterCancel = function(){
-          //keep a backup copy of previous filter incase of cancel press
-          $scope.appliedfilters.hospitalnameselected=$scope.appliedfilters.backup.hospitalnameselected;
+          //copy from backup in case of cancel press
+          $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
           $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
           $scope.closeModalfilter();
      }
@@ -1195,9 +1198,9 @@ if($scope.formData.doctor == true){
      $scope.filterapply = function(){
            var filteredkey=0;
            var allHospitals=false;
-
-           if(($scope.hospitalslist.length != 0) || ($scope.backuphosvisitinfo != undefined)){
-              if(angular.equals($scope.appliedfilters.hospitalnameselected,"All"))
+           if($scope.appliedfilters.hospitalnameselected.length != 0 )
+           {
+              if($scope.appliedfilters.hospitalnameselected.length == $scope.filtersavailable.hospitalnames.length)
                   allHospitals=true;
 
               if(allHospitals==true)
@@ -1221,23 +1224,22 @@ if($scope.formData.doctor == true){
                   $scope.hospitalslist=angular.copy($scope.backuphosvisitinfo);
                 }
 
-                angular.forEach($scope.hospitalslist,function (visitdata,key){
-                  if((allHospitals == true) || angular.equals($scope.appliedfilters.hospitalnameselected,visitdata.hospitalname))
-                    {
-                        $scope.hospitalslist[filteredkey]=visitdata;
-                        filteredkey++;
-                  }//end of if
-                })//end of forEach
+                angular.forEach($scope.appliedfilters.hospitalnameselected,function (hospitalName,key1){
+                    angular.forEach($scope.hospitalslist,function (hospitalVisited,key2){
+                        if(angular.equals(hospitalName,hospitalVisited.hospitalname))
+                        {
+                            $scope.hospitalslist[filteredkey]=hospitalVisited   ;
+                            filteredkey++;
+                        }//end of if
+                    });
+                });
                 $scope.hospitalslist.length=filteredkey;
               }//end of else
-            }
-            else{
-              //No data to filter show error msg
-              //no need to open modal
-              $scope.appliedfilters.isFilterApplied= false;
-              $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
-            }
             $scope.closeModalfilter();
+          }
+          else{
+            $rootScope.showPopup({title:'Filter Error', template:"Select at least one hospital"});
+          }
       }//end of filterapply
 
      $scope.filterDetails = function(visitid){
@@ -1245,10 +1247,6 @@ if($scope.formData.doctor == true){
            if($scope.backuphosvisitinfo == undefined)
                $scope.backuphosvisitinfo=angular.copy($scope.hospitalslist);
            angular.forEach($scope.backuphosvisitinfo, function(visitdata, key1){
-              if($scope.filtersavailable.hospitalnames.length === 0){
-                  $scope.filtersavailable.hospitalnames.push("All");
-                  $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
-              }else{
                   var namefound = false;
                   angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
                      if(angular.equals(value, visitdata.hospitalname)){
@@ -1258,10 +1256,9 @@ if($scope.formData.doctor == true){
                   if(!namefound){
                      $scope.filtersavailable.hospitalnames.push(visitdata.hospitalname);
                   }
-                }
             });
             //Keep a copy of previous filter values for backup in case of cancel press
-            $scope.appliedfilters.backup.hospitalnameselected=$scope.appliedfilters.hospitalnameselected;
+            $scope.appliedfilters.backup.hospitalnameselected=angular.copy($scope.appliedfilters.hospitalnameselected);
             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             $scope.openModalfilter();
           }
