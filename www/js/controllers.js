@@ -1817,7 +1817,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   &&  typeof profiledata.profile[0].bloodsugar.ppbs !== 'undefined'
                   &&  profiledata.profile[0].bloodsugar.ppbs !== ''
                   && profiledata.profile[0].bloodsugar.ppbs !== null
-                  && profiledata.profile[0].bloodsugar.fbs.toString().indexOf(filterText.toString()) !== -1)
+                  && profiledata.profile[0].bloodsugar.ppbs.toString().indexOf(filterText.toString()) !== -1)
               ||
               (typeof profiledata.profile[0].bloodsugar !== 'undefined'
                   &&  typeof profiledata.profile[0].bloodsugar.rbs !== 'undefined'
@@ -1845,7 +1845,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   && profiledata.profile[0].bloodpressure.systolic !== null
                   && profiledata.profile[0].bloodpressure.systolic.toString().indexOf(filterText.toString()) !== -1)
               ||
-              (typeof profiledata.profile[0].bloodpressure !== 'undefined'
+            (typeof profiledata.profile[0].bloodpressure !== 'undefined'
                   &&  profiledata.profile[0].bloodpressure.diastolic !== ''
                   && profiledata.profile[0].bloodpressure.diastolic !== null
                   && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
@@ -1893,9 +1893,9 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
    translate: function(value, sliderId, label) {
 switch (label) {
   case 'model':
-    return 'systolic : &nbsp;' + value;
-  case 'high':
     return 'diastolic : &nbsp;' + value;
+      case 'high':
+  return 'systolic : &nbsp;' + value;
   default:
     return  + value
 }
@@ -2003,7 +2003,7 @@ switch (label) {
                         if(data.summary !== '' && data.summary !== 0 ){
 
                           $scope.summary = data.summary;
-                         debugger;
+
                          console.log($scope.summary);
                         }
                     }
@@ -2052,9 +2052,9 @@ switch (label) {
  translate: function(value, sliderId, label) {
       switch (label) {
         case 'model':
-          return 'systolic : &nbsp;' + value;
+            return 'diastolic : &nbsp;' + value;
         case 'high':
-          return 'diastolic : &nbsp;' + value;
+          return 'systolic : &nbsp;' + value;
         default:
           return + value
       }
@@ -3594,7 +3594,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              expression:function(filterText, value, index, array){
                  return ( value.notificationtext.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
                          || value.hospitalid.hospitalname.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
-                         || value.notificationdate.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
                          || value.hospitalid.hospitaltelnumber.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
                                                )
              }
