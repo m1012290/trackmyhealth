@@ -1838,10 +1838,17 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   && profiledata.profile[0].vaccination.value.toString().indexOf(filterText.toString()) !== -1)
               ||
               (typeof profiledata.profile[0].bloodpressure !== 'undefined'
+                  &&  typeof profiledata.profile[0].bloodpressure.systolic !== 'undefined'
                   &&  profiledata.profile[0].bloodpressure.systolic !== ''
                   && profiledata.profile[0].bloodpressure.systolic !== null
                   && profiledata.profile[0].bloodpressure.systolic.toString().indexOf(filterText.toString()) !== -1)
-    
+              ||
+                  (typeof profiledata.profile[0].bloodpressure !== 'undefined'
+                      && typeof profiledata.profile[0].bloodpressure.diastolic !== 'undefined'
+                      &&  profiledata.profile[0].bloodpressure.diastolic !== ''
+                      && profiledata.profile[0].bloodpressure.diastolic !== null
+                      && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
+
               ){
                   foundvalue = true;
               }
@@ -3718,6 +3725,9 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 		  myPopup.close();
 	 }
 	};
+}])
+.controller('healthimageCtrl',['$scope',function($scope){
+
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
 
