@@ -1841,11 +1841,7 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   &&  profiledata.profile[0].bloodpressure.systolic !== ''
                   && profiledata.profile[0].bloodpressure.systolic !== null
                   && profiledata.profile[0].bloodpressure.systolic.toString().indexOf(filterText.toString()) !== -1)
-              ||
-            (typeof profiledata.profile[0].bloodpressure !== 'undefined'
-                  &&  profiledata.profile[0].bloodpressure.diastolic !== ''
-                  && profiledata.profile[0].bloodpressure.diastolic !== null
-                  && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
+    
               ){
                   foundvalue = true;
               }
