@@ -242,7 +242,8 @@ angular.module('bnotifiedappctrls', [])
             console.log('fileSystem object ['+ JSON.stringify(fileSystem) + ']');
         }); */
 
-          window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Pictures", function(dir) {
+          //window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Pictures", function(dir) {
+          window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
              dir.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
                fileEntry.copyTo(
                  direntry,
@@ -3077,6 +3078,9 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
   }).then(function (modal) {
         $scope.pdfviewermodal = modal;
   });
+  $scope.hidePDFViewerModal = function(){
+    $scope.pdfviewermodal.hide();
+  };
   var profiledata = loginservice.getProfileData();
   if(socket !== null){
     socket.on('connect', function(){
@@ -3099,9 +3103,9 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              $scope.pdfUrl = URL.createObjectURL(blob);
              $scope.pdfviewermodal.show();
              console.log('blob length ['+ blob.length + ']');
-             window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
-             //window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
-                dir.getDir("TracMyHealth",{create:true}, function(direntry){
+             //window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
+             window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
+                dir.getDirectory("TracMyHealth",{create:true}, function(direntry){
                   var filename = "labreport_"+(new Date()).getTime()+".pdf";
                   direntry.getFile(filename, {create:true}, function(file) {
                     console.log("File created succesfully.");
