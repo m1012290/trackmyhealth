@@ -35,7 +35,7 @@
 
 <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 
-                    <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-if="visit.reporturl" ng-click="downloaddocument(visit)" style="color:blue;"> Report</button></p>                 </div>
+                    <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-if="visit.documentmetadata && visitdocumentmetadata.docname !== null && visitdocumentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;"> Report</button></p>                 </div>
 
  </ion-content>
 
@@ -201,7 +201,7 @@
           </span>
           <span class="item-input">
               <label class="input-label-filter">Visit Type</label>
-              <select ng-model="appliedfilters.visittypeselected" ng-options="visittype for visittype in filtersavailable.visittypes">
+              <select ng-model="appliedfilters.visittypeselected" ng-options="visittype for visittype in filtersavailable.visittypes" multiple="true">
               </select>
           </span>
           <span class="item-input">
@@ -215,11 +215,8 @@
               </ion-checkbox>
               </label>
           </span>
-          <div class="pull-left">
-              <button class="button-mini button-assertive" style="position:relative;left:21px" ng-click="filterSetAll()">Set All</button>
-          </div>
           <div class="pull-right">
-              <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterResetAll()">Reset All</button>
+              <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterSetAll()">Set All</button>
           </div>
           <br>
           <br>
@@ -231,8 +228,11 @@
     </script>
 <script id="pdf-viewer.html" type="text/ng-template">
     <ion-modal-view>
-    <ion-header-bar>
-        <h1 class="title">Invoice</h1>
+    <ion-header-bar class="bar bar-positive">
+        <h1 class="title">Lab Report</h1>
+        <button class="button button-clear button-primary" ng-click="hidePDFViewerModal()">
+            <i class="icon ion-android-close"></i>
+        </button>
     </ion-header-bar>
     <ion-content>
         <ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>

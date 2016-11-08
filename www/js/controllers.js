@@ -242,7 +242,8 @@ angular.module('bnotifiedappctrls', [])
             console.log('fileSystem object ['+ JSON.stringify(fileSystem) + ']');
         }); */
 
-          window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Pictures", function(dir) {
+          //window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Pictures", function(dir) {
+          window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
              dir.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
                fileEntry.copyTo(
                  direntry,
@@ -1170,22 +1171,18 @@ if($scope.formData.doctor == true){
 
      $scope.appliedfilters = {
        "backup":{
-         "hospitalnameselected" : []
+         "hospitalnameselected" : ["All"]
          ,"isFilterApplied": false}
-       ,"hospitalnameselected" : []
+       ,"hospitalnameselected" : ["All"]
        ,"isFilterApplied": false
      };
 
      $scope.filtersavailable = {
-       "hospitalnames" : []
+       "hospitalnames" : ["All"]
      };
 
-     $scope.filterResetAll = function(){
-       $scope.appliedfilters.hospitalnameselected=angular.copy("");
-     }
-
      $scope.filterSetAll = function(){
-       $scope.appliedfilters.hospitalnameselected=angular.copy($scope.filtersavailable.hospitalnames);
+       $scope.appliedfilters.hospitalnameselected[0]=angular.copy("All");
      }
 
      $scope.filterCancel = function(){
@@ -1200,7 +1197,7 @@ if($scope.formData.doctor == true){
            var allHospitals=false;
            if($scope.appliedfilters.hospitalnameselected.length != 0 )
            {
-              if($scope.appliedfilters.hospitalnameselected.length == $scope.filtersavailable.hospitalnames.length)
+              if(angular.equals($scope.appliedfilters.hospitalnameselected[0],"All"))
                   allHospitals=true;
 
               if(allHospitals==true)
@@ -1838,14 +1835,17 @@ $scope.hosinfo= function(hospitalid,hospitalcode){
                   && profiledata.profile[0].vaccination.value.toString().indexOf(filterText.toString()) !== -1)
               ||
               (typeof profiledata.profile[0].bloodpressure !== 'undefined'
+                  &&  typeof profiledata.profile[0].bloodpressure.systolic !== 'undefined'
                   &&  profiledata.profile[0].bloodpressure.systolic !== ''
                   && profiledata.profile[0].bloodpressure.systolic !== null
                   && profiledata.profile[0].bloodpressure.systolic.toString().indexOf(filterText.toString()) !== -1)
               ||
-            (typeof profiledata.profile[0].bloodpressure !== 'undefined'
-                  &&  profiledata.profile[0].bloodpressure.diastolic !== ''
-                  && profiledata.profile[0].bloodpressure.diastolic !== null
-                  && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
+                  (typeof profiledata.profile[0].bloodpressure !== 'undefined'
+                      && typeof profiledata.profile[0].bloodpressure.diastolic !== 'undefined'
+                      &&  profiledata.profile[0].bloodpressure.diastolic !== ''
+                      && profiledata.profile[0].bloodpressure.diastolic !== null
+                      && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
+
               ){
                   foundvalue = true;
               }
@@ -2120,7 +2120,9 @@ switch (label) {
       }).then(function(modal) {
         $scope.modal = modal;
       });
-     $scope.openModal1 = function(){
+     $scope.openModal1 = function(trackername, title){
+         $scope.trackername = trackername;
+        $scope.title = title;
          $scope.tdate= new Date();
         $scope.modal.show();
       };
@@ -2701,28 +2703,28 @@ $rootScope.showLoader();
 
 
    $scope.appliedfilters = {
-     "backup":{"patientnameselected" : ""
-                ,"visittypeselected"  : ""
-                ,"hospitalnameselected" : ""
+     "backup":{"patientnameselected" : ["All"]
+                ,"visittypeselected"  : []
+                ,"hospitalnameselected" : ["All"]
                 ,"docswithattachment" : false
                 ,"isFilterApplied" : false}
-     ,"patientnameselected" : "All"
-     ,"visittypeselected"  : ""
-     ,"hospitalnameselected" : ""
+     ,"patientnameselected" : ["All"]
+     ,"visittypeselected"  : []
+     ,"hospitalnameselected" : ["All"]
      ,"docswithattachment" : false
      ,"isFilterApplied" : false
    };
 
    $scope.filtersavailable = {
-     "patientnames"   : []
+     "patientnames"   : ["All"]
      ,"visittypes"    : []
-     ,"hospitalnames" : ["111","abc","def","P.D Hinduja Sindhi Hospital","ijk","lmn","opq","C M H","rst","uvw","xyz","123","456","789","000"]
+     ,"hospitalnames" : ["All"]
    };
 
    $scope.filterCancel = function(){
       //copy from backup of previous filter in case of cancel press
       $scope.appliedfilters.patientnameselected=angular.copy($scope.appliedfilters.backup.patientnameselected);
-      $scope.appliedfilters.visittypeted=angular.copy($scope.appliedfilters.backup.visittypeselected);
+      $scope.appliedfilters.visittypeselected=angular.copy($scope.appliedfilters.backup.visittypeselected);
       $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
       $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
       $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
@@ -2731,33 +2733,20 @@ $rootScope.showLoader();
    }
 
    $scope.filterSetAll = function(){
-     $scope.appliedfilters.patientnameselected=angular.copy($scope.filtersavailable.patientnames);
+     $scope.appliedfilters.patientnameselected="All";
      $scope.appliedfilters.visittypeselected=angular.copy($scope.filtersavailable.visittypes);
-     $scope.appliedfilters.hospitalnameselected=angular.copy($scope.filtersavailable.hospitalnames);
-     $scope.appliedfilters.docswithattachment=false;
-   }
-
-   $scope.filterResetAll = function(){
-     $scope.appliedfilters.patientnameselected="";
-     $scope.appliedfilters.visittypeselected="";
-     $scope.appliedfilters.hospitalnameselected="";
+     $scope.appliedfilters.hospitalnameselected[0]=angular.copy($scope.filtersavailable.hospitalnames[0]);
      $scope.appliedfilters.docswithattachment=false;
    }
 
    $scope.filterapply = function(){
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
-         if(($scope.appliedfilters.patientnameselected=="") &&
-            ($scope.appliedfilters.visittypeselected=="") &&
-            ($scope.appliedfilters.hospitalnameselected=="") &&
-            ($scope.appliedfilters.docswithattachment==false)){
-              $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
-         }
-         else{
-         if(($scope.backupvisitinfo.length != 0) || ($scope.backupvisitinfo)){
-            if($scope.appliedfilters.patientnameselected.length == $scope.filtersavailable.patientnames.length)
+
+         if(($scope.backupvisitinfo.length != 0) || $scope.backupvisitinfo){
+            if(angular.equals($scope.appliedfilters.patientnameselected,"All"))
                 allPatients=true;
-            if($scope.appliedfilters.hospitalnameselected.length == $scope.filtersavailable.hospitalnames.length)
+            if(angular.equals($scope.appliedfilters.hospitalnameselected[0],"All"))
                 allHospitals=true;
             if($scope.appliedfilters.visittypeselected.length == $scope.filtersavailable.visittypes.length)
                 allVisittypes=true;
@@ -2801,12 +2790,12 @@ $rootScope.showLoader();
               //Now apply all other filters on hospital filter
               angular.forEach($scope.visitinfo,function (visitdata,key){
                   if((( allPatients == true) || angular.equals($scope.appliedfilters.patientnameselected,(visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname)))
-                      && ((allVisittypes == true) || angular.equals($scope.appliedfilters.visittypeselected,visitdata.visitid.visittype))
+                      && ((allVisittypes == true) || angular.equals($scope.appliedfilters.visittypeselected[0],visitdata.visitid.visittype))
                       && (( docswithattachment == false) || (visitdata.reporturl))){
                         $scope.visitinfo[filteredkey]=visitdata;
                         filteredkey++;
                       }//end of if
-              })//end of forEach
+              });//end of forEach
               $scope.visitinfo.length=filteredkey;
             }//end of else
           }//visitinfo =0 or backupvisitinfo=undefined
@@ -2817,11 +2806,10 @@ $rootScope.showLoader();
             $rootScope.showPopup({title:'Filter Error', template:"No data to Filter"});
           }
             $scope.closeModalfilter();
-          }
           }//end of filterapply
 
    $scope.filterdetails = function(visitid){
-      //There is no data no need to show filter
+        //There is no data no need to show filter
      if(($scope.backupvisitinfo) || ($scope.visitinfo && ($scope.visitinfo.length != 0))){
           if(angular.isUndefined($scope.backupvisitinfo))
           {
@@ -2830,7 +2818,7 @@ $rootScope.showLoader();
           }
           angular.forEach($scope.backupvisitinfo, function(visitdata, key1){
               //Fill patientnames
-              if($scope.filtersavailable.patientnames.length === 0){
+              if($scope.filtersavailable.patientnames.length == 1){
                 $scope.filtersavailable.patientnames.push(visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname);
               }
               else{
@@ -2862,7 +2850,7 @@ $rootScope.showLoader();
                }
 
             //Fill hospitalnames
-            if($scope.filtersavailable.hospitalnames.length === 0){
+            if($scope.filtersavailable.hospitalnames.length == 1){
                  $scope.filtersavailable.hospitalnames.push(visitdata.hospitalid.hospitalname);
              }
              else{
@@ -2878,17 +2866,17 @@ $rootScope.showLoader();
               }
         });
 
-        //keep a backup copy of previous filter incase of cancel press
-        //if(!angular.isUndefined(firstEntry)){
         if(firstEntry){
           //fill appliedfilters array for the first time
           $scope.filterSetAll();
           $scope.appliedfilters.isFilterApplied=false;
           firstEntry=false;
         }
-        $scope.appliedfilters.backup.patientnameselected=$scope.appliedfilters.patientnameselected;
-        $scope.appliedfilters.backup.visittypeselected=$scope.appliedfilters.visittypeselected;
-        $scope.appliedfilters.backup.hospitalnameselected=$scope.appliedfilters.hospitalnameselected;
+
+        //keep a backup copy of previous filter incase of cancel press
+        $scope.appliedfilters.backup.patientnameselected=angular.copy($scope.appliedfilters.patientnameselected);
+        $scope.appliedfilters.backup.visittypeselected=angular.copy($scope.appliedfilters.visittypeselected);
+        $scope.appliedfilters.backup.hospitalnameselected=angular.copy($scope.appliedfilters.hospitalnameselected);
         $scope.appliedfilters.backup.docswithattachment=$scope.appliedfilters.docswithattachment;
         $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
 
@@ -3107,6 +3095,9 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
   }).then(function (modal) {
         $scope.pdfviewermodal = modal;
   });
+  $scope.hidePDFViewerModal = function(){
+    $scope.pdfviewermodal.hide();
+  };
   var profiledata = loginservice.getProfileData();
   if(socket !== null){
     socket.on('connect', function(){
@@ -3129,9 +3120,9 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              $scope.pdfUrl = URL.createObjectURL(blob);
              $scope.pdfviewermodal.show();
              console.log('blob length ['+ blob.length + ']');
-             window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
-             //window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
-                dir.getDir("TracMyHealth",{create:true}, function(direntry){
+             //window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
+             window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
+                dir.getDirectory("TracMyHealth",{create:true}, function(direntry){
                   var filename = "labreport_"+(new Date()).getTime()+".pdf";
                   direntry.getFile(filename, {create:true}, function(file) {
                     console.log("File created succesfully.");
@@ -3497,34 +3488,28 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
 
        //Filters applied
        $scope.appliedfilters = {
-         "backup":{"hospitalnameselected" : ""
+         "backup":{"hospitalnameselected" : ["All"]
                   ,"docswithattachment" : false
                   ,"isFilterApplied": false}
-         ,"hospitalnameselected" : ""
+         ,"hospitalnameselected" : ["All"]
          ,"docswithattachment" : false
          ,"isFilterApplied": false
        };
 
        $scope.filtersavailable = {
-         "hospitalnames" : ["111","abc","def","P.D Hinduja Sindhi Hospital","ijk","lmn","opq","C M H","rst","uvw","xyz","123","456","789","000"]
+         "hospitalnames" : ["All"]
        };
 
        $scope.filterCancel = function(){
           //copy of backup filter values in case of cancel press
-          $scope.appliedfilters.hospitalnameselected=$scope.appliedfilters.backup.hospitalnameselected;
+          $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
           $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
           $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
           $scope.closeModalfilter();
        }
 
-       $scope.filterResetAll = function(){
-         $scope.appliedfilters.hospitalnameselected="";
-         $scope.appliedfilters.docswithattachment=false;
-         $scope.appliedfilters.isFilterApplied=false;
-       }
-
        $scope.filterSetAll = function(){
-         $scope.appliedfilters.hospitalnameselected=angular.copy($scope.filtersavailable.hospitalnames);
+         $scope.appliedfilters.hospitalnameselected[0]=angular.copy("All");
          $scope.appliedfilters.docswithattachment=false;
        }
 
@@ -3532,21 +3517,16 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
              var filteredkey=0;
              var allHospitals=false, docswithattachment=true;
 
-             if(($scope.appliedfilters.hospitalnameselected=="") &&
-                ($scope.appliedfilters.docswithattachment==false)){
-                  $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
-             }
-             else{
              if(($scope.drvisitinfo.length != 0) || $scope.backupdrvisitinfo){
-               if($scope.appliedfilters.hospitalnameselected.length == $scope.filtersavailable.hospitalnames.length)
-                   allHospitals=true;
+                if(angular.equals($scope.appliedfilters.hospitalnameselected[0],"All"))
+                    allHospitals=true;
                 if($scope.appliedfilters.docswithattachment == false)
                     docswithattachment=false;
 
                 if((allHospitals==true) && (docswithattachment==false))
                 {
                   $scope.appliedfilters.isFilterApplied=false;
-                  if($scope.backupdrvisitinfo) //if $scope.backupdrvisitinfo != undefined
+                  if($scope.backupdrvisitinfo)
                   {
                     //No need to apply filter all to be displayed
                     $scope.drvisitinfo=angular.copy($scope.backupdrvisitinfo);
@@ -3575,7 +3555,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                           $scope.drvisitinfo[filteredkey]=visitdata;
                           filteredkey++;
                     }//end of if
-                  })//end of forEach
+                  });//end of forEach
                   $scope.drvisitinfo.length=filteredkey;
                 }//end of else
               }
@@ -3586,7 +3566,6 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                 $scope.appliedfilters.isFilterApplied=false;
               }
               $scope.closeModalfilter();
-            }
         }//end of filterapply
 
        $scope.filterdetails = function(visitid){
@@ -3611,7 +3590,7 @@ $ionicModal.fromTemplateUrl('my-modal5.html', {
                   }
               });
               //keep a copy of backup filter values in case of cancel press
-              $scope.appliedfilters.backup.hospitalnameselected=$scope.appliedfilters.hospitalnameselected;
+              $scope.appliedfilters.backup.hospitalnameselected=angular.copy($scope.appliedfilters.hospitalnameselected);
               $scope.appliedfilters.backup.docswithattachment=$scope.appliedfilters.docswithattachment;
               $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
 
@@ -3772,6 +3751,9 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 	 }
 	};
 }])
+/*.controller('healthimageCtrl',['$scope',function($scope){
+
+}])*/
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
 
   $ionicModal.fromTemplateUrl('imageslist.html', {
