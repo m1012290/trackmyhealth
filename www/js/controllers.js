@@ -2124,7 +2124,9 @@ switch (label) {
       }).then(function(modal) {
         $scope.modal = modal;
       });
-     $scope.openModal1 = function(){
+     $scope.openModal1 = function(trackername, title){
+         $scope.trackername = trackername;
+        $scope.title = title;
          $scope.tdate= new Date();
         $scope.modal.show();
       };
@@ -3730,9 +3732,9 @@ doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(dat
 	 }
 	};
 }])
-.controller('healthimageCtrl',['$scope',function($scope){
+/*.controller('healthimageCtrl',['$scope',function($scope){
 
-}])
+}])*/
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
 
   $ionicModal.fromTemplateUrl('imageslist.html', {
