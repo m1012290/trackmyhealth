@@ -8,7 +8,7 @@
 <ion-nav-buttons side="right">
            <button class="button button-clear"  ng-click="filterdetails()">
              <div ng-switch on="appliedfilters.isFilterApplied">
-               <div ng-switch-when="true"
+               <div ng-switch-when="true">
                     <i class="ion-funnel icon-btn-customize blink"></i>
                 </div>
                <div ng-switch-default>
@@ -206,7 +206,7 @@
           </span>
           <span class="item-input">
               <label class="input-label-filter">Hospital Name</label>
-              <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames">
+                <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames" multiple="true">
               </select>
           </span>
           <span class="item-input">
@@ -215,6 +215,9 @@
               </ion-checkbox>
               </label>
           </span>
+          <div class="pull-left">
+              <button class="button-mini button-assertive" style="position:relative;left:21px" ng-click="filterSetAll()">Set All</button>
+          </div>
           <div class="pull-right">
               <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterResetAll()">Reset All</button>
           </div>
