@@ -34,11 +34,8 @@
     <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <i class="icon ion-arrow-right-b assertive" ng-click="patientdetails(visit._id)" ></i></p>
 
 <p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
-
-                    <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-if="visit.documentmetadata && visitdocumentmetadata.docname !== null && visitdocumentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;"> Report</button></p>                 </div>
-
- </ion-content>
-
+<p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-show="visit.documentmetadata && visit.documentmetadata.docname !==null && visit.documentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;">Report</button></p></div>
+</ion-content>
 
 <script id="my-modal5.html" type="text/ng-template">
   <ion-modal-view>
@@ -234,9 +231,9 @@
             <i class="icon ion-android-close"></i>
         </button>
     </ion-header-bar>
-    <ion-content>
-        <ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
-    </ion-content>
+    <ion-scroll zooming="true" direction="xy" scrollbar-x="true" scrollbar-y="true" delegate-handle="zoom-pane" class="zoom-pane">
+        <ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="1"></ng-pdf>
+    </ion-scroll>
     </ion-modal-view>
 </script>
 </ion-view>
