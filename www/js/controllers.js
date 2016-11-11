@@ -291,7 +291,7 @@ angular.module('tracmyhealthappctrls', [])
     });
   };
 }])
-.controller('LoginCtrl', ['$scope','$rootScope','internetservice', 'registrationservice','authservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA','$ionicHistory',function($scope, $rootScope, internetservice, registrationservice, authservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA, $ionicHistory) {
+.controller('LoginCtrl', ['$scope','$rootScope','internetservice','$state','$ionicPopup','$stateParams','forgotpwdservice' , '$ionicModal', 'loginservice','signupservice','registrationdetsdb','DBA','$ionicHistory',function($scope, $rootScope, internetservice, $state, $ionicPopup, $stateParams, forgotpwdservice, $ionicModal, loginservice, signupservice, registrationdetsdb, DBA, $ionicHistory) {
   $scope.$on("$ionicView.beforeEnter",function(event, data){
     $scope.logindata={
       "email" : "",
