@@ -416,7 +416,7 @@ angular.module('tracmyhealthappctrls', [])
           }).catch(function(error){
               $rootScope.showPopup({
                 title:'System Error',
-                template:'Unable to login right now, please try again !!'
+                template:'We are experiencing problem logging in right now, please try again'
               },function(res){
               });
           });
@@ -430,7 +430,7 @@ angular.module('tracmyhealthappctrls', [])
 		}).catch(function(error){
       $rootScope.hideLoader();
       console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
-      if(error.status === 400){
+      if(error.status === 400 || error.status === 404){
         $rootScope.showPopup({
           title:'Invalid Credentials',
           template:'Invalid login details, please try again'
@@ -440,7 +440,7 @@ angular.module('tracmyhealthappctrls', [])
         console.log('printing error object completely while login ['+ JSON.stringify(error) + ']');
         $rootScope.showPopup({
           title:'System Error',
-          template:'Unable to login right now, please try again'
+          template:'We are experiencing problem logging in right now, please try again'
         },function(res){
         });
       }
@@ -901,17 +901,17 @@ angular.module('tracmyhealthappctrls', [])
             });
         });
       });
-      $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
-        scope: $scope,
-        animation: 'slide-in-up'
-      }).then(function(modal){
-        $scope.filtermodal = modal;
-      });
-       $scope.openModalfilter = function(){
+      $scope.openModalfilter = function(){
+         $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
+           scope: $scope,
+           animation: 'slide-in-up'
+         }).then(function(modal){
+           $scope.filtermodal = modal;
            $scope.filtermodal.show();
+         });
        };
        $scope.closeModalfilter = function(){
-           $scope.filtermodal.hide();
+           $scope.filtermodal.remove();
        };
        $scope.appliedfilters = {
             "backup":{"bloodsugarFilter":true
@@ -1366,14 +1366,13 @@ angular.module('tracmyhealthappctrls', [])
        };
 
        $scope.filterCancel = function(){
+          $scope.closeModalfilter();
           //copy from backup of previous filter in case of cancel press
           $scope.appliedfilters.patientnameselected=angular.copy($scope.appliedfilters.backup.patientnameselected);
           $scope.appliedfilters.visittypeselected=angular.copy($scope.appliedfilters.backup.visittypeselected);
           $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
           $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
           $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
-
-          $scope.closeModalfilter();
        };
 
        $scope.filterSetAll = function(){
@@ -1384,6 +1383,7 @@ angular.module('tracmyhealthappctrls', [])
        };
 
        $scope.filterapply = function(){
+         $scope.closeModalfilter();
          var filteredkey=0;
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
 
@@ -1446,7 +1446,6 @@ angular.module('tracmyhealthappctrls', [])
               $scope.appliedfilters.isFilterApplied=false;
               $rootScope.showPopup({title:'Filter Error', template:"No data to Filter"});
           }
-          $scope.closeModalfilter();
        };//end of filterapply
 
        $scope.filterdetails = function(visitid){
