@@ -1,82 +1,4 @@
-angular.module('bnotifiedappsvcs', ['ngResource'])
-
-/*.service('AuthService', ['$q', '$http', 'USER_ROLES', function($q, $http, USER_ROLES) {
-  var LOCAL_TOKEN_KEY = 'yourTokenKey';
-  var username = '';
-  var isAuthenticated = false;
-  var role = '';
-  var authToken;
-
-  function loadUserCredentials() {
-    var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
-    if (token) {
-      useCredentials(token);
-    }
-  }
-
-  function storeUserCredentials(token) {
-    window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-    useCredentials(token);
-  }
-
-  function useCredentials(token) {
-    username = token.split('.')[0];
-    isAuthenticated = true;
-    authToken = token;
-
-    if (username == 'admin') {
-      role = USER_ROLES.admin
-    }
-    if (username == 'user') {
-      role = USER_ROLES.public
-    }
-
-    // Set the token as header for your requests!
-    $http.defaults.headers.common['X-Auth-Token'] = token;
-  }
-
-  function destroyUserCredentials() {
-    authToken = undefined;
-    username = '';
-    isAuthenticated = false;
-    $http.defaults.headers.common['X-Auth-Token'] = undefined;
-    window.localStorage.removeItem(LOCAL_TOKEN_KEY);
-  }
-
-  var login = function(name, pw) {
-    return $q(function(resolve, reject) {
-      if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
-        // Make a request and receive your auth token from your server
-        storeUserCredentials(name + '.yourServerToken');
-        resolve('Login success.');
-      } else {
-        reject('Login Failed.');
-      }
-    });
-  };
-
-  var logout = function() {
-    destroyUserCredentials();
-  };
-
-  var isAuthorized = function(authorizedRoles) {
-    if (!angular.isArray(authorizedRoles)) {
-      authorizedRoles = [authorizedRoles];
-    }
-    return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
-  };
-
-  loadUserCredentials();
-
-  return {
-    login: login,
-    logout: logout,
-    isAuthorized: isAuthorized,
-    isAuthenticated: function() {return isAuthenticated;},
-    username: function() {return username;},
-    role: function() {return role;}
-  };
-}])*/
+angular.module('tracmyhealthappsvcs', ['ngResource'])
 .factory('registrationservice', ['$q','$resource','NODE_SERVER_DETAILS', function($q, $resource, NODE_SERVER_DETAILS){
     var registrationservice = {};
     var self = this;
@@ -754,7 +676,6 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         419: AUTH_EVENTS.jsonwebtokenExpired
       }[response.status], response);
       return deferred.promise;
-      /*return $q.reject(response);*/
     },
     // optional method
 
@@ -1017,8 +938,7 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
         });
         return deferred.promise;
     },
-
-      fetchvisit: function(doctorid, patientid, visitid){
+    fetchvisit: function(doctorid, patientid, visitid){
 			var deferred = $q.defer();
 			var resource = $resource ("https://bnotified-service-m1012290.c9users.io:8080/v1/registered/:doctorid/:patientid/visits/:visitid/notifications");
 			resource.get({ doctorid: doctorid, patientid: patientid, visitid: visitid }, function(data){
@@ -1029,22 +949,18 @@ NODE_SERVER_DETAILS.port + '/bnotified/registered/:mobileNumber/:entityId/unsubs
 				deferred.reject(error);
 			});
 			return deferred.promise;
-		},
-
-      }
+		}
+   };
 }])
 .factory('socket',function(socketFactory){
- //Create socket and connect to http://cat.socket.io
- var mySocket = null;
- if(typeof io !== 'undefined'){
-    console.log('io is not undefined');
-    //var myIoSocket = io.connect( "https://socketioserver-m1012290.c9users.io:8080", { secure: true, transports: [ "flashsocket","polling","websocket" ] } );
-    var myIoSocket = io.connect( "https://bnotified-service-m1012290.c9users.io:8080" );
-    //var myIoSocket = io.connect('https://bnotified-service-m1012290.c9users.io:8080');
-    	mySocket = socketFactory({
-      	ioSocket: myIoSocket
-    });
-  }
-
-	return mySocket;
+    //Create socket and connect to http://cat.socket.io
+    var mySocket = null;
+    if(typeof io !== 'undefined'){
+        //var myIoSocket = io.connect( "https://socketioserver-m1012290.c9users.io:8080", { secure: true, transports: [ "flashsocket","polling","websocket" ] } );
+        var myIoSocket = io.connect( "https://bnotified-service-m1012290.c9users.io:8080" );
+        mySocket = socketFactory({
+      	   ioSocket: myIoSocket
+         });
+    }
+	  return mySocket;
 });

@@ -1,4 +1,4 @@
-angular.module('bnotifiedapp')
+angular.module('tracmyhealthapp')
 .constant('AUTH_EVENTS', {
   notAuthenticated: 'auth-not-authenticated',
   notAuthorized: 'auth-not-authorized',
@@ -18,7 +18,7 @@ angular.module('bnotifiedapp')
 
 function returnAPIKeys(){
   var apikeys = {};
-  apikeys['/v1/registered/hospitals/:patientid'] = 'hospitallist';  
+  apikeys['/v1/registered/hospitals/:patientid'] = 'hospitallist';
   return apikeys;
 }
 

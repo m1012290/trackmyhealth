@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ionnumerickeypad', [])
+    .module('tracmyhealthappdirectives', [])
     .directive('ionNumericKeyboard', function() {
 
     var appendDefaultCss = function(headElem) {
