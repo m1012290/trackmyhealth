@@ -15,6 +15,7 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false"/>
     <preference name="CrosswalkAnimatable" value="false" />
@@ -35,7 +36,6 @@
         <splash density="port-mdpi" src="resources\android\splash\drawable-port-mdpi-screen.png" />
         <splash density="port-hdpi" src="resources\android\splash\drawable-port-hdpi-screen.png" />
     </platform>
-    <plugin name="cordova-plugin-file-opener2" spec="https://github.com/pwlin/cordova-plugin-file-opener2.git" />
     <preference name="xwalkVersion" value="20+" />
     <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
     <preference name="xwalkMode" value="embedded" />
