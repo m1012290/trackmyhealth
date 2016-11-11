@@ -1,21 +1,21 @@
 <ion-view view-title="trackmyhealth" name="all-notifications-view">
-<ion-nav-title align-title="left">
-  <span class="circle-span direct-chat-timestamp">
-<img src="img/icon.png" class="img-responsive"/>
-</span>
+    <ion-nav-title align-title="left">
+        <span class="circle-span direct-chat-timestamp">
+            <img src="img/icon.png" class="img-responsive"/>
+        </span>
     </ion-nav-title>
 
 <ion-nav-buttons side="right">
-           <button class="button button-clear"  ng-click="filterdetails()">
-             <div ng-switch on="appliedfilters.isFilterApplied">
+    <button class="button button-clear"  ng-click="filterdetails()">
+            <div ng-switch on="appliedfilters.isFilterApplied">
                <div ng-switch-when="true">
                     <i class="ion-funnel icon-btn-customize blink"></i>
                 </div>
-               <div ng-switch-default>
+                <div ng-switch-default>
                     <i class="ion-funnel icon-btn-customize"></i>
                </div>
              </div>
-           </button>
+    </button>
            <button class="button button-clear" ng-click="selectImageSource()">
                  <i class=" ion-camera icon-btn-customize"></i>
             </button>
@@ -25,7 +25,7 @@
              <button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
              </button>
-    </ion-nav-buttons>
+</ion-nav-buttons>
 
 <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
 
@@ -33,11 +33,11 @@
 <p> <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)"></i>
     <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <i class="icon ion-arrow-right-b assertive" ng-click="patientdetails(visit._id)" ></i></p>
 
-<p> <b>Visit:</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
+<p> <b>Visit :</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-show="visit.documentmetadata && visit.documentmetadata.docname !==null && visit.documentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;">Report</button></p></div>
 </ion-content>
 
-<script id="my-modal5.html" type="text/ng-template">
+ </ion-content><script id="my-modal5.html" type="text/ng-template">
   <ion-modal-view>
        <ion-header-bar class="bar-positive">
           <h1 class="title">Notifications for Visit</h1>

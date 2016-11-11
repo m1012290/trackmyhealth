@@ -1,21 +1,20 @@
 <ion-view view-title="trackmyhealth" name="my-health-view">
-
-<ion-nav-title align-title="left">
-  <span class="circle-span direct-chat-timestamp">
-    <img src="img/icon.png" class="img-responsive"/>
+    <ion-nav-title align-title="left">
+        <span class="circle-span direct-chat-timestamp">
+        <img src="img/icon.png" class="img-responsive"/>
    </span>
 </ion-nav-title>
-<ion-nav-buttons side="right" >
-  <button class="button button-clear" ng-click="filterdetails()">
-    <div ng-switch on="appliedfilters.isFilterApplied">
-      <div ng-switch-when="true">
-           <i class="ion-funnel icon-btn-customize blink"></i>
-       </div>
-      <div ng-switch-default>
-           <i class="ion-funnel icon-btn-customize"></i>
-      </div>
-    </div>
-  </button>
+        <ion-nav-buttons side="right" >
+            <button class="button button-clear" ng-click="filterdetails()">
+            <div ng-switch on="appliedfilters.isFilterApplied">
+                  <div ng-switch-when="true">
+                       <i class="ion-funnel icon-btn-customize blink"></i>
+                   </div>
+                   <div ng-switch-default>
+                       <i class="ion-funnel icon-btn-customize"></i>
+                   </div>
+            </div>
+            </button>
 <button class="button button-clear" ng-click="selectImageSource()">
       <i class=" ion-camera icon-btn-customize"></i>
  </button>
@@ -25,60 +24,63 @@
   <button class="button button-clear" on-touch="openPopover($event)">
        <i class="ion-android-more-vertical icon-btn-customize" ></i>
   </button>
-</ion-nav-buttons>
-<ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
-  <div class="card responsive">
+        </ion-nav-buttons>
+        <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
+        <div class="card responsive">
 		<div class="item item-body">
 
 
-<div class="row"><h3><b>Blood Sugar</b><button class="button button-small button-clear" ng-click="openModal1('Blood Sugar', 'Blood Sugar')" on-tap="tracker('Blood Sugar', 'Blood Sugar')"> <i class="icon ion-edit assertive"  text="Blood Sugar" ></i></button></h3></div>
-<div class="row">
-<div class="col col-33"><h3><b>RBS</b></h3>
-<div class="row" ng-if="summary.bloodsugar.rbs !=='' && summary.bloodsugar.rbs !== 0 " >{{summary.bloodsugar.rbs}} MG/DL </div>
-</div>
+            <div class="row"><h3><b>Blood Sugar</b><button class="button button-small button-clear" ng-click="openModal1('Blood Sugar', 'Blood Sugar')" on-tap="tracker('Blood Sugar', 'Blood Sugar')"> <i class="icon ion-edit assertive"  text="Blood Sugar" ></i></button></h3>
+            </div>
+                <div class="row">
+                <div class="col col-33"><h3><b>RBS</b></h3>
+                <div class="row" ng-if="summary.bloodsugar.rbs !=='' && summary.bloodsugar.rbs !== 0 " >{{summary.bloodsugar.rbs}} MG/DL </div>
+                </div>
 
-<div class="col col-33 "><h3><b>FBS</b></h3>
-    <div class="row" ng-if="summary.bloodsugar.fbs !=='' && summary.bloodsugar.fbs != 0 ">{{summary.bloodsugar.fbs}} MG/DL</div>
-  </div>
+                <div class="col col-33 "><h3><b>FBS</b></h3>
+                    <div class="row" ng-if="summary.bloodsugar.fbs !=='' && summary.bloodsugar.fbs != 0 ">{{summary.bloodsugar.fbs}} MG/DL</div>
+                  </div>
 
-<div class="col col-33"><h3><b>PPBS</b></h3>
- <div class="row" ng-if="summary.bloodsugar.ppbs !=='' && summary.bloodsugar.ppbs != 0">{{summary.bloodsugar.ppbs}} MG/DL</div>
-</div>
-</div>
+                <div class="col col-33"><h3><b>PPBS</b></h3>
+                 <div class="row" ng-if="summary.bloodsugar.ppbs !=='' && summary.bloodsugar.ppbs != 0">{{summary.bloodsugar.ppbs}} MG/DL</div>
+                </div>
+                </div>
 
-<div class="row">
-    <div class="col col-50"><h3><b>Blood Pressure</b><button class="button button-small button-clear"  ng-click="openModal1('Blood Pressure', 'Blood Pressure')" on-tap="tracker('Blood Pressure', 'Blood Pressure')"><i class="icon ion-edit assertive"   text="Blood Pressure" ></i></button></h3>
- <div class="row" ng-if="summary.bloodpressure.systolic !=='' && summary.bloodpressure.systolic !== 0">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}} MM HG</div>
-</div>
-    <div class="col"><h3><b>Weight</b><button class="button button-small button-clear"  ng-click="openModal1('Weight', 'Weight')" on-tap="tracker('Weight', 'Weight')"><i class="icon ion-edit assertive" text="Weight" ></i></button></h3>
-<div class="row" ng-if="summary.weight.value !=='' && summary.weight.value !== 0 ">	{{summary.weight.value}} KG</div>
-</div>
-</div>
-<div class="col">
-    <div class="col"><h3><b>Vaccination</b><button class="button button-small button-clear" ng-click="openModal1('Vaccination', 'Vaccination Details')"  on-tap="tracker('Vaccination', 'Vaccination Details')" ><i class="icon ion-edit assertive"  text="Vaccination" ></i></button></h3></div>
-  <div class="row" ng-if="summary.vaccination.value !== ''">{{summary.vaccination.value}}</div>
-  </div>
+                <div class="row">
+                    <div class="col col-50"><h3><b>Blood Pressure</b><button class="button button-small button-clear"  ng-click="openModal1('Blood Pressure', 'Blood Pressure')" on-tap="tracker('Blood Pressure', 'Blood Pressure')"><i class="icon ion-edit assertive"   text="Blood Pressure" ></i></button></h3>
+                 <div class="row" ng-if="summary.bloodpressure.systolic !=='' && summary.bloodpressure.systolic !== 0">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}} MM HG</div>
+                    </div>
+                    <div class="col"><h3><b>Weight</b><button class="button button-small button-clear"  ng-click="openModal1('Weight', 'Weight')" on-tap="tracker('Weight', 'Weight')"><i class="icon ion-edit assertive" text="Weight" ></i></button></h3>
+                        <div class="row" ng-if="summary.weight.value !=='' && summary.weight.value !== 0 ">	{{summary.weight.value}} KG
+                        </div>
+                    </div>
+                </div>
+            <div class="col">
+                <div class="col"><h3><b>Vaccination</b><button class="button button-small button-clear" ng-click="openModal1('Vaccination', 'Vaccination Details')"  on-tap="tracker('Vaccination', 'Vaccination Details')" ><i class="icon ion-edit assertive"  text="Vaccination" ></i></button></h3>
+                </div>
+              <div class="row" ng-if="summary.vaccination.value !== ''">{{summary.vaccination.value}}</div>
+            </div>
 
-  <div class="col">
-      <div class="col"><h3><b>Allergies</b><button class="button button-small button-clear"  ng-click="openModal1('Allergies', 'Allergy Details')" on-tap="tracker('Allergies', 'Allergy Details')"><i class="icon ion-edit assertive" text="Allergies" ></i></button></h3></div>
-    <div class="row" ng-if="summary.allergies.value !== ''">	{{summary.allergies.value}}</div>
-    </div>
+            <div class="col">
+                  <div class="col"><h3><b>Allergies</b><button class="button button-small button-clear"  ng-click="openModal1('Allergies', 'Allergy Details')" on-tap="tracker('Allergies', 'Allergy Details')"><i class="icon ion-edit assertive" text="Allergies" ></i></button></h3>
+                  </div>
+                <div class="row" ng-if="summary.allergies.value !== ''">{{summary.allergies.value}}</div>
+            </div>
 
-    <div class="col">
-        <div class="col"><h3><b>Medication</b><button class="button button-small button-clear" ng-click="openModal1('Medication', 'Medication Details')"on-tap="tracker('Medication', 'Medication Details')"><i class="icon ion-edit assertive"  text="Medication" ></i></button></h3></div>
-        <div class="row" ng-if="summary.medication.value !== ''">
-      {{summary.medication.value}}
-        </div>
-     </div>
-            <!--div class="pull-right"><a href="#/healthimage"><button><i class="icon ion-information assertive" ></i></button></a></div-->
+            <div class="col">
+                <div class="col"><h3><b>Medication</b><button class="button button-small button-clear" ng-click="openModal1('Medication', 'Medication Details')"on-tap="tracker('Medication', 'Medication Details')"><i class="icon ion-edit assertive"  text="Medication" ></i></button></h3>
+                </div>
+                <div class="row" ng-if="summary.medication.value !== ''">
+              {{summary.medication.value}}
+                </div>
+            </div>
+           
 		</div>
 	</div>
   <div class="h-list">
-          <div class="item-card active">
-
-                    <div class="visits-block text-muted">
-
-                      <div class="timeline">
+          <div class="item-card">
+              <div class="visits-block text-muted">
+                  <div class="timeline">
                         <div class="row"  ng-repeat="details in healthdetails track by $index ">
 
                           <div class="right" ng-show="((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
@@ -99,9 +101,9 @@
                           || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
                           || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
                           )">
-           <!--div class="day">{{details.createdat.day}}</div-->
+           
                                           <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy h:mm:ss a "}} </div>
-                                              <!--h3 style="text-align:center;"><strong>{{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy"}}</strong></h3-->
+                                             
                                    </button>
                                   <div class="notification">
 
@@ -122,18 +124,16 @@
                   </div>
                </div>
         </div>
-     </div>
+       </div>
       </div>
 
       </ion-content>
 
-
-
-      <script id="medicalprofile.html" type="text/ng-template">
+    <script id="medicalprofile.html" type="text/ng-template">
       <ion-modal-view>
-
           <ion-header-bar class="bar-positive">
-              <button class="button button-clear button-default" ng-click="closeModal1()"><i class="icon ion-android-close"></i></button>
+              <button class="button button-clear button-default" ng-click="closeModal1()"><i class="icon ion-android-close"></i>
+              </button>
               <h1 class="title">{{title}}</h1>
               <button class="button button-clear" ng-click="create(data)"><i class="icon ion-android-done"></i></button>
           </ion-header-bar>
@@ -275,9 +275,9 @@
       </ion-modal-view>
       </script>
 
-<script id="filterhealthtabdetails.html" type="text/ng-template">
+  <script id="filterhealthtabdetails.html" type="text/ng-template">
 
-   <ion-modal-view>
+    <ion-modal-view>
        <ion-header-bar class="bar bar-positive">
            <h1 class="title">Filter Health details</h1>
            <button class="button button-clear button-primary" ng-click="filterCancel()">

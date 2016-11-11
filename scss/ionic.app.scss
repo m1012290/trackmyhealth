@@ -483,26 +483,6 @@ h1
                 top: 20px;
                 z-index: 0;
             }
-            .circle
-            {
-                display: inline-block;
-                background:  #d14836;
-                width: 46px;
-                height: 46px;
-                -webkit-border-radius: 50%;
-                -moz-border-radius: 50%;
-                -o-border-radius: 50%;
-                -ms-border-radius: 50%;
-                border-radius: 50%;
-                color: #fff;
-                border: 1px solid  #d14836;
-                position: relative;
-                z-index: 1;
-                .day
-                {
-                    padding-top: 6px;
-                }
-            }
         }
         .right
         {

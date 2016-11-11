@@ -1,16 +1,11 @@
-
 <ion-view view-title="Uploaded Images">
     <ion-nav-buttons side="left">
-    <button class="button button-clear" ng-click="backButtonAction()">
-        <i class="ion-android-arrow-back icon-btn-customize"></i>
-    </button>
-</ion-nav-buttons>
-     <ion-nav-buttons side="right">
-            <button class="button button-clear" ng-click="showFilterBar()">
-             <i class=" ion-search icon-btn-customize"></i>
-            </button>
+        <button class="button button-clear" ng-click="backButtonAction()">
+            <i class="ion-android-arrow-back icon-btn-customize"></i>
+        </button>
     </ion-nav-buttons>
-<ion-pane>
+   
+    <ion-pane>
 	  <ion-header-bar class="bar-stable">
 		<h1 class="title">Image</h1>
 	  </ion-header-bar>
@@ -18,24 +13,19 @@
    <div class="bar bar-subheader">
    <h2 class="title"><i class="ion-images"></i> My Images</h2>
    </div>
-
-     <ion-content class="has-subheader padding">
-
-            <div ng-repeat="image in imagesarray track by $index"  class="list card">
+    <ion-content class="has-subheader padding">
+        <div ng-repeat="image in imagesarray track by $index"  class="list card">
              <a class="item item-list-detail">
 				  <img ng-src="{{image.imgnativeurl}}" width="250 " height="250" style="display: block; margin: 0 auto;" ng-click="openImagesModal($index)"/>
-        </a>
-
-                 <span class="item-text-wrap"><p> <strong>Tag : </strong>{{image.imgtag}}</p></span>
-    <span class="item-text-wrap"><p><strong> Description : </strong>{{image.imgdescription}}</p></span>
-    <span class="item-text-wrap"><p><strong>Captured Date : </strong> {{image.capturedate | date: "dd MMM yyyy" }}</p> </span>
+             </a>
+        <span class="item-text-wrap"><p> <strong>Tag : </strong>{{image.imgtag}}</p></span>
+        <span class="item-text-wrap"><p><strong> Description : </strong>{{image.imgdescription}}</p></span>
+        <span class="item-text-wrap"><p><strong>Captured Date : </strong> {{image.capturedate | date: "dd MMM yyyy" }}</p> </span>
 
            </div>
-  </ion-content>
+    </ion-content>
     </ion-pane>
-
-
-<script id="imageslist.html" type="text/ng-template">
+    <script id="imageslist.html" type="text/ng-template">
   <div class="modal image-modal transparent" ng-click="closeImagesModal()">
        <ion-pane class="transparent">
            <ion-scroll zooming="true" direction="xy" delegate-handle="zoom-pane" class="zoom-pane" min-zoom="1" scrollbar-x="false" scrollbar-y="false">
@@ -43,5 +33,5 @@
            </ion-scroll>
        </ion-pane>
     </div>
-</script>
+    </script>
 </ion-view>

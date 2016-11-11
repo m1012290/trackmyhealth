@@ -1,94 +1,95 @@
 <ion-view view-title="trackmyhealth" name="listed-entities-view">
-  <ion-nav-title align-title="left">
-    <span class="circle-span direct-chat-timestamp">
-      <img src="img/icon.png" class="img-responsive"/>
-     </span>
-  </ion-nav-title>
-
-  <ion-nav-buttons side="right">
-            <button class="button button-clear" ng-click="filterDetails()">
+    <ion-nav-title align-title="left">
+        <span class="circle-span direct-chat-timestamp">
+            <img src="img/icon.png" class="img-responsive"/>
+        </span>
+    </ion-nav-title>
+        <ion-nav-buttons side="right">
+        <button class="button button-clear" ng-click="filterDetails()">
               <div ng-switch on="appliedfilters.isFilterApplied">
-                <div ng-switch-when="true">
-                     <i class="ion-funnel icon-btn-customize blink"></i>
-                 </div>
-                <div ng-switch-default>
-                     <i class="ion-funnel icon-btn-customize"></i>
-                </div>
+                    <div ng-switch-when="true">
+                        <i class="ion-funnel icon-btn-customize blink"></i>
+                    </div>
+                    <div ng-switch-default>
+                        <i class="ion-funnel icon-btn-customize"></i>
+                    </div>
               </div>
-            </button>
-            <button class="button button-clear" ng-click="selectImageSource()">
+        </button>
+         <button class="button button-clear" ng-click="selectImageSource()">
                 <i class=" ion-camera icon-btn-customize"></i>
-           </button>
-            <button class="button button-clear" ng-click="showFilterBar()">
+         </button>
+        <button class="button button-clear" ng-click="showFilterBar()">
                  <i class=" ion-search icon-btn-customize"></i>
-            </button>
-            <button class="button button-clear" on-touch="openPopover($event)">
+        </button>
+        <button class="button button-clear" on-touch="openPopover($event)">
                  <i class="ion-android-more-vertical icon-btn-customize"></i>
-            </button>
+         </button>
 </ion-nav-buttons>
-
-
-  <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
-
-     <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
-        <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
-            <span class="circle-span"  style ="background-color: #D14836";
+            <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
+      <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
+            <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
+                <span class="circle-span"  style ="background-color: #D14836";
                   ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
-            </span>
-             <a href="#/main/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
-                    <h3>{{entity.hospitalname}} </h3>
-                    <i class="icon ion-arrow-right-b assertive"></i>
-             </a>
-        </ion-item>
+                </span>
+                    <a href="#/main/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
+                        <h3>{{entity.hospitalname}}</h3>
+                        <i class="icon ion-arrow-right-b assertive"></i>
+                    </a>
+            </ion-item>
       </ion-list>
   </ion-content>
+                <script id="my-modal3.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar class=" bar bar-positive">
+            <h1 class="title">Hospital Information</h1>
+                <button class="button button-clear button-primary" ng-click="closeModal3()">
+                    <i class="icon ion-android-close"></i>
+                </button>
+        </ion-header-bar>
 
-<script id="my-modal3.html" type="text/ng-template">
-<ion-modal-view>
-  <ion-header-bar class=" bar bar-positive">
-      <h1 class="title">Hospital Information</h1>
-   <button class="button button-clear button-primary" ng-click="closeModal3()"><i class="icon ion-android-close"></i></button>
-    </ion-header-bar>
-
- <ion-content>
-
-     <div class="list card" >
-           <div class="item item-divider"><h2><strong>{{hos.hospitalname}}</strong></h2>
+    <ion-content>
+        <div class="list card" >
+           <div class="item item-divider">
+               <h2><strong>{{hos.hospitalname}}</strong></h2>
            </div>
-
             <div class="item item-divider"><h4>
                  Phone : </h4>
-           </div>
-         <div class="item-text-wrap">
-        <p> {{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}</p>
-           </div>
-     <div class="item item-divider"><h4>
-         Email : </h4></div>
+            </div>
+            <div class="item-text-wrap">
+                <p> {{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}</p>
+            </div>
+            <div class="item item-divider">
+                <h4>Email : </h4>
+            </div>
            <div class="item-text-wrap"><p>
               {{hos.hospitalemailid}} {{hos.hospitalsecondaryemailid}} </p>
            </div>
 
-  <div class="item item-divider" ><h4>
-         Location :</h4></div>
- <div class="item-text-wrap"><p>
-      {{hos.hospitaladdress.addressline1}} {{hos.hospitaladdress.addressline2}}{{hos.hospitaladdress.addressline3}} {{hos.hospitaladdress.city}} {{hos.hospitaladdress.pincode}} {{hos.hospitaladdress.state}} {{hos.hospitaladdress.country}}</p>
+            <div class="item item-divider" >
+                <h4>Location :</h4>
+            </div>
+            <div class="item-text-wrap">
+                <p>{{hos.hospitaladdress.addressline1}} {{hos.hospitaladdress.addressline2}}{{hos.hospitaladdress.addressline3}} {{hos.hospitaladdress.city}} {{hos.hospitaladdress.pincode}} {{hos.hospitaladdress.state}} {{hos.hospitaladdress.country}}</p>
 
-    </div>
-         <div class="item item-divider">
-          <h4> Departments :</h4></div>
-     <div class="item-text-wrap"><p ng-repeat="dept in hos.hospitaldepartments"> {{dept}}</p></div>
-
-           <div class="item item-divider"><h4>
-         In House Labs :</h4></div>
- <div class="item-text-wrap"><p>
-     {{ hos.inhouselab}}</p>
- </div>
-    </div>
-</ion-content>
+            </div>
+            <div class="item item-divider">
+                <h4> Departments :</h4>
+            </div>
+            <div class="item-text-wrap">
+                <p ng-repeat="dept in hos.hospitaldepartments"> {{dept}}</p>
+            </div>
+            <div class="item item-divider">
+                <h4>In House Labs :</h4>
+            </div>
+            <div class="item-text-wrap">
+                <p>{{ hos.inhouselab}}</p>
+            </div>
+        </div>
+    </ion-content>
  </ion-modal-view>
 </script>
-<script id="filterHospitaldetails.html" type="text/ng-template">
-   <ion-modal-view>
+                <script id="filterHospitaldetails.html" type="text/ng-template">
+    <ion-modal-view>
        <ion-header-bar class="bar bar-positive">
            <h1 class="title">Filter Hospitals</h1>
            <button class="button button-clear button-primary" ng-click="filterCancel()">
@@ -114,6 +115,7 @@
            <button class="button button-assertive" ng-click="filterapply()">Apply</button>
          </div>
        </ion-content>
-     </ion-modal-view>
-   </script>
+    </ion-modal-view>
+  </script>
+
 </ion-view>
