@@ -1,17 +1,8 @@
 <ion-view view-title="Login" name="login-view">
-<ion-content class="padding loginInner-responsive">
-    <div class="container-responsive">
-      <img src="img/pulse7.jpg" class="image-responsive"/>
     <ion-content class="padding loginInner-responsive">
         <div class="container-responsive">
             <img src="img/pulse7.jpg" class="image-responsive"/>
        </div>
-    <!--
-    <div ng-if="signin.passcode.$invalid && signin.user.$invalid">
-     <div class="error" ng-messages="signin.user.$error" ng-show="signin.user.$touched ">
-         <div ng-message="required"><i class="ion-information-circled"></i> Please fill all fields.</div>
-    </div>
-  </div>-->
     <div ng-if="signin.user.$invalid" ng-messages="signin.user.$error">
   		<div class="error" ng-message="required">
   			<i class="ion-information-circled"></i> Email or Mobile Number is required!
@@ -28,24 +19,8 @@
 			<i class="ion-information-circled"></i> Password must be minimum 6 characters!
 		</div>
 	  </div>
-        <div ng-if="signin.user.$invalid" ng-messages="signin.user.$error">
-  		    <div class="error" ng-message="required">
-  			   <i class="ion-information-circled"></i> Email or Mobile Number is required!
-  		    </div>
-            <div class="error" ng-message="validemailmobile">
-                <i class="ion-information-circled"></i> Invalid email or mobile number
-  	         </div>
-        </div>
-	   <div ng-if="signin.user.$valid" ng-messages="signin.passcode.$error">
-		      <div class="error" ng-message="required">
-			     <i class="ion-information-circled"></i> Password is required!
-		      </div>
-            <div class="error" ng-message="minlength">
-			     <i class="ion-information-circled"></i> Password must be minimum 6 characters!
-		    </div>
-	   </div>
     <div id="grid">
-	 <form  name="signin" ng-submit="login(logindata)"  required>
+	 <!--form  name="signin" ng-submit="login(logindata)"  required>
      <div class="list">
 
  <label class="item item-input">
@@ -62,7 +37,7 @@
      </label>
 
 <hr>
- </div>
+ </div-->
         <form  name="signin" ng-submit="login(logindata)"  required>
             <div class="list">
                 <label class="item item-input">
@@ -85,10 +60,10 @@
         <button class="button button-block button-raised button-positive"  type="submit">LOGIN</button>
          </div>
 		 </form>
-    <br>
+    <!--br>
             <button class="button button-block button-raised button-positive"  type="submit">LOGIN</button>
         </div>
-      </form>
+      </form-->
         <br>
          <div class="pull-left">
             <button class="button button-clear button-flat button-assertive " href="" ng-click="signup()">Sign up</button>
