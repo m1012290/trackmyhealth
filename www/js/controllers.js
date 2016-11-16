@@ -1904,7 +1904,7 @@ angular.module('tracmyhealthappctrls', [])
         }
     };
 }])
-.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate){
+.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate','socket',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate,socket){
       $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{
           scope: $scope,
           animation: 'slide-in-up'
@@ -2056,6 +2056,7 @@ angular.module('tracmyhealthappctrls', [])
               $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
               });
          });
+         /*
          $scope.downloaddocument = function(url){
            var options = {
              location: 'yes',
@@ -2068,8 +2069,17 @@ angular.module('tracmyhealthappctrls', [])
            }).catch(function(event) {
 
            });
+         };*/
+         $scope.downloaddocument = function(visit){
+           $rootScope.showLoader();
+           var data = {
+             "visitid" : visit.visitid.visitid,
+             "appregistrationid" : visit.visitid.patientregno,
+             "labrefno" : visit.visitid.labrefno,
+             "hospitalroutingkey" : visit.hospitalid.hospitalroutingkey[0]
+           };
+           socket.emit('documentrequest',data);
          };
-
          $scope.notification = function(patientid, visitid){
             doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(data){
 			          $scope.notinfo = data.data;
@@ -2128,11 +2138,72 @@ angular.module('tracmyhealthappctrls', [])
       		    title: 'Feedback',
       		    scope: $scope
       	   });
-    	  //popup close
-    	  $scope.closepopup = function(){
-    		  myPopup.close();
+    	     //popup close
+    	     $scope.closepopup = function(){
+    		       myPopup.close();
+    	     };
     	  };
-    	};
+        $scope.openPDFViewer = function(){
+          $ionicModal.fromTemplateUrl('pdf-viewer.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+          }).then(function (modal) {
+              $scope.pdfviewermodal = modal;
+              $scope.pdfviewermodal.show();
+          });
+        };
+        $scope.hidePDFViewerModal = function(){
+          $scope.pdfviewermodal.remove();
+        };
+        if(socket !== null){
+          socket.on('connect', function(){
+            console.log('socket connected successfully');
+            socket.emit('appregistrationid',$scope.doctorid);
+          });
+          socket.on('documentrecieved', function(data){
+             var datarecieved = data;
+             console.log('printing parsed data recieved ['+ data + ']');
+             if(data && data === 'ERROR'){
+               $rootScope.hideLoader();
+               $rootScope.showToast('Document is unavailable/error retrieving the document, please try again later', 'long','center');
+             }else{
+               $rootScope.hideLoader();
+               try{
+                 var uint8array = base64ToUint8Array(datarecieved);
+                 var blob = new Blob([uint8array],{type:'application/pdf'});
+                 //below 2 lines are working code commented for testing...
+                 $scope.pdfUrl = URL.createObjectURL(blob);
+                 $scope.openPDFViewer();
+                 //window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
+                 window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
+                    dir.getDirectory("TracMyHealth",{create:true}, function(direntry){
+                      var filename = "labreport_"+(new Date()).getTime()+".pdf";
+                      direntry.getFile(filename, {create:true}, function(file) {
+                        console.log("File created succesfully.");
+                        file.createWriter(function(fileWriter) {
+                            console.log("Writing content to file");
+                            fileWriter.write(blob);
+                            $rootScope.showToast("Report has also been downloaded to your device",'long','center');
+                        }, function(err){
+                            $rootScope.showToast("Couldn't download the report, please try again",'long','center');
+                        });
+                      });
+                    });
+                  });
+                }catch(error){
+                  $rootScope.showToast("Couldn't download the report, please try again",'long','center');
+                }
+              }
+          });
+        };
+        function base64ToUint8Array(base64) {
+          var raw = atob(base64);
+          var uint8Array = new Uint8Array(raw.length);
+          for (var i = 0; i < raw.length; i++) {
+            uint8Array[i] = raw.charCodeAt(i);
+          }
+          return uint8Array;
+        };
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
     $scope.openImagesModal = function(index) {
