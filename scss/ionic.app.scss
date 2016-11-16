@@ -619,7 +619,34 @@ padding-top: 5px!important;}
 // Added for patientimages.html ends
 
 // following added for popup msgs like: System Error during login
+.popup-buttons {
+  @include display-flex();
+  @include flex-direction(row);
+  padding: 10px;
+  min-height: $popup-button-min-height + 20;
 
+  .button {
+    @include flex(1);
+    display: block;
+    min-height: $popup-button-min-height;
+    border-radius: $popup-button-border-radius;
+    line-height: $popup-button-line-height;
+background-color: lightgray;
+      font-weight: bolder;
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+}
+
+
+
+.popup-body {
+    padding: 4px;
+    overflow: auto;
+    text-align: center;
+}
 .popup
 {
     max-height: 100% ;
