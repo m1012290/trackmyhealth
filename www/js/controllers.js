@@ -1368,17 +1368,17 @@ angular.module('tracmyhealthappctrls', [])
        $scope.filterCancel = function(){
           $scope.closeModalfilter();
           //copy from backup of previous filter in case of cancel press
-          $scope.appliedfilters.patientnameselected=angular.copy($scope.appliedfilters.backup.patientnameselected);
-          $scope.appliedfilters.visittypeselected=angular.copy($scope.appliedfilters.backup.visittypeselected);
-          $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
+          $scope.appliedfilters.patientnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.backup.patientnameselected));
+          $scope.appliedfilters.visittypeselected=JSON.parse(JSON.stringify($scope.appliedfilters.backup.visittypeselected));
+          $scope.appliedfilters.hospitalnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.backup.hospitalnameselected));
           $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
           $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
        };
 
        $scope.filterSetAll = function(){
          $scope.appliedfilters.patientnameselected="All";
-         $scope.appliedfilters.visittypeselected=angular.copy($scope.filtersavailable.visittypes);
-         $scope.appliedfilters.hospitalnameselected[0]=angular.copy($scope.filtersavailable.hospitalnames[0]);
+         $scope.appliedfilters.visittypeselected=JSON.parse(JSON.stringify($scope.filtersavailable.visittypes));
+         $scope.appliedfilters.hospitalnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.hospitalnames[0]));
          $scope.appliedfilters.docswithattachment=false;
        };
 
@@ -1402,7 +1402,7 @@ angular.module('tracmyhealthappctrls', [])
               if(!angular.isUndefined($scope.backupvisitinfo))
               {
                 //No need to apply filter
-                $scope.visitinfo=angular.copy($scope.backupvisitinfo);
+                $scope.visitinfo=JSON.parse(JSON.stringify($scope.backupvisitinfo));
               }
               //If no backupvisitinfo leave visitinfo as is.
             }else{
@@ -1410,10 +1410,10 @@ angular.module('tracmyhealthappctrls', [])
               $scope.appliedfilters.isFilterApplied=true;
               if(angular.isUndefined($scope.backupvisitinfo)){
                 //this check may not be needed any more, to be removed after checking
-                $scope.backupvisitinfo = angular.copy($scope.visitinfo);
+                $scope.backupvisitinfo = JSON.parse(JSON.stringify($scope.visitinfo));
               }
               else{
-                $scope.visitinfo=angular.copy($scope.backupvisitinfo);
+                $scope.visitinfo=JSON.parse(JSON.stringify($scope.backupvisitinfo));
               }
               //filter only hospital list first if hospital filter is applied
               if(allHospitals == false){
@@ -1454,7 +1454,7 @@ angular.module('tracmyhealthappctrls', [])
             if(angular.isUndefined($scope.backupvisitinfo))
             {
                 var firstEntry=true;
-                $scope.backupvisitinfo=angular.copy($scope.visitinfo);
+                $scope.backupvisitinfo=JSON.parse(JSON.stringify($scope.visitinfo));
             }
             angular.forEach($scope.backupvisitinfo, function(visitdata, key1){
                 //Fill patientnames
@@ -1507,9 +1507,9 @@ angular.module('tracmyhealthappctrls', [])
               firstEntry=false;
             }
             //keep a backup copy of previous filter incase of cancel press
-            $scope.appliedfilters.backup.patientnameselected=angular.copy($scope.appliedfilters.patientnameselected);
-            $scope.appliedfilters.backup.visittypeselected=angular.copy($scope.appliedfilters.visittypeselected);
-            $scope.appliedfilters.backup.hospitalnameselected=angular.copy($scope.appliedfilters.hospitalnameselected);
+            $scope.appliedfilters.backup.patientnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.patientnameselected));
+            $scope.appliedfilters.backup.visittypeselected=JSON.parse(JSON.stringify($scope.appliedfilters.visittypeselected));
+            $scope.appliedfilters.backup.hospitalnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.hospitalnameselected));
             $scope.appliedfilters.backup.docswithattachment=$scope.appliedfilters.docswithattachment;
             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             //display filter modal
@@ -2027,9 +2027,6 @@ angular.module('tracmyhealthappctrls', [])
                 $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
             }
         };//end of filterdetails
-         $scope.drvisitinfo=[];
-         $scope.notinfo=[];
-         $scope.filterBarInstance;
          $scope.showFilterBar = function(){
            filterBarInstance = $ionicFilterBar.show({
              items:$scope.drvisitinfo,
@@ -2044,17 +2041,26 @@ angular.module('tracmyhealthappctrls', [])
              }
            });
          };
-         registrationdetsdb.query({}).then(function(response){
-           var result = DBA.getById(response);
-           $scope.doctorid =  result.appregistrationid;
-           doctortabservice.getdctdets($scope.doctorid).then(function(data){
-              $scope.drvisitinfo = data.data;
-           }).catch(function(error){
-              $rootScope.showPopup({title:'Error',template:'We are experiencing problem retrieving doctors notifications'});
+         $scope.$on("$ionicView.loaded", function(event, data){
+           $scope.drvisitinfo=[];
+           $scope.notinfo=[];
+           $scope.filterBarInstance;
+           $rootScope.showLoader();
+           registrationdetsdb.query({}).then(function(response){
+             var result = DBA.getById(response);
+             $scope.doctorid =  result.appregistrationid;
+             doctortabservice.getdctdets($scope.doctorid).then(function(data){
+                $rootScope.hideLoader();
+                $scope.drvisitinfo = data.data;
+             }).catch(function(error){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'Error',template:'We are experiencing problem retrieving doctors notifications'});
+             });
+           }).catch(function(err){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+                });
            });
-         }).catch(function(err){
-              $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-              });
          });
          /*
          $scope.downloaddocument = function(url){
