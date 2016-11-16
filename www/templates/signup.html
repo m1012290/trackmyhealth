@@ -30,7 +30,8 @@
 			<i class="ion-information-circled"></i> Password is required!
 		</div>
 	  </div>
-
+      
+        
 <form name="signup" class="simple-form" ng-submit="save(formData)" required>
     <div class="list">
 	<ion-item class="item-input">
@@ -125,7 +126,7 @@
 	</div>
 
 
- <button  class="button button-block button-assertive" ng-disabled="signup.$invalid" href="">SignUp</button>
+ <button  class="button button-block button-assertive" ng-if="((formData.male||formData.female||formData.transgender)&&(formData.termsyes))" ng-disabled="signup.$invalid" href="">SignUp</button>
 
     </form>
     </ion-content>

@@ -25,7 +25,7 @@
     </div></div>
   <label class="item item-input item-floating-label">
         <span class="input-label">Mobile Number</span>
-    <input type="text" ng-model="patientprofiledata.alternatemobilenum" placeholder="Alternative Mobile Number" required>
+    <input type="number" ng-model="patientprofiledata.alternatemobilenum" placeholder="Alternative Mobile Number" ng-minlength="10" ng-maxlength="10" required>
   </label>
      <label class="item item-input item-floating-label">
              <span class="input-label">Email Address</span>
@@ -34,7 +34,7 @@
 
   <label class="item item-input item-floating-label">
              <span class="input-label">Date Of Birth</span>
-    <input type="text" ng-model="patientprofiledata.dateofbirth" placeholder="Date of Birth" ng-click="openDatePicker()" formatted-date format="medium">
+    <input type="text" ng-model="patientprofiledata.dateofbirth" placeholder="Date of Birth" ng-click="openDatePicker()" formatted-date format="medium" readonly>
   </label>
 
 	<label class="item item-input item-floating-label">
@@ -43,7 +43,7 @@
   </label>  
 </div>
   <div class="pull-center">
-			<button class="button button-outline button-assertive" ng-click="save(formData)">Submit</button>
+			<button class="button button-assertive" ng-click="save(formData)">Submit</button>
 	</div>
 
   </form>
