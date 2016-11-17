@@ -374,6 +374,7 @@ angular.module('tracmyhealthappctrls', [])
           }
       });
   };
+
 	$scope.newpassword= function(chg){
       $scope.forgot.push({emailId : chg.emailId, mobNo : chg.mobNo, password: chg.password, confirmpwd: chg.confirmpwd, smsotp: chg.smsotp, emailotp: chg.emailotp});
 		  if($scope.forgot.password === $scope.forgot.confirmpwd){
@@ -382,7 +383,6 @@ angular.module('tracmyhealthappctrls', [])
                 $rootScope.showToast('Password updated successfuly','long','top');
       					console.log("password saved successfully");
       					$scope.closeModal4();
-      					//$state.go('main.listedentities');
       				}else{
                 $rootScope.showPopup({
                   title:'Error',
@@ -403,6 +403,7 @@ angular.module('tracmyhealthappctrls', [])
           $rootScope.showToast("Passwords don't match, please re-enter them",'long','top');
       }
 	};
+
   $scope.signup=function(){
       $state.go('signup');
   };
@@ -1369,17 +1370,17 @@ angular.module('tracmyhealthappctrls', [])
        $scope.filterCancel = function(){
           $scope.closeModalfilter();
           //copy from backup of previous filter in case of cancel press
-          $scope.appliedfilters.patientnameselected=angular.copy($scope.appliedfilters.backup.patientnameselected);
-          $scope.appliedfilters.visittypeselected=angular.copy($scope.appliedfilters.backup.visittypeselected);
-          $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
+          $scope.appliedfilters.patientnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.backup.patientnameselected));
+          $scope.appliedfilters.visittypeselected=JSON.parse(JSON.stringify($scope.appliedfilters.backup.visittypeselected));
+          $scope.appliedfilters.hospitalnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.backup.hospitalnameselected));
           $scope.appliedfilters.docswithattachment=$scope.appliedfilters.backup.docswithattachment;
           $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
        };
 
        $scope.filterSetAll = function(){
          $scope.appliedfilters.patientnameselected="All";
-         $scope.appliedfilters.visittypeselected=angular.copy($scope.filtersavailable.visittypes);
-         $scope.appliedfilters.hospitalnameselected[0]=angular.copy($scope.filtersavailable.hospitalnames[0]);
+         $scope.appliedfilters.visittypeselected=JSON.parse(JSON.stringify($scope.filtersavailable.visittypes));
+         $scope.appliedfilters.hospitalnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.hospitalnames[0]));
          $scope.appliedfilters.docswithattachment=false;
        };
 
@@ -1403,7 +1404,7 @@ angular.module('tracmyhealthappctrls', [])
               if(!angular.isUndefined($scope.backupvisitinfo))
               {
                 //No need to apply filter
-                $scope.visitinfo=angular.copy($scope.backupvisitinfo);
+                $scope.visitinfo=JSON.parse(JSON.stringify($scope.backupvisitinfo));
               }
               //If no backupvisitinfo leave visitinfo as is.
             }else{
@@ -1411,10 +1412,10 @@ angular.module('tracmyhealthappctrls', [])
               $scope.appliedfilters.isFilterApplied=true;
               if(angular.isUndefined($scope.backupvisitinfo)){
                 //this check may not be needed any more, to be removed after checking
-                $scope.backupvisitinfo = angular.copy($scope.visitinfo);
+                $scope.backupvisitinfo = JSON.parse(JSON.stringify($scope.visitinfo));
               }
               else{
-                $scope.visitinfo=angular.copy($scope.backupvisitinfo);
+                $scope.visitinfo=JSON.parse(JSON.stringify($scope.backupvisitinfo));
               }
               //filter only hospital list first if hospital filter is applied
               if(allHospitals == false){
@@ -1455,7 +1456,7 @@ angular.module('tracmyhealthappctrls', [])
             if(angular.isUndefined($scope.backupvisitinfo))
             {
                 var firstEntry=true;
-                $scope.backupvisitinfo=angular.copy($scope.visitinfo);
+                $scope.backupvisitinfo=JSON.parse(JSON.stringify($scope.visitinfo));
             }
             angular.forEach($scope.backupvisitinfo, function(visitdata, key1){
                 //Fill patientnames
@@ -1508,9 +1509,9 @@ angular.module('tracmyhealthappctrls', [])
               firstEntry=false;
             }
             //keep a backup copy of previous filter incase of cancel press
-            $scope.appliedfilters.backup.patientnameselected=angular.copy($scope.appliedfilters.patientnameselected);
-            $scope.appliedfilters.backup.visittypeselected=angular.copy($scope.appliedfilters.visittypeselected);
-            $scope.appliedfilters.backup.hospitalnameselected=angular.copy($scope.appliedfilters.hospitalnameselected);
+            $scope.appliedfilters.backup.patientnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.patientnameselected));
+            $scope.appliedfilters.backup.visittypeselected=JSON.parse(JSON.stringify($scope.appliedfilters.visittypeselected));
+            $scope.appliedfilters.backup.hospitalnameselected=JSON.parse(JSON.stringify($scope.appliedfilters.hospitalnameselected));
             $scope.appliedfilters.backup.docswithattachment=$scope.appliedfilters.docswithattachment;
             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             //display filter modal
@@ -1905,7 +1906,7 @@ angular.module('tracmyhealthappctrls', [])
         }
     };
 }])
-.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate){
+.controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate','socket',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate,socket){
       $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{
           scope: $scope,
           animation: 'slide-in-up'
@@ -2028,7 +2029,6 @@ angular.module('tracmyhealthappctrls', [])
                 $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
             }
         };//end of filterdetails
-
          $scope.showFilterBar = function(){
            filterBarInstance = $ionicFilterBar.show({
              items:$scope.drvisitinfo,
@@ -2044,29 +2044,29 @@ angular.module('tracmyhealthappctrls', [])
            });
          };
 
-      $scope.$on("$ionicView.loaded", function(event, data){
-         $scope.drvisitinfo=[];
-         $scope.notinfo=[];
-         $scope.filterBarInstance;
+         $scope.$on("$ionicView.loaded", function(event, data){
+           $scope.drvisitinfo=[];
+           $scope.notinfo=[];
+           $scope.filterBarInstance;
 
-         $rootScope.showLoader();
-         registrationdetsdb.query({}).then(function(response){
-           var result = DBA.getById(response);
-           $scope.doctorid =  result.appregistrationid;
-           doctortabservice.getdctdets($scope.doctorid).then(function(data){
-              $rootScope.hideLoader();
-              $scope.drvisitinfo = data.data;
-           }).catch(function(error){
-              $rootScope.hideLoader();
-              $rootScope.showPopup({title:'Error',template:'We are experiencing problem retrieving doctors notifications'});
+           $rootScope.showLoader();
+           registrationdetsdb.query({}).then(function(response){
+             var result = DBA.getById(response);
+             $scope.doctorid =  result.appregistrationid;
+             doctortabservice.getdctdets($scope.doctorid).then(function(data){
+                $rootScope.hideLoader();
+                $scope.drvisitinfo = data.data;
+             }).catch(function(error){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'Error',template:'We are experiencing problem retrieving doctors notifications'});
+             });
+           }).catch(function(err){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+                });
            });
-         }).catch(function(err){
-              $rootScope.hideLoader();
-              $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-              });
          });
-       });
-
+         /*
          $scope.downloaddocument = function(url){
            var options = {
              location: 'yes',
@@ -2079,8 +2079,17 @@ angular.module('tracmyhealthappctrls', [])
            }).catch(function(event) {
 
            });
+         };*/
+         $scope.downloaddocument = function(visit){
+           $rootScope.showLoader();
+           var data = {
+             "visitid" : visit.visitid.visitid,
+             "appregistrationid" : visit.visitid.patientregno,
+             "labrefno" : visit.visitid.labrefno,
+             "hospitalroutingkey" : visit.hospitalid.hospitalroutingkey[0]
+           };
+           socket.emit('documentrequest',data);
          };
-
          $scope.notification = function(patientid, visitid){
             doctortabservice.fetchvisit($scope.doctorid,patientid,visitid).then(function(data){
 			          $scope.notinfo = data.data;
@@ -2139,11 +2148,72 @@ angular.module('tracmyhealthappctrls', [])
       		    title: 'Feedback',
       		    scope: $scope
       	   });
-    	  //popup close
-    	  $scope.closepopup = function(){
-    		  myPopup.close();
+    	     //popup close
+    	     $scope.closepopup = function(){
+    		       myPopup.close();
+    	     };
     	  };
-    	};
+        $scope.openPDFViewer = function(){
+          $ionicModal.fromTemplateUrl('pdf-viewer.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+          }).then(function (modal) {
+              $scope.pdfviewermodal = modal;
+              $scope.pdfviewermodal.show();
+          });
+        };
+        $scope.hidePDFViewerModal = function(){
+          $scope.pdfviewermodal.remove();
+        };
+        if(socket !== null){
+          socket.on('connect', function(){
+            console.log('socket connected successfully');
+            socket.emit('appregistrationid',$scope.doctorid);
+          });
+          socket.on('documentrecieved', function(data){
+             var datarecieved = data;
+             console.log('printing parsed data recieved ['+ data + ']');
+             if(data && data === 'ERROR'){
+               $rootScope.hideLoader();
+               $rootScope.showToast('Document is unavailable/error retrieving the document, please try again later', 'long','center');
+             }else{
+               $rootScope.hideLoader();
+               try{
+                 var uint8array = base64ToUint8Array(datarecieved);
+                 var blob = new Blob([uint8array],{type:'application/pdf'});
+                 //below 2 lines are working code commented for testing...
+                 $scope.pdfUrl = URL.createObjectURL(blob);
+                 $scope.openPDFViewer();
+                 //window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function(dir) {
+                 window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
+                    dir.getDirectory("TracMyHealth",{create:true}, function(direntry){
+                      var filename = "labreport_"+(new Date()).getTime()+".pdf";
+                      direntry.getFile(filename, {create:true}, function(file) {
+                        console.log("File created succesfully.");
+                        file.createWriter(function(fileWriter) {
+                            console.log("Writing content to file");
+                            fileWriter.write(blob);
+                            $rootScope.showToast("Report has also been downloaded to your device",'long','center');
+                        }, function(err){
+                            $rootScope.showToast("Couldn't download the report, please try again",'long','center');
+                        });
+                      });
+                    });
+                  });
+                }catch(error){
+                  $rootScope.showToast("Couldn't download the report, please try again",'long','center');
+                }
+              }
+          });
+        };
+        function base64ToUint8Array(base64) {
+          var raw = atob(base64);
+          var uint8Array = new Uint8Array(raw.length);
+          for (var i = 0; i < raw.length; i++) {
+            uint8Array[i] = raw.charCodeAt(i);
+          }
+          return uint8Array;
+        };
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
     $scope.openImagesModal = function(index) {
