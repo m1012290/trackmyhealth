@@ -379,9 +379,10 @@ angular.module('tracmyhealthappctrls', [])
 		  if($scope.forgot.password === $scope.forgot.confirmpwd){
           forgotpwdservice.changedpwd($scope.forgot.emailId, $scope.forgot.mobNo,$scope.forgot.password, $scope.forgot.smsotp, $scope.forgot.emailotp,$scope.forgotpass).then(function(data){
       				if(data.status === "SUCCESS"){
+                $rootScope.showToast('Password updated successfuly','long','top');
       					console.log("password saved successfully");
       					$scope.closeModal4();
-      					$state.go('main.listedentities');
+      					//$state.go('main.listedentities');
       				}else{
                 $rootScope.showPopup({
                   title:'Error',
@@ -2027,9 +2028,7 @@ angular.module('tracmyhealthappctrls', [])
                 $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
             }
         };//end of filterdetails
-         $scope.drvisitinfo=[];
-         $scope.notinfo=[];
-         $scope.filterBarInstance;
+
          $scope.showFilterBar = function(){
            filterBarInstance = $ionicFilterBar.show({
              items:$scope.drvisitinfo,
@@ -2044,18 +2043,30 @@ angular.module('tracmyhealthappctrls', [])
              }
            });
          };
+
+      $scope.$on("$ionicView.loaded", function(event, data){
+         $scope.drvisitinfo=[];
+         $scope.notinfo=[];
+         $scope.filterBarInstance;
+
+         $rootScope.showLoader();
          registrationdetsdb.query({}).then(function(response){
            var result = DBA.getById(response);
            $scope.doctorid =  result.appregistrationid;
            doctortabservice.getdctdets($scope.doctorid).then(function(data){
+              $rootScope.hideLoader();
               $scope.drvisitinfo = data.data;
            }).catch(function(error){
+              $rootScope.hideLoader();
               $rootScope.showPopup({title:'Error',template:'We are experiencing problem retrieving doctors notifications'});
            });
          }).catch(function(err){
+              $rootScope.hideLoader();
               $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
               });
          });
+       });
+
          $scope.downloaddocument = function(url){
            var options = {
              location: 'yes',
