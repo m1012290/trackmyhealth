@@ -705,13 +705,16 @@ angular.module('tracmyhealthappctrls', [])
       $scope.openPopover = function($event) {
         $scope.$parent.openPopover($event);
       };
+
       $scope.closePopover = function() {
         $scope.$parent.closePopover();
       };
+
     	$scope.listedentities=[];
     	$scope.hospitalslist=[];
     	$scope.hos=[];
       $rootScope.showLoader();
+
       registrationdetsdb.query({}).then(function(response){
           var result = DBA.getById(response);
           $scope.patientId = result.appregistrationid;
@@ -736,22 +739,28 @@ angular.module('tracmyhealthappctrls', [])
                       console.log('on click ok');
                   });
               }
-            }).catch(function(error){
-                $rootScope.hideLoader();
-                $rootScope.showPopup({
-                    title:'Error',
-                    template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
+          }).catch(function(error){
+                if(error.status === 404){
+                    $rootScope.hideLoader();
+                    $rootScope.showPopup({
+                    title:'Info',
+                    template:"Hospital data yet to be added, check with your hospital."}, function(res){
                     console.log('on click ok');
                 });
-            });
+              }else{
+                  $rootScope.hideLoader();
+                  $rootScope.showPopup({
+                  title:'Error',
+                  template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
+              });
+            }
+          });
       }).catch(function(error){
          $rootScope.hideLoader();
-         $rootScope.showPopup({
-             title:'Error',
-             template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
-             console.log('on click ok');
+         $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
          });
-      });
+     });
+
       $scope.hosinfo= function(hospitalid,hospitalcode){
   		    hospitalservice.hospitalinfo(hospitalid,hospitalcode).then(function(data){
 				      $scope.openModal3();
@@ -868,20 +877,25 @@ angular.module('tracmyhealthappctrls', [])
             "notes" : ""
          }
       };
+
       $scope.$on("$ionicView.loaded", function(event, data){
+
         $ionicModal.fromTemplateUrl('medicalprofile.html', {
           scope: $scope,
           animation: 'slide-in-up'
         }).then(function(modal) {
           $scope.modal = modal;
         });
+
         $scope.openModal1 = function(trackername, title){
           $scope.trackername = trackername;
           $scope.title = title;
           $scope.tdate= new Date();
           $scope.modal.show();
         };
+
         $rootScope.showLoader();
+
         registrationdetsdb.query({}).then(function(response){
           var result = DBA.getById(response);
           $scope.patientId = result.appregistrationid;
@@ -893,16 +907,28 @@ angular.module('tracmyhealthappctrls', [])
                 $scope.summary = data.summary;
               }
             }
-          }).catch(function(error){
-            $rootScope.hideLoader();
-            $rootScope.showPopup({title:'Message',template:'There is no medical history to retrieve'});
+            }).catch(function(error){
+              if(error == 404){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({
+                    title:'Info',
+                    template:"Health details are not added, try adding."}, function(res){
+                    console.log('on click ok');
+                });
+              }
+              else{
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'Error', template:"We are experiencing problem right now, please try again"}, function(res){
+                });
+              }
           });
         }).catch(function(error){
             $rootScope.hideLoader();
-            $rootScope.showPopup({title:'System Error', template:"We are experiencing problem right now, please try again"}, function(res){
+            $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
             });
         });
       });
+
       $scope.openModalfilter = function(){
          $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
            scope: $scope,
@@ -1542,6 +1568,7 @@ angular.module('tracmyhealthappctrls', [])
       $scope.$on('popover.removed', function() {
         // Execute action
       });
+
       $scope.$on("$ionicView.loaded", function(event, data){
         $scope.shouldShowReorder = false;
         $scope.shouldShowDelete  = false;
@@ -1550,7 +1577,9 @@ angular.module('tracmyhealthappctrls', [])
         $scope.patientId = '';
         $scope.notinfo =[];
         $scope.visitinfo=[];
+
         $rootScope.showLoader();
+
         registrationdetsdb.query({}).then(function(response){
             var result = DBA.getById(response);
             $scope.patientId = result.appregistrationid;
@@ -1559,13 +1588,20 @@ angular.module('tracmyhealthappctrls', [])
                 $rootScope.hideLoader();
                 $scope.visitinfo = data.data;
               }).catch(function(error){
-                $rootScope.hideLoader();
-                $rootScope.showPopup({
-                   title : 'Error'
-                  ,template:'We are experiencing problem retrieving your visit information'
-                }, function(res){
-
-                });
+                if(error.status === 404){
+                    $rootScope.hideLoader();
+                    $rootScope.showPopup({
+                      title:'Info',
+                      template:"Visit data yet to be added, check with your hospital."}, function(res){
+                        console.log('on click ok');
+                      });
+                }else{
+                  $rootScope.hideLoader();
+                  $rootScope.showPopup({
+                    title : 'Error'
+                    ,template:'We are experiencing problem retrieving your visit information'}, function(res){
+                  });
+                }
               });
             }else{
               visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
@@ -1582,11 +1618,11 @@ angular.module('tracmyhealthappctrls', [])
             }
         }).catch(function(err){
           $rootScope.hideLoader();
-          $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-
+          $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
           });
         });
       });
+
       $scope.notifications = function(visitid){
           visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
 			        $scope.notinfo = data.data;
@@ -2056,16 +2092,29 @@ angular.module('tracmyhealthappctrls', [])
              doctortabservice.getdctdets($scope.doctorid).then(function(data){
                 $rootScope.hideLoader();
                 $scope.drvisitinfo = data.data;
-             }).catch(function(error){
-                $rootScope.hideLoader();
-                $rootScope.showPopup({title:'Error',template:'We are experiencing problem retrieving doctors notifications'});
-             });
+              }).catch(function(error){
+                if(error.status === 404){
+                    $rootScope.hideLoader();
+                    $rootScope.showPopup({
+                      title:'Info',
+                      template:"Hospital visits yet to be added, check with your hospital."}, function(res){
+                        console.log('on click ok');
+                      });
+                }else{
+                  $rootScope.hideLoader();
+                  $rootScope.showPopup({
+                    title : 'Error'
+                    ,template:'We are experiencing problem retrieving your visit information'}, function(res){
+                  });
+                }
+              });
            }).catch(function(err){
                 $rootScope.hideLoader();
-                $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+                $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
                 });
            });
          });
+
          /*
          $scope.downloaddocument = function(url){
            var options = {
