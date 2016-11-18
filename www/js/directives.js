@@ -234,10 +234,15 @@ return {
         require: "ngModel",
         link: function(scope, element, attributes, ngModel) {
             ngModel.$validators.validemailmobile = function(modelValue) {
-                if(validator.isNumeric(modelValue)){
-                   return validator.isMobilePhone(modelValue, 'en-IN');
-                }else{
-                   return validator.isEmail(modelValue);
+                if(typeof modelValue === 'undefined'|| modelValue === '' || modelValue === null){
+                  return false;
+                }else {
+                  if(typeof modelValue === 'number'){
+                     modelValue = modelValue.toString();
+                     return validator.isMobilePhone(modelValue, 'en-IN');
+                  }else{
+                     return validator.isEmail(modelValue);
+                  }
                 }
             }
         }
