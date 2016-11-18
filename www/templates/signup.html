@@ -30,8 +30,8 @@
 			<i class="ion-information-circled"></i> Password is required!
 		</div>
 	  </div>
-      
-        
+
+
 <form name="signup" class="simple-form" ng-submit="save(formData)" required>
     <div class="list">
 	<ion-item class="item-input">
@@ -133,29 +133,28 @@
 
 	<script id="otpscreen.html" type="text/ng-template">
      <ion-modal-view>
-
-    <ion-header-bar class="bar-positive">
-		  <h1 class="title">Email and SMS OTP</h1>
-        <button class="button button-clear button-primary" ng-click="closeModal2()"><i class="icon ion-android-close"></i></button>
-    </ion-header-bar>
+        <ion-header-bar class="bar-positive">
+    		  <h1 class="title">Email and SMS OTP</h1>
+            <button class="button button-clear button-primary" ng-click="closeModal2()"><i class="icon ion-android-close"></i></button>
+        </ion-header-bar>
 
 			<ion-content class="padding">
-		<form name="otp">
-		<ion-list>
-		<ion-item class="item item-input item-floating-label">
-            <span class="input-label">SMS OTP</span>
-            <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="security.otpsms" required/>
-		</ion-item>
-		<ion-item class="item item-input item-floating-label">
-        	<span class="input-label">Email OTP</span>
-            <input name="otppin" type="number" placeholder="OTP recieved as email" ng-model="security.otpemail" required/>
-		</ion-item>
-		</ion-list>
-		<br/>
-		<div class="pull-center">
-			<button class="button button-outline button-assertive" ng-click="securitydets(security) ">Submit</button>
-		</div>
-		</form>
-	</ion-content>
-		</ion-modal-view>
+    		<form name="otp">
+    		<ion-list>
+    		<ion-item class="item item-input item-floating-label">
+                <span class="input-label">SMS OTP</span>
+                <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="security.otpsms" required/>
+    		</ion-item>
+    		<ion-item class="item item-input item-floating-label">
+            	<span class="input-label">Email OTP</span>
+                <input name="otppin" type="number" placeholder="OTP recieved as email" ng-model="security.otpemail" required/>
+    		</ion-item>
+    		</ion-list>
+    		<br/>
+    		<div class="pull-center">
+    			<button class="button button-outline button-assertive" ng-click="securitydets(security) ">Submit</button>
+    		</div>
+    		</form>
+	     </ion-content>
+		</ion-modal-view></script>
 </ion-view>

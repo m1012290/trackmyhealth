@@ -308,6 +308,7 @@ angular.module('tracmyhealthappctrls', [])
   // first on loading of the landing page lets check if we have
   //json web token available
   $scope.$on("$ionicView.loaded", function(event, data){
+
     $rootScope.showLoader();
     registrationdetsdb.query({}).then(function(response){
         var result = DBA.getById(response);
@@ -328,45 +329,54 @@ angular.module('tracmyhealthappctrls', [])
           $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
     });
   });
-  $ionicModal.fromTemplateUrl('my-modal4.html',{
-      scope: $scope,
-    	animation: 'slide-in-up'
-  	}).then(function(modal) {
-    	$scope.modal = modal;
-  	});
-	$scope.openModal4 = function() {
-		$scope.modal.show();
+	$scope.openForgotPwdModal = function() {
+    $scope.validemailmobile = false;
+    $ionicModal.fromTemplateUrl('forgotpassword.html',{
+        scope: $scope,
+      	animation: 'slide-in-up'
+    }).then(function(modal) {
+      	$scope.modal = modal;
+        $scope.modal.show();
+    });
 	};
-  $scope.closeModal4 = function() {
-    $scope.modal.hide();
+  $scope.closeForgotPwdModal = function() {
+    $scope.modal.remove();
 	};
 	$scope.save=function(dets){
 	    $scope.forgotpass = true;
+      $rootScope.showLoader();
       forgotpwdservice.forgotpwd($scope.forgot.emailId, $scope.forgot.mobNo, $scope.forgotpass ).then(function(data){
             if(data.status === "SUCCESS"){
-                //console.log("mobile no exists generate otp now");
-                $scope.pass=true;
+                $scope.validemailmobile=true;
                 var mobnum= $scope.forgot.mobNo.toString();
                 signupservice.generateOtp($scope.forgot.emailId, mobnum ).then(function(data){
+                    $rootScope.hideLoader();
                     if(data.status !== "SUCCESS"){
                         $rootScope.showPopup({title:"Error",template:"Error generating OTP, please try again"},
                         function(res){
                         });
                     }
                 }).catch(function(error){
+                  $rootScope.hideLoader();
                   $rootScope.showPopup({title:"Error",template:"Error generating OTP, please try again"},
                   function(res){
                   });
                 });
+            }else{
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:"Error",template:"Error resetting the password, please try again"},
+                function(res){
+                });
             }
       }).catch(function(error){
-          if(error.status === 400){
-              $rootScope.showPopup({
-               title:'Error',
-               template:"Please check your Email and Mobile number"
-              },function(res){
-               console.log("error to save");
-              });
+          $rootScope.hideLoader();
+          if(error.status === 400 || error.status === 404){
+            $rootScope.showPopup({
+             title:'Error',
+             template:"Email id and mobile number isn't registered on our platform"
+            },function(res){
+             console.log("error to save");
+            });
           }else{
             $rootScope.showPopup({title:"Error",template:"Error resetting the password, please try again"},
             function(res){
@@ -382,7 +392,7 @@ angular.module('tracmyhealthappctrls', [])
       				if(data.status === "SUCCESS"){
                 $rootScope.showToast('Password updated successfuly','long','top');
       					console.log("password saved successfully");
-      					$scope.closeModal4();
+      					$scope.closeForgotPwdModal();
       				}else{
                 $rootScope.showPopup({
                   title:'Error',
