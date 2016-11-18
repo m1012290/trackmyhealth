@@ -213,6 +213,9 @@ angular.module('tracmyhealthappctrls', [])
           $scope.srcImage = entry.nativeURL;
           $scope.data.filename = entry.fullPath.substr(entry.fullPath.lastIndexOf('/') + 1);
   			});
+        $cordovaCamera.cleanup().then(function(){
+        },function(error){
+        });
         cordova.plugins.MediaScannerPlugin.scanFile(entry.nativeURL, function(){
           //$rootScope.showToast("Mediascannerplugin scan was successful","long","top");
         }, function(err){

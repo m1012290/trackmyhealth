@@ -42,10 +42,10 @@
 		    </form>
         <br>
          <div class="pull-left">
-            <button class="button button-clear button-flat button-assertive " href="" ng-click="signup()">Sign up</button>
+            <button class="button button-clear button-flat button-assertive" ng-click="signup()">Sign up</button>
          </div>
          <div class="pull-right">
-             <button class="button button-clear button-flat button-assertive" href="" ng-click="openModal4()">Forgot password</button>
+             <button class="button button-clear button-flat button-assertive" ng-click="openForgotPwdModal()">Forgot password</button>
          </div>
        </div>
     </ion-content>
@@ -53,98 +53,110 @@
     <script id="forgotpassword.html" type="text/ng-template">
       <ion-modal-view>
         <ion-header-bar class="bar-positive">
-          <h1 class="title"> Forgot password</h1>
-          <button class="button button-clear button-primary" ng-click="closeModal4()">
+          <h1 class="title">Forgot password</h1>
+          <button class="button button-clear button-primary" ng-click="closeForgotPwdModal()">
             <i class="icon ion-android-close"></i>
           </button>
         </ion-header-bar>
-
       <ion-content class="padding">
-        <div ng-if="frgotpassword.mobnum.$valid" ng-messages="frgotpassword.email.$error">
-		         <div class="error" ng-message="required">
-			            <i class="ion-information-circled"></i>EmailId is required!
-		         </div>
+        <div ng-if="forgotpassword.email.$invalid" ng-messages="forgotpassword.email.$error">
+        		<div class="error" ng-message="required">
+        			<i class="ion-information-circled"></i> Please enter email id
+        		</div>
+            <div class="error" ng-message="validemailmobile">
+              <i class="ion-information-circled"></i> Please check your email id
+        	  </div>
         </div>
-	      <div ng-if="frgotpassword.email.$valid " ng-messages="frgotpassword.mobnum.$error" >
-		         <div class="error" ng-message="required">
-			            <i class="ion-information-circled"></i>EmailId is required!
-		         </div>
-	      </div>
-	      <div ng-if="frgotpassword.email.$valid " ng-messages="frgotpassword.mobnum.$error" >
-		        <div class="error" ng-message="required">
-			           <i class="ion-information-circled"></i>Mobile Number is required!
-		        </div>
-	      </div>
-		    <br>
-
-        <form name="frgotpassword">
-			  <ion-list>
- 				<ion-item class="item-input item-floating-label">
-				    <span class="input-label">Email Id</span>
-              <input name="email" type="email" placeholder="Enter email-id" ng-model="forgot.emailId" required>
-        </ion-item>
-            <div class="panel-footer" align="right">
-              <div ng-messages="frgotpassword.email.$error">
-                <div ng-messages="frgotpassword.email.$error">
-                  <div ng-message="email"  class="requiredStyle errorCls">This field must be a valid email address.</div>
-                  <div class="help-block" ng-show="frgotpassword.email.$error.pattern">Text only, please.</div>
-                  <div class="help-block" ng-show="frgotpassword.email.$error.emailadd">Not valid email!</div>
-                </div>
-              </div>
+    	  <div ng-if="forgotpassword.email.$valid" ng-messages="forgotpassword.mobnum.$error">
+        		<div class="error" ng-message="required">
+        			<i class="ion-information-circled"></i> Please enter mobile number
+        		</div>
+            <div class="error" ng-message="validemailmobile">
+        			<i class="ion-information-circled"></i> Please check your mobile number
+        		</div>
+    	  </div>
+        <div ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid" ng-messages="forgotpassword.password.$error">
+        		<div class="error" ng-message="required">
+        			<i class="ion-information-circled"></i> Please enter the password
+        		</div>
+            <div class="error" ng-message="minlength">
+        			<i class="ion-information-circled"></i> Password cannot be less than 6 characters
+        		</div>
+            <div class="error" ng-message="maxlength">
+        			<i class="ion-information-circled"></i> Password cannot be more than 20 characters
+        		</div>
+    	  </div>
+        <div ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
+        && forgotpassword.password.$valid" ng-messages="forgotpassword.confirmpwd.$error">
+        		<div class="error" ng-message="required">
+        			<i class="ion-information-circled"></i> Please re-enter the password
+        		</div>
+            <div class="error" ng-message="minlength">
+        			<i class="ion-information-circled"></i> Password cannot be less than 6 characters
+        		</div>
+            <div class="error" ng-message="maxlength">
+        			<i class="ion-information-circled"></i> Password cannot be more than 20 characters
+        		</div>
+    	  </div>
+        <div ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
+        && forgotpassword.password.$valid && forgotpassword.confirmpwd.$valid">
+        		<div class="error" ng-if="forgotpassword.password !== forgotpassword.confirmpwd">
+        			<i class="ion-information-circled"></i> Passwords doesn't match
+        		</div>
+    	  </div>
+        <div ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
+        && forgotpassword.password.$valid && forgotpassword.confirmpwd.$valid
+        && (forgotpassword.password === forgotpassword.confirmpwd)"
+        ng-messages="forgotpassword.smsotppin.$error">
+            <div class="error" ng-message="required">
+              <i class="ion-information-circled"></i> Please enter SMS OTP Pin
             </div>
-            <ion-item class="item-input item-floating-label">
-					      <span class="input-label">Mobile Number</span>
-                  <input name="mobnum" name="mobnum" type="number" placeholder="Enter mobile number" ng-model="forgot.mobNo"  ng-minlength="10" ng-maxlength="10" required>
-				    </ion-item>
-
-        <div class="panel-footer" align="right">
-          <div ng-messages="frgotpassword.mobnum.$error">
-            <div ng-message="minlength"  class="requiredStyle errorCls">Mob num must be over 10 character</div>
-            <div class="help-block" ng-show="frgotpassword.mobnum.$error.pattern">Text only, please</div>
-            <div ng-message="maxlength"  class="requiredStyle errorCls">Mob num must not exceed 10 characters</div>
-          </div>
         </div>
-
-        <div ng-if="pass">
-					<ion-item class="item-input item-floating-label">
-						<span class="input-label">Password</span>
-						<input  name="password" type="password" placeholder="Enter new password" ng-model= "forgot.password"  ng-minlength="6" ng-maxlength="20" required>
-					</ion-item>
-          <div class="panel-footer" align="right">
-            <div ng-messages="frgotpassword.password.$error">
-                <div ng-message="password">This field is required</div>
-                <div ng-message="minlength" class="requiredStyle errorCls">Password must be over 6-20 characters</div>
-                <div ng-message="maxlength" class="requiredStyle errorCls">Password must not exceed 20 characters</div>
+        <div ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
+        && forgotpassword.password.$valid && forgotpassword.confirmpwd.$valid
+        && forgotpassword.smsotppin.$valid
+        && (forgotpassword.password === forgotpassword.confirmpwd)"
+        ng-messages="forgotpassword.emailotppin.$error">
+            <div class="error" ng-message="required">
+              <i class="ion-information-circled"></i> Please enter Email OTP Pin
             </div>
-          </div>
-
-          <ion-item class="item-input item-floating-label">
-					      <span class="input-label">Confirm password</span>
-					      <input name="confirmpwd" type="password" placeholder="Confirm new password" ng-model="forgot.confirmpwd" required>
-					</ion-item>
-
-          <div class="panel-footer" align="right">
-             <div ng-if="frgotpassword.confirmpwd.$valid" >
-                <div class="error" ng-if="forgot.password !== forgot.confirmpwd" >
-                    <i class="ion-information-circled"></i> Password doesnot Match!
-                 </div>
-            </div>
-          </div>
-          <ion-item class="item item-input item-floating-label">
-              <span class="input-label">SMS OTP</span>
-              <input name="otppin" type="number" placeholder="OTP recieved as SMS" ng-model="forgot.smsotp" required/>
-          </ion-item>
-		      <ion-item class="item item-input item-floating-label">
-        	<span class="input-label">Email OTP</span>
-            <input name="otppin" type="number" placeholder="OTP recieved as email" ng-model="forgot.emailotp" required/>
-		      </ion-item>
-				</div>
-      </ion-list>
-			<br>
-      <div class="pull-center" ng-hide="forgot.password && forgot.confirmpwd ">
+        </div>
+        <form name="forgotpassword" required>
+		        <div class="list">
+       				<label class="item-input item-floating-label">
+      				    <span class="input-label">Email Id</span>
+                    <input name="email" type="email" placeholder="Enter email id" ng-model="forgot.emailId" required validemailmobile>
+              </label>
+              <label class="item-input item-floating-label">
+  					      <span class="input-label">Mobile Number</span>
+                    <input name="mobnum" name="mobnum" type="number" placeholder="Enter mobile number" ng-model="forgot.mobNo"  ng-minlength="10" ng-maxlength="10" required validemailmobile>
+  				    </label>
+              <div ng-if="validemailmobile">
+      					<label class="item-input item-floating-label">
+      						<span class="input-label">Password</span>
+      						<input  name="password" type="password" placeholder="Enter new password" ng-model= "forgot.password"  ng-minlength="6" ng-maxlength="20" required>
+      					</label>
+                <label class="item-input item-floating-label">
+      					      <span class="input-label">Confirm password</span>
+      					      <input name="confirmpwd" type="password" placeholder="Confirm new password" ng-model="forgot.confirmpwd" ng-minlength="6" ng-maxlength="20" required>
+      					</label>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">SMS OTP</span>
+                    <input name="smsotppin" type="number" placeholder="OTP recieved as SMS" ng-model="forgot.smsotp" required/>
+                </label>
+      		      <label class="item item-input item-floating-label">
+              	<span class="input-label">Email OTP</span>
+                  <input name="emailotppin" type="number" placeholder="OTP recieved as email" ng-model="forgot.emailotp" required/>
+      		      </label>
+      				</div>
+      </div>
+      <div class="pull-center" ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid && !validemailmobile">
 			    <button class="button  button-assertive" ng-click="save(forgot)">OK</button>
 			</div>
-			<div class="pull-center" ng-if="forgot.password && forgot.confirmpwd && forgot.smsotp && forgot.emailotp">
+			<div class="pull-center" ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
+      && forgotpassword.password.$valid && forgotpassword.confirmpwd.$valid
+      && forgotpassword.smsotppin.$valid && forgotpassword.emailotppin.$valid
+      && (forgotpassword.password === forgotpassword.confirmpwd)">
 			    <button class="button button-assertive" ng-click="newpassword(forgot)">Save New Password</button>
 			</div>
       </form>
