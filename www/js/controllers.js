@@ -219,12 +219,12 @@ angular.module('tracmyhealthappctrls', [])
         cordova.plugins.MediaScannerPlugin.scanFile(entry.nativeURL, function(){
           //$rootScope.showToast("Mediascannerplugin scan was successful","long","top");
         }, function(err){
-          $rootScope.showToast("Error displaying the captured photo, please try again","long","top");
+          $rootScope.showToast("Couldn't complete the action due to "+err+", please try again","long","top");
         });
         $scope.openDocModal();
   		}
-  		function fail(error) {
-  			$rootScope.showToast("Error displaying the captured photo, please try again","long","top");
+  		function fail(err) {
+  			$rootScope.showToast("Couldn't complete the action due to "+err+", please try again","long","top");
   		}
   		function makeid() {
   			var text = "";
@@ -235,7 +235,7 @@ angular.module('tracmyhealthappctrls', [])
   			return text;
   		}
   	}, function(err) {
-  		$rootScope.showToast("Error displaying the captured photo, please try again","long","top");
+  		$rootScope.showToast("Couldn't complete the action due to "+err+", please try again","long","top");
   	});
   };
   $scope.saveCapturedImage = function(){
