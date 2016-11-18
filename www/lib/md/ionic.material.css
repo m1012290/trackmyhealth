@@ -187,7 +187,7 @@
 
 .bar.bar-header .button + .title {
   text-align: left;
-  left: 48px !important;
+  margin-left:5% !important;
  line-height: 46px;
 position: fixed;
    float: none !important; }
@@ -2012,7 +2012,7 @@ a {
 ==================================*/
 .title-left,
 .title.title-left {
-  left: 48px; }
+  margin-left: 5%!important; }
 
 .title-right,
 .title.title-right {
