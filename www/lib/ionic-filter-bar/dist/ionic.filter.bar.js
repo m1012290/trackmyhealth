@@ -431,7 +431,7 @@ angular.module('jett.ionic.filter.bar', ['ionic']);
             expression: null,
             comparator: null,
             debounce: true,
-            delay: 1000,
+            delay: 2000,
             cancelText: 'Cancel',
             cancelOnStateChange: true,
             container: $body,
