@@ -1,18 +1,14 @@
-<ion-view view-title="Uploaded Images">
-    <ion-nav-buttons side="left">
+<ion-view view-title="Uploaded Photos">
+    <!--ion-nav-buttons side="left">
         <button class="button button-clear" ng-click="backButtonAction()">
             <i class="ion-android-arrow-back icon-btn-customize"></i>
         </button>
-    </ion-nav-buttons>
+    </ion-nav-buttons-->
    
     <ion-pane>
 	  <ion-header-bar class="bar-stable">
 		<h1 class="title">Image</h1>
 	  </ion-header-bar>
-
-   <div class="bar bar-subheader">
-   <h2 class="title"><i class="ion-images"></i> My Images</h2>
-   </div>
     <ion-content class="has-subheader padding">
         <div ng-repeat="image in imagesarray track by $index"  class="list card">
              <a class="item item-list-detail">

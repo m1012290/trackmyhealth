@@ -63,32 +63,27 @@
  <script id="documentpic.html" type="text/ng-template">
    <ion-modal-view>
       <ion-header-bar class="bar-positive">
-          <button class="button button-clear button-default" ng-click="closeDocModal()"><i class="icon ion-android-close"></i></button>
           <h1 class="title">About Image</h1>
+          <button class="button button-clear button-default" ng-click="closeDocModal()"><i class="icon ion-android-close"></i></button>
       </ion-header-bar>
+       <br>
     <ion-content class="padding">
 
-    <div class="row">
-         <div class="col">
-         <label class="item item-input large ">
-                 <span class="input-label"><i class="icon ion-ios-pricetags"></i> Tag </span>
-         <input type="text" placeholder="Tag the document" ng-model="data.tag">
-             </label>
-         </div>
-     </div>
+    <div class="list">
        <img ng-src="{{srcImage}}" id="srcImage" width="250 " height="250" style="display: block; margin: 0 auto;"/><br/>
-
-     <div class="row">
-         <div class="col">
-             <label class="item item-input text item-floating-label">
-               <span class="input-label ">Description </span>
-           <textarea placeholder="Describe the document" rows="1"  ng-model="data.description" ng-Required="true" name="description">             </textarea>
+             <label class="item item-input item-floating-label">
+                    <span class="input-label"><i class="icon ion-ios-pricetags"></i> &nbsp;Tag</span>
+                     <input type="text" placeholder="Tag the document" ng-model="data.tag">
              </label>
-         </div>
-     </div>
-             <br/>
+         
+             <label class="item item-input item-floating-label">
+               <span class="input-label ">Description </span>
+           <textarea placeholder="Describe the document" rows="1"  ng-model="data.description" ng-Required="true" name="description"></textarea>
+             </label>
+        </div>
+         <br/>
          <div class="pull-center">
-   			<button class="button button-outline button-assertive" ng-click="saveCapturedImage()">Submit</button>
+   			<button class="button button-assertive" ng-click="saveCapturedImage()">Submit</button>
    		</div>
     </ion-content>
   </ion-modal-view>
