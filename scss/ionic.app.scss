@@ -93,7 +93,7 @@ html{
 }
 .bar.bar-header .button + .title {
     text-align: left;
-    left: 48px !important;
+    margin-left:5% !important;
     line-height: 46px;
     position: fixed;
     float: none !important;
@@ -101,7 +101,7 @@ html{
 div .title.title-left.header-item
 {
   text-align: left;
-    left: 48px !important;
+    margin-left:5% !important;
   line-height: 46px;
   position: fixed;
   float: none !important;
@@ -312,6 +312,9 @@ div
     margin-bottom: 0px !important;
     background-color:#d14836 !important;
     border-color: #d14836;
+
+
+
     &.button-positive
     {
           margin-bottom: 0px !important;
@@ -507,8 +510,11 @@ h1
                   border-bottom: 1px solid #fff;
                   border-width:thick;
                  max-width: 93%;
+  
             }
+               
             }
+         
         }
         &:last-child
         {
@@ -670,7 +676,7 @@ background-color: lightgray;
      /* padding:10px 0px 0px 0px!important;
       min-height: auto;
       background-color: #f5f5f5;*/
-
+       
     padding: 25px 0px -2px 0px !important;
     background-color: #f5f5f5;
     }
@@ -889,7 +895,7 @@ input[type="color"] {
   height: 34px;
   color: #000;
     background-color: #fff;
-  font-weight:normal;
+  font-weight:normal; 
   vertical-align: middle;
   font-size: 17px;
   line-height: 16px;
@@ -910,7 +916,7 @@ input[type="url"],
 input[type="search"],
 input[type="tel"],
 input[type="color"] {
-  
+ 
   background-color: #ece4e2;
   
     }
@@ -1062,6 +1068,7 @@ p
   height: 100%;
 }
 
+
 .zoom-pane .scroll {
   min-height: 100%;
   /* Vertical align */
@@ -1100,36 +1107,6 @@ p
   vertical-align: middle;
 }
 
-.platform-android .action-sheet {
-    margin-right:10%;
-    margin-left:10%;
-    .button {
-        padding-left: 16px;
-        text-align: left;
-        border-color: gray;
-        font-size: 16px;
-        text-transform: none;
-        text-color:black;
-    }
-    .action-sheet-title {
-      font-size: 20px;
-      color: #ffffff;
-      text-align:center;
-      background-color:#D14836;
-    }
-}
-
-.platform-android {
-    .popover {
-        margin-top: 20px;
-        margin-right:0px;
-        background-color: #D14836;
-        box-shadow:0 0 0 0;
-        .item {
-            color: #ffffff;
-            background-color:#D14836;
-            font-size:16px;
-            padding-right: 0px;
-        }
-    }
+body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
