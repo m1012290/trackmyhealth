@@ -1795,7 +1795,10 @@ angular.module('tracmyhealthappctrls', [])
           }
       };
       //popup to show feedback
+    var ifentered = false;
       $scope.showMyPopup = function(hospitalid, visitid, patientregprofileid) {
+           if(!ifentered){
+                ifentered = true;
           $scope.feedbackanswers  = {};
           // ratings callback function , obtains the current slide and updates the object answer
           $scope.ratingsCallback = function(rating) {
@@ -1815,6 +1818,7 @@ angular.module('tracmyhealthappctrls', [])
               });
              feedbackservice.save(hospitalid,patientregprofileid,visitid,{"feedbackdets":feedbackresponse}).then(function(data){
                 $rootScope.showToast('Thank you for your valuable feedback','long','top');
+                  ifentered = false;
              }).catch(function(error){
                $rootScope.showToast('Error saving feedback, please retry again','short','center');
              });
@@ -1832,11 +1836,13 @@ angular.module('tracmyhealthappctrls', [])
          	  //popup close
            	 $scope.closepopup = function(){
            		  myPopup.close();
+                 ifentered = false;
            	 }
           }).catch(function(error){
              $rootScope.showToast("Error displaying feedqueries, please try again later",'long','top')
           });
-      };
+                };
+      }
 }])
 .controller('LogoutCtrl', ['$scope','$rootScope','$route','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $route, $state, $ionicHistory, registrationdetsdb){
     //deleting the jsonwebtoken as there is a logout request by the user..
