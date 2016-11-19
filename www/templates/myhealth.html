@@ -141,6 +141,7 @@
               </button>
           </ion-header-bar>
         <ion-content class="padding">
+            <div id="timeLineForms">
             <form name="timeLineForm" >
 
       			<div class="list" ng-if="trackername === 'Weight'">
@@ -164,7 +165,6 @@
       				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
 
-      				 <div class="row"><ul class="my-nav"><li><h4><b>Blood Sugar</b></h4></li></ul></div>
         <div class="col">
             <h5><b>RBS (Random Blood Sugar)</b></h5>
          <div class="row" ><input type="number" limit-to="3" placeholder=" MG/DL" ng-model="data.bloodsugar.rbs" ng-maxlength="3" required></div>
@@ -272,6 +272,7 @@
         		  		</label>
               	</div>
       		</form>
+            </div>
             <br>
             <div class="pull-center">
             <button class="button button-assertive" ng-click="create(data)">Apply</button>
