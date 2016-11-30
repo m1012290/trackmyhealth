@@ -12,7 +12,7 @@
     <link href="lib/ion-floating-menu-1.0.1/dist/ion-floating-menu.css" rel="stylesheet" >
     <link href="lib/ionic-filter-bar/dist/ionic.filter.bar.min.css" rel="stylesheet">
     <link href="lib/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
-      <link href="lib/angularjs-slider-master/dist/rzslider.css" rel="stylesheet">
+    <link href="lib/angularjs-slider-master/dist/rzslider.min.css" rel="stylesheet">
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -23,20 +23,20 @@
     <script src="lib/md-input/ion-md-input.js"></script>
 	  <script src="lib/ion-floating-menu-1.0.1/dist/ion-floating-menu.js"></script>
 	  <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
-    <script src="lib/ionic-filter-bar/dist/ionic.filter.bar.js"></script>
+    <script src="lib/ionic-filter-bar/dist/ionic.filter.bar.min.js"></script>
     <script src="lib/moment/min/moment.min.js"></script>
     <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
     <script src="lib/ionic-ratings/dist/ionic-ratings.min.js"></script>
-    <script src="lib/ionic-scroll-sista/dist/ionic.scroll.sista.js"></script>
+    <script src="lib/ionic-scroll-sista/dist/ionic.scroll.sista.min.js"></script>
     <script src="lib/underscore/underscore-min.js"></script>
     <script src="lib/validator-js/validator.min.js"></script>
     <script src="https://bnotified-service-m1012290.c9users.io/socket.io/socket.io.js"></script>
-    <script src="lib/angular-socket-io/socket.js"></script>
-    <script src="lib/pdfmake/build/pdfmake.js"></script>
-<script src="lib/pdfmake/build/vfs_fonts.js"></script>
-<script src="lib/pdfjs-dist/build/pdf.js"></script>
-<script src="lib/angular-pdf/dist/angular-pdf.js"></script>
-      <script src="lib/angularjs-slider-master/dist/rzslider.min.js"></script>
+    <script src="lib/angular-socket-io/socket.min.js"></script>
+    <script src="lib/pdfmake/build/pdfmake.min.js"></script>
+    <script src="lib/pdfmake/build/vfs_fonts.js"></script>
+    <script src="lib/pdfjs-dist/build/pdf.js"></script>
+    <script src="lib/angular-pdf/dist/angular-pdf.min.js"></script>
+    <script src="lib/angularjs-slider-master/dist/rzslider.min.js"></script>
 
       <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
@@ -63,27 +63,32 @@
  <script id="documentpic.html" type="text/ng-template">
    <ion-modal-view>
       <ion-header-bar class="bar-positive">
-          <h1 class="title">About Image</h1>
           <button class="button button-clear button-default" ng-click="closeDocModal()"><i class="icon ion-android-close"></i></button>
+          <h1 class="title">About Image</h1>
       </ion-header-bar>
-       <br>
     <ion-content class="padding">
 
-    <div class="list">
+    <div class="row">
+         <div class="col">
+         <label class="item item-input large ">
+                 <span class="input-label"><i class="icon ion-ios-pricetags"></i> Tag </span>
+         <input type="text" placeholder="Tag the document" ng-model="data.tag">
+             </label>
+         </div>
+     </div>
        <img ng-src="{{srcImage}}" id="srcImage" width="250 " height="250" style="display: block; margin: 0 auto;"/><br/>
-             <label class="item item-input item-floating-label">
-                    <span class="input-label"><i class="icon ion-ios-pricetags"></i> &nbsp;Tag</span>
-                     <input type="text" placeholder="Tag the document" ng-model="data.tag">
-             </label>
-         
-             <label class="item item-input item-floating-label">
+
+     <div class="row">
+         <div class="col">
+             <label class="item item-input text item-floating-label">
                <span class="input-label ">Description </span>
-           <textarea placeholder="Describe the document" rows="1"  ng-model="data.description" ng-Required="true" name="description"></textarea>
+           <textarea placeholder="Describe the document" rows="1"  ng-model="data.description" ng-Required="true" name="description">             </textarea>
              </label>
-        </div>
-         <br/>
+         </div>
+     </div>
+             <br/>
          <div class="pull-center">
-   			<button class="button button-assertive" ng-click="saveCapturedImage()">Submit</button>
+   			<button class="button button-outline button-assertive" ng-click="saveCapturedImage()">Submit</button>
    		</div>
     </ion-content>
   </ion-modal-view>
