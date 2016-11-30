@@ -611,7 +611,7 @@ angular.module('tracmyhealthappctrls', [])
 .controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal, $ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
     $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{
       scope: $scope,
-      animation: 'slide-in-up'
+      animation: 'slide-in-left'
     }).then(function(modal){
       $scope.filtermodal = modal;
     });
@@ -891,21 +891,25 @@ angular.module('tracmyhealthappctrls', [])
          }
       };
 
-      $scope.$on("$ionicView.loaded", function(event, data){
-
+      $scope.openModal1 = function(trackername, title){
         $ionicModal.fromTemplateUrl('medicalprofile.html', {
           scope: $scope,
-          animation: 'slide-in-up'
-        }).then(function(modal) {
-          $scope.modal = modal;
-        });
+          animation: 'slide-in-left'
+      }).then(function(modal) {
+        $scope.modal = modal;
+        $scope.trackername = trackername;
+        $scope.title = title;
+        $scope.tdate= new Date();
+        $scope.modal.show();
+      });
+    }
 
-        $scope.openModal1 = function(trackername, title){
-          $scope.trackername = trackername;
-          $scope.title = title;
-          $scope.tdate= new Date();
-          $scope.modal.show();
-        };
+    $scope.closeModal1 = function() {
+      $scope.modal.remove();
+
+    };
+
+      $scope.$on("$ionicView.loaded", function(event, data){
 
         $rootScope.showLoader();
 
@@ -945,7 +949,7 @@ angular.module('tracmyhealthappctrls', [])
       $scope.openModalfilter = function(){
          $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
            scope: $scope,
-           animation: 'slide-in-up'
+           animation: 'slide-in-left'
          }).then(function(modal){
            $scope.filtermodal = modal;
            $scope.filtermodal.show();
@@ -1346,9 +1350,12 @@ angular.module('tracmyhealthappctrls', [])
               $scope.data = initDataCopy();
            }
   	    };
-      	$scope.closeModal1 = function() {
-          	$scope.modal.hide();
-        };
+
+        // Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function() {
+          $scope.modal.remove();
+        });
+
         $scope.$on("$ionicView.beforeLeave", function(event, data){
 
         });
@@ -1379,7 +1386,7 @@ angular.module('tracmyhealthappctrls', [])
       $scope.openModalfilter = function(){
         $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
             scope: $scope,
-            animation: 'slide-in-up'
+            animation: 'slide-in-left'
         }).then(function(modal){
             $scope.filtermodal = modal;
             $scope.filtermodal.show();
@@ -1964,7 +1971,7 @@ angular.module('tracmyhealthappctrls', [])
 .controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate','socket',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate,socket){
       $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{
           scope: $scope,
-          animation: 'slide-in-up'
+          animation: 'slide-in-left'
       }).then(function(modal){
           $scope.filtermodal = modal;
       });
