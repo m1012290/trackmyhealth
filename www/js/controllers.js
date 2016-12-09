@@ -559,7 +559,8 @@ angular.module('tracmyhealthappctrls', [])
          $rootScope.hideLoader();
          $scope.closeModal2();
          $rootScope.showToast('Registration successful','long','top');
-         $state.go('main.listedentities');
+         //$state.go('main.listedentities');
+           $state.go('login');
     	 }).catch(function(error){
           $rootScope.hideLoader();
         	var alertpop = $ionicPopup.alert({
@@ -574,7 +575,8 @@ angular.module('tracmyhealthappctrls', [])
           $rootScope.hideLoader();
           $scope.closeModal2();
           $rootScope.showToast('Registration successful','long','top');
-          $state.go('main.listedentities');
+         // $state.go('main.listedentities');
+                $state.go('login');
         }).catch(function(error){
             $rootScope.hideLoader();
             $rootScope.showPopup({title:'Registration Error',template:'Error completing the registration, please try again'});
@@ -1809,8 +1811,10 @@ angular.module('tracmyhealthappctrls', [])
           // ratings callback function , obtains the current slide and updates the object answer
           $scope.ratingsCallback = function(rating) {
             $scope.i= $ionicSlideBoxDelegate.$getByHandle('feedbackdata').currentIndex();
-            $ionicSlideBoxDelegate.$getByHandle('feedbackdata').next();
-            $scope.feedbackanswers[$scope.i] = rating;
+             $scope.next=function(){
+                  $ionicSlideBoxDelegate.$getByHandle('feedbackdata').next();
+                                    }
+                  $scope.feedbackanswers[$scope.i] = rating;
             if($scope.i === $scope.questions.length - 1){
               //call service to save the feedback data..
               var feedbackresponse = [];
@@ -1835,7 +1839,7 @@ angular.module('tracmyhealthappctrls', [])
              $scope.questions = data.data[0].questions;
              // An elaborate, custom popup
        	     var myPopup = $ionicPopup.show({
-     		           template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i><button class="button button-full button-assertive"  ng-click="closepopup()">Not now!</button></ion-slide></ion-slide-box>',
+     		           template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><button class="button button-full button-assertive"  ng-click="next()">Next</button></ion-slide></ion-slide-box>',
      		           title: 'Feedback',
      		           scope: $scope
                  });

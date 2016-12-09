@@ -329,11 +329,6 @@ div
   float: right;
 }
 
-.item .item-content .icon.ion-transgender
-{
-   font-size:26px !important;
-}
-
 .ion-man
 {
   &:after
@@ -357,7 +352,10 @@ div
     	font-size: 35px;
     }
 }
-
+.item .item-content .icon.ion-transgender
+{
+   font-size:26px !important;
+}
 .item-checkbox-left
 {
    right:28px;
@@ -807,6 +805,15 @@ background-color: lightgray;
 
     font-size: 35px;
     padding-top: 21%;
+}
+.fa-pencil-square-o:before
+{
+ font-size: 33px;
+    padding-top: 21%;   
+}
+.fa fa-h-square:before{
+  font-size: 37px;
+    padding-top: 21%;  
 }
 .ion-android-more-vertical:before
 {
