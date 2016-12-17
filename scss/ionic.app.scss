@@ -638,13 +638,24 @@ background-color: lightgray;
   }
 }
 
+.popup-buttons .button {
 
+    background-color: #cec6c6;
+    
+    font-size: 18px;
+
+}
 
 .popup-body {
     padding: 18px 1px 10px 0px;
     overflow: auto;
     text-align: center;
 }
+.popup-body span {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center !important;
+    object-position: center; }
 .popup
 {
     max-height: 100% ;
@@ -1147,3 +1158,13 @@ p
         }
     }
 }
+
+.bar .title + .button:last-child, .bar > .button + .button:last-child, .bar > .button.pull-right, .bar .buttons.pull-right, .bar .title + .buttons {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+
+

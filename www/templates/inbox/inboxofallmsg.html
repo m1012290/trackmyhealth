@@ -30,8 +30,10 @@
 <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
 
     <div class="list card item-text-wrap" ng-repeat=" visit in visitinfo track by $index" >
-<p> <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)"></i>
-    <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <i class="icon ion-arrow-right-b assertive" ng-click="patientdetails(visit._id)" ></i></p>
+<p>
+        <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)"></i>
+
+  <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <i class="icon ion-arrow-right-b assertive" ng-click="patientdetails(visit._id)" ></i></p>
 
 <p> <b>Visit :</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-show="visit.documentmetadata && visit.documentmetadata.docname !==null && visit.documentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;">Report</button></p></div>
@@ -196,16 +198,26 @@
               <select ng-model="appliedfilters.patientnameselected" ng-options="pname for pname in filtersavailable.patientnames">
               <select>
           </span>
-          <span class="item-input">
-              <label class="input-label-filter">Visit Type</label>
-              <select ng-model="appliedfilters.visittypeselected" ng-options="visittype for visittype in filtersavailable.visittypes" multiple="true">
-              </select>
-          </span>
-          <span class="item-input">
-              <label class="input-label-filter">Hospital Name</label>
-                <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames" multiple="true">
-              </select>
-          </span>
+         
+                  <span class="item-input">
+           <label class="input-label-filter">Visit Type</label>
+            <button class="button"  modal-select ng-model="appliedfilters.visittypeselected" multiple="true" options="filtersavailable.visittypes" modal-title="Visit Type" has-search="true">
+    Select it
+    <div class="option">
+        {{option}}
+    </div>
+</button>
+                  </span><br>
+         
+                  <span class="item-input">
+           <label class="input-label-filter">Hospital Name</label>
+        <button class="button"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
+    Select it
+    <div class="option">
+        {{option}}
+    </div>
+</button> 
+                  </span><br>
           <span class="item-input">
               <label class="input-label-filter">Attachments?</label>
               <ion-checkbox class="item-checkbox-filter" style="position:relative;right:20px" ng-model="appliedfilters.docswithattachment">

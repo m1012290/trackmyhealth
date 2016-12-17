@@ -28,9 +28,9 @@
             <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
       <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
             <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
-                <span class="circle-span"  style ="background-color: #D14836";
-                  ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
+<span class="circle-span" style ="background-color: #D14836"; ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
                 </span>
+          
                     <a href="#/main/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
                         <h3>{{entity.hospitalname}}</h3>
                         <i class="icon ion-arrow-right-b assertive"></i>
@@ -66,7 +66,7 @@
            </div>
 
             <div class="item item-divider" >
-                <h4>Location :</h4>
+         <a href="https://www.google.co.in/maps/@12.9817406,77.5447453,15z">  <h4>Location :</h4></a>
             </div>
             <div class="item-text-wrap">
                 <p>{{hos.hospitaladdress.addressline1}} {{hos.hospitaladdress.addressline2}}{{hos.hospitaladdress.addressline3}} {{hos.hospitaladdress.city}} {{hos.hospitaladdress.pincode}} {{hos.hospitaladdress.state}} {{hos.hospitaladdress.country}}</p>
@@ -102,10 +102,15 @@
          <br>
          <span class="item-input">
            <label class="input-label-filter">Hospital Name</label>
-                 <select ng-model="appliedfilters.hospitalnameselected" ng-options="hsname for hsname in filtersavailable.hospitalnames" multiple="true">
-                 </select>
+                
+             <button class="button"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
+    Select it
+    <div class="option">
+        {{option}}
+    </div>
+</button>
          </span>
-         <br>
+             <br>
          <div class="pull-right">
            <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterSetAll()">Set All</button>
          </div>
@@ -119,3 +124,4 @@
   </script>
 
 </ion-view>
+ 
