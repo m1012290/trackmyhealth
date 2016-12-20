@@ -3,6 +3,7 @@ angular.module('tracmyhealthappctrls', [])
    //handle events and broadcasts such as error scenario to redirect user
    console.log('within AppCtrl current state -->'+JSON.stringify($state.current));
    $scope.$on('NoInternet' , function(event){
+
      var alertPopup = $ionicPopup.alert({
          title: 'No Internet Connection',
          template: 'Please check your internet connectivity'
@@ -195,8 +196,9 @@ angular.module('tracmyhealthappctrls', [])
   		function copyFile(fileEntry) {
   			var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
   			var newName = makeid() + name;
-        window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
-           dir.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
+       /* window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {*/
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+          fs.root.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
              fileEntry.copyTo(
                direntry,
                newName,
@@ -427,6 +429,7 @@ angular.module('tracmyhealthappctrls', [])
           $rootScope.hideLoader();
           registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken, data.isdoctor).then(function(result){
               loginservice.setProfileData({"appregistrationid":data.appregistrationid, "jsonwebtoken":data.authtoken, "isdoctor":data.isdoctor});
+
               $state.go('main.listedentities');
           }).catch(function(error){
               $rootScope.showPopup({
@@ -610,7 +613,8 @@ angular.module('tracmyhealthappctrls', [])
     });
   });
 }])
-.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal, $ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
+.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal,$ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
+
     $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{
       scope: $scope,
       animation: 'slide-in-left'
@@ -715,6 +719,7 @@ angular.module('tracmyhealthappctrls', [])
               //no need to open modal
               $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
           }
+
       };//end of filterdetails
 
       $scope.openPopover = function($event) {
@@ -922,6 +927,7 @@ angular.module('tracmyhealthappctrls', [])
             $rootScope.hideLoader();
             if(data.status === 'SUCCESS'){
               $scope.healthdetails = data.data;
+
               if(data.summary !== '' && data.summary !== 0){
                 $scope.summary = data.summary;
               }
@@ -985,6 +991,7 @@ angular.module('tracmyhealthappctrls', [])
             { text: "Allergies", checked: true, backupchecked: true},
             { text: "Weight", checked: true, backupchecked: true}
         ];
+
         $scope.filterCancel = function(){
           $scope.closeModalfilter();
           ionic.requestAnimationFrame(function (){
@@ -1130,6 +1137,7 @@ angular.module('tracmyhealthappctrls', [])
         };
         $scope.patientId = '';
         $scope.healthdetails = [];
+
         // Search bar implementation begins
         $scope.filterBarInstance;
         $scope.showFilterBar = function(){
@@ -1325,8 +1333,8 @@ angular.module('tracmyhealthappctrls', [])
                       $rootScope.showToast('Medical profile data saved successfully',null,'top');
                       medicalprofileservice.getdetails($scope.patientId).then(function(data){
                   	     if(data.status === 'SUCCESS'){
-                           $scope.healthdetails = data.data;
-                           if(data.summary !== '' && data.summary !== 0 ){
+                      $scope.healthdetails = data.data;
+                     if(data.summary !== '' && data.summary !== 0 ){
                              $scope.summary = data.summary;
                            }
                          }else{
@@ -1364,6 +1372,7 @@ angular.module('tracmyhealthappctrls', [])
         $scope.$on("$ionicView.enter", function(event, data){
 
         });
+
 }])
 .controller('TermsCtrl',['$scope','$state','$ionicHistory', function($scope, $state, $ionicHistory){
       $scope.backButtonAction = function(){
@@ -1379,7 +1388,7 @@ angular.module('tracmyhealthappctrls', [])
       };
 }])
 .controller('AboutusCtrl',['$scope', '$ionicHistory',function($scope,$ionicHistory){
-      $scope.backButtonAction = function(){
+     $scope.backButtonAction = function(){
         $scope.shouldShowDelete = false;
         $ionicHistory.goBack();
       };
