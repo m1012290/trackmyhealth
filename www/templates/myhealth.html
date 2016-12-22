@@ -85,32 +85,16 @@
                   <div class="timeline">
                         <div class="row"  ng-repeat="details in healthdetails track by $index ">
 
-                          <div class="right" ng-show="((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
-                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
-                          || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
-                          || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && details.vitalslistforday.medication !== null && appliedfilters.medicationFilter != false)
-                          || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && details.vitalslistforday.vaccination !== null && appliedfilters.vaccinationFilter != false)
-                          || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && appliedfilters.bloodsugarFilter != false)
-                          || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
-                          || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
-                          )">
-                          <button class="button button-small button-assertive" ng-show="((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== '' && appliedfilters.allergiesFilter != false)
-                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && appliedfilters.weightFilter != false)
-                          || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && appliedfilters.bloodpressureFilter != false)
-                          || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && details.vitalslistforday.medication !== null && appliedfilters.medicationFilter != false)
-                          || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && details.vitalslistforday.vaccination !== null && appliedfilters.vaccinationFilter != false)
-                          || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && appliedfilters.bloodsugarFilter != false)
-                          || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && appliedfilters.bloodsugarFilter != false)
-                          || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && appliedfilters.bloodsugarFilter != false)
-                          )">
-           
-                                          <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy h:mm:ss a "}} </div>
+                          <div class="right" ng-show="enableTimeLine(details)">
+                <button class="button button-small button-assertive" ng-show='enableTimeLine(details)'>              
+                       <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy h:mm:ss a "}} </div>
                                              
                                    </button>
                                   <div class="notification responsive">
 
                                       <div class="message responsive-sm">
                                         <div ng-repeat="medicalprofiledata in details.medicalprofile track by $index">
+                                          
                                            <p  class="item-text-wrap" ng-show="appliedfilters.weightFilter != false && appliedfilters.weightFilter && appliedfilters.weightFilter !== null && appliedfilters.weightFilter !== '' && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.rbs && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''">RBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''">PPBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
@@ -215,6 +199,13 @@
                 rz-slider-high="data.bloodpressure.systolic"
                 rz-slider-options="data.bloodpressure.options"></rzslider>
 
+                    
+                    <canvas id="line" class="chart chart-line" chart-data="data1"
+chart-labels="labels" chart-series="series" chart-options="options"
+chart-dataset-override="datasetOverride" chart-click="onClick">
+</canvas>
+                    
+                    
                 </div>
 
              <div class="list" ng-if="trackername === 'Medication'" >
@@ -315,6 +306,8 @@
            <div class="pull-center">
              <button class="button button-assertive" ng-click="filterapply()">Apply</button>
            </div>
+           
+        
        </ion-content>
      </ion-modal-view>
    </script>

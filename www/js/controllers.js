@@ -135,7 +135,7 @@ angular.module('tracmyhealthappctrls', [])
  $scope.showPopup = function() {
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
-      template: '<ion-item class="item-input" ><label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></label></ion-item>',
+      template: '<ion-item class="item-input" > <i class="icon ion-chevron-left icon-accessory"></i><label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></label> &nbsp;&nbsp; <button class="button-clear"><i class="icon ion-chevron-right dark"></i></button></ion-item>',
       title: 'Feedback',
       scope: $scope
     });
@@ -1207,7 +1207,9 @@ angular.module('tracmyhealthappctrls', [])
              }
           });
         };
-        function initDataCopy(){
+    //end of search
+   
+     function initDataCopy(){
             return {
                "weight" : {
                   "value" : "",
@@ -1334,7 +1336,7 @@ angular.module('tracmyhealthappctrls', [])
                       medicalprofileservice.getdetails($scope.patientId).then(function(data){
                   	     if(data.status === 'SUCCESS'){
                       $scope.healthdetails = data.data;
-                     if(data.summary !== '' && data.summary !== 0 ){
+                     if(data.summary !== '' && data.summary !== 0 && data.summery !== null){
                              $scope.summary = data.summary;
                            }
                          }else{
@@ -1358,9 +1360,13 @@ angular.module('tracmyhealthappctrls', [])
                   }
               });
               $scope.data = initDataCopy();
+            console.log($scope.healthdetails);
+               //$scope.showhide = function(){
+   
+         
            }
+          
   	    };
-
         // Cleanup the modal when we're done with it!
         $scope.$on('$destroy', function() {
           $scope.modal.remove();
@@ -1373,6 +1379,18 @@ angular.module('tracmyhealthappctrls', [])
 
         });
 
+    
+        $scope.enableTimeLine = function(details){
+            return ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && $scope.appliedfilters.allergiesFilter != false)
+                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && $scope.appliedfilters.weightFilter != false)
+                         || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && $scope.appliedfilters.bloodpressureFilter != false)
+                          || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && details.vitalslistforday.medication !== null && $scope.appliedfilters.medicationFilter != false)
+                          || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && details.vitalslistforday.vaccination !== null && $scope.appliedfilters.vaccinationFilter != false)
+                          || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
+                          || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
+                          || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
+                          );
+        };
 }])
 .controller('TermsCtrl',['$scope','$state','$ionicHistory', function($scope, $state, $ionicHistory){
       $scope.backButtonAction = function(){
@@ -1823,6 +1841,11 @@ angular.module('tracmyhealthappctrls', [])
              $scope.next=function(){
                   $ionicSlideBoxDelegate.$getByHandle('feedbackdata').next();
                                     }
+             $scope.previous = function() {
+    $ionicSlideBoxDelegate.enableSlide(true);
+    $ionicSlideBoxDelegate.previous();
+    $ionicSlideBoxDelegate.enableSlide(false);
+  };
                   $scope.feedbackanswers[$scope.i] = rating;
             if($scope.i === $scope.questions.length - 1){
               //call service to save the feedback data..
@@ -1848,10 +1871,11 @@ angular.module('tracmyhealthappctrls', [])
              $scope.questions = data.data[0].questions;
              // An elaborate, custom popup
        	     var myPopup = $ionicPopup.show({
-     		           template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><button class="button button-full button-assertive"  ng-click="next()">Next</button></ion-slide></ion-slide-box>',
+     		           template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><ion-item class="item-input" ><button class="button-clear" ng-click="previous()"> <i class="icon ion-chevron-left dark"></i></button><label class="item-input"><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="button-clear"  ng-click="next()"><i class="icon ion-chevron-right dark"></i></button></ion-item><button class="button button-full button-assertive"  ng-click="closepopup()">Not Now</button></ion-slide></ion-slide-box>',
      		           title: 'Feedback',
      		           scope: $scope
                  });
+             
          	  //popup close
            	 $scope.closepopup = function(){
            		  myPopup.close();
