@@ -716,8 +716,14 @@ background-color: lightgray;
 {
     font-size: 18px;
 }
-
-
+.icon.ion-chevron-right
+{
+    font-size: 20px;
+}
+.icon.ion-chevron-left
+{
+    font-size: 20px;
+}
 .ion-ios-star
 {
   &:before
@@ -1167,4 +1173,10 @@ p
 }
 
 
+/* unvisited link */
+a:link {
+    color: deepskyblue;
+    text-decoration: none;
+    border-bottom: 1px solid deepskyblue;
+}
 

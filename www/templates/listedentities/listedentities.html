@@ -56,17 +56,18 @@
                  Phone : </h4>
             </div>
             <div class="item-text-wrap">
-                <p> {{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}</p>
+                <p><a href="tel:{{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}" > {{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}</a></p>
+                 
             </div>
             <div class="item item-divider">
                 <h4>Email : </h4>
             </div>
-           <div class="item-text-wrap"><p>
-              {{hos.hospitalemailid}} {{hos.hospitalsecondaryemailid}} </p>
+           <div class="item-text-wrap"><p><a href="mailto:{{hos.hospitalemailid}} {{hos.hospitalsecondaryemailid}}">
+              {{hos.hospitalemailid}} {{hos.hospitalsecondaryemailid}}</a> </p>
            </div>
 
             <div class="item item-divider" >
-         <a href="https://www.google.co.in/maps/@12.9817406,77.5447453,15z">  <h4>Location :</h4></a>
+         <h4>Location :</h4>
             </div>
             <div class="item-text-wrap">
                 <p>{{hos.hospitaladdress.addressline1}} {{hos.hospitaladdress.addressline2}}{{hos.hospitaladdress.addressline3}} {{hos.hospitaladdress.city}} {{hos.hospitaladdress.pincode}} {{hos.hospitaladdress.state}} {{hos.hospitaladdress.country}}</p>

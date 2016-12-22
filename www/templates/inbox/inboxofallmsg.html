@@ -132,8 +132,13 @@
          <h4> Telephone Number :</h4>
          </div>
         <div class="item-text-wrap"><p>
-            {{visitdata.hospitaldetails.hospitaltelnumber}}</p></div>
-
+            <a href="tel:{{visitdata.hospitaldetails.hospitaltelnumber}}"> {{visitdata.hospitaldetails.hospitaltelnumber}}</a></p></div>
+<div class="item item-divider">
+                <h4>Email : </h4>
+            </div>
+           <div class="item-text-wrap"><p><a href="mailto:{{visitdata.hospitaldetails.hospitalemailid}}">
+              {{visitdata.hospitaldetails.hospitalemailid}}</a> </p>
+           </div>
  <div class="item item-divider">
           <h4> Departments :</h4></div>
      <div class="item-text-wrap"><p ng-repeat="dept in visitdata.hospitaldetails.hospitaldepartments"> {{dept}}</p></div>
