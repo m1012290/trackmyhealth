@@ -912,6 +912,7 @@ angular.module('tracmyhealthappctrls', [])
     }
 
     $scope.closeModal1 = function() {
+         $scope.data = initDataCopy();
       $scope.modal.remove();
 
     };
@@ -1367,9 +1368,10 @@ angular.module('tracmyhealthappctrls', [])
            }
           
   	    };
+    
         // Cleanup the modal when we're done with it!
-        $scope.$on('$destroy', function() {
-          $scope.modal.remove();
+       $scope.$on('$destroy', function() {
+         // $scope.modal.remove();
         });
 
         $scope.$on("$ionicView.beforeLeave", function(event, data){
@@ -2187,9 +2189,7 @@ angular.module('tracmyhealthappctrls', [])
            };
            $cordovaInAppBrowser.open(encodeURI(url), '_system', options)
            .then(function(event) {
-
            }).catch(function(event) {
-
            });
          };*/
          $scope.downloaddocument = function(visit){
