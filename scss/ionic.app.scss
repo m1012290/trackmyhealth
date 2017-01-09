@@ -142,6 +142,12 @@ div .title.title-left.header-item
   }
 }
 
+.item-input {
+ 
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 6px 0 5px 5px; }
 .item
 {
   h2
@@ -640,10 +646,10 @@ background-color: lightgray;
 
 .popup-buttons .button {
 
-    background-color: #cec6c6;
-    
-    font-size: 18px;
-
+    background-color: #d14836;
+    color: #fff;
+    font-size: 14px;
+      font-weight: normal;
 }
 
 .popup-body {
@@ -652,7 +658,7 @@ background-color: lightgray;
     text-align: center;
 }
 .popup-body span {
-    font-weight: bold;
+    font-weight: normal;
     font-size: 18px;
     text-align: center !important;
     object-position: center; }

@@ -100,7 +100,7 @@
     	  </div>
         <div ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
         && forgotpassword.password.$valid && forgotpassword.confirmpwd.$valid">
-        		<div class="error" ng-if="forgotpassword.password !== forgotpassword.confirmpwd">
+        		<div class="error" ng-if="forgot.password !== forgot.confirmpwd">
         			<i class="ion-information-circled"></i> Passwords doesn't match
         		</div>
     	  </div>
@@ -121,6 +121,7 @@
               <i class="ion-information-circled"></i> Please enter Email OTP Pin
             </div>
         </div>
+
         <form name="forgotpassword" required>
 		        <div class="list">
        				<label class="item-input item-floating-label">
@@ -128,7 +129,7 @@
                     <input name="email" type="email" placeholder="Enter email id" ng-model="forgot.emailId" required validemailmobile>
               </label>
               <label class="item-input item-floating-label">
-  					      <span class="input-label">Mobile Number</span>
+  					      <span class="input-label">MobileNo</span>
                     <input name="mobnum" name="mobnum" type="number" placeholder="Enter mobile number" ng-model="forgot.mobNo"  ng-minlength="10" ng-maxlength="10" required validemailmobile>
   				    </label>
               <div ng-if="validemailmobile">
@@ -156,7 +157,7 @@
 			<div class="pull-center" ng-if="forgotpassword.email.$valid && forgotpassword.mobnum.$valid
       && forgotpassword.password.$valid && forgotpassword.confirmpwd.$valid
       && forgotpassword.smsotppin.$valid && forgotpassword.emailotppin.$valid
-      && (forgotpassword.password === forgotpassword.confirmpwd)">
+      && (forgot.password === forgot.confirmpwd)">
 			    <button class="button button-assertive" ng-click="newpassword(forgot)">Save New Password</button>
 			</div>
       </form>
