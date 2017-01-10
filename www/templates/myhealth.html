@@ -1,7 +1,7 @@
 <ion-view view-title="trackmyhealth" name="my-health-view">
     <ion-nav-title align-title="left">
         <span class="circle-span direct-chat-timestamp">
-        <img src="img/icon.png" class="img-responsive"/>
+        <img src="img/72.png" class="img-responsive"/>
    </span>
 </ion-nav-title>
         <ion-nav-buttons side="right" >
@@ -54,7 +54,7 @@
                     </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <div class="row responsive">
                     <div class="col"><h3><b>Blood Pressure</b><button class="button button-small button-clear"  ng-click="openModal1('Blood Pressure', 'Blood Pressure')" on-tap="tracker('Blood Pressure', 'Blood Pressure')"><i class="icon ion-edit assertive"   text="Blood Pressure" ></i></button></h3>
-                 <div class="row" ng-if="summary.bloodpressure.systolic !=='' && summary.bloodpressure.systolic !== 0">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}} MM HG</div>
+                 <div class="row" ng-if="summary.bloodpressure.systolic !=='' && summary.bloodpressure.systolic !== 0 && summary.bloodpressure.diastolic !== '' && summary.bloodpressure.diastolic !== 0">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}} MM HG</div>
                         </div></div>
                 </div>
             <div class="col">
@@ -148,7 +148,6 @@
       				<div class="item item-divider">
       				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
-
         <div class="col">
             <h5><b>RBS (Random Blood Sugar)</b></h5>
          <div class="row" ><input type="number" limit-to="3" placeholder=" MG/DL" ng-model="data.bloodsugar.rbs" ng-maxlength="3" required></div>
@@ -266,7 +265,7 @@ chart-dataset-override="datasetOverride" chart-click="onClick">
             </div>
             <br>
             <div class="pull-center">
-            <button class="button button-assertive" ng-click="create(data)">Apply</button>
+            <button class="button button-assertive" ng-click="create()">Apply</button>
             </div>
       	</ion-content>
            
@@ -311,4 +310,5 @@ chart-dataset-override="datasetOverride" chart-click="onClick">
        </ion-content>
      </ion-modal-view>
    </script>
+    
 </ion-view>
