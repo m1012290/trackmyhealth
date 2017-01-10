@@ -135,7 +135,7 @@ angular.module('tracmyhealthappctrls', [])
  $scope.showPopup = function() {
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
-      template: '<ion-item class="item-input" > <i class="icon ion-chevron-left icon-accessory"></i><label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></label> &nbsp;&nbsp; <button class="button-clear"><i class="icon ion-chevron-right dark"></i></button></ion-item>',
+ template: '<ion-item class="item-input" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ></label></button></ion-item>',
       title: 'Feedback',
       scope: $scope
     });
@@ -613,7 +613,7 @@ angular.module('tracmyhealthappctrls', [])
     });
   });
 }])
-.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice', '$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal,$ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
+.controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice','$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal,$ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
 
     $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{
       scope: $scope,
@@ -735,6 +735,7 @@ angular.module('tracmyhealthappctrls', [])
     	$scope.hos=[];
       $rootScope.showLoader();
 
+    //service  call from database
       registrationdetsdb.query({}).then(function(response){
           var result = DBA.getById(response);
           $scope.patientId = result.appregistrationid;
@@ -1366,9 +1367,11 @@ angular.module('tracmyhealthappctrls', [])
    
          
            }
-          
+              
   	    };
     
+   
+
         // Cleanup the modal when we're done with it!
        $scope.$on('$destroy', function() {
          // $scope.modal.remove();
@@ -1873,7 +1876,7 @@ angular.module('tracmyhealthappctrls', [])
              $scope.questions = data.data[0].questions;
              // An elaborate, custom popup
        	     var myPopup = $ionicPopup.show({
-     		           template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><ion-item class="item-input" ><button class="button-clear" ng-click="previous()"> <i class="icon ion-chevron-left dark"></i></button><label class="item-input"><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="button-clear"  ng-click="next()"><i class="icon ion-chevron-right dark"></i></button></ion-item><button class="button button-full button-assertive"  ng-click="closepopup()">Not Now</button></ion-slide></ion-slide-box>',
+     		           template: '<ion-slide-box show-pager="false" delegate-handle="feedbackdata" ><ion-slide ng-repeat="quest in questions"><h4>{{quest.questiontext}}</h4><ion-item class="item-input" > &nbsp;&nbsp;&nbsp;&nbsp;<button class="button-clear" ng-click="previous()"> <i class="icon ion-chevron-left dark"></i></button>&nbsp;&nbsp;<label class="item-input"><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ></label> &nbsp;&nbsp;&nbsp;&nbsp;<button class="button-clear"  ng-click="next()"><i class="icon ion-chevron-right dark"></i></button></ion-item><button class="button button-full button-assertive"  ng-click="closepopup()">Not Now</button></ion-slide></ion-slide-box>',
      		           title: 'Feedback',
      		           scope: $scope
                  });
@@ -2157,6 +2160,7 @@ angular.module('tracmyhealthappctrls', [])
              doctortabservice.getdctdets($scope.doctorid).then(function(data){
                 $rootScope.hideLoader();
                 $scope.drvisitinfo = data.data;
+                 console.log($scope.drvisitinfo);
               }).catch(function(error){
                 if(error.status === 404){
                     $rootScope.hideLoader();
