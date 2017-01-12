@@ -1280,9 +1280,10 @@ angular.module('tracmyhealthappctrls', [])
              && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
              && ($scope.data.bloodsugar.ppbs === '' || $scope.data.bloodsugar.ppbs === 0)
              && ($scope.data.bloodsugar.rbs === '' || $scope.data.bloodsugar.rbs === 0)
-             && ($scope.data.bloodpressure.systolic === '' || $scope.data.bloodpressure.systolic ===  0 )
-             && ($scope.data.bloodpressure.diastolic === '' || $scope.data.bloodpressure.diastolic === 0 )
-             && $scope.data.medication.value === ''
+        && (($scope.data.bloodpressure.systolic === 0 || $scope.data.bloodpressure.systolic === '' )
+              || ($scope.data.bloodpressure.diastolic === 0 || $scope.data.bloodpressure.diastolic === '' ))
+
+                  && $scope.data.medication.value === ''
              && $scope.data.allergies.value === ''
              && $scope.data.vaccination.value === ''
           ){
@@ -1338,6 +1339,7 @@ angular.module('tracmyhealthappctrls', [])
                       medicalprofileservice.getdetails($scope.patientId).then(function(data){
                   	     if(data.status === 'SUCCESS'){
                       $scope.healthdetails = data.data;
+
                      if(data.summary !== '' && data.summary !== 0 && data.summery !== null){
                              $scope.summary = data.summary;
                            }
@@ -1386,9 +1388,9 @@ angular.module('tracmyhealthappctrls', [])
 
     
         $scope.enableTimeLine = function(details){
-            return ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && $scope.appliedfilters.allergiesFilter != false)
-                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && $scope.appliedfilters.weightFilter != false)
-                         || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && $scope.appliedfilters.bloodpressureFilter != false)
+            return ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && $scope.appliedfilters.allergiesFilter != false && $scope.appliedfilters.allergiesFilter != null && $scope.appliedfilters.allergiesFilter != '' && $scope.appliedfilters.allergiesFilter != 0)
+                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && $scope.appliedfilters.weightFilter != false && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != null && $scope.appliedfilters.weightFilter != 0 )
+                          || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && $scope.appliedfilters.bloodpressureFilter != false && $scope.appliedfilters.bloodpressureFilter != null && $scope.appliedfilters.bloodpressureFilter != '' && $scope.appliedfilters.bloodpressureFilter != 0)
                           || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && details.vitalslistforday.medication !== null && $scope.appliedfilters.medicationFilter != false)
                           || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && details.vitalslistforday.vaccination !== null && $scope.appliedfilters.vaccinationFilter != false)
                           || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
