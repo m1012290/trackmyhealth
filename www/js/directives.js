@@ -191,42 +191,37 @@
         }
     }
 }])
-.directive('tabsSwipable', ['$ionicGesture', '$ionicTabsDelegate',function($ionicGesture, $ionicTabsDelegate){
-return {
-  restrict: 'A',
-  require: 'ionTabs',
-  link: function($scope, element, attrs, tabsCtrl){
-    var maxTabIndex = tabsCtrl.tabs.length - 1; // Holds the maximum tab index depending on the amount of tabs.
 
-       /**
-        * Changes selected tab on LEFT SWIPE gesture.
-        */
-        var selectedTabIndex;
-       $ionicGesture.on('swipeleft', function(event) {
-
-         selectedTabIndex = $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).selectedIndex(); // Gets the currently displayed tab index.
-
-         if ( selectedTabIndex >= 0 && selectedTabIndex <= maxTabIndex + 1 ) {
-           $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).select(selectedTabIndex + 1);
-         }
-       }, tabsCtrl.$element);
-
-
-       /**
-        * Changes selected tab on RIGHT SWIPE gesture.
-        */
-       $ionicGesture.on('swiperight', function(event) {
-
-         selectedTabIndex = $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).selectedIndex(); // Gets the currently displayed tab index.
-
-         if ( selectedTabIndex <= 3 && selectedTabIndex >= maxTabIndex - 1 ) {
-
-           $ionicTabsDelegate.$getByHandle(attrs.delegateHandle).select(selectedTabIndex - 1);
-
-         }
-       }, tabsCtrl.$element);
-  }
-};
+  .directive('tabsSwipable', ['$ionicGesture', function($ionicGesture){
+	//
+	// make ionTabs swipable. leftswipe -> nextTab, rightswipe -> prevTab
+	// Usage: just add this as an attribute in the ionTabs tag
+	// <ion-tabs tabs-swipable> ... </ion-tabs>
+	//
+	return {
+		restrict: 'A',
+		require: 'ionTabs',
+		link: function(scope, elm, attrs, tabsCtrl){
+			var onSwipeLeft = function(){
+				var target = tabsCtrl.selectedIndex() + 1;
+				if(target < tabsCtrl.tabs.length){
+					scope.$apply(tabsCtrl.select(target));
+				}
+			};
+			var onSwipeRight = function(){
+				var target = tabsCtrl.selectedIndex() - 1;
+				if(target >= 0){
+					scope.$apply(tabsCtrl.select(target));
+				}
+			};
+		    
+		    var swipeGesture = $ionicGesture.on('swipeleft', onSwipeLeft, elm).on('swiperight', onSwipeRight);
+		    scope.$on('$destroy', function() {
+		        $ionicGesture.off(swipeGesture, 'swipeleft', onSwipeLeft);
+		        $ionicGesture.off(swipeGesture, 'swiperight', onSwipeRight);
+		    });
+		}
+	};
 }])
 .directive("validemailmobile", function() {
     return {

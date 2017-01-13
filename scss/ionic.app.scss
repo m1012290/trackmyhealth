@@ -52,12 +52,6 @@ html{
 
  }
 
- span .circle-span.direct-chat-timestamp
- {
-     padding: 6px 4px 4px 4px;
-     background-color: #fff;
-     opacity:1
- }
  .circle-span
  {
       padding: 12px 5px 0px 5px;
@@ -276,9 +270,10 @@ div
 .img-responsive
 {
   display: inline-block;
-  height:94%;
-  width: 94%;
-  opacity:1
+  height:130%;
+  width: 130%;
+  opacity:1;
+ margin-top:-11px;
 }
 .image-responsive
 {
@@ -901,6 +896,17 @@ hr.style-one {
         position: inherit;
     }
 
+}
+
+input[type="checkbox"]{
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-left:3%;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  *overflow: hidden;
 }
 
 textarea,
