@@ -134,7 +134,7 @@ angular.module('tracmyhealthappctrls', [])
  $scope.showPopup = function() {
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
-      template: '<ion-item class="item-input" ><label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></label></ion-item>',
+      template: '<ion-item class="item-input" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="item-input"><h4>{{rating}}</h4><br><ionic-ratings ratingsobj="ratingsObject"></ionic-ratings ><br/></i></label></ion-item>',
       title: 'Feedback',
       scope: $scope
     });
@@ -195,8 +195,8 @@ angular.module('tracmyhealthappctrls', [])
   		function copyFile(fileEntry) {
   			var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
   			var newName = makeid() + name;
-        window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {
-           dir.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+          fs.root.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
              fileEntry.copyTo(
                direntry,
                newName,
