@@ -26,6 +26,9 @@
   </button>
         </ion-nav-buttons>
         <ion-content scroll-sista="header" has-bouncing="false" overflow-scroll="true">
+             <ion-refresher pulling-text="Pull To Refresh" on-refresh="reloadmyhealth()"
+                 refreshing-icon="ion-loading-b"
+                ></ion-refresher>
         <div class="card responsive">
 		<div class="item item-body">
 
@@ -86,7 +89,7 @@
                         <div class="row"  ng-repeat="details in healthdetails track by $index ">
 
                           <div class="right" ng-show="enableTimeLine(details)">
-                <button class="button button-small button-assertive" ng-show='enableTimeLine(details)'>              
+                <button class="button button-small button-light" ng-show='enableTimeLine(details)'>              
                        <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy h:mm:ss a "}} </div>
                                              
                                    </button>
@@ -127,8 +130,11 @@
         <ion-content class="padding">
             <div id="timeLineForms">
             <form name="timeLineForm" >
-
+<ion-slide-box ng-if="trackername === 'Weight'">
+         <ion-slide>
+             <br>
       			<div class="list" ng-if="trackername === 'Weight'">
+                   
                  		<div class="item item-divider">
       			 		          <div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				      </div>
@@ -142,12 +148,29 @@
       <rzslider rz-slider-model="data.weight.value"
                 rz-slider-options="data.weight.options"></rzslider>
                 </div>
+                      
       			</div>
-
+                      </ion-slide>
+                      
+                       <ion-slide>
+                           <br>
+                           <div>
+          <canvas id="line" class="chart chart-line" chart-data="datawt"  chart-labels="labelswt"   chart-colours="colours" chart-series="serieswt" chart-options="optionswt" chart-dataset-override="datasetOverridewt" chart-click="onClick">
+               </canvas>
+                               <br>
+               <button class="button  button-assertive" ng-click="wtgraph()">graph</button>
+           </div>
+  </ion-slide>
+                </ion-slide-box>
+               
+                <ion-slide-box ng-if="trackername === 'Blood Sugar'">
+         <ion-slide>
+             <br>
             <div class="list" ng-if="trackername === 'Blood Sugar'" >
       				<div class="item item-divider">
       				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
+
         <div class="col">
             <h5><b>RBS (Random Blood Sugar)</b></h5>
          <div class="row" ><input type="number" limit-to="3" placeholder=" MG/DL" ng-model="data.bloodsugar.rbs" ng-maxlength="3" required></div>
@@ -171,9 +194,24 @@
       <rzslider rz-slider-model="data.bloodsugar.ppbs"
                 rz-slider-options="data.bloodsugar.options"></rzslider>
                 </div>
+                </div>
+         </ion-slide>
+         <ion-slide>
+               <br> 
+             <div>
+          <canvas id="line" class="chart chart-line" chart-data="data1" chart-labels="labels" chart-colours="colours" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+               </canvas>
+                 <br>
+               <button class="button  button-assertive" ng-click="test()">graph</button>
+           </div>
+        
+      			
+                    </ion-slide>
+                </ion-slide-box>
 
-      			</div>
-
+                 <ion-slide-box ng-if="trackername === 'Blood Pressure'">
+                     <ion-slide>
+                         <br>
       			<div class="list" ng-if="trackername === 'Blood Pressure'">
       			 	<div class="item item-divider">
       			 		<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
@@ -197,33 +235,19 @@
          <rzslider rz-slider-model="data.bloodpressure.diastolic"
                 rz-slider-high="data.bloodpressure.systolic"
                 rz-slider-options="data.bloodpressure.options"></rzslider>
-
-                    
-                    <canvas id="line" class="chart chart-line" chart-data="data1"
-chart-labels="labels" chart-series="series" chart-options="options"
-chart-dataset-override="datasetOverride" chart-click="onClick">
-</canvas>
-                    
-                    
-                </div>
-
-             <div class="list" ng-if="trackername === 'Medication'" >
-      				<div class="item item-divider">
-      					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
-      				</div>
-              <div class="item-input">
-      				      <label class="item item-input item-floating-label">
-                  	<span class="input-label">Medication</span>
-                  	<input type="text" placeholder="Medication details" name="medication" ng-model="data.medication.value">
-                		</label>
-              </div>
-              <div class="item-input">
-        			 	<label class="item item-input item-floating-label">
-        			  	<span class="input-label">Notes</span>
-            			<textarea placeholder="Notes" ng-model="data.medication.notes"></textarea>
-          		  </label>
-              </div>
-      			</div>
+  </div>
+                   </ion-slide>
+                         <ion-slide>
+                             <br>
+                    <div>
+          <canvas id="line" class="chart chart-line"  chart-data="data1bp"   chart-labels="labelsbp"  chart-colours="colours" chart-series="seriesbp" chart-options="optionsbp" chart-dataset-override="datasetOverridebp" chart-click="onClickbp">
+               </canvas>
+                        <br>
+               <button class="button  button-assertive" ng-click="bpgraph()">graph</button>
+           </div>
+                         </ion-slide>    
+              
+                </ion-slide-box>
 
                   <div class="list" ng-if="trackername === 'Allergies'">
                  		<div class="item item-divider">

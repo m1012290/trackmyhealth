@@ -27,6 +27,10 @@
          </button>
 </ion-nav-buttons>
             <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
+                <ion-refresher pulling-text="Pull To Refresh" on-refresh="reload()"
+                     refreshing-icon="ion-loading-b"
+                    ></ion-refresher>
+
       <ion-list  show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
             <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
 <span class="circle-span" style ="background-color: #D14836"; ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}

@@ -730,57 +730,69 @@ angular.module('tracmyhealthappctrls', [])
         $scope.$parent.closePopover();
       };
 
-    	$scope.listedentities=[];
-    	$scope.hospitalslist=[];
-    	$scope.hos=[];
-      $rootScope.showLoader();
+    $scope.$on("$ionicView.loaded", function(event, data){
+$scope.fetchhosp();
+});
+$scope.fetchhosp = function(){
+$scope.listedentities=[];
+$scope.hospitalslist=[];
+$scope.hos=[];
+$rootScope.showLoader();
 
-    //service  call from database
-      registrationdetsdb.query({}).then(function(response){
-          var result = DBA.getById(response);
-          $scope.patientId = result.appregistrationid;
-          hospitalservice.getregHospitals($scope.patientId).then(function(data){
+registrationdetsdb.query({}).then(function(response){
+    var result = DBA.getById(response);
+    $scope.patientId = result.appregistrationid;
+    hospitalservice.getregHospitals($scope.patientId).then(function(data){
+        $scope.$broadcast('scroll.refreshComplete');
+        $rootScope.hideLoader();  
+       if(data.status === 'SUCCESS'){
+            $scope.listedentities = data;
+            //before the data value lets take out duplicate hospitals from the list
+             var uniquehospitalset ={};
+             var arrayofhospitals = [];
+            _.each($scope.listedentities.data, function(hospitaldata, key, list){
+                uniquehospitalset[hospitaldata._id] = hospitaldata;
+            });
+            angular.forEach(uniquehospitalset, function(value, key) {
+                this.push(value);
+            }, arrayofhospitals);
+            $scope.hospitalslist = arrayofhospitals;
+        }
+        else{
+            $rootScope.showPopup({
+                title:'Error',
+                template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
+                console.log('on click ok');
+            });
+        }
+    }).catch(function(error){
+          if(error.status === 404){
+              $scope.$broadcast('scroll.refreshComplete');
               $rootScope.hideLoader();
-              if(data.status === 'SUCCESS'){
-                  $scope.listedentities = data;
-                  //before the data value lets take out duplicate hospitals from the list
-                   var uniquehospitalset ={};
-                   var arrayofhospitals = [];
-                  _.each($scope.listedentities.data, function(hospitaldata, key, list){
-                      uniquehospitalset[hospitaldata._id] = hospitaldata;
-                  });
-                  angular.forEach(uniquehospitalset, function(value, key) {
-                      this.push(value);
-                  }, arrayofhospitals);
-                  $scope.hospitalslist = arrayofhospitals;
-              }else{
-                  $rootScope.showPopup({
-                      title:'Error',
-                      template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
-                      console.log('on click ok');
-                  });
-              }
-          }).catch(function(error){
-                if(error.status === 404){
-                    $rootScope.hideLoader();
-                    $rootScope.showPopup({
-                    title:'Info',
-                    template:"Hospital data yet to be added, check with your hospital."}, function(res){
-                    console.log('on click ok');
-                });
-              }else{
-                  $rootScope.hideLoader();
-                  $rootScope.showPopup({
-                  title:'Error',
-                  template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
-              });
-            }
+              $rootScope.showPopup({
+              title:'Info',
+              template:"Hospital data yet to be added, check with your hospital."}, function(res){
+              console.log('on click ok');
           });
-      }).catch(function(error){
-         $rootScope.hideLoader();
-         $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
-         });
-     });
+        }else{
+             $scope.$broadcast('scroll.refreshComplete');
+            $rootScope.hideLoader();
+            $rootScope.showPopup({
+            title:'Error',
+            template:"We are experiencing problem retrieving Hospitals registered"}, function(res){
+                console.log('on click ok');
+        });
+      }
+    });
+}).catch(function(error){
+   $rootScope.hideLoader();
+   $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+   });
+});
+}
+$scope.reload = function(){
+  $scope.fetchhosp();
+}
 
       $scope.hosinfo= function(hospitalid,hospitalcode){
   		    hospitalservice.hospitalinfo(hospitalid,hospitalcode).then(function(data){
@@ -918,43 +930,51 @@ angular.module('tracmyhealthappctrls', [])
 
     };
 
-      $scope.$on("$ionicView.loaded", function(event, data){
+     $scope.$on("$ionicView.loaded", function(event, data){
+$scope.fetchmyhealth();
 
-        $rootScope.showLoader();
-
-        registrationdetsdb.query({}).then(function(response){
-          var result = DBA.getById(response);
-          $scope.patientId = result.appregistrationid;
-          medicalprofileservice.getdetails($scope.patientId).then(function(data){
-            $rootScope.hideLoader();
-            if(data.status === 'SUCCESS'){
-              $scope.healthdetails = data.data;
-
-              if(data.summary !== '' && data.summary !== 0){
-                $scope.summary = data.summary;
-              }
-            }
-            }).catch(function(error){
-              if(error == 404){
-                $rootScope.hideLoader();
-                $rootScope.showPopup({
-                    title:'Info',
-                    template:"Health details are not added, try adding."}, function(res){
-                    console.log('on click ok');
-                });
-              }
-              else{
-                $rootScope.hideLoader();
-                $rootScope.showPopup({title:'Error', template:"We are experiencing problem right now, please try again"}, function(res){
-                });
-              }
-          });
-        }).catch(function(error){
-            $rootScope.hideLoader();
-            $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
-            });
-        });
       });
+      $scope.fetchmyhealth = function(){
+      $rootScope.showLoader();
+
+      registrationdetsdb.query({}).then(function(response){
+        var result = DBA.getById(response);
+        $scope.patientId = result.appregistrationid;
+        medicalprofileservice.getdetails($scope.patientId).then(function(data){
+        $scope.$broadcast('scroll.refreshComplete');
+          $rootScope.hideLoader();
+         // if(data.status === 'SUCCESS'){
+            $scope.healthdetails = data.data;
+            if(data.summary !== '' && data.summary !== 0){
+              $scope.summary = data.summary;
+            }
+          //}
+          }).catch(function(error){
+            if(error == 404){
+                 $scope.$broadcast('scroll.refreshComplete');
+              $rootScope.hideLoader();
+              $rootScope.showPopup({
+                  title:'Info',
+                  template:"Health details are not added, try adding."}, function(res){
+                  console.log('on click ok');
+              });
+            }
+            else{
+              $rootScope.hideLoader();
+              $rootScope.showPopup({title:'Error', template:"We are experiencing problem right now, please try again"}, function(res){
+              });
+            }
+        });
+      }).catch(function(error){
+          $rootScope.hideLoader();
+          $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+          });
+      });
+    }
+    $scope.reloadmyhealth = function(){
+    $scope.fetchmyhealth();
+    }
+
 
       $scope.openModalfilter = function(){
          $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
@@ -1398,6 +1418,216 @@ angular.module('tracmyhealthappctrls', [])
                           || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
                           );
         };
+     $scope.test = function(){
+           $scope.labels = [];
+         $scope.data1 = [];
+            var fbsarray = [];
+            var rbsarray = [];
+            var ppbsarray = [];
+            
+        
+            angular.forEach($scope.healthdetails, function(details, key){
+                angular.forEach(details.medicalprofile,function(medicalprofiledata,keyobj){
+                    //rbs value
+                    if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
+                        && typeof medicalprofiledata.profile[0].bloodsugar.rbs !== 'undefined'
+                        && medicalprofiledata.profile[0].bloodsugar.rbs !== ''
+                        && medicalprofiledata.profile[0].bloodsugar.rbs !== null){
+                        rbsarray.push(medicalprofiledata.profile[0].bloodsugar.rbs);
+                        }
+                     //fbs value
+                    if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
+                      && typeof medicalprofiledata.profile[0].bloodsugar.fbs !== 'undefined'
+                      && medicalprofiledata.profile[0].bloodsugar.fbs !== ''
+                      && medicalprofiledata.profile[0].bloodsugar.fbs !== null){
+                        fbsarray.push(medicalprofiledata.profile[0].bloodsugar.fbs);
+                    }
+                    //ppbs value
+                    if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
+                      && typeof medicalprofiledata.profile[0].bloodsugar.ppbs !== 'undefined'
+                      && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''
+                      && medicalprofiledata.profile[0].bloodsugar.ppbs !== null){
+                        ppbsarray.push(medicalprofiledata.profile[0].bloodsugar.ppbs);
+                    }
+                   
+                });
+            });
+               
+            $scope.data1.push(rbsarray);
+            $scope.data1.push(fbsarray);
+            $scope.data1.push(ppbsarray);
+           angular.forEach($scope.healthdetails, function(details, key){
+         if(typeof details.createdat  !== 'undefined'&& typeof details.createdat.month !== 'undefined'
+                  && details.createdat  !== ''
+                  &&details.createdat  !== null){ 
+           
+                 
+              $scope.labels.push(details.createdat.month);  
+            // console.log($scope.labelsbp);
+                  //}
+          
+         }
+        });
+        }
+        $scope.labels = [];
+  $scope.series  = ['fbs', 'rbs', 'ppbs'];  
+ $scope.data1 = [];
+ $scope.onClick = function (points, evt) {
+   console.log(points, evt);
+ };
+ $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+ $scope.options = {
+   scales: {
+     yAxes: [
+       {
+         id: 'y-axis-1',
+         type: 'linear',
+         display: true,
+         position: 'left'
+       },
+       {
+         id: 'y-axis-2',
+         type: 'linear',
+         display: true,
+         position: 'right'
+       }
+     ]
+   }
+ };
+    
+    $scope.serieswt = ['weight'];
+    $scope.labelswt = [];
+    $scope.datawt = [];
+    $scope.onClickwt = function (points, evt) {
+   console.log(points, evt);
+ };
+ $scope.datasetOverridewt = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+ $scope.optionswt = {
+   scales: {
+     yAxes: [
+       {
+         id: 'y-axis-1',
+         type: 'linear',
+         display: true,
+         position: 'left'
+       },
+       {
+         id: 'y-axis-2',
+         type: 'linear',
+         display: true,
+         position: 'right'
+       }
+     ]
+   }
+ };
+    
+    $scope.wtgraph = function(){
+ 
+          $scope.labelswt = [];
+    $scope.datawt = [];
+        var wtarray = [];
+        angular.forEach($scope.healthdetails, function(details, key){
+            angular.forEach(details.medicalprofile, function(medicalprofiledata, keyobj){
+             
+                
+                if(typeof medicalprofiledata.profile[0].weight !== 'undefined'
+                  && typeof medicalprofiledata.profile[0].weight.value !== 'undefined'
+                  && medicalprofiledata.profile[0].weight.value !== ''
+                  && medicalprofiledata.profile[0].weight.value !== null){
+                    if(medicalprofiledata.profile[0].weight.value < 500){
+                   wtarray.push(medicalprofiledata.profile[0].weight.value);
+                    }
+                   }
+                 
+           
+                
+            });
+        });
+        $scope.datawt.push(wtarray);
+       angular.forEach($scope.healthdetails, function(details, key){
+      
+           
+         if(typeof details.createdat  !== 'undefined'
+                && typeof details.createdat.month !== 'undefined' && details.createdat  !== '' && details.createdat  !== null){ 
+
+             
+              $scope.labelswt.push(details.createdat.month);  
+          
+             
+            }  
+        });  
+   
+        
+        
+ 
+        
+     }
+    
+ $scope.labelsbp = [];
+            $scope.seriesbp  = ['systolic', 'diastolic']; 
+            $scope.data1bp = []; 
+            $scope.onClickbp = function (points, evt) {
+   console.log(points, evt);
+ };
+            $scope.datasetOverridebp = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+ $scope.optionsbp = {
+   scales: {
+     yAxes: [
+       {
+         id: 'y-axis-1',
+         type: 'linear',
+         display: true,
+         position: 'left'
+       },
+       {
+         id: 'y-axis-2',
+         type: 'linear',
+         display: true,
+         position: 'right'
+       }
+     ]
+   }
+ }; 
+         
+    $scope.bpgraph = function(){
+         $scope.data1bp = []; 
+        $scope.labelsbp = [];
+                var sysarray = [];
+                var diastolicarray = [];
+                angular.forEach($scope.healthdetails, function(details, keybp){
+                    angular.forEach(details.medicalprofile, function(medicalprofiledata, keyobjbp){
+                        if(typeof medicalprofiledata.profile[0].bloodpressure !== 'undefined'
+                          && typeof medicalprofiledata.profile[0].bloodpressure.systolic !== 'undefined'
+                          && medicalprofiledata.profile[0].bloodpressure.systolic !== '' 
+                          && medicalprofiledata.profile[0].bloodpressure.systolic !== null){
+                            if(medicalprofiledata.profile[0].bloodpressure.systolic < 250){
+                            sysarray.push(medicalprofiledata.profile[0].bloodpressure.systolic);
+                            }
+                           }                          
+                        if(typeof medicalprofiledata.profile[0].bloodpressure !== 'undefined'
+                          && typeof medicalprofiledata.profile[0].bloodpressure.diastolic !== 'undefined'
+                          && medicalprofiledata.profile[0].bloodpressure.diastolic !== ''
+                          && medicalprofiledata.profile[0].bloodpressure.diastolic !== null){
+                            diastolicarray.push(medicalprofiledata.profile[0].bloodpressure.diastolic);
+                        }
+                    });
+                });
+                $scope.data1bp.push(sysarray);
+               $scope.data1bp.push(diastolicarray);
+         angular.forEach($scope.healthdetails, function(details, keycreate){
+          
+        if(typeof details.createdat  !== 'undefined' 
+           && typeof details.createdat.month !== 'undefined'
+           && details.createdat  !== ''
+           && details.createdat  !== null){
+
+            
+            $scope.labelsbp.push(details.createdat.month); 
+
+            
+           }    
+        });
+              }
 }])
 .controller('TermsCtrl',['$scope','$state','$ionicHistory', function($scope, $state, $ionicHistory){
       $scope.backButtonAction = function(){
@@ -1625,59 +1855,75 @@ angular.module('tracmyhealthappctrls', [])
         // Execute action
       });
 
-      $scope.$on("$ionicView.loaded", function(event, data){
-        $scope.shouldShowReorder = false;
-        $scope.shouldShowDelete  = false;
-        $scope.listCanSwipe = true;
-        $scope.filterBarInstance;
-        $scope.patientId = '';
-        $scope.notinfo =[];
-        $scope.visitinfo=[];
-
-        $rootScope.showLoader();
-
-        registrationdetsdb.query({}).then(function(response){
-            var result = DBA.getById(response);
-            $scope.patientId = result.appregistrationid;
-            if($stateParams.hospitalid === '123'){
-              visitservice.getVisits($scope.patientId).then(function(data){
-                $rootScope.hideLoader();
-                $scope.visitinfo = data.data;
-              }).catch(function(error){
-                if(error.status === 404){
-                    $rootScope.hideLoader();
-                    $rootScope.showPopup({
-                      title:'Info',
-                      template:"Visit data yet to be added, check with your hospital."}, function(res){
-                        console.log('on click ok');
-                      });
-                }else{
-                  $rootScope.hideLoader();
-                  $rootScope.showPopup({
-                    title : 'Error'
-                    ,template:'We are experiencing problem retrieving your visit information'}, function(res){
-                  });
-                }
-              });
-            }else{
-              visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
-                  $rootScope.hideLoader();
-                  $scope.visitinfo = data.data;
-              }).catch(function(error){
-                  $rootScope.hideLoader();
-                  $rootScope.showPopup({
-                     title : 'Error'
-                    ,template:'We are experiencing problem retrieving your visit information'
-                  }, function(res){
-                  });
-              });
-            }
-        }).catch(function(err){
-          $rootScope.hideLoader();
-          $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
-          });
-        });
+    $scope.$on("$ionicView.loaded", function(event, data){
+$scope.fetchdata();
       });
+      $scope.fetchdata = function(){
+              $scope.shouldShowReorder = false;
+              $scope.shouldShowDelete  = false;
+              $scope.listCanSwipe = true;
+              $scope.filterBarInstance;
+              $scope.patientId = '';
+              $scope.notinfo =[];
+              $scope.visitinfo=[];
+
+              $rootScope.showLoader();
+              registrationdetsdb.query({}).then(function(response){
+                  var result = DBA.getById(response);
+                  $scope.patientId = result.appregistrationid;
+                  if($stateParams.hospitalid === '123'){
+                    visitservice.getVisits($scope.patientId).then(function(data){
+                        $scope.$broadcast('scroll.refreshComplete');
+                        $rootScope.hideLoader();
+                        $scope.visitinfo = data.data;
+                    }).catch(function(error){
+                      if(error.status === 404){
+                        $scope.$broadcast('scroll.refreshComplete');
+                        $rootScope.hideLoader();
+                          $rootScope.showPopup({
+                            title:'Info',
+                            template:"Visit data yet to be added, check with your hospital."}, function(res){
+                              console.log('on click ok');
+                            });
+                      }else{
+                       $scope.$broadcast('scroll.refreshComplete');  
+                        $rootScope.hideLoader();
+                        $rootScope.showPopup({
+                          title : 'Error'
+                          ,template:'We are experiencing problem retrieving your visit information'}, function(res){
+                            console.log('on click ok');
+                        });
+                      }
+                    });
+
+                  }else{
+                    visitservice.getvisitdets($scope.patientId, $stateParams.hospitalid).then(function(data){
+                        $rootScope.hideLoader();
+                        $scope.visitinfo = data.data;
+
+                    }).catch(function(error){
+                      $rootScope.hideLoader();
+                      $rootScope.showPopup({
+                           title : 'Error'
+                          ,template:'We are experiencing problem retrieving your visit information'
+                        }, function(res){
+                          console.log('on click ok');
+                        });
+                    });
+                  }
+
+              }).catch(function(err){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+                });
+              });
+    //    }//riz added for refresh close
+}
+$scope.reloadNotifications=function(){
+
+  $scope.fetchdata();
+    console.log("call reload");
+}
 
       $scope.notifications = function(visitid){
           visitservice.savevisitinfo($scope.patientId, visitid).then(function(data){
@@ -2150,41 +2396,51 @@ angular.module('tracmyhealthappctrls', [])
            });
          };
 
-         $scope.$on("$ionicView.loaded", function(event, data){
-           $scope.drvisitinfo=[];
-           $scope.notinfo=[];
-           $scope.filterBarInstance;
+        $scope.$on("$ionicView.loaded", function(event, data){
+$scope.docfetch();
+         });
+         $scope.docfetch = function(){
+         $scope.drvisitinfo=[];
+         $scope.notinfo=[];
+         $scope.filterBarInstance;
 
-           $rootScope.showLoader();
-           registrationdetsdb.query({}).then(function(response){
-             var result = DBA.getById(response);
-             $scope.doctorid =  result.appregistrationid;
-             doctortabservice.getdctdets($scope.doctorid).then(function(data){
-                $rootScope.hideLoader();
-                $scope.drvisitinfo = data.data;
-                 console.log($scope.drvisitinfo);
-              }).catch(function(error){
-                if(error.status === 404){
-                    $rootScope.hideLoader();
-                    $rootScope.showPopup({
-                      title:'Info',
-                      template:"Hospital visits yet to be added, check with your hospital."}, function(res){
-                        console.log('on click ok');
-                      });
-                }else{
+         $rootScope.showLoader();
+         registrationdetsdb.query({}).then(function(response){
+           var result = DBA.getById(response);
+           $scope.doctorid =  result.appregistrationid;
+           doctortabservice.getdctdets($scope.doctorid).then(function(data){
+                 $scope.$broadcast('scroll.refreshComplete');
+              $rootScope.hideLoader();
+              $scope.drvisitinfo = data.data;
+               console.log($scope.drvisitinfo);
+            }).catch(function(error){
+              if(error.status === 404){
+                   $scope.$broadcast('scroll.refreshComplete');
                   $rootScope.hideLoader();
                   $rootScope.showPopup({
-                    title : 'Error'
-                    ,template:'We are experiencing problem retrieving your visit information'}, function(res){
-                  });
-                }
-              });
-           }).catch(function(err){
+                    title:'Info',
+                    template:"Hospital visits yet to be added, check with your hospital."}, function(res){
+                      console.log('on click ok');
+                    });
+              }else{
+                   $scope.$broadcast('scroll.refreshComplete');
                 $rootScope.hideLoader();
-                $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+                $rootScope.showPopup({
+                  title : 'Error'
+                  ,template:'We are experiencing problem retrieving your visit information'}, function(res){
                 });
-           });
+              }
+            });
+         }).catch(function(err){
+              $rootScope.hideLoader();
+              $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+              });
          });
+       }
+       $scope.reloaddocNotifications = function(){
+         $scope.docfetch();
+       }
+
 
          /*
          $scope.downloaddocument = function(url){
