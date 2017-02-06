@@ -988,6 +988,7 @@ $scope.fetchmyhealth();
        $scope.closeModalfilter = function(){
            $scope.filtermodal.remove();
        };
+
        $scope.appliedfilters = {
             "backup":{"bloodsugarFilter":true
                       ,"bloodpressureFilter":true
@@ -1690,9 +1691,11 @@ $scope.fetchmyhealth();
        };
 
        $scope.filterSetAll = function(){
-         $scope.appliedfilters.patientnameselected="All";
+         $scope.appliedfilters.patientnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.patientnames[0]));
+            console.log($scope.appliedfilters.patientnameselected[0]);  
          $scope.appliedfilters.visittypeselected=JSON.parse(JSON.stringify($scope.filtersavailable.visittypes));
-         $scope.appliedfilters.hospitalnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.hospitalnames[0]));
+         console.log($scope.appliedfilters.visittypeselected); $scope.appliedfilters.hospitalnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.hospitalnames[0]));
+           console.log($scope.appliedfilters.hospitalnameselected[0]);
          $scope.appliedfilters.docswithattachment=false;
        };
 
@@ -1702,7 +1705,7 @@ $scope.fetchmyhealth();
          var allPatients=false, allHospitals=false, allVisittypes=false, docswithattachment=true;
 
          if(($scope.backupvisitinfo.length != 0) || $scope.backupvisitinfo){
-            if(angular.equals($scope.appliedfilters.patientnameselected,"All"))
+            if(angular.equals($scope.appliedfilters.patientnameselected[0],"All"))
                 allPatients=true;
             if(angular.equals($scope.appliedfilters.hospitalnameselected[0],"All"))
                 allHospitals=true;
@@ -1745,7 +1748,7 @@ $scope.fetchmyhealth();
               filteredkey=0;
               //Now apply all other filters on hospital filter
               angular.forEach($scope.visitinfo,function (visitdata,key){
-                  if((( allPatients == true) || angular.equals($scope.appliedfilters.patientnameselected,(visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname)))
+                  if((( allPatients == true) || angular.equals($scope.appliedfilters.patientnameselected[0],(visitdata.patientregprofiles.firstname +' '+visitdata.patientregprofiles.lastname)))
                       && ((allVisittypes == true) || angular.equals($scope.appliedfilters.visittypeselected[0],visitdata.visitid.visittype))
                       && (( docswithattachment == false) || (visitdata.reporturl))){
                         $scope.visitinfo[filteredkey]=visitdata;
