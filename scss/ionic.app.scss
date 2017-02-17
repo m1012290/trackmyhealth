@@ -1188,6 +1188,13 @@ p
     bottom: 0px;
 }
 
+.scroll-bar-v {
+  top: 8px;
+  right: 3px;
+  bottom: 2px;
+  width: 3px; }
+  .scroll-bar-v .scroll-bar-indicator {
+    width: 100%; }
 
 /* unvisited link */
 div.item-text-wrap a{

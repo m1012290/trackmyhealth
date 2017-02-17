@@ -232,7 +232,7 @@
                 if(typeof modelValue === 'undefined'|| modelValue === '' || modelValue === null){
                   return false;
                 }else {
-                  if(typeof modelValue === 'number'){
+                  if(typeof modelValue === 'number'  || validator.isNumeric(modelValue)){
                      modelValue = modelValue.toString();
                      return validator.isMobilePhone(modelValue, 'en-IN');
                   }else{
