@@ -90,7 +90,7 @@
 
                           <div class="right" ng-show="enableTimeLine(details)">
                 <button class="button button-small button-light" ng-show='enableTimeLine(details)'>              
-                       <div class="month">  {{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy h:mm:ss a "}} </div>
+                       <div class="month">  {{details.medicalprofile[0].recorddate|date:"EEEE ,"| lowercase}}{{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy"}} </div>
                                              
                                    </button>
                                   <div class="notification responsive">
@@ -248,24 +248,25 @@
                          </ion-slide>    
               
                 </ion-slide-box>
- <div class="list" ng-if="trackername === 'Medication'" >
+<div class="list" ng-if="trackername === 'Medication'" >
       				<div class="item item-divider">
-      					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
-      				</div>
-              <div class="item-input">
-      				      <label class="item item-input item-floating-label">
-                  	<span class="input-label">Medication</span>
-                  	<input type="text" placeholder="Medication details" name="medication" ng-model="data.medication.value">
-                		</label>
-              </div>
-              <div class="item-input">
-        			 	<label class="item item-input item-floating-label">
-        			  	<span class="input-label">Notes</span>
-            			<textarea placeholder="Notes" ng-model="data.medication.notes"></textarea>
-          		  </label>
-              </div>
-      			</div>
-                  <div class="list" ng-if="trackername === 'Allergies'">
+       					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
+       				</div>
+               <div class="item-input">
+       				      <label class="item item-input item-floating-label">
+                   	<span class="input-label">Medication</span>
+                   	<input type="text" placeholder="Medication details" name="medication" ng-model="data.medication.value">
+                 		</label>
+               </div>
+               <div class="item-input">
+         			 	<label class="item item-input item-floating-label">
+         			  	<span class="input-label">Notes</span>
+             			<textarea placeholder="Notes" ng-model="data.medication.notes"></textarea>
+           		  </label>
+               </div>
+       			</div>
+
+     <div class="list" ng-if="trackername === 'Allergies'">
                  		<div class="item item-divider">
       					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
@@ -333,7 +334,8 @@
            </ion-checkbox>
 
          </div>
-            <div class="pull-left">
+        
+          <div class="pull-left">
               <button class="button-mini button-assertive" style="position:relative;left:21px"  ng-click="filterResetAll()">Reset All</button>
             </div>
             <div class="pull-right">

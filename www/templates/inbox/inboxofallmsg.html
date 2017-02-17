@@ -33,9 +33,9 @@
           ></ion-refresher>
     <div class="list card item-text-wrap" ng-repeat=" visit in visitinfo track by $index" >
 <p>
-        <i class="fa  fa-star-half-o assertive" aria-hidden="true" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)"></i>
-
-  <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <i class="icon ion-arrow-right-b assertive" ng-click="patientdetails(visit._id)" ></i></p>
+      <button class="button-clear" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)">  <i class="fa  fa-star-half-o assertive" aria-hidden="true" ></i>
+    </button>
+    <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <button class="button-clear" ng-click="patientdetails(visit._id)" ><i class="icon ion-arrow-right-b assertive" ></i></button></p>
 
 <p> <b>Visit :</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-show="visit.documentmetadata && visit.documentmetadata.docname !==null && visit.documentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;">Report</button></p></div>
@@ -201,39 +201,46 @@
         <ion-content>
           <br>
           <span class="item-input">
-              <label class="input-label-filter">Patient Name</label>
-              <select ng-model="appliedfilters.patientnameselected" ng-options="pname for pname in filtersavailable.patientnames">
-              <select>
-          </span>
-         
-                  <span class="item-input">
-           <label class="input-label-filter">Visit Type</label>
-            <button class="button"  modal-select ng-model="appliedfilters.visittypeselected" multiple="true" options="filtersavailable.visittypes" modal-title="Visit Type" has-search="true">
-    Select it
+              <label class="input-label-filter">Patient Name</label> </span>
+              <!--select ng-model="appliedfilters.patientnameselected" ng-options="pname for pname in filtersavailable.patientnames">
+              <select-->               
+
+              <button class="button button-full"   modal-select ng-model="appliedfilters.patientnameselected" multiple="true" placeholder="select it" options="filtersavailable.patientnames" modal-title="Patient Name" has-search="true">
+                <h5><span ng-bind="appliedfilters.patientnameselected"></span></h5>
     <div class="option">
         {{option}}
     </div>
-</button>
-                  </span><br>
+</button>  
          
+            <span class="item-input">
+           <label class="input-label-filter">Visit Type</label> </span>
+            <button class="button button-full"  modal-select ng-model="appliedfilters.visittypeselected" multiple="true" options="filtersavailable.visittypes" modal-title="Visit Type" has-search="true">
+  <h5><span ng-bind="appliedfilters.visittypeselected"></span></h5>
+    <div class="option">
+        {{option}} 
+    </div>
+</button> 
+        
                   <span class="item-input">
-           <label class="input-label-filter">Hospital Name</label>
-        <button class="button"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
-    Select it
+                      <label class="input-label-filter">Hospital Name</label></span>
+        <button class="button button-full"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
+     <h5><span ng-bind="appliedfilters.hospitalnameselected"></span></h5>
     <div class="option">
         {{option}}
     </div>
 </button> 
-                  </span><br>
+                
+            
+            
           <span class="item-input">
               <label class="input-label-filter">Attachments?</label>
               <ion-checkbox class="item-checkbox-filter" style="position:relative;right:20px" ng-model="appliedfilters.docswithattachment">
               </ion-checkbox>
               </label>
           </span>
-          <div class="pull-right">
+          <!--div class="pull-right">
               <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterSetAll()">Set All</button>
-          </div>
+          </div-->
           <br>
           <br>
           <div class="pull-center">

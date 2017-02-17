@@ -108,20 +108,21 @@
          <br>
          <span class="item-input">
            <label class="input-label-filter">Hospital Name</label>
-                
-             <button class="button"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
-    Select it
+               </span> 
+             <button class="button button-full"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
+                 <h5><span ng-bind="appliedfilters.hospitalnameselected"></span></h5>
     <div class="option">
         {{option}}
     </div>
 </button>
-         </span>
+         
              <br>
-         <div class="pull-right">
+         <!--div class="pull-right">
            <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterSetAll()">Set All</button>
-         </div>
+         </div-->
          <br>
-         <br>
+         <br>           
+           
          <div class="pull-center">
            <button class="button button-assertive" ng-click="filterapply()">Apply</button>
          </div>
