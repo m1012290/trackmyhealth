@@ -57,10 +57,12 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
  <body ng-controller="AppCtrl" ng-app="tracmyhealthapp">
-   <ion-nav-bar class="bar-assertive" align-title="left" >
+  <ion-nav-bar class="bar-assertive" align-title="left" >
           <ion-nav-back-button class="button-clear">
-              <i class="ion-android-arrow-back icon-btn-customize"></i>
-          </ion-nav-back-button>
+             <i class="ion-android-arrow-back icon-btn-customize assertive" ng-click="backButtonAction()"></i>
+                
+         </ion-nav-back-button>
+    
     </ion-nav-bar>
     <ion-nav-view></ion-nav-view>
  </body>
