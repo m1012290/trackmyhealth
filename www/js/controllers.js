@@ -153,7 +153,7 @@ angular.module('tracmyhealthappctrls', [])
     $scope.hideSheet = $ionicActionSheet.show({
       buttons: [
         { text: 'Take a photo' },
-        { text: 'Add photo from Gallery' }
+//{ text: 'Add photo from Gallery' }
       ],
       titleText: 'Add Photos',
       cancelText: 'Cancel',
@@ -321,7 +321,7 @@ angular.module('tracmyhealthappctrls', [])
           $rootScope.hideLoader();
           if(data.status === 'SUCCESS'){
               loginservice.setProfileData({"appregistrationid":result.appregistrationid, "isdoctor":result.isdoctor});
-              $state.go('main.listedentities');
+              $state.go('main.menu');
           }else{
             $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
           }
@@ -430,7 +430,7 @@ angular.module('tracmyhealthappctrls', [])
           registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken, data.isdoctor).then(function(result){
               loginservice.setProfileData({"appregistrationid":data.appregistrationid, "jsonwebtoken":data.authtoken, "isdoctor":data.isdoctor});
 
-              $state.go('main.listedentities');
+              $state.go('main.menu');
           }).catch(function(error){
               $rootScope.showPopup({
                 title:'System Error',
@@ -635,19 +635,20 @@ angular.module('tracmyhealthappctrls', [])
        ,"hospitalnameselected" : ["All"]
        ,"isFilterApplied": false
      };
-
      $scope.filtersavailable = {
        "hospitalnames" : ["All"]
      };
-
+   
      $scope.filterSetAll = function(){
        $scope.appliedfilters.hospitalnameselected[0]=angular.copy("All");
+        
      };
 
      $scope.filterCancel = function(){
           //copy from backup in case of cancel press
           $scope.appliedfilters.hospitalnameselected=angular.copy($scope.appliedfilters.backup.hospitalnameselected);
           $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
+        // console.log( $scope.appliedfilters.isFilterApplied);
           $scope.closeModalfilter();
      };
 
@@ -698,6 +699,7 @@ angular.module('tracmyhealthappctrls', [])
          if(($scope.backuphosvisitinfo != undefined) || (($scope.hospitalslist != undefined ) && ($scope.hospitalslist.length != 0 ))){
            if($scope.backuphosvisitinfo == undefined)
                $scope.backuphosvisitinfo=angular.copy($scope.hospitalslist);
+             console.log($scope.hospitalslist);
            angular.forEach($scope.backuphosvisitinfo, function(visitdata, key1){
                   var namefound = false;
                   angular.forEach($scope.filtersavailable.hospitalnames, function(value, key2){
@@ -1007,13 +1009,13 @@ $scope.fetchmyhealth();
         };
 
         $scope.healthFilterList = [
-            { text: "Blood Sugar", checked: true, backupchecked: true},
+           { text: "Blood Sugar", checked: true, backupchecked: true},
             { text: "Blood Pressure", checked: true, backupchecked: true},
             { text: "Vaccination", checked: true, backupchecked: true},
             { text: "Medication", checked: true, backupchecked: true},
             { text: "Allergies", checked: true, backupchecked: true},
             { text: "Weight", checked: true, backupchecked: true}
-        ];
+    ];
 
         $scope.filterCancel = function(){
           $scope.closeModalfilter();
@@ -1032,7 +1034,7 @@ $scope.fetchmyhealth();
 
               $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
 
-              $scope.healthFilterList[bloodsugarFilter].checked=$scope.healthFilterList[bloodsugarFilter].backupchecked;
+              $scope.healthFilterList[bloodsugarFilter].checked=$scope.healthFilterList[bloodpressureFilter].backupchecked;
               $scope.healthFilterList[bloodpressureFilter].checked=$scope.healthFilterList[bloodpressureFilter].backupchecked;
               $scope.healthFilterList[vaccinationFilter].checked=$scope.healthFilterList[vaccinationFilter].backupchecked;
               $scope.healthFilterList[medicationFilter].checked=$scope.healthFilterList[medicationFilter].backupchecked;
@@ -1056,8 +1058,8 @@ $scope.fetchmyhealth();
           $scope.healthFilterList[allergiesFilter].checked=true;
           $scope.healthFilterList[weightFilter].checked=true;
         };
-        $scope.filterdetails = function(visitid){
-           if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
+      $scope.filterdetails = function(visitid){
+          if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
              $scope.openModalfilter();
              ionic.requestAnimationFrame(function (){
                   $scope.backupFilters();
@@ -1078,7 +1080,7 @@ $scope.fetchmyhealth();
             $scope.appliedfilters.backup.weightFilter=$scope.appliedfilters.weightFilter;
             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             $scope.healthFilterList[bloodsugarFilter].backupchecked=$scope.healthFilterList[bloodsugarFilter].checked;
-            $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
+ console.log($scope.healthFilterList[bloodsugarFilter].backupchecked);           $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
             $scope.healthFilterList[vaccinationFilter].backupchecked=$scope.healthFilterList[vaccinationFilter].checked;
             $scope.healthFilterList[medicationFilter].backupchecked=$scope.healthFilterList[medicationFilter].checked;
             $scope.healthFilterList[allergiesFilter].backupchecked=$scope.healthFilterList[allergiesFilter].checked;
@@ -2591,6 +2593,14 @@ $scope.docfetch();
           }
           return uint8Array;
         };
+}])
+.controller('MenuCtrl', ['$scope','$ionicSideMenuDelegate', function($scope,$ionicSideMenuDelegate){
+	  
+	//sidemenu addition
+     $scope.toggleLeftSideMenu = function() {
+      $ionicSideMenuDelegate.toggleLeft();
+   };
+    
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
     $scope.openImagesModal = function(index) {

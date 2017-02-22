@@ -154,7 +154,10 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
   window.addEventListener('native.keyboardshow', function(){
    document.body.classList.add('keyboard-open');
  });*/
+    
 }])
+
+
 .config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider',function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
   $stateProvider
   .state('login', {
@@ -193,7 +196,36 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  .state('main.listedentities', {
+  
+  
+  .state('main.menu',{
+	  url:'/menu/:mobilenumber',
+	  views: {
+		  'menu': {
+			  templateUrl: 'templates/menu.html',
+ controller: 'MenuCtrl'
+	  }
+    }
+  })
+  .state('notified', {
+
+	  url:'/notified',
+	  templateUrl: 'templates/tab-notified.html',
+	  data : {
+			   mobilenumber : ""
+    		},  
+      controller : function($scope, $state,loginservice){
+        $scope.mobilenumber = $state.current.data.mobilenumber;
+        console.log('$scope.mobilenumber within main ['+ $scope.mobilenumber + ']');
+             var profiledata = loginservice.getProfileData();
+        if(typeof profiledata !== 'undefined'){
+          $scope.showDoctorsTab = profiledata.isdoctor;
+        }
+		  }
+	  })
+  
+  
+  .state('notified.listedentities', {
     cache: true,
     url: '/listedentities',
     views: {
@@ -203,7 +235,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  .state('main.allnotifications', {
+  .state('notified.allnotifications', {
     cache: true,
     url: '/allnotifications/:hospitalid',
     views: {
@@ -213,7 +245,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  .state('main.myhealth', {
+  .state('notified.myhealth', {
     cache: true,
     url: '/myhealth',
     views: {
@@ -223,7 +255,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  .state('main.doctortab', {
+  .state('notified.doctortab', {
     cache: true,
     url: '/doctortab',
     views: {
