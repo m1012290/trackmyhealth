@@ -1,10 +1,10 @@
-<ion-view view-title="trackmyhealth" name="listed-entities-view">
-    <ion-nav-title align-title="left">
-        <span class="circle-span">
-            <img src="img/appicon_whitecircle_2300.png" class="img-responsive"/>
-        </span>
-   
-    </ion-nav-title>
+<ion-view view-title="" name="listed-entities-view">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()"> 
+            <i class="icon ion-navicon " menu-toggle = "left" ></i>
+        </button>
+    </ion-nav-buttons>
+    
         <ion-nav-buttons side="right">
         <button class="button button-clear" ng-click="filterDetails()">
               <div ng-switch on="appliedfilters.isFilterApplied">
@@ -22,9 +22,9 @@
         <button class="button button-clear" ng-click="showFilterBar()">
                  <i class=" ion-search icon-btn-customize"></i>
         </button>
-        <button class="button button-clear" on-touch="openPopover($event)">
+        <!--button class="button button-clear" on-touch="openPopover($event)">
                  <i class="ion-android-more-vertical icon-btn-customize"></i>
-         </button>
+         </button-->
 </ion-nav-buttons>
             <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
                 <ion-refresher pulling-text="Pull To Refresh" on-refresh="reload()"

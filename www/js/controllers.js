@@ -1,5 +1,104 @@
 angular.module('tracmyhealthappctrls', [])
-.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb', function($rootScope, $scope, $state, $ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb) {
+.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicSideMenuDelegate','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb','ionicDatePicker','$filter','patientprflservice','DBA' , function($rootScope, $scope, $state,$ionicSideMenuDelegate,$ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb,ionicDatePicker,$filter, patientprflservice, DBA) {
+     
+    /*Patient profile data*/
+        $scope.patientId = '';
+    $scope.patientprofiledata = {
+      "firstname"        : "",
+      "lastname"         : "",
+      "emailid"          : "",
+      "mobilenumber"     : "",
+      "gender"           : "",
+      "alternateemailid" : "",
+      "alternatemobilenum" : "",
+      "dataofbirth" : "",
+      "licenseno"   : "",
+      "doctor"    : "",
+      "address"     : ""
+    };
+    $scope.originalresponse = '';
+
+  	$scope.backButtonAction = function(){
+       $scope.shouldShowDelete = false;
+       $ionicHistory.goBack();
+    };
+
+    $scope.$on("$ionicView.afterEnter", function(event, data){
+      $rootScope.showLoader();
+      registrationdetsdb.query({}).then(function(response){
+          //alternateemailid alternatemobilenum doctorlicenseno
+          var result = DBA.getById(response);
+          $scope.patientId = result.appregistrationid;
+          patientprflservice.getpatientinfo($scope.patientId).then(function(data){
+               $rootScope.hideLoader();
+               $scope.originalresponse = data.data;
+               $scope.patientprofiledata = {
+                  "firstname" : data.data.firstname,
+                  "lastname"  : data.data.lastname,
+                  "emailid"   : data.data.emailid,
+                  "mobilenumber" : data.data.mobilenumber,
+                  "gender"    : data.data.gender,
+                  "address"   : typeof data.data.address !== 'undefined' ?  data.data.address.addressline1 : "",
+                  "doctor"    : data.data.isdoctor,
+                  "alternateemailid" : data.data.alternateemailid,
+                  "alternatemobilenum" : data.data.alternatemobilenum,
+                  "licenseno"  : data.data.doctorlicenseno,
+                  "dateofbirth" : data.data.dateofbirth
+                }
+            }).catch(function(error){
+                $rootScope.hideLoader();
+                $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+
+                });
+            });
+        }).catch(function(err){
+              $rootScope.hideLoader();
+              $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
+
+              });
+        });
+    });
+	  // DatePicker object with callbcak to obtain the date
+	  var ipObj1 = {
+      callback: function (val) {  //Mandatory
+          console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+		      $scope.patientprofiledata.dateofbirth = $filter('date')(val, "dd MMM yyyy");
+      },
+      from: new Date(1910 , 1, 1), //Optional
+      //to: new Date(2016, 10, 30), //Optional
+      inputDate: new Date(),      //Optional
+      mondayFirst: true,          //Optional
+//      disableWeekdays: [0],       //Optional
+      closeOnSelect: false,       //Optional
+      templateType: 'popup',       //Optional
+      dateFormat  : 'MMM dd, yyyy'
+    };
+    $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(ipObj1);
+    };
+    $scope.save = function(){
+        $rootScope.showLoader();
+         if($scope.originalresponse.alternateemailid !== $scope.patientprofiledata.alternateemailid
+            || $scope.originalresponse.alternatemobilenum !== $scope.patientprofiledata.alternatemobilenum
+            || $scope.originalresponse.isdoctor.toString() !== $scope.patientprofiledata.doctor.toString()
+            || $scope.originalresponse.doctorlicenseno !== $scope.patientprofiledata.licenseno
+            || $scope.originalresponse.dateofbirth !== $scope.patientprofiledata.dateofbirth){
+           $scope.patientprofiledata.doctorlicenseno = !$scope.patientprofiledata.doctor ? "" : $scope.patientprofiledata.doctorlicenseno;
+           patientprflservice.changedpatientinfo($scope.patientprofiledata,
+              $scope.patientId).then(function(data){
+                $rootScope.hideLoader();
+              $rootScope.showToast('Profile updated successfully','Long','top');
+           }).catch(function(error){
+               $rootScope.hideLoader();
+               $rootScope.showPopup({'title':'Error','template':"Couldn't update the profile, please try again"}, function(){
+
+               });
+           });
+         }else{
+            $rootScope.hideLoader();
+            $rootScope.showToast('You have not updated anything in your profile','Long','top');
+        }
+    };    
    //handle events and broadcasts such as error scenario to redirect user
    console.log('within AppCtrl current state -->'+JSON.stringify($state.current));
    $scope.$on('NoInternet' , function(event){
@@ -145,6 +244,12 @@ angular.module('tracmyhealthappctrls', [])
        myPopup.close();
     }
   };
+    
+     //sidemenu addition
+     $scope.toggleLeftSideMenu = function() {
+      $ionicSideMenuDelegate.toggleLeft();
+   };
+    
   $scope.urlForImage = function(imageName) {
     var trueOrigin = cordova.file.dataDirectory + imageName;
     return trueOrigin;
@@ -153,7 +258,7 @@ angular.module('tracmyhealthappctrls', [])
     $scope.hideSheet = $ionicActionSheet.show({
       buttons: [
         { text: 'Take a photo' },
-//{ text: 'Add photo from Gallery' }
+        { text: 'Add photo from Gallery' }
       ],
       titleText: 'Add Photos',
       cancelText: 'Cancel',
@@ -2165,7 +2270,7 @@ $scope.reloadNotifications=function(){
     });
 }])
 .controller('PatientprofileCtrl',['$scope','$rootScope','$state','ionicDatePicker','$filter','patientprflservice','$ionicHistory','DBA','registrationdetsdb', function($scope,$rootScope,$state,ionicDatePicker,$filter, patientprflservice,$ionicHistory, DBA, registrationdetsdb){
-    $scope.patientId = '';
+  /*  $scope.patientId = '';
     $scope.patientprofiledata = {
       "firstname"        : "",
       "lastname"         : "",
@@ -2261,7 +2366,7 @@ $scope.reloadNotifications=function(){
             $rootScope.hideLoader();
             $rootScope.showToast('You have not updated anything in your profile','Long','top');
         }
-    };
+    };*/
 }])
 .controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate','socket',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate,socket){
       $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{

@@ -64,7 +64,57 @@
          </ion-nav-back-button>
     
     </ion-nav-bar>
-    <ion-nav-view></ion-nav-view>
+       <ion-side-menus>
+
+   <ion-side-menu>side = "left">
+    <!--ion-header-bar class="bar-stable">
+      <h1 class="title">Left</h1>
+    </ion-header-bar-->
+    <ion-content>
+      <ion-list>
+        <div  class="list card" style="background-color: #dd4b39;">
+  <a menu-close href="#/patientprfl">  <span  class="circle-span"  style ="background-color: #000;">{{patientprofiledata.firstname|limitTo:1}}
+      </span></a>
+        <br><br>
+                  <ion-item style="color:#fff">
+      <h2> <strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2> 
+               {{patientprofiledata.emailid}}<br>
+              {{patientprofiledata.mobilenumber}}
+                  </ion-item>
+             </div>
+          <ion-item menu-close href="#/main/menu/">
+         Home page 
+        </ion-item>
+          <!--ion-item menu-close href="#/recententry">
+          Recent entry
+        </ion-item-->
+          <ion-item menu-close href="#/patientimages">
+          Uploaded photos
+        </ion-item>
+          <ion-item menu-close ng-click="showPopup()">
+          Rate the app
+        </ion-item>
+        <ion-item menu-close href="#/about">
+          About
+        </ion-item>        
+<ion-item menu-close on-tap="closePopover()" ng-click="showConfirm()" href="#/logout">
+         Logout
+        </ion-item>
+      </ion-list>
+     
+           </ion-content>
+       <ion-footer-bar class="bar-assertive">
+           <p>Version 1.0.0</p>
+         </ion-footer-bar>
+   </ion-side-menu>
+
+   <ion-side-menu-content>
+      <ion-nav-view>
+      </ion-nav-view>
+   </ion-side-menu-content>
+
+</ion-side-menus>
+    <!--ion-nav-view></ion-nav-view-->
  </body>
  <script id="documentpic.html" type="text/ng-template">
    <ion-modal-view>
