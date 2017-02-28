@@ -141,21 +141,24 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
   window.addEventListener("offline", function(){
     showToast($cordovaToast, 'No internet connectivity available', 'long', 'top');
   }, false);
-
+  
   $ionicPlatform.registerBackButtonAction(function(event) {
     console.log('printing state name-->'+$state.current.name);
-    if ($state.current.name === 'forgotpassword' || $state.current.name === 'main.recentnotifications' || $state.current.name === 'main.listedentities' || $state.current.name === 'login') { // your check here
+    if ($state.current.name === 'login') { // your check here
         ionic.Platform.exitApp();
     }else{
         $ionicHistory.goBack();
     }
-  }, 100);
+  },101);
   /*
   window.addEventListener('native.keyboardshow', function(){
    document.body.classList.add('keyboard-open');
  });*/
     
 }])
+
+
+
 
 
 .config(['$stateProvider', '$urlRouterProvider','USER_ROLES','$ionicConfigProvider',function ($stateProvider, $urlRouterProvider, USER_ROLES,$ionicConfigProvider) {
@@ -197,7 +200,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
     }
   })
   
-  
+  /*
   .state('main.menu',{
 	  url:'/menu/:mobilenumber',
 	  views: {
@@ -206,6 +209,11 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
  controller: 'MenuCtrl'
 	  }
     }
+  })*/
+  .state('menu',{
+	  url:'/menu/:mobilenumber',
+      templateUrl: 'templates/menu.html',
+      controller: 'MenuCtrl'
   })
   .state('notified', {
 
@@ -265,6 +273,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
+  
   .state('logout', {
     cache:false,
     url: '/logout',

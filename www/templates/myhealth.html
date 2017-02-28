@@ -48,7 +48,7 @@
                  <div class="row" ng-if="summary.bloodsugar.ppbs !=='' && summary.bloodsugar.ppbs != 0">{{summary.bloodsugar.ppbs}} MG/DL</div>
                 </div>
                 </div>
-
+<hr class="horizon">
                 <div class="row">
                     
                     <div class="col"><h3><b>Weight</b><button class="button button-small button-clear"  ng-click="openModal1('Weight', 'Weight')" on-tap="tracker('Weight', 'Weight')"><i class="icon ion-edit assertive" text="Weight" ></i></button></h3>
@@ -60,18 +60,19 @@
                  <div class="row" ng-if="summary.bloodpressure.systolic !=='' && summary.bloodpressure.systolic !== 0 && summary.bloodpressure.diastolic !== '' && summary.bloodpressure.diastolic !== 0">	{{summary.bloodpressure.systolic}}/{{summary.bloodpressure.diastolic}} MM HG</div>
                         </div></div>
                 </div>
+            <hr class="horizon">
             <div class="col">
                 <div class="col"><h3><b>Vaccination</b><button class="button button-small button-clear" ng-click="openModal1('Vaccination', 'Vaccination Details')"  on-tap="tracker('Vaccination', 'Vaccination Details')" ><i class="icon ion-edit assertive"  text="Vaccination" ></i></button></h3>
                 </div>
               <div class="row" ng-if="summary.vaccination.value !== ''">{{summary.vaccination.value}}</div>
             </div>
-
+<hr class="horizon">
             <div class="col">
                   <div class="col"><h3><b>Allergies</b><button class="button button-small button-clear"  ng-click="openModal1('Allergies', 'Allergy Details')" on-tap="tracker('Allergies', 'Allergy Details')"><i class="icon ion-edit assertive" text="Allergies" ></i></button></h3>
                   </div>
                 <div class="row" ng-if="summary.allergies.value !== ''">{{summary.allergies.value}}</div>
             </div>
-
+<hr class="horizon">
             <div class="col">
                 <div class="col"><h3><b>Medication</b><button class="button button-small button-clear" ng-click="openModal1('Medication', 'Medication Details')"on-tap="tracker('Medication', 'Medication Details')"><i class="icon ion-edit assertive"  text="Medication" ></i></button></h3>
                 </div>
@@ -96,17 +97,30 @@
                                   <div class="notification responsive">
 
                                       <div class="message responsive-sm">
+                                
                                         <div ng-repeat="medicalprofiledata in details.medicalprofile track by $index">
-                                          
-                                           <p  class="item-text-wrap" ng-show="appliedfilters.weightFilter != false && appliedfilters.weightFilter && appliedfilters.weightFilter !== null && appliedfilters.weightFilter !== '' && appliedfilters.weightFilter !== 0 && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong></p>
+                                            
+                                          <div class="profilecolor" ng-show="medicalprofiledata.profile[0].weight.value">{{medicalprofiledata.profile[0].profile.name}}      {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
+                                           <p  class="item-text-wrap" ng-show="appliedfilters.weightFilter != false && appliedfilters.weightFilter && appliedfilters.weightFilter !== null && appliedfilters.weightFilter !== '' && appliedfilters.weightFilter !== 0 && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong><br>
+                                  </p>
+                                            
+            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ">  {{medicalprofiledata.profile[0].profile.name}}  {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>                                
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.rbs && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''">RBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''">PPBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.fbs && medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''">FBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
+                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic">  {{medicalprofiledata.profile[0].profile.name}}   {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div> 
                                            <p ng-show="appliedfilters.bloodpressureFilter != false && appliedfilters.bloodpressureFilter !== null && appliedfilters.bloodpressureFilter !=='' && medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== '' && medicalprofiledata.profile[0].bloodpressure.diastolic && medicalprofiledata.profile[0].bloodpressure.diastolic !== null && medicalprofiledata.profile[0].bloodpressure.diastolic !== ''">Blood Pressure : <strong>{{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} MM HG</strong></p>
-                                           <p class="item-text-wrap" ng-show="appliedfilters.allergiesFilter != false && medicalprofiledata.profile[0].allergies && medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''">Allergies : <strong>{{medicalprofiledata.profile[0].allergies.value}}</strong></p>
-                                           <p class="item-text-wrap" ng-show="appliedfilters.medicationFilter != false && medicalprofiledata.profile[0].medication && medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''">Medication : <strong >{{medicalprofiledata.profile[0].medication.value}}</strong> </p>
+                                          
+                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].allergies.value">  {{medicalprofiledata.profile[0].profile.name}}  
+    {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
+                                            <p class="item-text-wrap" ng-show="appliedfilters.allergiesFilter != false && medicalprofiledata.profile[0].allergies && medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''">Allergies : <strong>{{medicalprofiledata.profile[0].allergies.value}}</strong></p>
+                                         
+                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].medication.value">{{medicalprofiledata.profile[0].profile.name}} {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
+                                            <p class="item-text-wrap" ng-show="appliedfilters.medicationFilter != false && medicalprofiledata.profile[0].medication && medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''">Medication : <strong >{{medicalprofiledata.profile[0].medication.value}}</strong> </p>
+                                            
+                                             <div class="profilecolor" ng-show="medicalprofiledata.profile[0].vaccination.value">  {{medicalprofiledata.profile[0].profile.name}}     {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p class="item-text-wrap" ng-show="appliedfilters.vaccinationFilter != false  && medicalprofiledata.profile[0].vaccination && medicalprofiledata.profile[0].vaccination.value !== null && medicalprofiledata.profile[0].vaccination.value !== ''">Vaccination :<strong> {{medicalprofiledata.profile[0].vaccination.value}}</strong> </p>
-                                      </div>
+                                              <hr class="horizon" ng-show="medicalprofiledata.profile[0].weight.value || medicalprofiledata.profile[0].vaccination.value || medicalprofiledata.profile[0].medication.value || medicalprofiledata.profile[0].allergies.value || medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ||medicalprofiledata.profile[0].weight.value || (medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic)">
   				                      </div>
                           </div>
                       </div>
@@ -138,6 +152,8 @@
                  		<div class="item item-divider">
       			 		          <div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				      </div>
+                    <br>
+                    <h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
       			 <div class="row">
                <div class="col"><ul class="my-nav"><li><h5><b>Weight</b></h5></li></ul>
               <input type="number" limit-to="5" placeholder="Ex: 50 KG" name="weight"  ng-model="data.weight.value">
@@ -162,15 +178,14 @@
            </div>
   </ion-slide>
                 </ion-slide-box>
-               
-                <ion-slide-box ng-if="trackername === 'Blood Sugar'">
+<ion-slide-box ng-if="trackername === 'Blood Sugar'">
          <ion-slide>
              <br>
             <div class="list" ng-if="trackername === 'Blood Sugar'" >
       				<div class="item item-divider">
       				 	<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
-
+<h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
         <div class="col">
             <h5><b>RBS (Random Blood Sugar)</b></h5>
          <div class="row" ><input type="number" limit-to="3" placeholder=" MG/DL" ng-model="data.bloodsugar.rbs" ng-maxlength="3" required></div>
@@ -208,15 +223,14 @@
       			
                     </ion-slide>
                 </ion-slide-box>
-
-                 <ion-slide-box ng-if="trackername === 'Blood Pressure'">
+<ion-slide-box ng-if="trackername === 'Blood Pressure'">
                      <ion-slide>
                          <br>
       			<div class="list" ng-if="trackername === 'Blood Pressure'">
       			 	<div class="item item-divider">
       			 		<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
-
+<h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
     <h4><b>&nbsp;&nbsp;Blood Pressure</b></h4>
 
              <div class="item-input">
@@ -252,6 +266,7 @@
       				<div class="item item-divider">
        					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
        				</div>
+   <h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
                <div class="item-input">
        				      <label class="item item-input item-floating-label">
                    	<span class="input-label">Medication</span>
@@ -265,11 +280,11 @@
            		  </label>
                </div>
        			</div>
-
-     <div class="list" ng-if="trackername === 'Allergies'">
+<div class="list" ng-if="trackername === 'Allergies'">
                  		<div class="item item-divider">
       					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
+<h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
       				<label class="item item-input item-floating-label">
                   	<span class="input-label">Allergies</span>
                   	<input type="text" placeholder="Ex : Peanuts, dust mites" name="allergies" ng-model="data.allergies.value">
@@ -279,8 +294,7 @@
       				<textarea placeholder="Notes" ng-model="data.allergies.notes"></textarea>
         		  		</label>
               	</div>
-
-                  <div class="list" ng-if="trackername === 'notes'">
+<div class="list" ng-if="trackername === 'notes'">
       				<div class="item item-divider">
       					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
@@ -289,10 +303,11 @@
       					<textarea  placeholder="Notes"></textarea>
       				</label>
       			</div>
-          <div class="list" ng-if="trackername === 'Vaccination'">
+<div class="list" ng-if="trackername === 'Vaccination'">
               <div class="item item-divider">
       				      <div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				</div>
+             <h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
       				<label class="item item-input item-floating-label">
                   	<span class="input-label">Vaccination</span>
                   	<input type="text" placeholder="Ex : DNA Vaccine, Subunit vaccines" name="vaccination" ng-model="data.vaccination.value">

@@ -35,11 +35,11 @@
             <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
 <span class="circle-span" style ="background-color: #D14836"; ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
                 </span>
-          
-                    <a href="#/main/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
+         
+                   <a href="#/notified/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
                         <h3>{{entity.hospitalname}}</h3>
                         <i class="icon ion-arrow-right-b assertive"></i>
-                    </a>
+                       </a>
             </ion-item>
       </ion-list>
   </ion-content>

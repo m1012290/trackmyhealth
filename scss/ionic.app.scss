@@ -1202,31 +1202,72 @@ div.item-text-wrap a{
     text-decoration: none;
     border-bottom: 1px solid deepskyblue;
 }
+
+.mycolor{
+    color:#000;
+    text-align: center;
+    font-family: cursive;
+}
+.example1 {
+  border-radius: 50%;
+ background: #fff;
+ border: 5px solid #d14836;
+  width: 300px;
+  height: 300px;
+  line-height: 40px;
+  text-align: center;
+   margin-left: auto;
+    margin-right: auto;
+    display: block;
+    .example {
+  position:relative;
+  width: auto;
+  display:inline-block;
+  background-color:#d14836;
+  text-decoration:none;
+  border-radius:50%;
+  border:solid 1px #f39c12;
+  text-align:center;
+  padding:16px 18px 14px;
+   
+  margin: 5px;
+   width: 70px;
+  height: 70px;
+}
+}
+.example .icon {
+    font-size: 34px;
+  vertical-align: middle;
+    color: #fff;
+    padding-bottom: 15px;
+}
+  .img1-responsive
+{
+  //display: inline-block;
+  height:25%;
+  width: 25%;
+  opacity:1;
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}  
+
+
 .container1-responsive{
    margin-top: 40%;
     margin-left:4%;
     margin-right:4%;
 }
- .example {
-  border-radius: 50%;
-  background: #000;
-  border: 5px solid #d14836;
-  width: 70px;
-  height: 70px;
-  line-height: 45px;
-  text-align: center;
-  margin-left: 1%;
-      }
 
-.example .icon {
-    font-size: 34px;
-  vertical-align: middle;
-    color: #fff;
+.profilecolor{
+    color: red;
+    text-align: right;
+    font-size: 15px;
 }
-#rowspace{
-    margin-left: 13%;
-}
-.heading1{
-    color: black;
-    padding-left: 13px;
+
+hr.horizon {
+    border-top: 2px double #8c8b8b;
+    width: inherit;
+    margin-left: auto;
+     margin-right: auto;
 }

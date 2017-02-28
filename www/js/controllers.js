@@ -426,7 +426,7 @@ angular.module('tracmyhealthappctrls', [])
           $rootScope.hideLoader();
           if(data.status === 'SUCCESS'){
               loginservice.setProfileData({"appregistrationid":result.appregistrationid, "isdoctor":result.isdoctor});
-              $state.go('main.menu');
+              $state.go('menu');
           }else{
             $rootScope.showToast("Couldn't do auto sign in, please login again",'long','top');
           }
@@ -535,7 +535,7 @@ angular.module('tracmyhealthappctrls', [])
           registrationdetsdb.updateJWTAndAppRegId(data.appregistrationid, data.authtoken, data.isdoctor).then(function(result){
               loginservice.setProfileData({"appregistrationid":data.appregistrationid, "jsonwebtoken":data.authtoken, "isdoctor":data.isdoctor});
 
-              $state.go('main.menu');
+              $state.go('menu');
           }).catch(function(error){
               $rootScope.showPopup({
                 title:'System Error',
@@ -1392,6 +1392,9 @@ $scope.fetchmyhealth();
                "vaccination" : {
                 "value" : "",
                 "notes" : ""
+               },
+               "profile" : {
+                   "name" : ""
                }
             };
         };
@@ -1454,10 +1457,16 @@ $scope.fetchmyhealth();
               medicalprofiledatatosave["vaccination"] = {}
               medicalprofiledatatosave["vaccination"]["value"] = $scope.data.vaccination.value;
               medicalprofiledatatosave["vaccination"]["notes"] = $scope.data.vaccination.notes;
+              
+              medicalprofiledatatosave["profile"] = {}
+              medicalprofiledatatosave["profile"]["name"] = $scope.data.profile.name;
+             
+
               var medicalprofile = {
                   "data" : medicalprofiledatatosave
                   ,"createdat" : $scope.tdate
               };
+              console.log(medicalprofile.createdat);
               $rootScope.showLoader();
               medicalprofileservice.savedetails($scope.patientId, medicalprofile).then(function(data){
                   if(data.status == 'SUCCESS'){
@@ -1664,12 +1673,7 @@ $scope.fetchmyhealth();
              
             }  
         });  
-   
-        
-        
- 
-        
-     }
+  }
     
  $scope.labelsbp = [];
             $scope.seriesbp  = ['systolic', 'diastolic']; 
@@ -1756,6 +1760,7 @@ $scope.fetchmyhealth();
         $ionicHistory.goBack();
       };
 }])
+
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','feedbackservice',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, feedbackservice){
       $scope.openModalfilter = function(){
         $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
@@ -2699,10 +2704,21 @@ $scope.docfetch();
           return uint8Array;
         };
 }])
-.controller('MenuCtrl', ['$scope','$ionicSideMenuDelegate', function($scope,$ionicSideMenuDelegate){
-	  
-	//sidemenu addition
-     $scope.toggleLeftSideMenu = function() {
+.controller('MenuCtrl', ['$scope','$ionicSideMenuDelegate','$ionicHistory','loginservice', function($scope,$ionicSideMenuDelegate, $ionicHistory, loginservice){
+  $scope.$on("$ionicView.beforeEnter",function(event, data){
+      $ionicHistory.nextViewOptions({
+            disableBack: true
+      });
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      
+      var profiledata = loginservice.getProfileData();
+      if(typeof profiledata !== 'undefined'){
+        $scope.showDoctorsTab = profiledata.isdoctor;
+      }
+  });
+   //sidemenu addition
+   $scope.toggleLeftSideMenu = function() {
       $ionicSideMenuDelegate.toggleLeft();
    };
     
