@@ -51,29 +51,39 @@
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
     <script src="js/constants.js"></script>
-    
+
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css"> -->
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300italic,300,100,700,700italic,400italic' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
  <body ng-controller="AppCtrl" ng-app="tracmyhealthapp">
        <ion-side-menus>
+         <ion-side-menu-content>
+              <ion-nav-bar class="bar-assertive" align-title="left" >
+                <ion-nav-back-button class="button-clear">
+                   <i class="ion-android-arrow-back icon-btn-customize assertive" ng-click="backButtonAction()"></i>
 
-   <ion-side-menu enable-menu-with-back-views="true">
+               </ion-nav-back-button>
+
+          </ion-nav-bar>
+            <ion-nav-view>
+            </ion-nav-view>
+         </ion-side-menu-content>
+   <ion-side-menu  ng-cloak>
     <ion-content>
  <ion-list>
         <div  class="list card" style="background-color: #dd4b39;">
-  <a menu-close href="#/patientprfl">  <span  class="circle-span"  style ="background-color: #000;">{{patientprofiledata.firstname|limitTo:1}}
-      </span></a>
+    <span  class="circle-span"  style ="background-color: #000;">{{patientprofiledata.firstname|limitTo:1}}
+      </span>
         <br><br>
                   <ion-item style="color:#fff">
-      <h2> <strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2> 
+      <h2> <strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2>
                {{patientprofiledata.emailid}}<br>
-              {{patientprofiledata.mobilenumber}}
+              {{patientprofiledata.mobilenumber}}&nbsp;&nbsp;<a menu-close href="#/patientprfl"><i class="icon ion-edit"></i></a>
                   </ion-item>
              </div>
           <ion-item menu-close href="#/menu/">
-         Home page 
+         Home page
         </ion-item>
           <!--ion-item menu-close href="#/recententry">
           Recent entry
@@ -86,29 +96,19 @@
         </ion-item>
         <ion-item menu-close href="#/about">
           About
-        </ion-item>        
+        </ion-item>
 <ion-item menu-close on-tap="closePopover()" ng-click="showConfirm()" href="#/logout">
          Logout
         </ion-item>
       </ion-list>
-     
+
        </ion-content>
        <ion-footer-bar class="bar-assertive">
            <p>Version 1.0.0</p>
          </ion-footer-bar>
    </ion-side-menu>
 
-   <ion-side-menu-content>
-        <ion-nav-bar class="bar-assertive" align-title="left" >
-          <ion-nav-back-button class="button-clear">
-             <i class="ion-android-arrow-back icon-btn-customize assertive" ng-click="backButtonAction()"></i>
-                
-         </ion-nav-back-button>
-    
-    </ion-nav-bar>
-      <ion-nav-view>
-      </ion-nav-view>
-   </ion-side-menu-content>
+
 
 </ion-side-menus>
     <!--ion-nav-view></ion-nav-view-->
@@ -128,7 +128,7 @@
                     <span class="input-label"><i class="icon ion-ios-pricetags"></i> &nbsp;Tag</span>
                      <input type="text" placeholder="Tag the document" ng-model="data.tag">
              </label>
-         
+
              <label class="item item-input item-floating-label">
                <span class="input-label ">Description </span>
            <textarea placeholder="Describe the document" rows="1"  ng-model="data.description" ng-Required="true" name="description"></textarea>

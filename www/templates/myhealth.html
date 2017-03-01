@@ -1,6 +1,6 @@
 <ion-view view-title="" name="my-health-view">
      <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()"> 
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
             <i class="icon ion-navicon " menu-toggle = "left" ></i>
         </button>
     </ion-nav-buttons>
@@ -50,7 +50,7 @@
                 </div>
 <hr class="horizon">
                 <div class="row">
-                    
+
                     <div class="col"><h3><b>Weight</b><button class="button button-small button-clear"  ng-click="openModal1('Weight', 'Weight')" on-tap="tracker('Weight', 'Weight')"><i class="icon ion-edit assertive" text="Weight" ></i></button></h3>
                         <div class="row" ng-if="summary.weight.value !=='' && summary.weight.value !== 0 ">	{{summary.weight.value}} KG
                         </div>
@@ -80,7 +80,7 @@
               {{summary.medication.value}}
                 </div>
             </div>
-           
+
 		</div>
 	</div>
   <div class="h-list">
@@ -90,34 +90,34 @@
                         <div class="row"  ng-repeat="details in healthdetails track by $index ">
 
                           <div class="right" ng-show="enableTimeLine(details)">
-                <button class="button button-small button-light" ng-show='enableTimeLine(details)'>              
+                <button class="button button-small button-light" ng-show='enableTimeLine(details)'>
                        <div class="month">  {{details.medicalprofile[0].recorddate|date:"EEE ,"| lowercase}}{{details.createdat.day}} {{details.medicalprofile[0].recorddate|date:"MMM yyyy"}} </div>
-                                             
+
                                    </button>
                                   <div class="notification responsive">
 
                                       <div class="message responsive-sm">
-                                
+
                                         <div ng-repeat="medicalprofiledata in details.medicalprofile track by $index">
-                                            
+
                                           <div class="profilecolor" ng-show="medicalprofiledata.profile[0].weight.value">{{medicalprofiledata.profile[0].profile.name}}      {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p  class="item-text-wrap" ng-show="appliedfilters.weightFilter != false && appliedfilters.weightFilter && appliedfilters.weightFilter !== null && appliedfilters.weightFilter !== '' && appliedfilters.weightFilter !== 0 && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong><br>
                                   </p>
-                                            
-            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ">  {{medicalprofiledata.profile[0].profile.name}}  {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>                                
+
+            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ">  {{medicalprofiledata.profile[0].profile.name}}  {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.rbs && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''">RBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''">PPBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.fbs && medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''">FBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
-                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic">  {{medicalprofiledata.profile[0].profile.name}}   {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div> 
+                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic">  {{medicalprofiledata.profile[0].profile.name}}   {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p ng-show="appliedfilters.bloodpressureFilter != false && appliedfilters.bloodpressureFilter !== null && appliedfilters.bloodpressureFilter !=='' && medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== '' && medicalprofiledata.profile[0].bloodpressure.diastolic && medicalprofiledata.profile[0].bloodpressure.diastolic !== null && medicalprofiledata.profile[0].bloodpressure.diastolic !== ''">Blood Pressure : <strong>{{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} MM HG</strong></p>
-                                          
-                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].allergies.value">  {{medicalprofiledata.profile[0].profile.name}}  
+
+                                            <div class="profilecolor" ng-show="medicalprofiledata.profile[0].allergies.value">  {{medicalprofiledata.profile[0].profile.name}}
     {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                             <p class="item-text-wrap" ng-show="appliedfilters.allergiesFilter != false && medicalprofiledata.profile[0].allergies && medicalprofiledata.profile[0].allergies.value !== null && medicalprofiledata.profile[0].allergies.value !== ''">Allergies : <strong>{{medicalprofiledata.profile[0].allergies.value}}</strong></p>
-                                         
+
                                             <div class="profilecolor" ng-show="medicalprofiledata.profile[0].medication.value">{{medicalprofiledata.profile[0].profile.name}} {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                             <p class="item-text-wrap" ng-show="appliedfilters.medicationFilter != false && medicalprofiledata.profile[0].medication && medicalprofiledata.profile[0].medication.value !== null && medicalprofiledata.profile[0].medication.value !== ''">Medication : <strong >{{medicalprofiledata.profile[0].medication.value}}</strong> </p>
-                                            
+
                                              <div class="profilecolor" ng-show="medicalprofiledata.profile[0].vaccination.value">  {{medicalprofiledata.profile[0].profile.name}}     {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p class="item-text-wrap" ng-show="appliedfilters.vaccinationFilter != false  && medicalprofiledata.profile[0].vaccination && medicalprofiledata.profile[0].vaccination.value !== null && medicalprofiledata.profile[0].vaccination.value !== ''">Vaccination :<strong> {{medicalprofiledata.profile[0].vaccination.value}}</strong> </p>
                                               <hr class="horizon" ng-show="medicalprofiledata.profile[0].weight.value || medicalprofiledata.profile[0].vaccination.value || medicalprofiledata.profile[0].medication.value || medicalprofiledata.profile[0].allergies.value || medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ||medicalprofiledata.profile[0].weight.value || (medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic)">
@@ -135,9 +135,9 @@
     <script id="medicalprofile.html" type="text/ng-template">
       <ion-modal-view>
           <ion-header-bar class="bar-positive">
-              
+
               <h1 class="title">{{title}}</h1>
-             
+
               <button class="button button-clear button-default" ng-click="closeModal1()"><i class="icon ion-android-close"></i>
               </button>
           </ion-header-bar>
@@ -148,7 +148,7 @@
          <ion-slide>
              <br>
       			<div class="list" ng-if="trackername === 'Weight'">
-                   
+
                  		<div class="item item-divider">
       			 		          <div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
       				      </div>
@@ -164,19 +164,29 @@
       <rzslider rz-slider-model="data.weight.value"
                 rz-slider-options="data.weight.options"></rzslider>
                 </div>
-                      
+
       			</div>
                       </ion-slide>
-                      
-                       <ion-slide>
-                           <br>
-                           <div>
-          <canvas id="line" class="chart chart-line" chart-data="datawt"  chart-labels="labelswt"   chart-colours="colours" chart-series="serieswt" chart-options="optionswt" chart-dataset-override="datasetOverridewt" chart-click="onClick">
-               </canvas>
-                               <br>
-               <button class="button  button-assertive" ng-click="wtgraph()">graph</button>
-           </div>
-  </ion-slide>
+
+                      <ion-slide>
+                         <br>
+                         <div >
+                             <div class="pull-right">
+                             <button class="button button-small button-assertive button-outline" ng-click="wtweek()">1W</button>
+                             <button class="button button-small button-assertive button-outline" ng-click="wtmonth()">1M</button>
+                             <button class="button button-small button-assertive button-outline" ng-click="wtmonth3()">3M</button>
+                             <button class="button button-small button-assertive button-outline" ng-click="wtmonth6()">6M</button>
+                             </div>
+
+                             <br>
+                         <canvas id="line" class="chart chart-line" chart-legend = "true" chart-data="datawt"  chart-labels="labelswt"   chart-colours="colours" chart-series="serieswt" chart-options="optionswt" chart-dataset-override="datasetOverridewt" chart-click="onClick">
+             </canvas>
+                         </div>
+
+                             <br>
+
+
+</ion-slide>
                 </ion-slide-box>
 <ion-slide-box ng-if="trackername === 'Blood Sugar'">
          <ion-slide>
@@ -189,7 +199,7 @@
         <div class="col">
             <h5><b>RBS (Random Blood Sugar)</b></h5>
          <div class="row" ><input type="number" limit-to="3" placeholder=" MG/DL" ng-model="data.bloodsugar.rbs" ng-maxlength="3" required></div>
-       
+
                 </div>
                <rzslider rz-slider-model="data.bloodsugar.rbs"
                 rz-slider-options="data.bloodsugar.options"></rzslider>
@@ -212,15 +222,21 @@
                 </div>
          </ion-slide>
          <ion-slide>
-               <br> 
-             <div>
-          <canvas id="line" class="chart chart-line" chart-data="data1" chart-labels="labels" chart-colours="colours" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
-               </canvas>
-                 <br>
-               <button class="button  button-assertive" ng-click="test()">graph</button>
-           </div>
-        
-      			
+               <br>
+               <div>
+                   <div class="pull-right">
+                   <button class="button button-small button-assertive button-outline" ng-click="weekbs()">1W</button>
+                   <button class="button button-small button-assertive button-outline" ng-click="monthbs()">1M</button>
+                   <button class="button button-small button-assertive button-outline" ng-click="month3bs()">3M</button>
+                   <button class="button button-small button-assertive button-outline" ng-click="month6bs()">6M</button>
+                   </div>
+
+                   <br>
+               <canvas id="line" class="chart chart-line" chart-legend = "true" chart-data="data1"  chart-labels="labels"   chart-colours="colours" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+   </canvas>
+                   <!--button class="button  button-assertive" ng-click="wtgraph()">graph</button-->
+               </div>
+
                     </ion-slide>
                 </ion-slide-box>
 <ion-slide-box ng-if="trackername === 'Blood Pressure'">
@@ -251,16 +267,22 @@
                 rz-slider-options="data.bloodpressure.options"></rzslider>
   </div>
                    </ion-slide>
-                         <ion-slide>
-                             <br>
-                    <div>
-          <canvas id="line" class="chart chart-line"  chart-data="data1bp"   chart-labels="labelsbp"  chart-colours="colours" chart-series="seriesbp" chart-options="optionsbp" chart-dataset-override="datasetOverridebp" chart-click="onClickbp">
-               </canvas>
-                        <br>
-               <button class="button  button-assertive" ng-click="bpgraph()">graph</button>
-           </div>
-                         </ion-slide>    
-              
+                   <ion-slide>
+                       <br>
+         <div >
+             <div class="pull-right">
+             <button class="button button-small button-assertive button-outline" ng-click="weekbp()">1W</button>
+             <button class="button button-small button-assertive button-outline" ng-click="monthbp()">1M</button>
+             <button class="button button-small button-assertive button-outline" ng-click="month3bp()">3M</button>
+             <button class="button button-small button-assertive button-outline" ng-click="month6bp()">6M</button>
+             </div>
+
+             <br>
+             <canvas id="line" class="chart chart-line"  chart-data="data1bp"  chart-labels="labelsbp"  chart-colours="colours" chart-series="seriesbp" chart-legend = "true" chart-options="optionsbp" chart-dataset-override="datasetOverridebp" chart-click="onClickbp">
+                  </canvas>
+             <!--button class="button  button-assertive" ng-click="wtgraph()">graph</button-->
+         </div>
+                   </ion-slide>
                 </ion-slide-box>
 <div class="list" ng-if="trackername === 'Medication'" >
       				<div class="item item-divider">
@@ -324,7 +346,7 @@
             <button class="button button-assertive" ng-click="create()">Apply</button>
             </div>
       	</ion-content>
-           
+
       </ion-modal-view>
       </script>
 
@@ -349,7 +371,7 @@
            </ion-checkbox>
 
          </div>
-        
+
           <div class="pull-left">
               <button class="button-mini button-assertive" style="position:relative;left:21px"  ng-click="filterResetAll()">Reset All</button>
             </div>
@@ -362,10 +384,10 @@
            <div class="pull-center">
              <button class="button button-assertive" ng-click="filterapply()">Apply</button>
            </div>
-           
-        
+
+
        </ion-content>
      </ion-modal-view>
    </script>
-    
+
 </ion-view>

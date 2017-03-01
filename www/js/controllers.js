@@ -1,6 +1,6 @@
 angular.module('tracmyhealthappctrls', [])
 .controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicSideMenuDelegate','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb','ionicDatePicker','$filter','patientprflservice','DBA' , function($rootScope, $scope, $state,$ionicSideMenuDelegate,$ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb,ionicDatePicker,$filter, patientprflservice, DBA) {
-     
+
     /*Patient profile data*/
         $scope.patientId = '';
     $scope.patientprofiledata = {
@@ -98,7 +98,7 @@ angular.module('tracmyhealthappctrls', [])
             $rootScope.hideLoader();
             $rootScope.showToast('You have not updated anything in your profile','Long','top');
         }
-    };    
+    };
    //handle events and broadcasts such as error scenario to redirect user
    console.log('within AppCtrl current state -->'+JSON.stringify($state.current));
    $scope.$on('NoInternet' , function(event){
@@ -244,12 +244,12 @@ angular.module('tracmyhealthappctrls', [])
        myPopup.close();
     }
   };
-    
+
      //sidemenu addition
      $scope.toggleLeftSideMenu = function() {
       $ionicSideMenuDelegate.toggleLeft();
    };
-    
+
   $scope.urlForImage = function(imageName) {
     var trueOrigin = cordova.file.dataDirectory + imageName;
     return trueOrigin;
@@ -743,10 +743,10 @@ angular.module('tracmyhealthappctrls', [])
      $scope.filtersavailable = {
        "hospitalnames" : ["All"]
      };
-   
+
      $scope.filterSetAll = function(){
        $scope.appliedfilters.hospitalnameselected[0]=angular.copy("All");
-        
+
      };
 
      $scope.filterCancel = function(){
@@ -851,7 +851,7 @@ registrationdetsdb.query({}).then(function(response){
     $scope.patientId = result.appregistrationid;
     hospitalservice.getregHospitals($scope.patientId).then(function(data){
         $scope.$broadcast('scroll.refreshComplete');
-        $rootScope.hideLoader();  
+        $rootScope.hideLoader();
        if(data.status === 'SUCCESS'){
             $scope.listedentities = data;
             //before the data value lets take out duplicate hospitals from the list
@@ -987,7 +987,7 @@ $scope.reload = function(){
     	 }
     	};
 }])
-.controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb','$ionicPopover','$ionicFilterBar',function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb, $ionicPopover, $ionicFilterBar) {
+.controller('MyHealthCtrl', ['$scope', '$rootScope','$state', '$stateParams','$ionicModal','medicalprofileservice','$ionicPopup', 'DBA','registrationdetsdb','$ionicPopover','$ionicFilterBar','$filter',function($scope, $rootScope, $state, $stateParams, $ionicModal, medicalprofileservice,$ionicPopup, DBA, registrationdetsdb, $ionicPopover, $ionicFilterBar, $filter) {
       $scope.healthdetails = [];
       $scope.summary = {
          "weight" : {
@@ -1338,7 +1338,7 @@ $scope.fetchmyhealth();
           });
         };
     //end of search
-   
+
      function initDataCopy(){
             return {
                "weight" : {
@@ -1457,10 +1457,10 @@ $scope.fetchmyhealth();
               medicalprofiledatatosave["vaccination"] = {}
               medicalprofiledatatosave["vaccination"]["value"] = $scope.data.vaccination.value;
               medicalprofiledatatosave["vaccination"]["notes"] = $scope.data.vaccination.notes;
-              
+
               medicalprofiledatatosave["profile"] = {}
               medicalprofiledatatosave["profile"]["name"] = $scope.data.profile.name;
-             
+
 
               var medicalprofile = {
                   "data" : medicalprofiledatatosave
@@ -1503,13 +1503,13 @@ $scope.fetchmyhealth();
               $scope.data = initDataCopy();
             console.log($scope.healthdetails);
                //$scope.showhide = function(){
-   
-         
+
+
            }
-              
+
   	    };
-    
-   
+
+
 
         // Cleanup the modal when we're done with it!
        $scope.$on('$destroy', function() {
@@ -1523,7 +1523,7 @@ $scope.fetchmyhealth();
 
         });
 
-    
+
         $scope.enableTimeLine = function(details){
             return ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && $scope.appliedfilters.allergiesFilter != false && $scope.appliedfilters.allergiesFilter != null && $scope.appliedfilters.allergiesFilter != '' && $scope.appliedfilters.allergiesFilter != 0)
                           || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && $scope.appliedfilters.weightFilter != false && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != null && $scope.appliedfilters.weightFilter != 0 )
@@ -1535,211 +1535,504 @@ $scope.fetchmyhealth();
                           || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
                           );
         };
-     $scope.test = function(){
-           $scope.labels = [];
-         $scope.data1 = [];
-            var fbsarray = [];
-            var rbsarray = [];
-            var ppbsarray = [];
-            
-        
-            angular.forEach($scope.healthdetails, function(details, key){
-                angular.forEach(details.medicalprofile,function(medicalprofiledata,keyobj){
-                    //rbs value
-                    if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
-                        && typeof medicalprofiledata.profile[0].bloodsugar.rbs !== 'undefined'
-                        && medicalprofiledata.profile[0].bloodsugar.rbs !== ''
-                        && medicalprofiledata.profile[0].bloodsugar.rbs !== null){
-                        rbsarray.push(medicalprofiledata.profile[0].bloodsugar.rbs);
-                        }
-                     //fbs value
-                    if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
-                      && typeof medicalprofiledata.profile[0].bloodsugar.fbs !== 'undefined'
-                      && medicalprofiledata.profile[0].bloodsugar.fbs !== ''
-                      && medicalprofiledata.profile[0].bloodsugar.fbs !== null){
-                        fbsarray.push(medicalprofiledata.profile[0].bloodsugar.fbs);
-                    }
-                    //ppbs value
-                    if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
-                      && typeof medicalprofiledata.profile[0].bloodsugar.ppbs !== 'undefined'
-                      && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''
-                      && medicalprofiledata.profile[0].bloodsugar.ppbs !== null){
-                        ppbsarray.push(medicalprofiledata.profile[0].bloodsugar.ppbs);
-                    }
-                   
-                });
-            });
-               
-            $scope.data1.push(rbsarray);
-            $scope.data1.push(fbsarray);
-            $scope.data1.push(ppbsarray);
-           angular.forEach($scope.healthdetails, function(details, key){
-         if(typeof details.createdat  !== 'undefined'&& typeof details.createdat.month !== 'undefined'
-                  && details.createdat  !== ''
-                  &&details.createdat  !== null){ 
-           
-                 
-              $scope.labels.push(details.createdat.month);  
-            // console.log($scope.labelsbp);
-                  //}
-          
-         }
-        });
-        }
+        // 1 week blood sugar graph
+      $scope.weekbs = function(){
         $scope.labels = [];
-  $scope.series  = ['fbs', 'rbs', 'ppbs'];  
- $scope.data1 = [];
- $scope.onClick = function (points, evt) {
-   console.log(points, evt);
- };
- $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
- $scope.options = {
-   scales: {
-     yAxes: [
-       {
-         id: 'y-axis-1',
-         type: 'linear',
-         display: true,
-         position: 'left'
-       },
-       {
-         id: 'y-axis-2',
-         type: 'linear',
-         display: true,
-         position: 'right'
-       }
-     ]
-   }
- };
-    
-    $scope.serieswt = ['weight'];
-    $scope.labelswt = [];
-    $scope.datawt = [];
-    $scope.onClickwt = function (points, evt) {
-   console.log(points, evt);
- };
- $scope.datasetOverridewt = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
- $scope.optionswt = {
-   scales: {
-     yAxes: [
-       {
-         id: 'y-axis-1',
-         type: 'linear',
-         display: true,
-         position: 'left'
-       },
-       {
-         id: 'y-axis-2',
-         type: 'linear',
-         display: true,
-         position: 'right'
-       }
-     ]
-   }
- };
-    
-    $scope.wtgraph = function(){
- 
-          $scope.labelswt = [];
-    $scope.datawt = [];
-        var wtarray = [];
-        angular.forEach($scope.healthdetails, function(details, key){
-            angular.forEach(details.medicalprofile, function(medicalprofiledata, keyobj){
-             
-                
-                if(typeof medicalprofiledata.profile[0].weight !== 'undefined'
-                  && typeof medicalprofiledata.profile[0].weight.value !== 'undefined'
-                  && medicalprofiledata.profile[0].weight.value !== ''
-                  && medicalprofiledata.profile[0].weight.value !== null){
-                    if(medicalprofiledata.profile[0].weight.value < 500){
-                   wtarray.push(medicalprofiledata.profile[0].weight.value);
-                    }
-                   }
-                 
-           
-                
-            });
-        });
-        $scope.datawt.push(wtarray);
-       angular.forEach($scope.healthdetails, function(details, key){
-      
-           
-         if(typeof details.createdat  !== 'undefined'
-                && typeof details.createdat.month !== 'undefined' && details.createdat  !== '' && details.createdat  !== null){ 
+        $scope.data1 = [];
+             var fbsarray = [];
+             var rbsarray = [];
+             var ppbsarray = [];
+             $scope.yaxisbs = function(){
+             angular.forEach($scope.healthdetails, function(details, key){
+                 angular.forEach(details.medicalprofile,function(medicalprofiledata,keyobj){
+                     //rbs value
+                     if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
+                         && typeof medicalprofiledata.profile[0].bloodsugar.rbs !== 'undefined'
+                         && medicalprofiledata.profile[0].bloodsugar.rbs !== ''
+                         && medicalprofiledata.profile[0].bloodsugar.rbs !== null){
+                          if(medicalprofiledata.profile[0].bloodsugar.rbs < 400){
+                         rbsarray.push(medicalprofiledata.profile[0].bloodsugar.rbs);
+                         }
+                     }
+                      //fbs value
+                     if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
+                       && typeof medicalprofiledata.profile[0].bloodsugar.fbs !== 'undefined'
+                       && medicalprofiledata.profile[0].bloodsugar.fbs !== ''
+                       && medicalprofiledata.profile[0].bloodsugar.fbs !== null){
+                          if(medicalprofiledata.profile[0].bloodsugar.fbs < 400){
+                         fbsarray.push(medicalprofiledata.profile[0].bloodsugar.fbs);
+                     }
+                     }
+                     //ppbs value
+                     if(typeof medicalprofiledata.profile[0].bloodsugar !== 'undefined'
+                       && typeof medicalprofiledata.profile[0].bloodsugar.ppbs !== 'undefined'
+                       && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''
+                       && medicalprofiledata.profile[0].bloodsugar.ppbs !== null){
+                          if(medicalprofiledata.profile[0].bloodsugar.ppbs < 400){
+                         ppbsarray.push(medicalprofiledata.profile[0].bloodsugar.ppbs);
+                     }
+                     }
+                 });
+             });
+             $scope.data1.push(rbsarray);
+             $scope.data1.push(fbsarray);
+             $scope.data1.push(ppbsarray);
+ }
+             $scope.yaxisbs();
+             var weekdatesarray = [];
 
-             
-              $scope.labelswt.push(details.createdat.month);  
-          
-             
-            }  
-        });  
-  }
-    
- $scope.labelsbp = [];
-            $scope.seriesbp  = ['systolic', 'diastolic']; 
-            $scope.data1bp = []; 
-            $scope.onClickbp = function (points, evt) {
-   console.log(points, evt);
- };
-            $scope.datasetOverridebp = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
- $scope.optionsbp = {
-   scales: {
-     yAxes: [
-       {
-         id: 'y-axis-1',
-         type: 'linear',
-         display: true,
-         position: 'left'
-       },
-       {
-         id: 'y-axis-2',
-         type: 'linear',
-         display: true,
-         position: 'right'
-       }
-     ]
-   }
- }; 
-         
-    $scope.bpgraph = function(){
-         $scope.data1bp = []; 
-        $scope.labelsbp = [];
-                var sysarray = [];
-                var diastolicarray = [];
-                angular.forEach($scope.healthdetails, function(details, keybp){
-                    angular.forEach(details.medicalprofile, function(medicalprofiledata, keyobjbp){
-                        if(typeof medicalprofiledata.profile[0].bloodpressure !== 'undefined'
-                          && typeof medicalprofiledata.profile[0].bloodpressure.systolic !== 'undefined'
-                          && medicalprofiledata.profile[0].bloodpressure.systolic !== '' 
-                          && medicalprofiledata.profile[0].bloodpressure.systolic !== null){
-                            if(medicalprofiledata.profile[0].bloodpressure.systolic < 250){
-                            sysarray.push(medicalprofiledata.profile[0].bloodpressure.systolic);
-                            }
-                           }                          
-                        if(typeof medicalprofiledata.profile[0].bloodpressure !== 'undefined'
-                          && typeof medicalprofiledata.profile[0].bloodpressure.diastolic !== 'undefined'
-                          && medicalprofiledata.profile[0].bloodpressure.diastolic !== ''
-                          && medicalprofiledata.profile[0].bloodpressure.diastolic !== null){
-                            diastolicarray.push(medicalprofiledata.profile[0].bloodpressure.diastolic);
-                        }
-                    });
-                });
-                $scope.data1bp.push(sysarray);
-               $scope.data1bp.push(diastolicarray);
-         angular.forEach($scope.healthdetails, function(details, keycreate){
-          
-        if(typeof details.createdat  !== 'undefined' 
-           && typeof details.createdat.month !== 'undefined'
-           && details.createdat  !== ''
-           && details.createdat  !== null){
-
-            
-            $scope.labelsbp.push(details.createdat.month); 
-
-            
-           }    
-        });
+            var day = $filter('date')(new Date(), 'dd');
+            var month = $filter('date')(new Date(), 'MM');
+            var year = $filter('date')(new Date(), 'yyyy');
+            for(var i=0; i<7;i++){
+                weekdatesarray.push(getDate(year, month, day -i));
               }
+              function getDate(year, month, day){
+                   return new Date(year, month , day);
+                 }
+
+             angular.forEach($scope.healthdetails, function(details, key){
+             angular.forEach(weekdatesarray, function( value, key){
+               if( weekdatesarray[key].getDate() === details.createdat.day &&  weekdatesarray[key].getMonth()  === details.createdat.month&&   weekdatesarray[key].getFullYear() === details.createdat.year){
+                $scope.labels.push('');
+               }
+              });
+            });
+          }
+ //1 month blood sugar graph
+ $scope.monthbs = function(){
+     $scope.labels = [];
+     $scope.data1 = [];
+    var fbsarray = [];
+    var rbsarray = [];
+    var ppbsarray = [];
+
+       $scope.yaxisbs();
+       var montharray = [];
+       var day = $filter('date')(new Date(), 'dd');
+       var month = $filter('date')(new Date(), 'MM');
+       var year = $filter('date')(new Date(), 'yyyy');
+
+             function getDate(year, month, day){
+              return new Date(year, month , day);
+            }
+            for(var j=0; j<30 ;j++){
+              montharray.push(getDate(year, month, day -j));
+            }
+
+            angular.forEach($scope.healthdetails, function(details, key){
+              angular.forEach(montharray, function( value, key){
+                  if( montharray[key].getDate() === details.createdat.day &&  montharray[key].getMonth()  === details.createdat.month&&   montharray[key].getFullYear() === details.createdat.year){
+                    $scope.labels.push('');
+                }
+              });
+            });
+          }
+          // 3 months graph for blood sugar
+    $scope.month3bs = function(){
+    $scope.labels = [];
+    $scope.data1 = [];
+     var fbsarray = [];
+     var rbsarray = [];
+     var ppbsarray = [];
+     $scope.yaxisbs();
+     var montharray3 = [];
+      var day = $filter('date')(new Date(), 'dd');
+      var month = $filter('date')(new Date(), 'MM');
+      var year = $filter('date')(new Date(), 'yyyy');
+
+                function getDate(year, month, day){
+                 return new Date(year, month , day);
+               }
+
+               for(var k=0; k<90; k++){
+                 montharray3.push(getDate(year, month, day - k));
+               }
+
+               angular.forEach($scope.healthdetails, function(details, key){
+                      angular.forEach(montharray3, function( value, key){
+                        if( montharray3[key].getDate() === details.createdat.day &&  montharray3[key].getMonth()  === details.createdat.month&&   montharray3[key].getFullYear() === details.createdat.year){
+                      $scope.labels.push('');
+                    }
+                  });
+                });
+              }
+ //6 months for blood sugar
+
+ $scope.month6bs = function(){
+   $scope.labels = [];
+ $scope.data1 = [];
+    var fbsarray = [];
+    var rbsarray = [];
+    var ppbsarray = [];
+   $scope.yaxisbs();
+   var montharray6 = [];
+    var day = $filter('date')(new Date(), 'dd');
+    var month = $filter('date')(new Date(), 'MM');
+    var year = $filter('date')(new Date(), 'yyyy');
+
+     function getDate(year, month, day){
+              return new Date(year, month , day);
+            }
+            for(var l=0; l<180; l++){
+              montharray6.push(getDate(year, month, day - l));
+            }
+            angular.forEach($scope.healthdetails, function(details, key){
+              angular.forEach(montharray6, function( value, key){
+              if( montharray6[key].getDate() === details.createdat.day &&  montharray6[key].getMonth()  === details.createdat.month&&   montharray6[key].getFullYear() === details.createdat.year){
+                $scope.labels.push('');
+              }
+            });
+          });
+        }
+
+         $scope.labels = [];
+   $scope.series  = ['fbs', 'rbs', 'ppbs'];
+  $scope.data1 = [];
+  $scope.onClick = function (points, evt) {
+    console.log(points, evt);
+  };
+  // $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+  // $scope.options = {
+  //   scales: {
+  //     yAxes: [
+  //       {
+  //         id: 'y-axis-1',
+  //         label: '$scope.labels',
+  //         type: 'linear',
+  //         display: true,
+  //         position: 'left'
+  //       },
+  //       {
+  //         id: 'y-axis-2',
+  //         label: '$scope.labels',
+  //         type: 'linear',
+  //         display: true,
+  //         position: 'right'
+  //       }
+  //     ]
+  //   }
+  // };
+
+     $scope.serieswt = ['weight'];
+     $scope.labelswt = [];
+     $scope.datawt = [];
+     $scope.onClickwt = function (points, evt) {
+    console.log(points, evt);
+  };
+  // $scope.datasetOverridewt = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+  // $scope.optionswt = {
+  //   scales: {
+  //     yAxes: [
+  //       {
+  //         id: 'y-axis-1',
+  //         type: 'linear',
+  //         display: true,
+  //         position: 'left'
+  //       },
+  //       {
+  //         id: 'y-axis-2',
+  //         type: 'linear',
+  //         display: true,
+  //         position: 'right'
+  //       }
+  //     ]
+  //   }
+  // };
+ //6 months weight graph
+     $scope.wtmonth6 = function(){
+
+           $scope.labelswt = [];
+     $scope.datawt = [];
+         var wtarray = [];
+         $scope.yaxiswt();
+         var montharray6 = [];
+         var day = $filter('date')(new Date(), 'dd');
+         var month = $filter('date')(new Date(), 'MM');
+         var year = $filter('date')(new Date(), 'yyyy');
+          function getDate(year, month, day){
+               return new Date(year, month , day);
+             }
+
+             for(var l=0; l<180; l++){
+               montharray6.push(getDate(year, month, day - l));
+             }
+   angular.forEach($scope.healthdetails, function(details, key){
+     angular.forEach(montharray6, function( value, key){
+     if( montharray6[key].getDate() === details.createdat.day &&  montharray6[key].getMonth()  === details.createdat.month&&   montharray6[key].getFullYear() === details.createdat.year){
+       $scope.labelswt.push('');
+   }
+ });
+ });
+ }
+     //1 month for weight graph
+     $scope.wtmonth = function(){
+       $scope.labelswt = [];
+     $scope.datawt = [];
+     var wtarray = [];
+   $scope.yaxiswt();
+     var montharray = [];
+
+            var day = $filter('date')(new Date(), 'dd');
+            var month = $filter('date')(new Date(), 'MM');
+            var year = $filter('date')(new Date(), 'yyyy');
+
+
+   $scope.today = new Date();
+          function getDate(year, month, day){
+           return new Date(year, month , day);
+         }
+         for(var j=0; j<30 ;j++){
+           montharray.push(getDate(year, month, day -j));
+
+         }
+   angular.forEach($scope.healthdetails, function(details, key){
+     angular.forEach(montharray, function( value, key){
+       if( montharray[key].getDate() === details.createdat.day &&  montharray[key].getMonth()  === details.createdat.month&&   montharray[key].getFullYear() === details.createdat.year){
+                 $scope.labelswt.push('');
+             }
+           });
+         });
+       }
+ // 1 week graph for weight
+ $scope.wtweek = function(){
+   $scope.labelswt = [];
+ $scope.datawt = [];
+ var wtarray = [];
+ $scope.yaxiswt = function(){
+ angular.forEach($scope.healthdetails, function(details, key){
+     angular.forEach(details.medicalprofile, function(medicalprofiledata, keyobj){
+
+         if(typeof medicalprofiledata.profile[0].weight !== 'undefined'
+           && typeof medicalprofiledata.profile[0].weight.value !== 'undefined'
+           && medicalprofiledata.profile[0].weight.value !== ''
+           && medicalprofiledata.profile[0].weight.value !== null){
+             if(medicalprofiledata.profile[0].weight.value < 500){
+            wtarray.push(medicalprofiledata.profile[0].weight.value);
+             }
+            }
+
+
+     });
+ });
+
+ $scope.datawt.push(wtarray);
+ }
+ $scope.yaxiswt();
+
+ var weekdatesarray = [];
+
+        var day = $filter('date')(new Date(), 'dd');
+        var month = $filter('date')(new Date(), 'MM');
+        var year = $filter('date')(new Date(), 'yyyy');
+
+ $scope.today = new Date();
+
+     for(var i=0; i<7;i++){
+
+    weekdatesarray.push(getDate(year, month, day -i));
+
+      }
+
+      function getDate(year, month, day){
+       return new Date(year, month , day);
+     }
+         var getdatesarray = [];
+ angular.forEach($scope.healthdetails, function(details, key){
+  angular.forEach(weekdatesarray, function( value, key){
+    if( weekdatesarray[key].getDate() === details.createdat.day &&  weekdatesarray[key].getMonth()  === details.createdat.month&&   weekdatesarray[key].getFullYear() === details.createdat.year){
+    $scope.labelswt.push('');
+   }
+ });
+ });
+ }
+ // 3 month weight graph
+ $scope.wtmonth3 = function(){
+
+       $scope.labelswt = [];
+ $scope.datawt = [];
+     var wtarray = [];
+     $scope.yaxiswt();
+     var montharray3 = [];
+            var day = $filter('date')(new Date(), 'dd');
+            var month = $filter('date')(new Date(), 'MM');
+            var year = $filter('date')(new Date(), 'yyyy');
+             function getDate(year, month, day){
+           return new Date(year, month , day);
+         }
+
+         for(var k=0; k<90; k++){
+           montharray3.push(getDate(year, month, day - k));
+         }
+         angular.forEach($scope.healthdetails, function(details, key){
+           angular.forEach(montharray3, function( value, key){
+             if( montharray3[key].getDate() === details.createdat.day &&  montharray3[key].getMonth()  === details.createdat.month&&   montharray3[key].getFullYear() === details.createdat.year){
+                $scope.labelswt.push('');
+              }
+            });
+          });
+        }
+
+  $scope.labelsbp = [];
+             $scope.seriesbp  = ['systolic', 'diastolic'];
+             $scope.data1bp = [];
+             $scope.onClickbp = function (points, evt) {
+    console.log(points, evt);
+  };
+  //            $scope.datasetOverridebp = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+  // $scope.optionsbp = {
+  //   scales: {
+  //     yAxes: [
+  //       {
+  //         id: 'y-axis-1',
+  //         type: 'linear',
+  //         display: true,
+  //         position: 'left'
+  //       },
+  //       {
+  //         id: 'y-axis-2',
+  //         type: 'linear',
+  //         display: true,
+  //         position: 'right'
+  //       }
+  //     ]
+  //   }
+  // };
+ // 1 week bp graph
+     $scope.weekbp = function(){
+          $scope.data1bp = [];
+         $scope.labelsbp = [];
+                 var sysarray = [];
+                 var diastolicarray = [];
+                 $scope.yaxisbp = function(){
+                 angular.forEach($scope.healthdetails, function(details, keybp){
+                     angular.forEach(details.medicalprofile, function(medicalprofiledata, keyobjbp){
+                         if(typeof medicalprofiledata.profile[0].bloodpressure !== 'undefined'
+                           && typeof medicalprofiledata.profile[0].bloodpressure.systolic !== 'undefined'
+                           && medicalprofiledata.profile[0].bloodpressure.systolic !== ''
+                           && medicalprofiledata.profile[0].bloodpressure.systolic !== null){
+                             if(medicalprofiledata.profile[0].bloodpressure.systolic < 250){
+                             sysarray.push(medicalprofiledata.profile[0].bloodpressure.systolic);
+                             }
+                            }
+                         if(typeof medicalprofiledata.profile[0].bloodpressure !== 'undefined'
+                           && typeof medicalprofiledata.profile[0].bloodpressure.diastolic !== 'undefined'
+                           && medicalprofiledata.profile[0].bloodpressure.diastolic !== ''
+                           && medicalprofiledata.profile[0].bloodpressure.diastolic !== null){
+                             diastolicarray.push(medicalprofiledata.profile[0].bloodpressure.diastolic);
+                         }
+                     });
+                 });
+                 $scope.data1bp.push(sysarray);
+                $scope.data1bp.push(diastolicarray);
+              }
+              $scope.yaxisbp();
+                var weekdatesarray = [];
+                       var day = $filter('date')(new Date(), 'dd');
+                       var month = $filter('date')(new Date(), 'MM');
+                       var year = $filter('date')(new Date(), 'yyyy');
+                       for(var i=0; i<7;i++){
+                         weekdatesarray.push(getDate(year, month, day -i));
+                       }
+                       function getDate(year, month, day){
+                         return new Date(year, month , day);
+                       }
+                       angular.forEach($scope.healthdetails, function(details, key){
+                         angular.forEach(weekdatesarray, function( value, key){
+                           if( weekdatesarray[key].getDate() === details.createdat.day &&  weekdatesarray[key].getMonth()  === details.createdat.month&&   weekdatesarray[key].getFullYear() === details.createdat.year){
+                               $scope.labelsbp.push('');
+                             }
+                           });
+                         });
+                       }
+
+               //1 month bp
+               $scope.monthbp = function(){
+               $scope.data1bp = [];
+               $scope.labelsbp = [];
+               var sysarray = [];
+               var diastolicarray = [];
+               $scope.yaxisbp();
+               var montharray = [];
+
+                                 var day = $filter('date')(new Date(), 'dd');
+                                 var month = $filter('date')(new Date(), 'MM');
+                                 var year = $filter('date')(new Date(), 'yyyy');
+
+
+                           function getDate(year, month, day){
+                                return new Date(year, month , day);
+                              }
+                              for(var j=0; j<30 ;j++){
+                                montharray.push(getDate(year, month, day -j));
+
+                              }
+                        angular.forEach($scope.healthdetails, function(details, key){
+                          angular.forEach(montharray, function( value, key){
+                                    if( montharray[key].getDate() === details.createdat.day &&  montharray[key].getMonth()  === details.createdat.month&&   montharray[key].getFullYear() === details.createdat.year){
+                                      $scope.labelsbp.push('');
+                                  }
+
+                                       });
+                                       });
+
+                         }
+                         // 3 month graph for bp
+                         $scope.month3bp = function(){
+                              $scope.data1bp = [];
+                             $scope.labelsbp = [];
+                                     var sysarray = [];
+                                     var diastolicarray = [];
+                                     $scope.yaxisbp();
+
+                                    var montharray3 = [];
+                                           var day = $filter('date')(new Date(), 'dd');
+                                           var month = $filter('date')(new Date(), 'MM');
+                                           var year = $filter('date')(new Date(), 'yyyy');
+
+                                   function getDate(year, month, day){
+                                          return new Date(year, month , day);
+                                        }
+
+                                        for(var k=0; k<90; k++){
+                                          montharray3.push(getDate(year, month, day - k));
+                                        }
+                                    angular.forEach($scope.healthdetails, function(details, key){
+                                      angular.forEach(montharray3, function( value, key){
+                                              if( montharray3[key].getDate() === details.createdat.day &&  montharray3[key].getMonth()  === details.createdat.month&&   montharray3[key].getFullYear() === details.createdat.year){
+                                               $scope.labelsbp.push('');
+                                             }
+                                           });
+                                         });
+                                       }
+                 // 6 month bp graph
+
+                 $scope.month6bp = function(){
+                      $scope.data1bp = [];
+                     $scope.labelsbp = [];
+                             var sysarray = [];
+                             var diastolicarray = [];
+                             $scope.yaxisbp();
+
+                            var montharray6 = [];
+                            var day = $filter('date')(new Date(), 'dd');
+                            var month = $filter('date')(new Date(), 'MM');
+                            var year = $filter('date')(new Date(), 'yyyy');
+                            function getDate(year, month, day){
+                                  return new Date(year, month , day);
+                                }
+
+                                for(var l=0; l<180; l++){
+                                  montharray6.push(getDate(year, month, day - l));
+                                }
+                            angular.forEach($scope.healthdetails, function(details, key){
+                            angular.forEach(montharray6, function( value, key){
+                            if( montharray6[key].getDate() === details.createdat.day &&  montharray6[key].getMonth()  === details.createdat.month&&   montharray6[key].getFullYear() === details.createdat.year){
+                            $scope.labelsbp.push('');
+                            }
+                          });
+                        });
+                      }
 }])
 .controller('TermsCtrl',['$scope','$state','$ionicHistory', function($scope, $state, $ionicHistory){
       $scope.backButtonAction = function(){
@@ -1804,7 +2097,7 @@ $scope.fetchmyhealth();
 
        $scope.filterSetAll = function(){
          $scope.appliedfilters.patientnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.patientnames[0]));
-            console.log($scope.appliedfilters.patientnameselected[0]);  
+            console.log($scope.appliedfilters.patientnameselected[0]);
          $scope.appliedfilters.visittypeselected=JSON.parse(JSON.stringify($scope.filtersavailable.visittypes));
          console.log($scope.appliedfilters.visittypeselected); $scope.appliedfilters.hospitalnameselected[0]=JSON.parse(JSON.stringify($scope.filtersavailable.hospitalnames[0]));
            console.log($scope.appliedfilters.hospitalnameselected[0]);
@@ -2001,7 +2294,7 @@ $scope.fetchdata();
                               console.log('on click ok');
                             });
                       }else{
-                       $scope.$broadcast('scroll.refreshComplete');  
+                       $scope.$broadcast('scroll.refreshComplete');
                         $rootScope.hideLoader();
                         $rootScope.showPopup({
                           title : 'Error'
@@ -2243,7 +2536,7 @@ $scope.reloadNotifications=function(){
      		           title: 'Feedback',
      		           scope: $scope
                  });
-             
+
          	  //popup close
            	 $scope.closepopup = function(){
            		  myPopup.close();
@@ -2711,7 +3004,7 @@ $scope.docfetch();
       });
       $ionicHistory.clearHistory();
       $ionicHistory.clearCache();
-      
+
       var profiledata = loginservice.getProfileData();
       if(typeof profiledata !== 'undefined'){
         $scope.showDoctorsTab = profiledata.isdoctor;
@@ -2721,7 +3014,7 @@ $scope.docfetch();
    $scope.toggleLeftSideMenu = function() {
       $ionicSideMenuDelegate.toggleLeft();
    };
-    
+
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
     $scope.openImagesModal = function(index) {
