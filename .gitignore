@@ -4,3 +4,4 @@
 node_modules/
 platforms/
 plugins/
+/hooks/after_prepare/ionic-minify.js
