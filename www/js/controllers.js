@@ -718,6 +718,51 @@ angular.module('tracmyhealthappctrls', [])
     });
   });
 }])
+.controller('HealthtipsCtrl',['$scope','$http','$sce','$cordovaCalendar',function($scope, $http, $sce,$cordovaCalendar){
+    
+// $http.get('myjson.json').success(function (data){
+//    $scope.medianew = data.media.map(function (m) {
+//      m.url = $sce.trustAsResourceUrl(m.url);
+//        console.log(m.url);
+//      return m;
+//    });
+//    
+//  });    
+      $scope.event = {
+       summary : '',
+       location:'',
+       description :''
+ };  
+  $scope.createEvent = function(event){
+    // Add to calendar interactively (vs silently):
+    $cordovaCalendar.createEventInteractively({
+      title: event.summary,
+      location: event.location,
+      notes: event.description,
+     // startDate: startsAt,
+     // endDate: endsAt
+      startDate: new Date(2017, 0, 15, 18, 30, 0, 0, 0),
+            endDate: new Date(2015, 1, 17, 12, 0, 0, 0, 0)
+      
+    }).then(function (result) {
+       console.log("Event created successfully");
+    }, function (err) {
+       alert('Oops, something went wrong');
+    });
+  } 
+    
+ $http.get('example.json').success(function(data) {
+     $scope.phones = data.medias.map(function (m) {
+         console.log("my audio" + '' + $scope.phones);
+      m.video = $sce.trustAsResourceUrl(m.video);
+        console.log(m.video);
+      return m;
+    });
+});
+
+    
+}])
+
 .controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice','$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal,$ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
 
     $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{

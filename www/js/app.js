@@ -274,6 +274,17 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
     }
   })
   
+  .state('notified.healthtips', {
+    cache: true,
+    url: '/healthtips',
+    views: {
+        'health-tips': {
+          templateUrl: 'templates/healthtips.html',
+          controller: 'HealthtipsCtrl'
+        }
+    }
+  })
+  
   .state('logout', {
     cache:false,
     url: '/logout',

@@ -558,6 +558,7 @@ h1
 .row {
 
     padding: 0.1px;
+    margin-top: -4%;
     width: 100%;
     padding-left: 5px;
   }
@@ -1266,8 +1267,14 @@ div.item-text-wrap a{
 }
 
 hr.horizon {
-    border-top: 2px double #8c8b8b;
+    border-top: 0.1px double #8c8b8b;
     width: inherit;
     margin-left: auto;
      margin-right: auto;
+}
+//json image display
+.jsonimg {
+   display: block;
+    width: 100%;
+    height: 100%;  
 }
