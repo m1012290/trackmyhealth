@@ -1,6 +1,28 @@
 angular.module('tracmyhealthappctrls', [])
-.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicSideMenuDelegate','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb','ionicDatePicker','$filter','patientprflservice','DBA' , function($rootScope, $scope, $state,$ionicSideMenuDelegate,$ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb,ionicDatePicker,$filter, patientprflservice, DBA) {
-
+.controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicSideMenuDelegate','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb','ionicDatePicker','$filter','patientprflservice','DBA' ,'$cordovaCalendar', function($rootScope, $scope, $state,$ionicSideMenuDelegate,$ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb,ionicDatePicker,$filter, patientprflservice, DBA, $cordovaCalendar) {
+ /*Alarm notification*/
+    $scope.event = {
+       summary : '',
+       location:'',
+       description :''
+ };  
+  $scope.createEvent = function(event){
+    // Add to calendar interactively (vs silently):
+    $cordovaCalendar.createEventInteractively({
+      title: event.summary,
+      location: event.location,
+      notes: event.description,
+     // startDate: startsAt,
+     // endDate: endsAt
+      startDate: new Date(2017, 0, 15, 18, 30, 0, 0, 0),
+            endDate: new Date(2015, 1, 17, 12, 0, 0, 0, 0)
+      
+    }).then(function (result) {
+       console.log("Event created successfully");
+    }, function (err) {
+       alert('Oops, something went wrong');
+    });
+  } 
     /*Patient profile data*/
         $scope.patientId = '';
     $scope.patientprofiledata = {
@@ -718,7 +740,7 @@ angular.module('tracmyhealthappctrls', [])
     });
   });
 }])
-.controller('HealthtipsCtrl',['$scope','$http','$sce','$cordovaCalendar',function($scope, $http, $sce,$cordovaCalendar){
+.controller('HealthtipsCtrl',['$scope','$http','$sce',function($scope, $http, $sce){
     
 // $http.get('myjson.json').success(function (data){
 //    $scope.medianew = data.media.map(function (m) {
@@ -728,28 +750,7 @@ angular.module('tracmyhealthappctrls', [])
 //    });
 //    
 //  });    
-      $scope.event = {
-       summary : '',
-       location:'',
-       description :''
- };  
-  $scope.createEvent = function(event){
-    // Add to calendar interactively (vs silently):
-    $cordovaCalendar.createEventInteractively({
-      title: event.summary,
-      location: event.location,
-      notes: event.description,
-     // startDate: startsAt,
-     // endDate: endsAt
-      startDate: new Date(2017, 0, 15, 18, 30, 0, 0, 0),
-            endDate: new Date(2015, 1, 17, 12, 0, 0, 0, 0)
-      
-    }).then(function (result) {
-       console.log("Event created successfully");
-    }, function (err) {
-       alert('Oops, something went wrong');
-    });
-  } 
+     
     
  $http.get('example.json').success(function(data) {
      $scope.phones = data.medias.map(function (m) {
