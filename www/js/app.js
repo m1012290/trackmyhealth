@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealthappsvcs', 'tracmyhealthappdirectives', 'ngCordova', 'ionMdInput','ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista','btford.socket-io', 'pdf','rzModule','ionic-modal-select','chart.js'])
+angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealthappsvcs', 'tracmyhealthappdirectives', 'ngCordova', 'ionMdInput','ngMessages', 'ngTouch', 'jett.ionic.filter.bar', 'ionic-ratings', 'ion-floating-menu', 'ionic-datepicker','jett.ionic.scroll.sista','btford.socket-io', 'pdf','rzModule','ionic-modal-select','chart.js','ngImgCrop'])
 .run(['$ionicPlatform','$ionicPopup','NETWORK_STATES','$cordovaSQLite','registrationdetsdb','DBA','$state','$ionicHistory','$cordovaPush', '$rootScope', '$cordovaToast','$cordovaSplashscreen',function($ionicPlatform, $ionicPopup, NETWORK_STATES, $cordovaSQLite, registrationdetsdb, DBA, $state, $ionicHistory, $cordovaPush, $rootScope, $cordovaToast, $cordovaSplashscreen) {
   $ionicPlatform.ready(function() {
     if (window.StatusBar) {
@@ -137,11 +137,11 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         });
     }
   });
-    
+
   window.addEventListener("offline", function(){
     showToast($cordovaToast, 'No internet connectivity available', 'long', 'top');
   }, false);
-  
+
   $ionicPlatform.registerBackButtonAction(function(event) {
     console.log('printing state name-->'+$state.current.name);
     if ($state.current.name === 'login') { // your check here
@@ -154,7 +154,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
   window.addEventListener('native.keyboardshow', function(){
    document.body.classList.add('keyboard-open');
  });*/
-    
+
 }])
 
 
@@ -199,7 +199,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  
+
   /*
   .state('main.menu',{
 	  url:'/menu/:mobilenumber',
@@ -221,7 +221,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
 	  templateUrl: 'templates/tab-notified.html',
 	  data : {
 			   mobilenumber : ""
-    		},  
+    		},
       controller : function($scope, $state,loginservice){
         $scope.mobilenumber = $state.current.data.mobilenumber;
         console.log('$scope.mobilenumber within main ['+ $scope.mobilenumber + ']');
@@ -231,8 +231,8 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
 		  }
 	  })
-  
-  
+
+
   .state('notified.listedentities', {
     cache: true,
     url: '/listedentities',
@@ -273,7 +273,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  
+
   .state('notified.healthtips', {
     cache: true,
     url: '/healthtips',
@@ -284,7 +284,36 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  
+  // .state('notified.screening', {
+  //   cache: true,
+  //   url: '/screening',
+  //   views: {
+  //       'screening-tab': {
+  //         templateUrl: 'templates/screening.html',
+  //         controller: 'ScreeningCtrl'
+  //       }
+  //   }
+  // })
+  // .state('notified.screening.dataentry',{
+  //   cache : true,
+  //   url: '/dataentry',
+  //   views:{
+  //     'dataentry-tab':{
+  //       templateUrl: 'templates/dataentry.html',
+  //       controller: 'DataentryCtrl'
+  //           }
+  //   }
+  // })
+  // .state('notified.screening.registration',{
+  //   cache: true,
+  //   url: '/registration',
+  //   views:{
+  //     'reg-tab':{
+  //       templateUrl: 'templates/registration.html',
+  //       controller: 'RegistrationCtrl'
+  //     }
+  //   }
+  // })
   .state('logout', {
     cache:false,
     url: '/logout',
@@ -353,12 +382,12 @@ function checkForInternetConnection($ionicPlatform){
             networkState = navigator.connection.type;
         }
     });
-    
+
     return networkState;
 }
 
 function ionicAlertPopup($ionicPopup){
-    
+
     var alertPopup = $ionicPopup.alert({
              title: 'No Internet Connection',
              template: 'Please check your internet connectivity'

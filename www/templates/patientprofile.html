@@ -8,47 +8,60 @@
         <a href back-button><button class="button button-clear" ><i class="ion-android-arrow-back icon-btn-customize"></i></button></a>
     </ion-nav-buttons>
 <ion-content  class="padding" scroll-sista="subheader">
-<div class="list card subheader" style="background-color: #dd4b39;">
+<div class="list card subheader main_img_list_card" style="margin-left: -22%; padding-top:0px">
+          <ion-item class="fullscreen_img_card">
 
-          <ion-item style="color:#FFF">
-            <h2><strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2>
-              {{patientprofiledata.gender}}<br>
-               {{patientprofiledata.emailid}}<br>
-              {{patientprofiledata.mobilenumber}}
+           <!-- <object data="/img/abhi.JPG" type="image/png" style="width:50%">  -->
+           <!-- <img src="/img/abhi.JPG" /> -->
+           <img ng-src="{{croppedimage}}"  height="100%" width="82%"  style="margin-left:18%"/><br/>
+
+              <!-- <img ng-src=" {{'srcImage1'}}=='null' || '/img/default.JPG' " height="450px"  style="display: block;margin-top: -5%; margin-bottom: -5%; "/><br/> -->
+            <!-- </object> -->
+<!-- button class="button button-icon icon ion-ios-camera icon-left camera_icon_css" ng-click="selectImageSources()"></button -->
+
           </ion-item>
+          <button class="button button-icon icon ion-ios-camera icon-center camera_icon_css" ng-click="selectImages()" style="margin-left:4%"></button>
 </div>
+
+<h4><strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong>
+  <span class= "radio-icon ion-male" style="margin-left:28%"> {{patientprofiledata.gender}}  </span></h4>
+   {{patientprofiledata.emailid}}<br>
+  <span style="color:#ef473a">+91</span> {{patientprofiledata.mobilenumber}}
 
 <form name="patienprfl" class="simple-form" required>
 <div class="list">
-  <div class="card" ng-if="patientprofiledata.doctor">
-   <div class="item item-text-wrap">
-    Please contact your Hospital to update Your Licence Number
-   </div>
-		<ion-checkbox ng-model="patientprofiledata.doctor" ng-value="patientprofiledata.doctor" ng-disabled="true">Doctor</ion-checkbox>
-    <div ng-if="patientprofiledata.doctor" readonly>
-      <label class="item item-input item-floating-label">
-          <span class="input-label">Licence Number</span>
-   		    <input type="text" ng-model="patientprofiledata.licenseno" placeholder="Licence No"  readonly required>
-       </label>
-    </div></div>
   <label class="item item-input item-floating-label">
-        <span class="input-label">Alternate Mobile Number</span>
-    <input type="number" ng-model="patientprofiledata.alternatemobilenum" placeholder="Alternate Mobile Number" ng-minlength="10" ng-maxlength="10" required>
-  </label>
+      <span style="color:#3794b7">Alternate Mobile Number</span>
+  <input type="number" ng-model="patientprofiledata.alternatemobilenum" placeholder="Alternate Mobile Number" ng-minlength="10" ng-maxlength="10" required>
+</label>
      <label class="item item-input item-floating-label">
-             <span class="input-label">Alternate Email Address</span>
+             <span style="color:#3794b7">Alternate Email Address</span>
     <input type="email" ng-model="patientprofiledata.alternateemailid" placeholder= "Alternate Email address" required>
   </label>
 
   <label class="item item-input item-floating-label">
-             <span class="input-label">Date Of Birth</span>
+             <span style="color:#3794b7">Date Of Birth</span>
     <input type="text" ng-model="patientprofiledata.dateofbirth" placeholder="Date of Birth" ng-click="openDatePicker()" formatted-date format="medium" readonly>
   </label>
 
 	<label class="item item-input item-floating-label">
-        <span class="input-label">Address</span>
+        <span style="color:#3794b7">Address</span>
     <input type="text" ng-model="patientprofiledata.address" placeholder="Enter your Address">
-  </label>  
+  </label>
+
+  <div class="card" ng-if="patientprofiledata.doctor">
+   <div class="item item-text-wrap">
+     <i class = "icon icon ion-information-circled"></i>
+    <span style="color:red">Please contact your Hospital to update Your Licence Number</span>
+   </div>
+    <ion-checkbox ng-model="patientprofiledata.doctor" ng-value="patientprofiledata.doctor" ng-disabled="true">Doctor</ion-checkbox>
+    <div ng-if="patientprofiledata.doctor" readonly>
+      <label class="item item-input item-floating-label">
+          <span class="input-label">Licence Number</span>
+          <input type="text" ng-model="patientprofiledata.licenseno" placeholder="Licence No"  readonly required>
+       </label>
+    </div></div>
+
 </div>
   <div class="pull-center">
 			<button class="button button-assertive" ng-click="save(formData)">Submit</button>

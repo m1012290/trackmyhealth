@@ -49,7 +49,7 @@ html{
     color: #404040;
     background-image: radial-gradient(circle, #555555, #333333 80%);
   }
-  
+
  }
 .month{
     color:#d14836;
@@ -141,7 +141,7 @@ div .title.title-left.header-item
 }
 
 .item-input {
- 
+
   align-items: center;
   position: relative;
   overflow: hidden;
@@ -829,14 +829,20 @@ background-color: lightgray;
     font-size: 35px;
     padding-top: 21%;
 }
+.fa-user-o:before
+{
+
+    font-size: 35px;
+    padding-top: 21%;
+}
 .fa-pencil-square-o:before
 {
  font-size: 33px;
-    padding-top: 21%;   
+    padding-top: 21%;
 }
 .fa fa-h-square:before{
   font-size: 37px;
-    padding-top: 21%;  
+    padding-top: 21%;
 }
 .ion-android-more-vertical:before
 {
@@ -1230,7 +1236,7 @@ div.item-text-wrap a{
   border:solid 1px #f39c12;
   text-align:center;
   padding:16px 18px 14px;
-   
+
   margin: 5px;
    width: 70px;
   height: 70px;
@@ -1250,8 +1256,8 @@ div.item-text-wrap a{
   opacity:1;
     display: block;
     margin-left: auto;
-    margin-right: auto 
-}  
+    margin-right: auto
+}
 
 
 .container1-responsive{
@@ -1276,5 +1282,74 @@ hr.horizon {
 .jsonimg {
    display: block;
     width: 100%;
-    height: 100%;  
+    height: 100%;
+}
+
+.fullscreen_img_card{
+color:#FFF;
+padding-bottom: 0px;
+padding-top: 0px;
+padding-right: 0px;
+padding-left: 0px;
+height: 250px;
+}
+
+.main_img_list_card{
+  background-color: #dd4b39;
+   padding-bottom: 0px;
+      padding-top: 0px;
+      padding-right: 0px;
+      margin-right: -11px;
+      padding-left: 0px !important;
+       margin-top: 1px !important;
+}
+
+.camera_icon_css{
+  color:#ffffff;
+  padding-left: 50%;
+  text-align: center;
+}
+
+.img_crcl_span{
+width:80px;
+height:80px
+}
+.img_circle{
+//  background-image:url('/img/abhi.JPG');
+  border-radius:50%;
+   background-position:center center;
+   background-size:cover; width:100%;
+    height:100%;
+    margin-left: 85px;
+     border-color: white;
+     border-width: 3px;
+     border-style: solid;
+}
+
+.cropArea {
+  background: #E4E4E4;
+  overflow: hidden;
+  width:100%;
+  height:357px;
+}
+.ion-ios-paper-outline{
+  margin-top: 20px;
+}
+/* omr select sheet type select*/
+
+.sm-box {
+   background-color: #fff;
+margin-left: 15%;
+ margin-right: 15%;
+
+}
+
+.sm-radio {
+  display: inline-block;
+
+    border-radius: 8px;
+    padding: 4px;
+    margin-left: 5%;
+    margin-top: 2%;
+
 }

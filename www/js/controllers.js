@@ -1,11 +1,237 @@
 angular.module('tracmyhealthappctrls', [])
 .controller('AppCtrl', ['$rootScope', '$scope','$state','$ionicSideMenuDelegate','$ionicPopup','$ionicLoading','$cordovaToast','AUTH_EVENTS','$ionicHistory','registrationdetsdb','$ionicPopover','$cordovaCamera','$ionicModal','$cordovaFile','$ionicActionSheet','$cordovaFileTransfer','imagesservicedb','ionicDatePicker','$filter','patientprflservice','DBA' ,'$cordovaCalendar', function($rootScope, $scope, $state,$ionicSideMenuDelegate,$ionicPopup, $ionicLoading, $cordovaToast, AUTH_EVENTS,$ionicHistory, registrationdetsdb, $ionicPopover, $cordovaCamera, $ionicModal, $cordovaFile, $ionicActionSheet,$cordovaFileTransfer,imagesservicedb,ionicDatePicker,$filter, patientprflservice, DBA, $cordovaCalendar) {
+
+  // profile camera function
+    $scope.urlForImage = function(imageName) {
+      var trueOrigin = cordova.file.dataDirectory + imageName;
+      return trueOrigin;
+    };
+    if(!$scope.croppedimage)
+    {
+      $scope.croppedimage="/img/default.jpg";
+
+    };
+
+    $scope.selectImages = function(){
+    $scope.hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: 'Take a photo ' },
+        { text: 'Add photo from Gallery ' },
+        { text: 'Remove photo'}
+      ],
+      titleText: 'Add Profile Photo',
+      cancelText: 'Cancel',
+      buttonClicked: function(index) {
+        $scope.takeImages(index);
+      }
+    });
+  };
+  $scope.takeImages = function(type){
+    $scope.hideSheet();
+    $scope.source;
+    $scope.RemovePhoto;
+    if(type === 0){
+      $scope.source = Camera.PictureSourceType.CAMERA;
+    }
+    if(type === 1){
+      $scope.source = Camera.PictureSourceType.SAVEDPHOTOALBUM;
+    }
+
+    if(type ===2){
+
+      $scope.RemovePhoto=function() {
+
+
+      var confirmPopup = $ionicPopup.confirm({
+         title: 'remove photo',
+         template: 'Are you sure?'
+      });
+
+      confirmPopup.then(function(res) {
+         if(res) {
+            $scope.RemovePhoto1=(function(){
+              $scope.croppedimage="img/default.jpg";
+              $rootScope.showToast("profile photo removed successfully","long","top");
+              $state.go('patientprfl');
+              })();
+            // scope.RemovePhoto1();
+
+         } else {
+            console.log('Not sure!');
+         }
+      });
+
+   }
+      // $scope.RemovePhoto=function(){
+      //   $scope.croppedimage="img/default.jpg";
+      //   $rootScope.showToast("profile photo removed successfully","long","top");
+      //   $state.go('patientprofile');
+      //
+      // }
+    $scope.RemovePhoto();
+    }
+$state.go('patientprfl');
+    $scope.data = {
+      "filename" : "",
+      "tag" : "",
+      "description" : ""
+    };
+
+    var  options = {
+         quality: 60,
+         destinationType: Camera.DestinationType.FILE_URI,
+         sourceType: $scope.source,
+         allowEdit: false,
+         encodingType: Camera.EncodingType.JPEG,
+         mediaType: Camera.MediaType.PICTURE,
+         targetWidth: 800,
+         targetHeight: 600,
+        popoverOptions: CameraPopoverOptions,
+         saveToPhotoAlbum: false,
+        //  correctOrientation: true
+    };
+
+if(type!=2)
+{
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+
+      onImageSuccess1(imageData);
+
+      function onImageSuccess1(fileURI) {
+        createFileEntry1(fileURI);
+      }
+      function createFileEntry1(fileURI) {
+        window.resolveLocalFileSystemURL(fileURI, copyFile1, fail);
+
+      }
+      function copyFile1(fileEntry) {
+        var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
+        var newName = makeid() + name;
+       /* window.resolveLocalFileSystemURL("file:///storage/emulated/0/", function(dir) {*/
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+          fs.root.getDirectory("TracMyHealth",{create:true, exclusive:false}, function(direntry){
+             fileEntry.copyTo(
+               direntry,
+               newName,
+               onCopySuccess1,
+               function(err) {
+                  $rootScope.showToast("Copy to TracMyHealth directory failed","long","top");
+               }
+             );
+           }, fail);
+        },fail);
+      }
+
+      function onCopySuccess1(entry) {
+
+          // crop function read
+
+          $scope.myImage1='';
+          $scope.myCroppedImage1='';
+
+         entry.file(gotFile, fail);
+         function gotFile(file){
+             readDataUrl(file);
+         }
+         function readDataUrl(file) {
+           var reader = new FileReader();
+           reader.onloadend = function(evt) {
+               $scope['srcImage1']=entry.nativeURL;
+
+           };
+           reader.readAsDataURL(file);
+         }
+         function fail(evt) {
+           console.log(evt.target.error.code);
+         }
+
+         //crop end
+
+        $scope.$apply(function () {
+          $scope.srcImage1 = entry.nativeURL;
+          $scope.data.filename = entry.fullPath.substr(entry.fullPath.lastIndexOf('/') + 1);
+        });
+        $cordovaCamera.cleanup().then(function(){
+        },function(error){
+        });
+        cordova.plugins.MediaScannerPlugin.scanFile(entry.nativeURL, function(){
+          //$rootScope.showToast("Mediascannerplugin scan was successful","long","top");
+        }, function(err){
+          $rootScope.showToast("Couldn't complete the action due to "+err+", please try again","long","top");
+        });
+       $scope.openDocModal1();
+
+      }
+      function fail(err) {
+        $rootScope.showToast("Couldn't complete the action due to "+err+", please try again","long","top");
+      }
+      function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i=0; i < 5; i++) {
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+      }
+    }, function(err) {
+      $rootScope.showToast("Couldn't complete the action due to "+err+", please try again","long","top");
+    });
+  }
+  };
+
+
+
+
+
+  $scope.saveCapturedImage1 = function(){
+
+    $cordovaFile.writeFile(cordova.file.dataDirectory, "croppedimage", "base64", true)
+     .then(function (success) {
+       //successful
+       $scope.fileName = cordova.file.dataDirectory + croppedimage;
+     }, function (error) {
+         $rootScope.showToast('image captured successfully','Long','top');
+     });
+     $scope.closeDocModal1();
+}
+
+  $ionicModal.fromTemplateUrl('crop.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal1) {
+      $scope.documentmodal1 = modal1;
+  });
+  $scope.openDocModal1 = function() {
+      $scope.profilepicupdated = false;
+      $scope.documentmodal1.show();
+  }
+  $scope.closeDocModal1 = function() {
+    $scope.profilepicupdated = true;
+
+      $scope.documentmodal1.hide();
+  }
+  $scope.cancel= function() {
+    resultimage=$scope.previmg;
+    	$scope.documentmodal1.hide();
+
+	}
+
+$scope.updateProfilePic=function(){
+
+    $scope.closeDocModal();
+  // });
+}
+$scope.onimagecrop = function(resultimage){
+   if(!$scope.profilepicupdated)
+   $scope.croppedimage = resultimage;
+   $scope.previmg=$scope.croppedimage;
+};
  /*Alarm notification*/
     $scope.event = {
        summary : '',
        location:'',
        description :''
- };  
+ };
   $scope.createEvent = function(event){
     // Add to calendar interactively (vs silently):
     $cordovaCalendar.createEventInteractively({
@@ -16,13 +242,13 @@ angular.module('tracmyhealthappctrls', [])
      // endDate: endsAt
       startDate: new Date(2017, 0, 15, 18, 30, 0, 0, 0),
             endDate: new Date(2015, 1, 17, 12, 0, 0, 0, 0)
-      
+
     }).then(function (result) {
        console.log("Event created successfully");
     }, function (err) {
        alert('Oops, something went wrong');
     });
-  } 
+  }
     /*Patient profile data*/
         $scope.patientId = '';
     $scope.patientprofiledata = {
@@ -741,17 +967,17 @@ angular.module('tracmyhealthappctrls', [])
   });
 }])
 .controller('HealthtipsCtrl',['$scope','$http','$sce',function($scope, $http, $sce){
-    
+
 // $http.get('myjson.json').success(function (data){
 //    $scope.medianew = data.media.map(function (m) {
 //      m.url = $sce.trustAsResourceUrl(m.url);
 //        console.log(m.url);
 //      return m;
 //    });
-//    
-//  });    
-     
-    
+//
+//  });
+
+
  $http.get('example.json').success(function(data) {
      $scope.phones = data.medias.map(function (m) {
          console.log("my audio" + '' + $scope.phones);
@@ -761,9 +987,38 @@ angular.module('tracmyhealthappctrls', [])
     });
 });
 
-    
-}])
 
+}])
+// .controller('ScreeningCtrl',['$scope', '$filter', '$ionicModal',function($scope, $filter, $ionicModal){
+//
+// }])
+// .controller('DataentryCtrl',['$scope', '$filter', '$ionicModal','$http',function($scope, $filter, $ionicModal, $http){
+//   $scope.openModal = function() {
+//   $ionicModal.fromTemplateUrl('survey_form.html', {
+//     scope: $scope,
+//     animation: 'slide-in-up'
+//   }).then(function(modal) {
+//     $scope.modal = modal;
+//     $scope.modal.show();
+//   });
+// };
+// $scope.closeModal = function() {
+//   $scope.sdate = $filter('date')(new Date(),'dd-MM-yyyy');
+//   $scope.modal.remove();
+// };
+// $http.get('detail.json').success(function(data) {
+//     $scope.phones = data;
+//     console.log($scope.phones);
+// });
+//
+// }])
+// .controller('RegistrationCtrl',['$scope', '$filter', '$ionicModal', '$http', function($scope, $filter, $ionicModal, $http){
+// $http.get('registration.json').success(function(data){
+//   $scope.regform = data;
+//   console.log($scope.regform);
+//
+// });
+// }])
 .controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice','$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal,$ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
 
     $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{
@@ -1061,6 +1316,12 @@ $scope.reload = function(){
          "vaccination" : {
             "value" : "",
             "notes" : ""
+         },
+         "yogaactivity" : {
+        //   "yogatype" :"",
+           "sttime" : "",
+           "endtime":"",
+        //   "remarks": ""
          }
       };
 
@@ -1098,6 +1359,7 @@ $scope.fetchmyhealth();
           $rootScope.hideLoader();
          // if(data.status === 'SUCCESS'){
             $scope.healthdetails = data.data;
+            console.log($scope.healthdetails);
             if(data.summary !== '' && data.summary !== 0){
               $scope.summary = data.summary;
             }
@@ -1231,7 +1493,7 @@ $scope.fetchmyhealth();
             $scope.appliedfilters.backup.weightFilter=$scope.appliedfilters.weightFilter;
             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             $scope.healthFilterList[bloodsugarFilter].backupchecked=$scope.healthFilterList[bloodsugarFilter].checked;
- console.log($scope.healthFilterList[bloodsugarFilter].backupchecked);           $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
+          $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
             $scope.healthFilterList[vaccinationFilter].backupchecked=$scope.healthFilterList[vaccinationFilter].checked;
             $scope.healthFilterList[medicationFilter].backupchecked=$scope.healthFilterList[medicationFilter].checked;
             $scope.healthFilterList[allergiesFilter].backupchecked=$scope.healthFilterList[allergiesFilter].checked;
@@ -1452,9 +1714,11 @@ $scope.fetchmyhealth();
         $scope.tdate= new Date();
         //function to capture vitals as entered by the user
   	    $scope.create = function() {
+
           //check if the values are entered by user to proceed further to save the data
           if(($scope.data.weight.value === '' || $scope.data.weight.value === 0)
-             && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
+       
+                   && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
              && ($scope.data.bloodsugar.ppbs === '' || $scope.data.bloodsugar.ppbs === 0)
              && ($scope.data.bloodsugar.rbs === '' || $scope.data.bloodsugar.rbs === 0)
         && (($scope.data.bloodpressure.systolic === 0 || $scope.data.bloodpressure.systolic === '' )
@@ -1472,6 +1736,7 @@ $scope.fetchmyhealth();
               medicalprofiledatatosave["weight"] = {};
               medicalprofiledatatosave["weight"]["value"] = $scope.data.weight.value;
               medicalprofiledatatosave["weight"]["notes"] = $scope.data.weight.notes;
+  
               medicalprofiledatatosave["bloodsugar"] = {};
               if($scope.data.bloodsugar.rbs !== 0){
                   if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
@@ -1579,6 +1844,7 @@ $scope.fetchmyhealth();
                           || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
                           || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
                           || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
+
                           );
         };
         // 1 week blood sugar graph
@@ -2330,6 +2596,7 @@ $scope.fetchdata();
                         $scope.$broadcast('scroll.refreshComplete');
                         $rootScope.hideLoader();
                         $scope.visitinfo = data.data;
+                    
                     }).catch(function(error){
                       if(error.status === 404){
                         $scope.$broadcast('scroll.refreshComplete');
