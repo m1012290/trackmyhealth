@@ -1,14 +1,12 @@
 <ion-view view-title="" name="listed-entities-view">
     <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()"> 
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
             <i class="icon ion-navicon " menu-toggle = "left" ></i>
         </button>
     </ion-nav-buttons>
-    
+
         <ion-nav-buttons side="right">
-             <button class="button button-clear" ng-click="createEvent(event)">
-                 <i class="ion-android-alarm-clock icon-btn-customize"></i>
-       </button>
+
         <button class="button button-clear" ng-click="filterDetails()">
               <div ng-switch on="appliedfilters.isFilterApplied">
                     <div ng-switch-when="true">
@@ -19,12 +17,16 @@
                     </div>
               </div>
         </button>
-         <button class="button button-clear" ng-click="selectImageSource()">
-                <i class=" ion-camera icon-btn-customize"></i>
-         </button>
         <button class="button button-clear" ng-click="showFilterBar()">
                  <i class=" ion-search icon-btn-customize"></i>
         </button>
+        <button class="button button-clear" ng-click="createEvent(event)">
+            <i class="ion-android-alarm-clock icon-btn-customize"></i>
+  </button>
+         <button class="button button-clear" ng-click="selectImageSource()">
+                <i class=" ion-camera icon-btn-customize"></i>
+         </button>
+
         <!--button class="button button-clear" on-touch="openPopover($event)">
                  <i class="ion-android-more-vertical icon-btn-customize"></i>
          </button-->
@@ -38,7 +40,7 @@
             <ion-item ng-repeat="entity in hospitalslist track by $index" class="item item-avatar item-remove-animate">
 <span class="circle-span" style ="background-color: #D14836"; ng-click="hosinfo(entity._id, entity.hospitalcode)">{{entity.hospitalname|limitTo:1}}
                 </span>
-         
+
                    <a href="#/notified/allnotifications/{{entity._id}}" class="item item-text-wrap item-avatar item-icon-right"  nav-direction="enter">
                         <h3>{{entity.hospitalname}}</h3>
                         <i class="icon ion-arrow-right-b assertive"></i>
@@ -65,7 +67,7 @@
             </div>
             <div class="item-text-wrap">
                 <p><a href="tel:{{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}" > {{ hos.hospitaltelnumber}}{{hos.hospitalmobnumber}}</a></p>
-                 
+
             </div>
             <div class="item item-divider">
                 <h4>Email : </h4>
@@ -111,21 +113,21 @@
          <br>
          <span class="item-input">
            <label class="input-label-filter">Hospital Name</label>
-               </span> 
+               </span>
              <button class="button button-full"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
                  <h5><span ng-bind="appliedfilters.hospitalnameselected"></span></h5>
     <div class="option">
         {{option}}
     </div>
 </button>
-         
+
              <br>
          <!--div class="pull-right">
            <button class="button-mini button-assertive" style="position:relative;right:21px" ng-click="filterSetAll()">Set All</button>
          </div-->
          <br>
-         <br>           
-           
+         <br>
+
          <div class="pull-center">
            <button class="button button-assertive" ng-click="filterapply()">Apply</button>
          </div>
@@ -134,4 +136,3 @@
   </script>
 
 </ion-view>
- 

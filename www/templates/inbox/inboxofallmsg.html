@@ -1,14 +1,12 @@
 <ion-view view-title="" name="all-notifications-view">
      <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()"> 
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
             <i class="icon ion-navicon " menu-toggle = "left" ></i>
         </button>
     </ion-nav-buttons>
 
 <ion-nav-buttons side="right">
-     <button class="button button-clear" ng-click="createEvent(event)">
-                 <i class="ion-android-alarm-clock icon-btn-customize"></i>
-       </button>
+
     <button class="button button-clear"  ng-click="filterdetails()">
             <div ng-switch on="appliedfilters.isFilterApplied">
                <div ng-switch-when="true">
@@ -19,12 +17,16 @@
                </div>
              </div>
     </button>
+    <button class="button button-clear" ng-click="showFilterBar()">
+     <i class=" ion-search icon-btn-customize"></i>
+    </button>
+    <button class="button button-clear" ng-click="createEvent(event)">
+                <i class="ion-android-alarm-clock icon-btn-customize"></i>
+      </button>
            <button class="button button-clear" ng-click="selectImageSource()">
                  <i class=" ion-camera icon-btn-customize"></i>
             </button>
-            <button class="button button-clear" ng-click="showFilterBar()">
-             <i class=" ion-search icon-btn-customize"></i>
-            </button>
+
              <!--button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
              </button-->
@@ -38,8 +40,10 @@
 <p>
       <button class="button-clear" ng-click="showMyPopup(visit.visitid.hospitalid, visit.visitid._id, visit.visitid.patientregprofiles)">  <i class="fa  fa-star-half-o assertive" aria-hidden="true" ></i>
     </button>
-    <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}</i>&nbsp;&nbsp; <button class="button-clear" ng-click="patientdetails(visit._id)" ><i class="icon ion-arrow-right-b assertive" ></i></button></p>
+    <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}  </i>&nbsp;&nbsp; <button class="button-clear" ng-click="patientdetails(visit._id)" ><i class="icon ion-arrow-right-b assertive" ></i></button></p>
+    <!-- <strong style="color:#d14836">{{visit.visitid.admissiondate|date: "dd MMM yy"}} </strong> {{visit.patientregprofiles.firstname}} {{visit.patientregprofiles.lastname}}<i style="font-style: italic;"> {{visit.hospitalid.hospitalname}}  </i>&nbsp;&nbsp; <button class="button-clear" ng-click="getdetails(visit._id)" ><i class="icon ion-arrow-right-b assertive" ></i></button></p> -->
 
+<p><b>Doctor id :</b> {{visit.visitid.doctorid}}</p>
 <p> <b>Visit :</b> {{visit.visitid.ipadmissionno}} {{visit.visitid.visittype}} {{visit.visitid.wardinfo}}</p>
 <p><b>Notification :</b>{{visit.notificationtext}} <button class="button button-clear pull-right" ng-show="visit.documentmetadata && visit.documentmetadata.docname !==null && visit.documentmetadata.docname !==''" ng-click="downloaddocument(visit)" style="color:blue;">Report</button></p></div>
 </ion-content>
@@ -88,10 +92,15 @@
 
          <ion-slide>
       <div class="list card" style=" padding-top:25px;">
+
           <div class="item item-divider"> <h2><strong>Visit Details
               </strong>
       </h2></div>
-
+      <div class="item item-divider"><h4>
+          Doctor name :</h4></div>
+            <div class="item-text-wrap"><p>
+                {{visitdata.visitdetails.docname}} </p>
+            </div>
            <div class="item item-divider" >
                <h4> IP Admission No :</h4></div>
          <div class="item-text-wrap"><p>
@@ -155,6 +164,7 @@
 
            <ion-slide>
        <div class="list card" style="padding-top:25px;">
+
           <div class="item item-divider"> <h2><strong>Patient Details </strong></h2></div>
             <div class="item item-divider"><h4>
                 Patient :</h4>
@@ -206,24 +216,24 @@
           <span class="item-input">
               <label class="input-label-filter">Patient Name</label> </span>
               <!--select ng-model="appliedfilters.patientnameselected" ng-options="pname for pname in filtersavailable.patientnames">
-              <select-->               
+              <select-->
 
               <button class="button button-full"   modal-select ng-model="appliedfilters.patientnameselected" multiple="true" placeholder="select it" options="filtersavailable.patientnames" modal-title="Patient Name" has-search="true">
                 <h5><span ng-bind="appliedfilters.patientnameselected"></span></h5>
     <div class="option">
         {{option}}
     </div>
-</button>  
-         
+</button>
+
             <span class="item-input">
            <label class="input-label-filter">Visit Type</label> </span>
             <button class="button button-full"  modal-select ng-model="appliedfilters.visittypeselected" multiple="true" options="filtersavailable.visittypes" modal-title="Visit Type" has-search="true">
   <h5><span ng-bind="appliedfilters.visittypeselected"></span></h5>
     <div class="option">
-        {{option}} 
+        {{option}}
     </div>
-</button> 
-        
+</button>
+
                   <span class="item-input">
                       <label class="input-label-filter">Hospital Name</label></span>
         <button class="button button-full"  modal-select ng-model="appliedfilters.hospitalnameselected" multiple="true" options="filtersavailable.hospitalnames" modal-title="Hospital Name" has-search="true">
@@ -231,10 +241,10 @@
     <div class="option">
         {{option}}
     </div>
-</button> 
-                
-            
-            
+</button>
+
+
+
           <span class="item-input">
               <label class="input-label-filter">Attachments?</label>
               <ion-checkbox class="item-checkbox-filter" style="position:relative;right:20px" ng-model="appliedfilters.docswithattachment">

@@ -25,6 +25,7 @@
     <link href="lib/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <link href="lib/angularjs-slider-master/dist/rzslider.css" rel="stylesheet">
     <link href="lib/ionic/js/angular-chart.js-master/dist/angular-chart.css" rel="stylesheet">
+    <link href="lib/ion-datetime-picker/release/ion-datetime-picker.min.css" rel="stylesheet">
           <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
@@ -56,6 +57,7 @@
       <script src="lib/ionic/js/angular-chart.js-master/dist/angular-chart.min.js"></script>
             <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
+    <script src="lib/ion-datetime-picker/release/ion-datetime-picker.min.js"></script>
 
 
 
@@ -98,7 +100,7 @@
             <ion-item style="color:#fff; margin-left:20px; margin-right:20px;padding-top: 43px;" >
 <h2 style="color:#fff"> <strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2>
          {{patientprofiledata.emailid}}<br>
-        {{patientprofiledata.mobilenumber}}&nbsp;  <a menu-close href="#/patientprfl"> <i class="icon ion-edit"></i></a>
+        +91 {{patientprofiledata.mobilenumber}}&nbsp;  <a menu-close href="#/patientprfl"> <i class="icon ion-edit"></i></a>
             </ion-item>
        </div>
 

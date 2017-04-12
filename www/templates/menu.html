@@ -1,12 +1,12 @@
-<ion-view view-title="Home Page" name="menu-views">
-<ion-content  class="padding loginInner-responsive"><br> 
+<ion-view view-title="Home Page" style="text-align:center" name="menu-views">
+<ion-content  class="padding loginInner-responsive"><br>
          <img src="img/appicon_whitecircle_2300.png" class="img1-responsive"/>
-         <h4 class="mycolor">Health Matters</h5>
-     
+         <h4 class="mycolor">Health Matters</h4>
+
            <br><div class="example1" responsive><br>
            <div class="row">
                <div class="col">
-       <a href="#/notified/listedentities" > 
+       <a href="#/notified/listedentities" >
            <div class="example">
    <i class="icon fa fa-hospital-o light"></i>
            </div></a></div>
@@ -15,18 +15,31 @@
  <i class="icon fa fa-envelope light"></i>
                 </div></a></div>
            </div>
-   <div class="row"><div class="col col-offset-30">
-        <a href="#/notified/healthtips"><div class="example">
-            <i class="icon fa fa-bell-o"></i></div></a></div>
-    </div>
+
     <div class="row">
       <div class="col"><a href="#/notified/myhealth" ><div class="example">
     <i class="icon fa fa-file-text light"></i>
-          </div></a></div>
-   <div class="col" ng-if="showDoctorsTab" ><a href="#/notified/doctortab"  ><div class="example">
-    <i class="icon fa fa-user-md light"></i>
-        </div></a></div></div>
+          </div></a>
         </div>
-     
+        <div class="col">
+     <a href="#/notified/screening" ><div class="example">
+  <i class="icon fa fa-file-o light"></i>
+         </div></a></div>
+    </div>
+    <div class="row">
+       <div class="col ">
+        <a href="#/notified/healthtips"><div class="example">
+            <i class="icon fa fa-commenting-o"></i></div></a>
+       </div>
+       <div class="col"  ng-if="showDoctorsTab"  ><a href="#/notified/doctortab"  >
+           <div class="example">
+        <i class="icon fa fa-user-md light"></i>
+            </div></a>
+            </div>
+
+
+    </div>
+        </div>
+
            	</ion-content>
 </ion-view>

@@ -1,27 +1,30 @@
 <ion-view view-title="" name="health-tips-view">
     <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()"> 
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
             <i class="icon ion-navicon " menu-toggle = "left" ></i>
         </button>
     </ion-nav-buttons>
-    
+
         <ion-nav-buttons side="right">
-       
+
             <button class="button button-clear" ng-click="createEvent(event)">
                  <i class="ion-android-alarm-clock icon-btn-customize"></i>
        </button>
          <button class="button button-clear" ng-click="selectImageSource()">
                 <i class=" ion-camera icon-btn-customize"></i>
          </button>
-        
+
 
 </ion-nav-buttons>
             <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
         <div class="list" ng-repeat="detaile in phones track by $index">
-          <div class="card" > <p> {{detaile.name}} </p></div>
-           <div class="card">  <iframe  ng-src="{{detaile.video}}" width="420" height="345" frameborder="0" allowfullscreen>
+          <div class="pull-center"><button class="button button-small ">{{detaile.date1}}</button> </div>  <div class="card" > <p> {{detaile.name}} </p></div><br>
+          <!-- <div class="month">{{detaile.date2}}</div> -->
+          <div class="pull-center"><button class="button button-small ">{{detaile.date2}}</button> </div><div class="card">  <iframe  ng-src="{{detaile.video}}" width="420" height="345" frameborder="0" allowfullscreen>
                  </iframe></div>
-           <div class="card">  <img class="jsonimg" ng-src="{{detaile.img}}" />
-          </div></div>
+                 <br>
+             <div class="pull-center"><button class="button button-small ">{{detaile.date3}}</button> </div><div class="card">  <img class="jsonimg" ng-src="{{detaile.img}}" />
+          </div>
+        </div>
 </ion-content>
 </ion-view>

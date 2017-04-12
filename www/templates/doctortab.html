@@ -1,13 +1,11 @@
 <ion-view view-title="" name="doctortab">
      <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()"> 
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
             <i class="icon ion-navicon " menu-toggle = "left" ></i>
         </button>
     </ion-nav-buttons>
         <ion-nav-buttons side="right" >
-             <button class="button button-clear" ng-click="createEvent(event)">
-                 <i class="ion-android-alarm-clock icon-btn-customize"></i>
-       </button>
+
           <button class="button button-clear" ng-click="filterdetails()">
                 <div ng-switch on="appliedfilters.isFilterApplied">
                     <div ng-switch-when="true">
@@ -18,12 +16,17 @@
                     </div>
                 </div>
             </button>
-            <button class="button button-clear" ng-click="selectImageSource()">
-               <i class=" ion-camera icon-btn-customize"></i>
-            </button>
+
             <button class="button button-clear" ng-click="showFilterBar()">
              <i class=" ion-search icon-btn-customize"></i>
             </button>
+            <button class="button button-clear" ng-click="createEvent(event)">
+                <i class="ion-android-alarm-clock icon-btn-customize"></i>
+      </button>
+            <button class="button button-clear" ng-click="selectImageSource()">
+               <i class=" ion-camera icon-btn-customize"></i>
+            </button>
+
             <!--button class="button button-clear" on-touch="openPopover($event)">
                 <i class="ion-android-more-vertical icon-btn-customize" ></i>
             </button-->
@@ -87,7 +90,7 @@
         {{option}}
     </div>
               </button>
-     
+
           <span class="item-input">
               <label class="input-label-filter">Attachments?</label>
               <ion-checkbox class="item-checkbox-filter" style="position:relative;right:20px" ng-model="appliedfilters.docswithattachment">

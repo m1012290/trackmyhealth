@@ -1,19 +1,30 @@
 {
-  "medias": [  
+  "medias": [
       {
+        "date1":"April 11,2016",
         "name": "Copy your kitty: Learn to do stretching exercises when you wake up. It boosts circulation and digestion, and eases back pain.",
+          "date2":"April 10,2016",
         "img": "https://s-media-cache-ak0.pinimg.com/236x/5d/70/41/5d7041724d457351782f0461af455dc3.jpg",
+          "date3":"April 9,2016",
         "video": "https://www.youtube.com/embed/Yk7Vqsv8lzU"},
-          
-      
-        {"name": "Don’t skip breakfast. Studies show that eating a proper breakfast is one of the most positive things you can do if you are trying to lose weight. Breakfast skippers tend to gain weight. A balanced breakfast includes fresh fruit or fruit juice, a high-fibre breakfast cereal, low-fat milk or yoghurt, wholewheat toast, and a boiled egg.",
+
+
+        {
+             "date1":"April 8,2016",
+            "name": "Don’t skip breakfast. Studies show that eating a proper breakfast is one of the most positive things you can do if you are trying to lose weight. Breakfast skippers tend to gain weight. A balanced breakfast includes fresh fruit or fruit juice, a high-fibre breakfast cereal, low-fat milk or yoghurt, wholewheat toast, and a boiled egg.",
+             "date2":"April 7,2016",
         "img": "https://s-media-cache-ak0.pinimg.com/236x/10/5c/5c/105c5cba5ba91458cf2ca18450e7e36c.jpg",
+             "date3":"April 6,2016",
            "video": "https://www.youtube.com/embed/QTYiedxaolQ"},
-          
-      
-        {"name": "Pure water. Don’t have soft drinks or energy drinks while you're exercising. Stay properly hydrated by drinking enough water during your workout (just don't overdo things, as drinking too much water can also be dangerous). ",
+
+
+        {
+             "date1":"April 5,2016",
+            "name": "Pure water. Don’t have soft drinks or energy drinks while you're exercising. Stay properly hydrated by drinking enough water during your workout (just don't overdo things, as drinking too much water can also be dangerous). ",
+             "date2":"April 4,2016",
         "img": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ73W1NC7AE5rb4TGlEwT7JT7WmzeZT6dE5m1OEN9_xRpH9TrTbRw",
+             "date3":"April 3,2016",
           "video": "https://www.youtube.com/embed/uRJ71HLcKmI"}
-      
+
 ]
 }

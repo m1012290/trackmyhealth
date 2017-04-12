@@ -8,7 +8,8 @@ angular.module('tracmyhealthappctrls', [])
     };
     if(!$scope.croppedimage)
     {
-      $scope.croppedimage="/img/default.jpg";
+
+      $scope.croppedimage=  '/img/default.jpg';
 
     };
 
@@ -255,6 +256,7 @@ $scope.onimagecrop = function(resultimage){
       "firstname"        : "",
       "lastname"         : "",
       "emailid"          : "",
+      "cntrynum"         : "",
       "mobilenumber"     : "",
       "gender"           : "",
       "alternateemailid" : "",
@@ -284,6 +286,7 @@ $scope.onimagecrop = function(resultimage){
                   "firstname" : data.data.firstname,
                   "lastname"  : data.data.lastname,
                   "emailid"   : data.data.emailid,
+                  "cntrynum"  : data.data.cntrynum,
                   "mobilenumber" : data.data.mobilenumber,
                   "gender"    : data.data.gender,
                   "address"   : typeof data.data.address !== 'undefined' ?  data.data.address.addressline1 : "",
@@ -863,6 +866,7 @@ $scope.onimagecrop = function(resultimage){
 		$scope.formData.push({
 		firstname: fdata.firstname,
     lastname:fdata.lastname,
+    cntrynum:fdata.cntrynum,
     mobnum:fdata.mobnum,
     emailadd:fdata.emailadd,
     password:fdata.password,
@@ -911,7 +915,7 @@ $scope.onimagecrop = function(resultimage){
 	  var mobile = $scope.formData.mobnum.toString();
     $rootScope.showLoader();
     if($scope.formData.doctor == true){
-       signupservice.registerDoctor($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
+       signupservice.registerDoctor($scope.formData.firstname,$scope.formData.lastname,$scope.formData.cntrynum,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor, $scope.formData.licenceNo,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
          $rootScope.hideLoader();
          $scope.closeModal2();
          $rootScope.showToast('Registration successful','long','top');
@@ -927,7 +931,7 @@ $scope.onimagecrop = function(resultimage){
         	});
         });
 	  }else{
-		    signupservice.registerPatient($scope.formData.firstname,$scope.formData.lastname,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
+		    signupservice.registerPatient($scope.formData.firstname,$scope.formData.lastname,$scope.formData.cntrynum,$scope.formData.gender,$scope.formData.emailadd,mobile,$scope.formData.address,$scope.formData.age,$scope.formData.dob,$scope.formData.doctor,$scope.security.otpsms, $scope.security.otpemail, $scope.formData.password).then(function(data){
           $rootScope.hideLoader();
           $scope.closeModal2();
           $rootScope.showToast('Registration successful','long','top');
@@ -989,36 +993,71 @@ $scope.onimagecrop = function(resultimage){
 
 
 }])
-// .controller('ScreeningCtrl',['$scope', '$filter', '$ionicModal',function($scope, $filter, $ionicModal){
-//
-// }])
-// .controller('DataentryCtrl',['$scope', '$filter', '$ionicModal','$http',function($scope, $filter, $ionicModal, $http){
-//   $scope.openModal = function() {
-//   $ionicModal.fromTemplateUrl('survey_form.html', {
-//     scope: $scope,
-//     animation: 'slide-in-up'
-//   }).then(function(modal) {
-//     $scope.modal = modal;
-//     $scope.modal.show();
-//   });
-// };
-// $scope.closeModal = function() {
-//   $scope.sdate = $filter('date')(new Date(),'dd-MM-yyyy');
-//   $scope.modal.remove();
-// };
-// $http.get('detail.json').success(function(data) {
-//     $scope.phones = data;
-//     console.log($scope.phones);
-// });
-//
-// }])
-// .controller('RegistrationCtrl',['$scope', '$filter', '$ionicModal', '$http', function($scope, $filter, $ionicModal, $http){
-// $http.get('registration.json').success(function(data){
-//   $scope.regform = data;
-//   console.log($scope.regform);
-//
-// });
-// }])
+.controller('ScreeningCtrl',['$scope', '$filter', '$ionicModal','$http',function($scope, $filter, $ionicModal, $http){
+  $scope.openModal = function() {
+  $ionicModal.fromTemplateUrl('screening.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+    $scope.modal.show();
+  });
+};
+$scope.closeModal = function() {
+
+  $scope.modal.remove();
+};
+
+$scope.openModalreg = function() {
+$ionicModal.fromTemplateUrl('registration.html', {
+  scope: $scope,
+  animation: 'slide-in-up'
+}).then(function(modal) {
+  $scope.modal = modal;
+  $scope.modal.show();
+});
+};
+$scope.closeModalreg = function() {
+
+$scope.modal.remove();
+};
+$http.get('detail.json').success(function(data) {
+    $scope.phones = data;
+    console.log($scope.phones);
+});
+$http.get('registration.json').success(function(data){
+  $scope.regform = data;
+  console.log($scope.regform);
+
+});
+}])
+.controller('DataentryCtrl',['$scope', '$filter', '$ionicModal','$http',function($scope, $filter, $ionicModal, $http){
+  $scope.openModal = function() {
+  $ionicModal.fromTemplateUrl('survey_form.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+    $scope.modal.show();
+  });
+};
+$scope.closeModal = function() {
+  $scope.sdate = $filter('date')(new Date(),'dd-MM-yyyy');
+  $scope.modal.remove();
+};
+$http.get('detail.json').success(function(data) {
+    $scope.phones = data;
+    console.log($scope.phones);
+});
+
+}])
+.controller('RegistrationCtrl',['$scope', '$filter', '$ionicModal', '$http', function($scope, $filter, $ionicModal, $http){
+$http.get('registration.json').success(function(data){
+  $scope.regform = data;
+  console.log($scope.regform);
+
+});
+}])
 .controller('EntitiesCtrl', ['$scope','$rootScope','$stateParams','$state', 'hospitalservice','$ionicPopup','$cordovaDialogs','$ionicFilterBar', '$ionicModal', '$ionicSlideBoxDelegate','DBA','registrationdetsdb','$ionicPopover',function($scope, $rootScope, $stateParams, $state, hospitalservice, $ionicPopup, $cordovaDialogs, $ionicFilterBar, $ionicModal,$ionicSlideBoxDelegate, DBA, registrationdetsdb, $ionicPopover){
 
     $ionicModal.fromTemplateUrl('filterHospitaldetails.html',{
@@ -1318,11 +1357,17 @@ $scope.reload = function(){
             "notes" : ""
          },
          "yogaactivity" : {
-        //   "yogatype" :"",
            "sttime" : "",
            "endtime":"",
-        //   "remarks": ""
+           "remarks": "",
+              "yogatype" :{
+                  "asana" : "Asana",
+                  "pranayama" : "Pranayama",
+                  "meditation" : "Meditation"
+              },
+              "selectedyoga": ""
          }
+
       };
 
       $scope.openModal1 = function(trackername, title){
@@ -1391,7 +1436,7 @@ $scope.fetchmyhealth();
     }
 
 
-      $scope.openModalfilter = function(){
+    $scope.openModalfilter = function(){
          $ionicModal.fromTemplateUrl('filterhealthtabdetails.html',{
            scope: $scope,
            animation: 'slide-in-left'
@@ -1411,6 +1456,7 @@ $scope.fetchmyhealth();
                       ,"medicationFilter":true
                       ,"allergiesFilter":true
                       ,"weightFilter":true
+                      ,"yogaactivity":true
                       ,"isFilterApplied":false}
             ,"bloodsugarFilter":true
             ,"bloodpressureFilter":true
@@ -1418,6 +1464,7 @@ $scope.fetchmyhealth();
             ,"medicationFilter":true
             ,"allergiesFilter":true
             ,"weightFilter":true
+            ,"yogaactivity":true
             ,"isFilterApplied":false
         };
 
@@ -1427,7 +1474,8 @@ $scope.fetchmyhealth();
             { text: "Vaccination", checked: true, backupchecked: true},
             { text: "Medication", checked: true, backupchecked: true},
             { text: "Allergies", checked: true, backupchecked: true},
-            { text: "Weight", checked: true, backupchecked: true}
+            { text: "Weight", checked: true, backupchecked: true},
+            { text: "Yoga Activity", checked: true, backupchecked: true}
     ];
 
         $scope.filterCancel = function(){
@@ -1444,17 +1492,20 @@ $scope.fetchmyhealth();
               $scope.appliedfilters.medicationFilter=$scope.appliedfilters.backup.medicationFilter;
               $scope.appliedfilters.allergiesFilter=$scope.appliedfilters.backup.allergiesFilter;
               $scope.appliedfilters.weightFilter=$scope.appliedfilters.backup.weightFilter;
-
+ $scope.appliedfilters.yogaactivity=$scope.appliedfilters.backup.yogaactivity;
               $scope.appliedfilters.isFilterApplied=$scope.appliedfilters.backup.isFilterApplied;
 
-              $scope.healthFilterList[bloodsugarFilter].checked=$scope.healthFilterList[bloodpressureFilter].backupchecked;
+
+ $scope.healthFilterList[bloodsugarFilter].checked=$scope.healthFilterList[bloodpressureFilter].backupchecked;
               $scope.healthFilterList[bloodpressureFilter].checked=$scope.healthFilterList[bloodpressureFilter].backupchecked;
               $scope.healthFilterList[vaccinationFilter].checked=$scope.healthFilterList[vaccinationFilter].backupchecked;
               $scope.healthFilterList[medicationFilter].checked=$scope.healthFilterList[medicationFilter].backupchecked;
               $scope.healthFilterList[allergiesFilter].checked=$scope.healthFilterList[allergiesFilter].backupchecked;
               $scope.healthFilterList[weightFilter].checked=$scope.healthFilterList[weightFilter].backupchecked;
+
+ $scope.healthFilterList[yogaactivity].checked=$scope.healthFilterList[yogaactivity].backupchecked;
         };
-        var bloodsugarFilter=0,bloodpressureFilter=1,vaccinationFilter=2,medicationFilter=3,allergiesFilter=4,weightFilter=5;
+        var bloodsugarFilter=0,bloodpressureFilter=1,vaccinationFilter=2,medicationFilter=3,allergiesFilter=4,weightFilter=5,yogaactivity=6;
         $scope.filterResetAll = function(){
           $scope.healthFilterList[bloodsugarFilter].checked=false;
           $scope.healthFilterList[bloodpressureFilter].checked=false;
@@ -1462,6 +1513,7 @@ $scope.fetchmyhealth();
           $scope.healthFilterList[medicationFilter].checked=false;
           $scope.healthFilterList[allergiesFilter].checked=false;
           $scope.healthFilterList[weightFilter].checked=false;
+            $scope.healthFilterList[yogaactivity].checked=false;
         };
         $scope.filterSetAll = function(){
           $scope.healthFilterList[bloodsugarFilter].checked=true;
@@ -1470,6 +1522,7 @@ $scope.fetchmyhealth();
           $scope.healthFilterList[medicationFilter].checked=true;
           $scope.healthFilterList[allergiesFilter].checked=true;
           $scope.healthFilterList[weightFilter].checked=true;
+          $scope.healthFilterList[yogaactivity].checked=true;
         };
       $scope.filterdetails = function(visitid){
           if(($scope.healthdetails != undefined ) && ($scope.healthdetails.length != 0 )){
@@ -1491,18 +1544,22 @@ $scope.fetchmyhealth();
             $scope.appliedfilters.backup.medicationFilter=$scope.appliedfilters.medicationFilter;
             $scope.appliedfilters.backup.allergiesFilter=$scope.appliedfilters.allergiesFilter;
             $scope.appliedfilters.backup.weightFilter=$scope.appliedfilters.weightFilter;
+            $scope.appliedfilters.backup.yogaactivity=$scope.appliedfilters.yogaactivity;
             $scope.appliedfilters.backup.isFilterApplied=$scope.appliedfilters.isFilterApplied;
             $scope.healthFilterList[bloodsugarFilter].backupchecked=$scope.healthFilterList[bloodsugarFilter].checked;
-          $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
+ console.log($scope.healthFilterList[bloodsugarFilter].backupchecked);           $scope.healthFilterList[bloodpressureFilter].backupchecked=$scope.healthFilterList[bloodpressureFilter].checked;
             $scope.healthFilterList[vaccinationFilter].backupchecked=$scope.healthFilterList[vaccinationFilter].checked;
             $scope.healthFilterList[medicationFilter].backupchecked=$scope.healthFilterList[medicationFilter].checked;
             $scope.healthFilterList[allergiesFilter].backupchecked=$scope.healthFilterList[allergiesFilter].checked;
             $scope.healthFilterList[weightFilter].backupchecked=$scope.healthFilterList[weightFilter].checked;
+            $scope.healthFilterList[yogaactivity].backupchecked=$scope.healthFilterList[yogaactivity].checked;
         };
         $scope.filterapply = function(){
+
             if(($scope.healthdetails == undefined) || ($scope.healthdetails.length == 0)){
                 //No data to filter show error msg
                 //no need to open modal
+
                 $rootScope.showPopup({title:'Filter Error', template:"No data to filter"});
                 $scope.closeModalfilter();
             }else{
@@ -1511,7 +1568,8 @@ $scope.fetchmyhealth();
                 ($scope.healthFilterList[vaccinationFilter].checked == false) &&
                 ($scope.healthFilterList[medicationFilter].checked == false) &&
                 ($scope.healthFilterList[allergiesFilter].checked == false) &&
-                ($scope.healthFilterList[weightFilter].checked == false)){
+                ($scope.healthFilterList[weightFilter].checked == false) &&
+                ($scope.healthFilterList[yogaactivity].checked == false)){
                     $rootScope.showPopup({title:'Error', template:"Select at least one filter"});
               }else{
                   $scope.closeModalfilter();
@@ -1527,7 +1585,8 @@ $scope.fetchmyhealth();
                 ($scope.healthFilterList[vaccinationFilter].checked == true) &&
                 ($scope.healthFilterList[medicationFilter].checked == true) &&
                 ($scope.healthFilterList[allergiesFilter].checked == true) &&
-                ($scope.healthFilterList[weightFilter].checked == true)){
+                ($scope.healthFilterList[weightFilter].checked == true) &&
+              ($scope.healthFilterList[yogaactivity].checked == true)){
                     $scope.appliedfilters.isFilterApplied=false;
             }else{
                 $scope.appliedfilters.isFilterApplied=true;
@@ -1570,6 +1629,12 @@ $scope.fetchmyhealth();
                  else
                      $scope.appliedfilters.weightFilter=false;
                  break;
+                       case yogaactivity:
+                 if(item.checked == true)
+                     $scope.appliedfilters.yogaactivity=true;
+                 else
+                     $scope.appliedfilters.yogaactivity=false;
+                 break;
               }
             });
         };
@@ -1609,6 +1674,31 @@ $scope.fetchmyhealth();
                       &&  profiledata.profile[0].bloodsugar.rbs !== ''
                       && profiledata.profile[0].bloodsugar.rbs !== null
                       && profiledata.profile[0].bloodsugar.rbs.toString().indexOf(filterText.toString()) !== -1)
+                  ||
+                      (typeof profiledata.profile[0].yogaactivity !== 'undefined'
+                          &&  typeof profiledata.profile[0].yogaactivity.selectedyoga !== 'undefined'
+                          &&  profiledata.profile[0].yogaactivity.selectedyoga !== ''
+                          && profiledata.profile[0].yogaactivity.selectedyoga !== null
+                          && profiledata.profile[0].yogaactivity.selectedyoga.toString().indexOf(filterText.toString()) !== -1)
+                  ||
+                      (typeof profiledata.profile[0].yogaactivity !== 'undefined'
+                                  &&  typeof profiledata.profile[0].yogaactivity.sttime !== 'undefined'
+                                  &&  profiledata.profile[0].yogaactivity.sttime !== ''
+                                  && profiledata.profile[0].yogaactivity.sttime !== null
+                                  && profiledata.profile[0].yogaactivity.sttime.toString().indexOf(filterText.toString()) !== -1)
+                  ||
+                          (typeof profiledata.profile[0].yogaactivity !== 'undefined'
+                                &&  typeof profiledata.profile[0].yogaactivity.endtime !== 'undefined'
+                                &&  profiledata.profile[0].yogaactivity.endtime !== ''
+                               && profiledata.profile[0].yogaactivity.endtime !== null
+                                && profiledata.profile[0].yogaactivity.endtime.toString().indexOf(filterText.toString()) !== -1)
+                  ||
+                              (typeof profiledata.profile[0].yogaactivity !== 'undefined'
+                                &&  typeof profiledata.profile[0].yogaactivity.remarks !== 'undefined'
+                                &&  profiledata.profile[0].yogaactivity.remarks !== ''
+                              && profiledata.profile[0].yogaactivity.remarks !== null
+                              && profiledata.profile[0].yogaactivity.remarks.toString().indexOf(filterText.toString()) !== -1)
+
                   ||
                   (typeof profiledata.profile[0].medication !== 'undefined'
                       &&  profiledata.profile[0].medication.value !== ''
@@ -1703,7 +1793,20 @@ $scope.fetchmyhealth();
                },
                "profile" : {
                    "name" : ""
-               }
+               },
+               "yogaactivity" : {
+            "sttime" : "",
+            "endtime":"",
+            "remarks": "",
+               "yogatype" :{
+                   "asana" : "Asana",
+                   "pranayama" : "Pranayama",
+                    "meditation" : "Meditation"
+               },
+                "selectedyoga": ""
+          }
+
+
             };
         };
         $scope.data = initDataCopy();
@@ -1717,8 +1820,11 @@ $scope.fetchmyhealth();
 
           //check if the values are entered by user to proceed further to save the data
           if(($scope.data.weight.value === '' || $scope.data.weight.value === 0)
-       
-                   && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
+          &&($scope.data.yogaactivity.sttime === '' || $scope.data.yogaactivity.sttime === 0)
+           &&($scope.data.yogaactivity.endtime === '' || $scope.data.yogaactivity.endtime === 0)
+           &&($scope.data.yogaactivity.remarks === '' || $scope.data.yogaactivity.remarks === 0)
+              &&($scope.data.yogaactivity.selectedyoga === '' || $scope.data.yogaactivity.selectedyoga === 0)
+             && ($scope.data.bloodsugar.fbs === '' || $scope.data.bloodsugar.fbs === 0)
              && ($scope.data.bloodsugar.ppbs === '' || $scope.data.bloodsugar.ppbs === 0)
              && ($scope.data.bloodsugar.rbs === '' || $scope.data.bloodsugar.rbs === 0)
         && (($scope.data.bloodpressure.systolic === 0 || $scope.data.bloodpressure.systolic === '' )
@@ -1736,7 +1842,12 @@ $scope.fetchmyhealth();
               medicalprofiledatatosave["weight"] = {};
               medicalprofiledatatosave["weight"]["value"] = $scope.data.weight.value;
               medicalprofiledatatosave["weight"]["notes"] = $scope.data.weight.notes;
-  
+              medicalprofiledatatosave["yogaactivity"] = {};
+                medicalprofiledatatosave["yogaactivity"]["sttime"] = $scope.data.yogaactivity.sttime;
+                medicalprofiledatatosave["yogaactivity"]["endtime"] = $scope.data.yogaactivity.endtime;
+                medicalprofiledatatosave["yogaactivity"]["remarks"] = $scope.data.yogaactivity.remarks;
+    medicalprofiledatatosave["yogaactivity"]["selectedyoga"] = $scope.data.yogaactivity.selectedyoga;
+      //
               medicalprofiledatatosave["bloodsugar"] = {};
               if($scope.data.bloodsugar.rbs !== 0){
                   if(typeof medicalprofiledatatosave["bloodsugar"] === 'undefined') {
@@ -1844,7 +1955,7 @@ $scope.fetchmyhealth();
                           || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
                           || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
                           || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
-
+ || (details.vitalslistforday.yogaactivity &&  $scope.appliedfilters.selectedyoga !== false )
                           );
         };
         // 1 week blood sugar graph
@@ -2365,7 +2476,6 @@ $scope.fetchmyhealth();
         $ionicHistory.goBack();
       };
 }])
-
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','feedbackservice',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, feedbackservice){
       $scope.openModalfilter = function(){
         $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
@@ -2596,7 +2706,7 @@ $scope.fetchdata();
                         $scope.$broadcast('scroll.refreshComplete');
                         $rootScope.hideLoader();
                         $scope.visitinfo = data.data;
-                    
+
                     }).catch(function(error){
                       if(error.status === 404){
                         $scope.$broadcast('scroll.refreshComplete');
@@ -2677,18 +2787,32 @@ $scope.reloadNotifications=function(){
           angular.forEach($scope.visitinfo, function(value, key){
               if(value._id === visitid){
                   $scope.visitdata.patientdetails = value.patientregprofiles;
-              }
-          });
-          angular.forEach($scope.visitinfo, function(value, key){
-              if(value._id === visitid){
                   $scope.visitdata.hospitaldetails = value.hospitalid;
+                    $scope.visitdata.visitdetails = value.visitid;
+                  console.log($scope.visitdata.patientdetails);
               }
           });
-          angular.forEach($scope.visitinfo, function(value, key){
-              if(value._id === visitid){
-                  $scope.visitdata.visitdetails = value.visitid;
-              }
+          // angular.forEach($scope.visitinfo, function(value, key){
+          //     if(value._id === visitid){
+          //
+          //         console.log($scope.visitdata.hospitaldetails);
+          //     }
+          // });
+          // angular.forEach($scope.visitinfo, function(value, key){
+          //     if(value._id === visitid){
+          //         $scope.visitdata.visitdetails = value.visitid;
+          //         console.log($scope.visitdata.visitdetails.doctorid);
+          //
+          //     }
+          // });
+          //perform service call to doctor profile details
+        var docProfilePromise = visitservice.getdocdetail($scope.visitdata.visitdetails.doctorid);
+          docProfilePromise.then(function(profiledata){
+              $scope.visitdata.visitdetails["docname"] = profiledata.firstname + " " + profiledata.lastname;
+          }).catch(function(err){
+              $rootScope.showToast("Error fetching Doctor Profile Details","short","top");
           });
+
           $scope.openModal3();
       };
     	$scope.openModal3 = function() {
@@ -2858,9 +2982,10 @@ $scope.reloadNotifications=function(){
           }).catch(function(error){
              $rootScope.showToast("Error displaying feedqueries, please try again later",'long','top')
           });
-                };
+              };
       }
 }])
+
 .controller('LogoutCtrl', ['$scope','$rootScope','$route','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $route, $state, $ionicHistory, registrationdetsdb){
     //deleting the jsonwebtoken as there is a logout request by the user..
     $rootScope.showLoader();
@@ -3309,6 +3434,26 @@ $scope.docfetch();
           }
           return uint8Array;
         };
+}])
+
+.controller('LogoutCtrl', ['$scope','$rootScope','$route','$state','$ionicHistory','registrationdetsdb',function($scope, $rootScope, $route, $state, $ionicHistory, registrationdetsdb){
+  //deleting the jsonwebtoken as there is a logout request by the user..
+  $rootScope.showLoader();
+  registrationdetsdb.updateJWTWithoutMobileNo({jsonwebtoken:null}).then(function(response){
+      $rootScope.hideLoader();
+      $scope.closePopover();
+      $state.go('login');
+      $route.reload();
+      $ionicHistory.nextViewOptions({
+          disableBack: true
+      });
+      $ionicHistory.clearCache();
+      $rootScope.showToast('Logout completed successfully', null, 'bottom');
+  }).catch(function(error){
+      $rootScope.hideLoader();
+      $scope.closePopover();
+      $rootScope.showToast('Logout failed, Please try again later !!', null, 'bottom');
+  });
 }])
 .controller('MenuCtrl', ['$scope','$ionicSideMenuDelegate','$ionicHistory','loginservice', function($scope,$ionicSideMenuDelegate, $ionicHistory, loginservice){
   $scope.$on("$ionicView.beforeEnter",function(event, data){

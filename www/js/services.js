@@ -13,12 +13,13 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-		registerDoctor: function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,licence,smsotp,emailotp,pw){
+		registerDoctor: function(firstname,lastname,cntrynum,gender,emailid,mobilenumber,address,age,dob,doc,licence,smsotp,emailotp,pw){
 			var deferred= $q.defer();
 			var resource= $resource (NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registration/register/doctor");
 			resource.save({regdets:{
 				firstname:firstname,
 				lastname:lastname,
+				cntrynum:cntrynum,
 				gender:gender,
 				emailid:emailid,
 				mobilenumber:mobilenumber,
@@ -51,13 +52,14 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		},
-		registerPatient:function(firstname,lastname,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw){
+		registerPatient:function(firstname,lastname,cntrynum,gender,emailid,mobilenumber,address,age,dob,doc,smsotp,emailotp,pw){
 			var deferred = $q.defer();
 			var resource = $resource (NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registration/register/patient");
 
 			resource.save({regdets:{
 				firstname:firstname,
 				lastname:lastname,
+				cntrynum:cntrynum,
 				gender:gender,
 				emailid:emailid,
 				mobilenumber:mobilenumber,
@@ -371,31 +373,36 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
           });
           return deferred.promise;
         },
-        getdetails:function(patientId){
-          var deferred = $q.defer();
-          var resource = $resource (NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/medicalprofilet");
-          resource.get({patientid: patientId},function(data){
-              deferred.resolve(data);
-          }, function(error){
-              deferred.reject(error);
-          });
-          return deferred.promise;
-        }
+				getdetails:function(patientId){
+		           var deferred = $q.defer();
+		           var resource = $resource (NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/medicalprofilet");
+		           resource.get({patientid: patientId},function(data){
+		               deferred.resolve(data);
+		           }, function(error){
+		               deferred.reject(error);
+		           });
+		           return deferred.promise;
+		         }
     };
  }])
+
 .service('visitservice', ['$q', '$resource','NODE_SERVER_DETAILS',function($q, $resource,NODE_SERVER_DETAILS){
 	return{
+
 		getvisitdets: function(patientid, hospitalid){
+
 			var deferred = $q.defer();
 			var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/visits/:hospitalid");
 			resource.get({ patientid: patientid, hospitalid: hospitalid }, function(data){
+				console.log( "visits service call is successful ["+ JSON.stringify(data) + "]");
 				deferred.resolve(data);
 			},function(error){
 				deferred.reject(error);
 			});
 			return deferred.promise;
 		},
-    getVisits : function(patientid){
+     getVisits : function(patientid){
+	//		 debugger;
       var deferred = $q.defer();
 			var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/visits");
 			resource.get({ patientid: patientid}, function(data){
@@ -405,6 +412,17 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
     },
+		 getdocdetail: function(doctorid){
+			var deferred = $q.defer();
+			var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:doctorid/profile");
+			resource.get({ doctorid: doctorid}, function(data){
+				console.log( "doctor service call is successful ["+ JSON.stringify(data) + "]");
+				deferred.resolve(data);
+			},function(error){
+				deferred.reject(error);
+			});
+			return deferred.promise;
+		},
 		savevisitinfo: function(patientid,visitid){
 			var deferred = $q.defer();
 			var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/visits/:visitid/notifications");
@@ -415,6 +433,7 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
 			});
 			return deferred.promise;
 		}
+
 	};
 }])
 .service('patientprflservice',['$q','$resource','NODE_SERVER_DETAILS',function($q, $resource,NODE_SERVER_DETAILS){
@@ -499,6 +518,7 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
           var deferred = $q.defer();
           var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:doctorid/notifications");
           resource.get({doctorid: doctorid}, function(data){
+						console.log( "doctor service call is successful ["+ JSON.stringify(data) + "]");
               deferred.resolve(data);
           },function(error){
   				    deferred.reject(error);
@@ -528,4 +548,19 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
          });
     }
 	  return mySocket;
-});
+})
+// .service('screeningdataservice',['$q','$resource',function($q,$resource){
+//  return {
+// 	  loadHospitals : function(){
+// 			var deferred = $q.defer();
+// 			var resource = $resource('/json/screeningdata.json');
+// 			resource.query(null,function(data){
+//              deferred.resolve(data);
+// 				console.log('data ['+JSON.stringify(data)+']');
+// 			}, function(err){
+// 				console.log('err encountered ['+ err.toString() + ']');
+// 			});
+// 			return deferred.promise;
+// 		}
+//  };
+// }]);

@@ -5,9 +5,7 @@
         </button>
     </ion-nav-buttons>
         <ion-nav-buttons side="right" >
-             <button class="button button-clear" ng-click="createEvent(event)">
-                 <i class="ion-android-alarm-clock icon-btn-customize"></i>
-       </button>
+
             <button class="button button-clear" ng-click="filterdetails()">
             <div ng-switch on="appliedfilters.isFilterApplied">
                   <div ng-switch-when="true">
@@ -18,12 +16,16 @@
                    </div>
             </div>
             </button>
+            <button class="button button-clear" ng-click="showFilterBar()">
+              <i class=" ion-search icon-btn-customize"></i>
+            </button>
+            <button class="button button-clear" ng-click="createEvent(event)">
+                <i class="ion-android-alarm-clock icon-btn-customize"></i>
+      </button>
 <button class="button button-clear" ng-click="selectImageSource()">
       <i class=" ion-camera icon-btn-customize"></i>
  </button>
-  <button class="button button-clear" ng-click="showFilterBar()">
-    <i class=" ion-search icon-btn-customize"></i>
-  </button>
+
   <!--button class="button button-clear" on-touch="openPopover($event)">
        <i class="ion-android-more-vertical icon-btn-customize" ></i>
   </button-->
@@ -83,7 +85,22 @@
               {{summary.medication.value}}
                 </div>
             </div>
+            <hr class="horizon">
+            <div class="row"><h3><b>Yoga Activity</b><button class="button button-small button-clear" ng-click="openModal1('Yoga Activity', 'Yoga Activity')" on-tap="tracker('Yoga Activity', 'Yoga Activity')"><i class="icon ion-edit assertive"  text="Yoga Activity" ></i></button></h3>
+            </div>
+            <div class="row">
+                 <div class="col col-33"><h3><b>Yoga Type </b></h3>
+                 <div class="row">
+                     {{summary.yogaactivity.selectedyoga}}</div>
+                 </div>
+                 <div class="col col-33"><h3><b>Start Time</b></h3>
+                 <div class="row" ng-if="summary.yogaactivity.sttime !=='' && summary.yogaactivity.sttime !== 0 " >{{summary.yogaactivity.sttime | date: "dd MMM yy hh:mm a"}} </div>
+                 </div>
 
+                 <div class="col col-33"><h3><b>End Time</b></h3>
+                 <div class="row" ng-if="summary.yogaactivity.endtime !=='' && summary.yogaactivity.endtime !== 0 " >{{summary.yogaactivity.endtime | date: "dd MMM yy hh:mm a"}} </div>
+                 </div>
+                 </div>
 		</div>
 	</div>
   <div class="h-list">
@@ -106,11 +123,14 @@
                                           <div class="profilecolor" ng-show="medicalprofiledata.profile[0].weight.value">{{medicalprofiledata.profile[0].profile.name}}      {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p  class="item-text-wrap" ng-show="appliedfilters.weightFilter != false && appliedfilters.weightFilter && appliedfilters.weightFilter !== null && appliedfilters.weightFilter !== '' && appliedfilters.weightFilter !== 0 && medicalprofiledata.profile[0].weight.value && medicalprofiledata.profile[0].weight.value !== null && medicalprofiledata.profile[0].weight.value !== ''">Weight : <strong>{{medicalprofiledata.profile[0].weight.value}} KG </strong><br>
                                   </p>
-
             <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ">  {{medicalprofiledata.profile[0].profile.name}}  {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
+
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.rbs && medicalprofiledata.profile[0].bloodsugar.rbs !== null && medicalprofiledata.profile[0].bloodsugar.rbs !== ''">RBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.rbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false && medicalprofiledata.profile[0].bloodsugar.ppbs && medicalprofiledata.profile[0].bloodsugar.ppbs !== null && medicalprofiledata.profile[0].bloodsugar.ppbs !== ''">PPBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.ppbs}} MG/DL</strong></p>
                                            <p class="item-text-wrap" ng-show="appliedfilters.bloodsugarFilter != false  && medicalprofiledata.profile[0].bloodsugar.fbs && medicalprofiledata.profile[0].bloodsugar.fbs !== null && medicalprofiledata.profile[0].bloodsugar.fbs !== ''">FBS :<strong> {{medicalprofiledata.profile[0].bloodsugar.fbs}} MG/DL</strong></p>
+
+
+
                                             <div class="profilecolor" ng-show="medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic">  {{medicalprofiledata.profile[0].profile.name}}   {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p ng-show="appliedfilters.bloodpressureFilter != false && appliedfilters.bloodpressureFilter !== null && appliedfilters.bloodpressureFilter !=='' && medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.systolic !== null && medicalprofiledata.profile[0].bloodpressure.systolic !== '' && medicalprofiledata.profile[0].bloodpressure.diastolic && medicalprofiledata.profile[0].bloodpressure.diastolic !== null && medicalprofiledata.profile[0].bloodpressure.diastolic !== ''">Blood Pressure : <strong>{{medicalprofiledata.profile[0].bloodpressure.systolic}} / {{ medicalprofiledata.profile[0].bloodpressure.diastolic }} MM HG</strong></p>
 
@@ -123,18 +143,33 @@
 
                                              <div class="profilecolor" ng-show="medicalprofiledata.profile[0].vaccination.value">  {{medicalprofiledata.profile[0].profile.name}}     {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
                                            <p class="item-text-wrap" ng-show="appliedfilters.vaccinationFilter != false  && medicalprofiledata.profile[0].vaccination && medicalprofiledata.profile[0].vaccination.value !== null && medicalprofiledata.profile[0].vaccination.value !== ''">Vaccination :<strong> {{medicalprofiledata.profile[0].vaccination.value}}</strong> </p>
-                                              <hr class="horizon" ng-show="medicalprofiledata.profile[0].weight.value || medicalprofiledata.profile[0].vaccination.value || medicalprofiledata.profile[0].medication.value || medicalprofiledata.profile[0].allergies.value || medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ||medicalprofiledata.profile[0].weight.value || (medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic)">
-  				                      </div>
-                          </div>
-                      </div>
-                  </div>
-               </div>
-        </div>
-       </div>
-      </div>
 
-      </ion-content>
 
+                                           <div class="profilecolor" ng-show="medicalprofiledata.profile[0].yogaactivity && ((medicalprofiledata.profile[0].yogaactivity.selectedyoga !== null && medicalprofiledata.profile[0].yogaactivity.selectedyoga !== '') || (medicalprofiledata.profile[0].yogaactivity.sttime  !== null && medicalprofiledata.profile[0].yogaactivity.sttime  !== '' )||(medicalprofiledata.profile[0].yogaactivity.endtime  !== null && medicalprofiledata.profile[0].yogaactivity.endtime  !== '')||(medicalprofiledata.profile[0].yogaactivity.remarks  !== null && medicalprofiledata.profile[0].yogaactivity.remarks  !== ''))">  {{medicalprofiledata.profile[0].profile.name}}
+                                               {{details.medicalprofile[$index].recorddate| date: "hh:mm:ss a"}}</div>
+
+                                                                                      <p  class="item-text-wrap" ng-show="appliedfilters.yogaactivity != false  && medicalprofiledata.profile[0].yogaactivity && medicalprofiledata.profile[0].yogaactivity.selectedyoga !== null && medicalprofiledata.profile[0].yogaactivity.selectedyoga !== '' ">
+                                           Yoga Type  : <strong>{{medicalprofiledata.profile[0].yogaactivity.selectedyoga}}</strong></p>
+                                                                                         <p  class="item-text-wrap" ng-show="appliedfilters.yogaactivity != false  && medicalprofiledata.profile[0].yogaactivity && medicalprofiledata.profile[0].yogaactivity.sttime  !== null && medicalprofiledata.profile[0].yogaactivity.sttime  !== '' ">
+                                           Start time : <strong>{{medicalprofiledata.profile[0].yogaactivity.sttime | date: "dd MMM yy hh:mm a"}}</strong></p>
+                                                                                        <p  class="item-text-wrap" ng-show="appliedfilters.yogaactivity != false  && medicalprofiledata.profile[0].yogaactivity && medicalprofiledata.profile[0].yogaactivity.endtime  !== null && medicalprofiledata.profile[0].yogaactivity.endtime  !== '' ">
+                                           End Time   : <strong>{{medicalprofiledata.profile[0].yogaactivity.endtime | date: "dd MMM yy hh:mm a"}}</strong></p>
+                                                                                        <p  class="item-text-wrap" ng-show="appliedfilters.yogaactivity != false  && medicalprofiledata.profile[0].yogaactivity && medicalprofiledata.profile[0].yogaactivity.remarks  !== null && medicalprofiledata.profile[0].yogaactivity.remarks  !== '' ">
+                                           Remarks : <strong>{{medicalprofiledata.profile[0].yogaactivity.remarks}}</strong>
+                                           <br></p>
+                                                 <hr class="horizon" ng-show="medicalprofiledata.profile[0].weight.value || medicalprofiledata.profile[0].vaccination.value || medicalprofiledata.profile[0].medication.value || medicalprofiledata.profile[0].allergies.value || medicalprofiledata.profile[0].bloodsugar.rbs || medicalprofiledata.profile[0].bloodsugar.ppbs || medicalprofiledata.profile[0].bloodsugar.fbs ||medicalprofiledata.profile[0].weight.value || (medicalprofiledata.profile[0].bloodpressure.systolic && medicalprofiledata.profile[0].bloodpressure.diastolic)|| (medicalprofiledata.profile[0].yogaactivity)">
+
+
+                                             				                      </div>
+                                                                     </div>
+                                                                 </div>
+                                                             </div>
+                                                          </div>
+                                                   </div>
+                                                  </div>
+                                                 </div>
+
+                                                 </ion-content>
     <script id="medicalprofile.html" type="text/ng-template">
       <ion-modal-view>
           <ion-header-bar class="bar-positive">
@@ -319,15 +354,41 @@
       				<textarea placeholder="Notes" ng-model="data.allergies.notes"></textarea>
         		  		</label>
               	</div>
-<div class="list" ng-if="trackername === 'notes'">
-      				<div class="item item-divider">
-      					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
-      				</div>
-      				<label class="item item-input item-floating-label">
-      				<span class="input-label">Notes</span>
-      					<textarea  placeholder="Notes"></textarea>
-      				</label>
-      			</div>
+                <div class="list" ng-if="trackername === 'Yoga Activity'">
+                                   		<div class="item item-divider">
+                        					<div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>
+                        				</div>
+       <h5><b>Name</b></h5><input type="text"  placeholder="Enter Your Name" name="name"  ng-model="data.profile.name">
+                                <label class = "item item-input item-select">
+     <div class = "input-label">
+        Yoga Type
+     </div>
+
+     <select  ng-model="data.yogaactivity.selectedyoga" ng-options="x for (x, y) in data.yogaactivity.yogatype">
+  </select>
+
+  <b>{{yogaactivity.selectedyoga}}</b>
+
+  </label>
+
+       <ion-list>
+   <span class="input-label">Start time</span>
+           <div class="item" ion-datetime-picker ng-model="data.yogaactivity.sttime">
+  <i class="icon ion-calendar" style="color:#000"> </i>  {{data.yogaactivity.sttime| date: "dd MMM yy hh:mm a"}}
+           </div>
+  </ion-list>
+   <ion-list>
+   <span class="input-label">End time</span>
+           <div class="item" ion-datetime-picker ng-model="data.yogaactivity.endtime">
+      <i class="icon ion-calendar" style="color:#000"> </i> {{data.yogaactivity.endtime| date: "yyyy-MM-dd H:mm a"}}
+           </div>
+  </ion-list>
+
+  <label class="item item-input item-floating-label">
+  <span class="input-label">Remark</span>
+  <textarea placeholder="Remark" name="remarks" ng-model="data.yogaactivity.remarks"></textarea>
+      </label>
+    </div>
 <div class="list" ng-if="trackername === 'Vaccination'">
               <div class="item item-divider">
       				      <div class="pull-left" >{{tdate | date: "dd MMM yy hh:mm:ss a"}}</div>

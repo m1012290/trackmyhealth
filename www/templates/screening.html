@@ -1,0 +1,210 @@
+<ion-view view-title="" name="screening-view" style="margin-top:-15%;">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
+            <i class="icon ion-navicon " menu-toggle = "left" ></i>
+        </button>
+    </ion-nav-buttons>
+
+        <ion-nav-buttons side="right">
+
+            <button class="button button-clear" ng-click="createEvent(event)">
+                 <i class="ion-android-alarm-clock icon-btn-customize"></i>
+       </button>
+         <button class="button button-clear" ng-click="selectImageSource()">
+                <i class=" ion-camera icon-btn-customize"></i>
+         </button>
+
+
+</ion-nav-buttons>
+            <ion-content  scroll-sista="header" has-bouncing="false" overflow-scroll="true">
+            <br/>
+            <br/>
+            <br/>
+            <div>
+            <p><a href="" ng-click="openModal()">screening</a></p>
+          </div>
+
+  <!-- <p><a href="" ng-click="openModal()">screening</a></p> -->
+<!-- <button class="button button-assertive button-outline" ng-click="openModal()">Screening</button>
+<a><i class="icon ion-edit assertive" ng-click="openModalreg()">Registration</i></a> -->
+  <!-- <a href="" ng-click="openModal()"> screening</a>
+  <a href="" ng-click="openModalreg()">registration</a> -->
+  <!-- <div class="button-bar">
+     <a class="" ng-click="openModal()"><p>Screening</p></a><br/>&nbsp;&nbsp;
+     <a class="" ng-click="openModalreg()"><p>Registration</p></a>
+
+  </div> -->
+  <button class="mybutton button-clear" ng-click="openModal()"><h4>IYA SDM Screening</h4></button><br>
+  <button class="mybutton button-clear" ng-click="openModalreg()"><h4>IYA SDM Registration</h4></button>
+
+                  <!-- <ion-tabs class="tabs-screening tabs-light tabs-top tabs-icon-top has-tabs-top" >
+       <ion-tab title="" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" href="#/notified/screening/dataentry" >
+           <ion-nav-view name="dataentry-tab"></ion-nav-view>
+       </ion-tab>
+       <ion-tab title="" icon-on="ion-flame" icon-off="ion-flame" href="#/notified/screening/registration" >
+           <ion-nav-view name="reg-tab"></ion-nav-view>
+       </ion-tab>
+
+   </ion-tabs> -->
+                <!-- <div class="card list">
+              <div class="item item-text-wrap">
+        <button class="button button-block button-outline button-positive" ng-click="openModal()">
+         Registration
+        </button>
+      </div>
+    </div> -->
+
+
+</ion-content>
+<script id="screening.html" type="text/ng-template">
+
+<ion-modal-view>
+  <ion-header-bar class=" bar bar-positive">
+   <h1 class="title">Screening</h1>
+   <button class="button button-clear button-primary" ng-click="closeModal()"><i class="icon ion-android-close"></i></button>
+    </ion-header-bar>
+
+  <ion-content>
+   <div class="list" ng-repeat="detaile in phones track by $index">
+
+     <div class="item item-body">
+        <h3>Demographic Details</h3>
+<div><p>Person name : {{detaile.demographic1.firstName}}</p>
+<p>Person age : {{detaile.demographic1.age}}</p>
+<p>Person's Address : {{detaile.demographic2}}</p>
+<p>Occupation : {{detaile.demographic6}}</p>
+<p>Gender : {{detaile.demographic3}}</p>
+<p>Education : {{detaile.demographic5}}</p>
+<!-- <p>Contact Details : </p>
+<p>Email id : {{detaile.contactdetails.emailid}}</p>
+<p>Mobile number :  {{detaile.contactdetails.mobilenumber}}</p>
+<p>Residential Phone No : {{detaile.contactdetails.phonenumber}}</p> -->
+</div>
+</div>
+
+
+
+          <div class="item item-body">
+            <h3>Participant Location Details</h3>
+   <div><p>State : {{detaile.locationdetails.statevalue}}</p>
+   <p>District : {{detaile.locationdetails.districtvalue}}</p>
+   <p>Village : {{detaile.locationdetails.villagevalue}}</p>
+   <p>Area : {{detaile.userprofiledets1}}</p>
+   <p>Camp Code : {{detaile.userprofiledets2.yidmcode}}</p>
+   <p>Serial No : {{detaile.userprofiledets2.serialno}}</p>
+   <p>SRL Barcode : {{detaile.userprofiledets2.yidmmobilenumber}}</p>
+   <p>Start time : {{detaile.starttime | date: "dd MMM yy hh:mm a"}}</p>
+   </div>
+   </div>
+   <div class="item item-body">
+     <h3>Diabetes Information</h3>
+  <div>
+  <p>Do you have Diabetes? : {{detaile.diainfo2}}</p>
+  <p>Are you on Treatment for Diabetes? : {{detaile.diainfo2}}</p>
+  </div>
+  </div>
+  <div class="item item-body">
+    <h3>Diet Information </h3>
+ <div>
+ <p>Which of these oils do you use for cooking? : {{detaile.dietinfo1}}</p>
+ <p>How frequently you are consuming these items generally?  </p>
+ <p>Meat/Chicken</p>
+ <p>How much per serving? : {{detaile.dietinfo5.meatperserv}}</p>
+ <p>How many times in a week? : {{detaile.dietinfo5.meatperweek}}</p>
+ <p>How much per serving? : {{detaile.dietinfo5.fishperserv}}</p>
+ <p>How many times in a week? : {{detaile.dietinfo5.fishperweek}}</p>
+ </div>
+ </div>
+ </div>
+
+  </ion-content>
+ </ion-modal-view>
+</script>
+<script id="registration.html" type="text/ng-template">
+    <ion-modal-view>
+    <ion-header-bar class="bar bar-positive">
+        <h1 class="title">Registration</h1>
+        <button class="button button-clear button-primary" ng-click="closeModalreg()">
+            <i class="icon ion-android-close"></i>
+        </button>
+    </ion-header-bar>
+      <ion-content>
+    <div class = "list" ng-repeat="reg in regform track by $index">
+    <div class="item item-body">
+<h3>Demographic Details</h3>
+<p>Person name : {{reg.demographic1.firstName}}</p>
+<p>Person age : {{reg.demographic1.age}}</p>
+<p>Person's Address : {{reg.demographic2}}</p>
+<p>Occupation : {{reg.G02}}</p>
+<p>Gender : {{reg.demographic3}}</p>
+<p>Education : {{reg.G01}}</p>
+<!-- <p>{{reg.contactdetails.phonenumber}}</p>
+<p>{{reg.contactdetails.mobilenumber}}</p>
+<p>{{reg.contactdetails.emailid}}</p> -->
+
+
+</div>
+<div class="item item-body">
+  <h3>Participant Location Details</h3>
+<p>State : {{reg.locationdetails.statevalue}}</p>
+<p>District : {{reg.locationdetails.districtvalue}}</p>
+ <p>Village : {{reg.locationdetails.villagevalue}}</p>
+ <p>Area : {{reg.userprofiledets1}}</p>
+ <p>Camp Code : {{reg.userprofiledets2.yidmcode}}</p>
+<p>Serial No : {{reg.userprofiledets2.serialno}}</p>
+<p>SRL Barcode : {{reg.userprofiledets2.yidmmobilenumber}}</p>
+</div>
+<!-- <div class="item item-body">
+<h4>General Information</h4>
+<p>{{reg.G01}}</p>
+</div> -->
+<div class="item item-body">
+<h3>High Blood Pressure</h3>
+<p>Have you ever been told by a health care provider that you have High blood pressure? : {{reg.HBP1}}</p>
+<p>Do you now take medication for your High blood pressure?  : {{reg.HBP2}}</p>
+<p>What is the name of the High blood pressure medication prescribed by your family physician? : {{reg.HBP3}}</p>
+<p>How many tablets a day do you have to consume for High blood pressure? : {{reg.HBP4}}</p>
+<p>How many times a day do you have to take your medication for High blood pressure? : {{reg.HBP5}}</p>
+
+</div>
+<div class="item item-body">
+<h3>Diabetes Specific</h3>
+<p>Have you ever been told by a health care provider that you have Diabetes? : {{reg.DIA1}}</p>
+   <p>Since how many years you  suffer from diabetes?(inyears and months) </p>
+    <p> Duration in no of years : {{reg.DIA2.durationyrs}}</p>
+   <p>Duration in no of months : {{reg.DIA2.durationmonths}}</p>
+    <p>How old were you at the time of diagnosis?(inyears) : {{reg.DIA3}}</p>
+    <p>No of episodes of high blood sugar during last one year(rapid breathing/fruity  breath odour/confusion/coma  etc)? : {{reg.DIA4}}</p>
+    <p>No of episodes of high blood sugar during last three months? : {{reg.DIA5}}</p>
+    <p>No of episodes of low(hypoglycemia) blood sugar during last one year(with blurred
+vision/sweating/reeling of head etc)
+: {{reg.DIA6}}</p>
+        <p>No of episodes of low blood sugar during last three months? : {{reg.DIA7}}</p>
+         <p>Do you now take medication for your Diabetes?  : {{reg.DIA8}}</p>
+         <p>What is the name of the Diabetes medication prescribed by your family physician? : {{reg.DIA9}}</p>
+         <p>How many tablets a day do you have to consume for diabetes? : {{reg.DIA10}}</p>
+   </div>
+   <!-- <div class="item item-body">
+ <h4>Diabetes Treatement</h4>
+<p>DIT1 : {{reg.DIT1}}</p>
+<p>DIT2 : {{reg.DIT2}}</p>
+<p>DIT3 : {{reg.DIT3}}</p>
+  <p>DIT4 : {{reg.DIT4}}</p>
+    <p>DIT5 : {{reg.DIT5}}</p>
+    <p>DIT6 : {{reg.DIT6}}</p>
+</div> -->
+
+ <div class="item item-body">
+    <h3>Physical Activity</h3>
+      <p>How many days do you go for a mild activity that causes no increases in breathing or heart rate like walk at a slow or normal pace? : {{reg.PMI1}}</p>
+        <p>On average, how many minutes of mild activity each day? : {{reg.PMI2}}</p>
+          <p>PMO1 : {{reg.PMO1}}</p>
+            <p>On average, how many minutes of moderate-intensity activityeach day? : {{reg.PMO2}}</p>
+              <p>PVI1 : {{reg.PVI1}}</p>
+              <p>On average, how many minutes of vigorous-intensity activityeach day?  : {{reg.PVI2}}</p>
+      </div>
+</div>
+  </ion-content>
+    </ion-modal-view>
+</script>
+</ion-view>
