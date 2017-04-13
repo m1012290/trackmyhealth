@@ -1698,7 +1698,12 @@ $scope.fetchmyhealth();
                                 &&  profiledata.profile[0].yogaactivity.remarks !== ''
                               && profiledata.profile[0].yogaactivity.remarks !== null
                               && profiledata.profile[0].yogaactivity.remarks.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
-
+                   ||
+                   (typeof profiledata.profile[0].profile !== 'undefined'
+                                &&  typeof profiledata.profile[0].profile.name !== 'undefined'
+                                &&  profiledata.profile[0].profile.name !== ''
+                              && profiledata.profile[0].profile.name !== null
+                              && profiledata.profile[0].profile.name.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].medication !== 'undefined'
                       &&  profiledata.profile[0].medication.value !== ''
