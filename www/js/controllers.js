@@ -1655,77 +1655,77 @@ $scope.fetchmyhealth();
                 if((typeof profiledata.profile[0].weight !== 'undefined'
                     &&  profiledata.profile[0].weight.value !== ''
                     && profiledata.profile[0].weight.value !== null
-                    && profiledata.profile[0].weight.value.toString().indexOf(filterText.toString()) !== -1)
+                    && profiledata.profile[0].weight.value.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].bloodsugar !== 'undefined'
                       &&  typeof profiledata.profile[0].bloodsugar.fbs !== 'undefined'
                       &&  profiledata.profile[0].bloodsugar.fbs !== ''
                       && profiledata.profile[0].bloodsugar.fbs !== null
-                      && profiledata.profile[0].bloodsugar.fbs.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].bloodsugar.fbs.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].bloodsugar !== 'undefined'
                       &&  typeof profiledata.profile[0].bloodsugar.ppbs !== 'undefined'
                       &&  profiledata.profile[0].bloodsugar.ppbs !== ''
                       && profiledata.profile[0].bloodsugar.ppbs !== null
-                      && profiledata.profile[0].bloodsugar.ppbs.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].bloodsugar.ppbs.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].bloodsugar !== 'undefined'
                       &&  typeof profiledata.profile[0].bloodsugar.rbs !== 'undefined'
                       &&  profiledata.profile[0].bloodsugar.rbs !== ''
                       && profiledata.profile[0].bloodsugar.rbs !== null
-                      && profiledata.profile[0].bloodsugar.rbs.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].bloodsugar.rbs.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                       (typeof profiledata.profile[0].yogaactivity !== 'undefined'
                           &&  typeof profiledata.profile[0].yogaactivity.selectedyoga !== 'undefined'
                           &&  profiledata.profile[0].yogaactivity.selectedyoga !== ''
                           && profiledata.profile[0].yogaactivity.selectedyoga !== null
-                          && profiledata.profile[0].yogaactivity.selectedyoga.toString().indexOf(filterText.toString()) !== -1)
+                          && profiledata.profile[0].yogaactivity.selectedyoga.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                       (typeof profiledata.profile[0].yogaactivity !== 'undefined'
                                   &&  typeof profiledata.profile[0].yogaactivity.sttime !== 'undefined'
                                   &&  profiledata.profile[0].yogaactivity.sttime !== ''
                                   && profiledata.profile[0].yogaactivity.sttime !== null
-                                  && profiledata.profile[0].yogaactivity.sttime.toString().indexOf(filterText.toString()) !== -1)
+                                  && profiledata.profile[0].yogaactivity.sttime.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                           (typeof profiledata.profile[0].yogaactivity !== 'undefined'
                                 &&  typeof profiledata.profile[0].yogaactivity.endtime !== 'undefined'
                                 &&  profiledata.profile[0].yogaactivity.endtime !== ''
                                && profiledata.profile[0].yogaactivity.endtime !== null
-                                && profiledata.profile[0].yogaactivity.endtime.toString().indexOf(filterText.toString()) !== -1)
+                                && profiledata.profile[0].yogaactivity.endtime.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                               (typeof profiledata.profile[0].yogaactivity !== 'undefined'
                                 &&  typeof profiledata.profile[0].yogaactivity.remarks !== 'undefined'
                                 &&  profiledata.profile[0].yogaactivity.remarks !== ''
                               && profiledata.profile[0].yogaactivity.remarks !== null
-                              && profiledata.profile[0].yogaactivity.remarks.toString().indexOf(filterText.toString()) !== -1)
+                              && profiledata.profile[0].yogaactivity.remarks.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
 
                   ||
                   (typeof profiledata.profile[0].medication !== 'undefined'
                       &&  profiledata.profile[0].medication.value !== ''
                       && profiledata.profile[0].medication.value !== null
-                      && profiledata.profile[0].medication.value.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].medication.value.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].allergies !== 'undefined'
                       &&  profiledata.profile[0].allergies.value !== ''
                       && profiledata.profile[0].allergies.value !== null
-                      && profiledata.profile[0].allergies.value.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].allergies.value.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].vaccination !== 'undefined'
                       &&  profiledata.profile[0].vaccination.value !== ''
                       && profiledata.profile[0].vaccination.value !== null
-                      && profiledata.profile[0].vaccination.value.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].vaccination.value.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].bloodpressure !== 'undefined'
                       &&  typeof profiledata.profile[0].bloodpressure.systolic !== 'undefined'
                       &&  profiledata.profile[0].bloodpressure.systolic !== ''
                       && profiledata.profile[0].bloodpressure.systolic !== null
-                      && profiledata.profile[0].bloodpressure.systolic.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].bloodpressure.systolic.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
                   ||
                   (typeof profiledata.profile[0].bloodpressure !== 'undefined'
                       && typeof profiledata.profile[0].bloodpressure.diastolic !== 'undefined'
                       &&  profiledata.profile[0].bloodpressure.diastolic !== ''
                       && profiledata.profile[0].bloodpressure.diastolic !== null
-                      && profiledata.profile[0].bloodpressure.diastolic.toString().indexOf(filterText.toString()) !== -1)
+                      && profiledata.profile[0].bloodpressure.diastolic.toString().toLowerCase().indexOf(filterText.toString().toLowerCase()) !== -1)
 
                 ){
                       foundvalue = true;
