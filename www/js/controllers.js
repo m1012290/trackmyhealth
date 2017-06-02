@@ -2489,7 +2489,7 @@ $scope.fetchmyhealth();
         $ionicHistory.goBack();
       };
 }])
-.controller('FamilyCtrl',['$scope','$ionicModal','$ionicHistory','familymemberservice','DBA','registrationdetsdb','ionicDatePicker',function($scope,$ionicModal,$ionicHistory,familymemberservice,DBA,registrationdetsdb,ionicDatePicker){
+.controller('FamilyCtrl',['$scope','$ionicModal','$ionicHistory','familymemberservice','DBA','registrationdetsdb','ionicDatePicker','$filter',function($scope,$ionicModal,$ionicHistory,familymemberservice,DBA,registrationdetsdb,ionicDatePicker,$filter){
      $scope.backButtonAction = function(){
     $scope.shouldShowDelete = false;
     $ionicHistory.goBack();
@@ -2497,23 +2497,23 @@ $scope.fetchmyhealth();
     
     
     // DatePicker object with callbcak to obtain the date
-	var ipObj1 = {
-      callback: function (val) {  //Mandatory
-          //console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-		      $scope.formData.dataofbirth = $filter('date')(val, "dd MMM yyyy");
-      },
-      from: new Date(1900 , 1, 1), //Optional
-      //to: new Date(2016, 10, 30), //Optional
-      inputDate: new Date(),      //Optional
-      mondayFirst: true,          //Optional
-//      disableWeekdays: [0],       //Optional
-      closeOnSelect: false,       //Optional
-      templateType: 'popup'       //Optional
-  };
-  $scope.openDatePicker = function(){
-    ionicDatePicker.openDatePicker(ipObj1);
-  };
-    
+	 var ipObj1 = {
+     callback: function (val) {  //Mandatory
+         console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+         $scope.formData.dateofbirth = $filter('date')(val, "dd MMM yyyy");
+     },
+     from: new Date(1910 , 1, 1), //Optional
+     //to: new Date(2016, 10, 30), //Optional
+     inputDate: new Date(),      //Optional
+     mondayFirst: true,          //Optional
+   //      disableWeekdays: [0],       //Optional
+     closeOnSelect: false,       //Optional
+     templateType: 'popup',       //Optional
+     dateFormat  : 'MMM dd, yyyy'
+   };
+   $scope.openDatePicker = function(){
+     ionicDatePicker.openDatePicker(ipObj1);
+   };    
     
     
   $ionicModal.fromTemplateUrl('addfamilymember.html',{
@@ -2524,10 +2524,11 @@ $scope.fetchmyhealth();
   });
    $scope.openModal = function(){
      $scope.familymodal.show();
-       getmemberdetail();
+      // getmemberdetail();
    }
    $scope.closeModal = function(){
        $scope.familymodal.hide();
+        getmemberdetail();
    }
 
    $scope.formData = [];
@@ -2551,7 +2552,7 @@ $scope.fetchmyhealth();
     emailid:fdata.emailadd,
     mobnum:fdata.mobilenumber,
     age: fdata.age,
-   dataofbirth:fdata.dataofbirth
+   dob:fdata.dateofbirth
      }).then(function(data){
         if(data.status == 'SUCCESS'){
             $scope.familydata = data;
