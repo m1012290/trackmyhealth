@@ -1213,7 +1213,8 @@ div.item-text-wrap a{
 .mycolor{
     color:#000;
     text-align: center;
-    font-family: cursive;
+    font-family: inherit;
+    font-size: 19px;
 }
 
 .example1 {
@@ -1360,4 +1361,30 @@ margin-left: 15%;
     margin-left: 5%;
     margin-top: 2%;
 
+}
+.fa-lightbulb-o:before {
+    font-size: 35px;}
+.ion-android-bulb:before {
+   font-size: 39px; 
+}
+
+.button-float{
+  background: #d14836 !important;
+  color:white !important;
+  z-index: 12 !important;
+  position: absolute !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26) !important;
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  transform: translate3d(0, 0, 0) !important;
+  -webkit-transition: 0.2s linear !important;
+  transition: 0.2s linear !important;
+  -webkit-transition-property: -webkit-transform, all !important;
+  transition-property: transform, all !important;
+
+}
+.space{
+    margin-left:50%;
 }

@@ -181,9 +181,6 @@ if(type!=2)
   };
 
 
-
-
-
   $scope.saveCapturedImage1 = function(){
 
     $cordovaFile.writeFile(cordova.file.dataDirectory, "croppedimage", "base64", true)
@@ -274,7 +271,7 @@ $scope.onimagecrop = function(resultimage){
     };
 
     $scope.$on("$ionicView.afterEnter", function(event, data){
-      $rootScope.showLoader();
+     // $rootScope.showLoader();
       registrationdetsdb.query({}).then(function(response){
           //alternateemailid alternatemobilenum doctorlicenseno
           var result = DBA.getById(response);
@@ -509,7 +506,8 @@ $scope.onimagecrop = function(resultimage){
     $scope.hideSheet = $ionicActionSheet.show({
       buttons: [
         { text: 'Take a photo' },
-        { text: 'Add photo from Gallery' }
+        { text: 'Add photo from Gallery' },
+        { text: 'View Uploaded Images'}
       ],
       titleText: 'Add Photos',
       cancelText: 'Cancel',
@@ -526,6 +524,9 @@ $scope.onimagecrop = function(resultimage){
     }
     if(type === 1){
       $scope.source = Camera.PictureSourceType.SAVEDPHOTOALBUM;
+    }
+      if(type === 2){
+      $state.go('patientimages');
     }
     $scope.data = {
       "filename" : "",
@@ -970,28 +971,34 @@ $scope.onimagecrop = function(resultimage){
     });
   });
 }])
-.controller('HealthtipsCtrl',['$scope','$http','$sce',function($scope, $http, $sce){
+.controller('HealthtipsCtrl',['$scope','$http','$sce','$rootScope',function($scope, $http, $sce, $rootScope){
 
-// $http.get('myjson.json').success(function (data){
-//    $scope.medianew = data.media.map(function (m) {
-//      m.url = $sce.trustAsResourceUrl(m.url);
-//        console.log(m.url);
-//      return m;
-//    });
-//
-//  });
-
-
+    $scope.video = function(e) {
+    var videoElements = angular.element(e.srcElement);
+    videoElements[0].pause();
+}
+    
+    
+    
+$rootScope.showLoader();
  $http.get('example.json').success(function(data) {
      $scope.phones = data.medias.map(function (m) {
+        
          console.log("my audio" + '' + $scope.phones);
       m.video = $sce.trustAsResourceUrl(m.video);
-        console.log(m.video);
+         console.log(m.video);
       return m;
-    });
+         $rootScope.hideLoader();
+         
+       $scope.video = function(e) {
+    m.video = $sce.trustAsResourceUrl(m.video);
+    m.video[0].pause();
+}   
+         
+         
+         
+            });
 });
-
-
 }])
 .controller('ScreeningCtrl',['$scope', '$filter', '$ionicModal','$http',function($scope, $filter, $ionicModal, $http){
   $scope.openModal = function() {
@@ -2462,6 +2469,7 @@ $scope.fetchmyhealth();
                         });
                       }
 }])
+
 .controller('TermsCtrl',['$scope','$state','$ionicHistory', function($scope, $state, $ionicHistory){
       $scope.backButtonAction = function(){
         $scope.shouldShowDelete = false;
@@ -2481,6 +2489,129 @@ $scope.fetchmyhealth();
         $ionicHistory.goBack();
       };
 }])
+.controller('FamilyCtrl',['$scope','$ionicModal','$ionicHistory','familymemberservice','DBA','registrationdetsdb','ionicDatePicker',function($scope,$ionicModal,$ionicHistory,familymemberservice,DBA,registrationdetsdb,ionicDatePicker){
+     $scope.backButtonAction = function(){
+    $scope.shouldShowDelete = false;
+    $ionicHistory.goBack();
+  };
+    
+    
+    // DatePicker object with callbcak to obtain the date
+	var ipObj1 = {
+      callback: function (val) {  //Mandatory
+          //console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+		      $scope.formData.dataofbirth = $filter('date')(val, "dd MMM yyyy");
+      },
+      from: new Date(1900 , 1, 1), //Optional
+      //to: new Date(2016, 10, 30), //Optional
+      inputDate: new Date(),      //Optional
+      mondayFirst: true,          //Optional
+//      disableWeekdays: [0],       //Optional
+      closeOnSelect: false,       //Optional
+      templateType: 'popup'       //Optional
+  };
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(ipObj1);
+  };
+    
+    
+    
+  $ionicModal.fromTemplateUrl('addfamilymember.html',{
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal){
+    $scope.familymodal = modal;
+  });
+   $scope.openModal = function(){
+     $scope.familymodal.show();
+       getmemberdetail();
+   }
+   $scope.closeModal = function(){
+       $scope.familymodal.hide();
+   }
+
+   $scope.formData = [];
+   $scope.$on("$ionicView.loaded", function(event, data){
+  // $rootScope.showLoader();
+  getmemberdetail();
+ });
+   $scope.save = function(fdata){
+     if( $scope.formData.male === true){
+       $scope.formData.gender = "male";
+     }else{
+       $scope.formData.gender = "female";
+     }
+     registrationdetsdb.query({}).then(function(response){
+         var result = DBA.getById(response);
+         $scope.patientId = result.appregistrationid;
+    familymemberservice.savedetails($scope.patientId,{
+    firstname: fdata.firstname,
+    lastname:fdata.lastname,
+    gender:fdata.gender,
+    emailid:fdata.emailadd,
+    mobnum:fdata.mobilenumber,
+    age: fdata.age,
+   dataofbirth:fdata.dataofbirth
+     }).then(function(data){
+        if(data.status == 'SUCCESS'){
+            $scope.familydata = data;
+          //  console.log("calling SUCCESS");
+            console.log($scope.familydata);
+            $scope.closeModal();
+             }
+  }).catch(function(error){
+  //    $rootScope.hideLoader();
+      $rootScope.showPopup({
+           title : 'Error'
+          ,template:'We are experiencing problem in saving'
+        }, function(res){
+          console.log('on click ok');
+        });
+    });
+  }).catch(function(error){
+  //   $rootScope.hideLoader();
+     $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+     });
+  });
+    // console.log($scope.formData);
+
+}
+var getmemberdetail = function(){
+  registrationdetsdb.query({}).then(function(response){
+      var result = DBA.getById(response);
+      $scope.patientId = result.appregistrationid;
+  familymemberservice.getdetails($scope.patientId).then(function(data){
+  //  console.log($scope.patientId);
+    $scope.memberprofile = data.data;
+
+    console.log($scope.memberprofile);
+  }).catch(function(error){
+  if(error.status === 404){
+
+      $rootScope.showPopup({
+        title:'Info',
+        template:"Sorry get method"}, function(res){
+          console.log('on click ok');
+        });
+  }
+  else{
+    $rootScope.showPopup({
+      title : 'Error'
+      ,template:'We are experiencing problem '}, function(res){
+        console.log('on click ok');
+    });
+  }
+  });
+}).catch(function(error){
+  // $rootScope.hideLoader();
+   $rootScope.showPopup({title:'Error', template:"Unable to process the request, please try  again!!"}, function(res){
+   });
+});
+
+}
+
+}])
+
 .controller('InboxOfAllMsgCtrl', ['$scope', '$rootScope','$stateParams', '$ionicPopup', '$state', '$ionicFilterBar','hospitalservice', 'visitservice', '$ionicModal', 'DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicPopover','$ionicSlideBoxDelegate', 'socket','loginservice','$cordovaFile','feedbackservice',function($scope, $rootScope, $stateParams, $ionicPopup, $state, $ionicFilterBar, hospitalservice,  visitservice, $ionicModal, DBA, registrationdetsdb, $cordovaInAppBrowser, $ionicPopover,$ionicSlideBoxDelegate, socket, loginservice, $cordovaFile, feedbackservice){
       $scope.openModalfilter = function(){
         $ionicModal.fromTemplateUrl('filterPatientDetails.html',{
@@ -3011,105 +3142,10 @@ $scope.reloadNotifications=function(){
     });
 }])
 .controller('PatientprofileCtrl',['$scope','$rootScope','$state','ionicDatePicker','$filter','patientprflservice','$ionicHistory','DBA','registrationdetsdb', function($scope,$rootScope,$state,ionicDatePicker,$filter, patientprflservice,$ionicHistory, DBA, registrationdetsdb){
-  /*  $scope.patientId = '';
-    $scope.patientprofiledata = {
-      "firstname"        : "",
-      "lastname"         : "",
-      "emailid"          : "",
-      "mobilenumber"     : "",
-      "gender"           : "",
-      "alternateemailid" : "",
-      "alternatemobilenum" : "",
-      "dataofbirth" : "",
-      "licenseno"   : "",
-      "doctor"    : "",
-      "address"     : ""
-    };
-    $scope.originalresponse = '';
-
-  	$scope.backButtonAction = function(){
-       $scope.shouldShowDelete = false;
-       $ionicHistory.goBack();
-    };
-
-    $scope.$on("$ionicView.afterEnter", function(event, data){
-      $rootScope.showLoader();
-      registrationdetsdb.query({}).then(function(response){
-          //alternateemailid alternatemobilenum doctorlicenseno
-          var result = DBA.getById(response);
-          $scope.patientId = result.appregistrationid;
-          patientprflservice.getpatientinfo($scope.patientId).then(function(data){
-               $rootScope.hideLoader();
-               $scope.originalresponse = data.data;
-               $scope.patientprofiledata = {
-                  "firstname" : data.data.firstname,
-                  "lastname"  : data.data.lastname,
-                  "emailid"   : data.data.emailid,
-                  "mobilenumber" : data.data.mobilenumber,
-                  "gender"    : data.data.gender,
-                  "address"   : typeof data.data.address !== 'undefined' ?  data.data.address.addressline1 : "",
-                  "doctor"    : data.data.isdoctor,
-                  "alternateemailid" : data.data.alternateemailid,
-                  "alternatemobilenum" : data.data.alternatemobilenum,
-                  "licenseno"  : data.data.doctorlicenseno,
-                  "dateofbirth" : data.data.dateofbirth
-                }
-            }).catch(function(error){
-                $rootScope.hideLoader();
-                $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-
-                });
-            });
-        }).catch(function(err){
-              $rootScope.hideLoader();
-              $rootScope.showPopup({title:'System Error', template:"Unable to process the request, please try  again!!"}, function(res){
-
-              });
-        });
-    });
-	  // DatePicker object with callbcak to obtain the date
-	  var ipObj1 = {
-      callback: function (val) {  //Mandatory
-          console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-		      $scope.patientprofiledata.dateofbirth = $filter('date')(val, "dd MMM yyyy");
-      },
-      from: new Date(1910 , 1, 1), //Optional
-      //to: new Date(2016, 10, 30), //Optional
-      inputDate: new Date(),      //Optional
-      mondayFirst: true,          //Optional
-//      disableWeekdays: [0],       //Optional
-      closeOnSelect: false,       //Optional
-      templateType: 'popup',       //Optional
-      dateFormat  : 'MMM dd, yyyy'
-    };
-    $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(ipObj1);
-    };
-    $scope.save = function(){
-        $rootScope.showLoader();
-         if($scope.originalresponse.alternateemailid !== $scope.patientprofiledata.alternateemailid
-            || $scope.originalresponse.alternatemobilenum !== $scope.patientprofiledata.alternatemobilenum
-            || $scope.originalresponse.isdoctor.toString() !== $scope.patientprofiledata.doctor.toString()
-            || $scope.originalresponse.doctorlicenseno !== $scope.patientprofiledata.licenseno
-            || $scope.originalresponse.dateofbirth !== $scope.patientprofiledata.dateofbirth){
-           $scope.patientprofiledata.doctorlicenseno = !$scope.patientprofiledata.doctor ? "" : $scope.patientprofiledata.doctorlicenseno;
-           patientprflservice.changedpatientinfo($scope.patientprofiledata,
-              $scope.patientId).then(function(data){
-                $rootScope.hideLoader();
-              $rootScope.showToast('Profile updated successfully','Long','top');
-           }).catch(function(error){
-               $rootScope.hideLoader();
-               $rootScope.showPopup({'title':'Error','template':"Couldn't update the profile, please try again"}, function(){
-
-               });
-           });
-         }else{
-            $rootScope.hideLoader();
-            $rootScope.showToast('You have not updated anything in your profile','Long','top');
-        }
-    };*/
+  
 }])
 .controller('DoctortabCtrl', ['$scope','$rootScope','$stateParams', '$ionicPopup','$ionicModal','$state','doctortabservice','DBA','registrationdetsdb','$cordovaInAppBrowser','$ionicFilterBar','$ionicSlideBoxDelegate','socket',function($scope ,$rootScope,$stateParams, $ionicPopup,$ionicModal,$state,doctortabservice,DBA, registrationdetsdb,$cordovaInAppBrowser, $ionicFilterBar,$ionicSlideBoxDelegate,socket){
+       
       $ionicModal.fromTemplateUrl('filterDoctortabdetails.html',{
           scope: $scope,
           animation: 'slide-in-left'
@@ -3465,8 +3501,8 @@ $scope.docfetch();
       $ionicHistory.nextViewOptions({
             disableBack: true
       });
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
+//      $ionicHistory.clearHistory();
+//      $ionicHistory.clearCache();
 
       var profiledata = loginservice.getProfileData();
       if(typeof profiledata !== 'undefined'){

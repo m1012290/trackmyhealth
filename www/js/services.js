@@ -386,6 +386,36 @@ angular.module('tracmyhealthappsvcs', ['ngResource'])
     };
  }])
 
+
+.service('familymemberservice', ['$q','$resource','NODE_SERVER_DETAILS',function($q,$resource,NODE_SERVER_DETAILS){
+     return {
+         savedetails: function(patientId, fdata){
+
+           var deferred = $q.defer();
+           var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/familymember",{patientid: patientId});
+           resource.save(fdata,function(data){
+             deferred.resolve(data);
+           },function(error){
+             deferred.reject(error);
+           });
+           return deferred.promise;
+         },
+           getdetails: function(patientId){
+						
+            var deferred = $q.defer();
+            var resource = $resource(NODE_SERVER_DETAILS.protocol+"://"+NODE_SERVER_DETAILS.server+":"+NODE_SERVER_DETAILS.port+"/v1/registered/:patientid/familymember");
+            resource.get({patientid : patientId}, function(data){
+              deferred.resolve(data);
+            },function(error){
+              deferred.reject(error);
+            });
+            return deferred.promise;
+          }
+     };
+  }])
+	
+
+
 .service('visitservice', ['$q', '$resource','NODE_SERVER_DETAILS',function($q, $resource,NODE_SERVER_DETAILS){
 	return{
 

@@ -1,8 +1,8 @@
 <ion-view view-title="" name="my-health-view">
-     <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
-            <i class="icon ion-navicon " menu-toggle = "left" ></i>
-        </button>
+<ion-nav-buttons side="left">
+       <a href="#/menu/"> <button class="button button-clear">
+            <i class="icon ion-home" menu-toggle = "left" ></i>
+           </button></a>
     </ion-nav-buttons>
         <ion-nav-buttons side="right" >
 
@@ -22,9 +22,7 @@
             <button class="button button-clear" ng-click="createEvent(event)">
                 <i class="ion-android-alarm-clock icon-btn-customize"></i>
       </button>
-<button class="button button-clear" ng-click="selectImageSource()">
-      <i class=" ion-camera icon-btn-customize"></i>
- </button>
+
 
   <!--button class="button button-clear" on-touch="openPopover($event)">
        <i class="ion-android-more-vertical icon-btn-customize" ></i>
@@ -414,7 +412,7 @@
       </ion-modal-view>
       </script>
 
-  <script id="filterhealthtabdetails.html" type="text/ng-template">
+    <script id="filterhealthtabdetails.html" type="text/ng-template">
 
     <ion-modal-view>
        <ion-header-bar class="bar bar-positive">
@@ -453,5 +451,4 @@
        </ion-content>
      </ion-modal-view>
    </script>
-
 </ion-view>

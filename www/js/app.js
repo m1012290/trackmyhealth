@@ -184,6 +184,13 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
          templateUrl:'templates/about.html',
         controller:'AboutusCtrl'
          })
+  
+  .state('family',{
+      url:'/family',
+      templateUrl:'templates/family.html',
+      controller:'FamilyCtrl'
+  })
+  
   .state('main', {
     url : '/main',
     abstract: true,
@@ -294,26 +301,7 @@ angular.module('tracmyhealthapp', ['ionic','tracmyhealthappctrls','tracmyhealtha
         }
     }
   })
-  .state('notified.screening.dataentry',{
-  
-    url: '/dataentry',
-    views:{
-      'dataentry-tab':{
-        templateUrl: 'templates/dataentry.html',
-        controller: 'DataentryCtrl'
-            }
-    }
-  })
-  .state('notified.screening.registration',{
-
-    url: '/registration',
-    views:{
-      'reg-tab':{
-        templateUrl: 'templates/registration.html',
-        controller: 'RegistrationCtrl'
-      }
-    }
-  })
+ 
   .state('logout', {
     cache:false,
     url: '/logout',

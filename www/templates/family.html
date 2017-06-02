@@ -1,0 +1,98 @@
+<ion-view view-title="family member">
+  <ion-nav-buttons side="left">
+      <a href back-button><button class="button button-clear" ><i class="ion-android-arrow-back icon-btn-customize"></i></button></a>
+  </ion-nav-buttons>
+
+<ion-content  class="padding" scroll-sista="subheader">
+
+
+  <ion-list>
+            <a href="#/patientprfl">
+           <div  class="card">
+         <ion-item >
+<h2 > <strong>{{patientprofiledata.firstname}} {{patientprofiledata.lastname}}</strong></h2>
+      <b> {{patientprofiledata.emailid}}<br> 
+            +91 {{patientprofiledata.mobilenumber}}</b>
+                </ion-item>
+                </div></a>
+                          </ion-list>
+
+    <div class="list card item-text-wrap" ng-repeat="profile in memberprofile">
+
+ <h4 > <strong> {{profile.firstname}} {{profile.lastname}}</strong></h4>
+                  <p> {{patientprofiledata.emailid}} , &nbsp;&nbsp;{{profile.mobnum}}</p>
+
+  </div>
+</ion-content>
+<button fab class="button button-float" ng-click="openModal()">
+        <i class="icon ion-plus"></i>
+      </button>
+<script id="addfamilymember.html" type="text/ng-template">
+   <ion-modal-view>
+      <ion-header-bar class="bar-positive">
+          <h1 class="title pull-center">family member</h1>
+          <button class="button button-clear button-default" ng-click="closeModal()"><i class="icon ion-android-close"></i></button>
+      </ion-header-bar>
+       <br>
+    <ion-content class="padding">
+      <form name="addfamilymember" class="simple-form" ng-submit="save(formData)" required>
+      <div class="list">
+        <ion-item class="item-input">
+      		<label class="item item-input item-floating-label">
+              <span class="input-label">  First Name</span>
+      			<input type="text" name="userFirstName" ng-model="formData.firstname" placeholder= "First Name"  required>
+      		</label>
+      		<label class="item item-input item-floating-label">
+              <span class="input-label">  LastName</span>
+      			<input type="text" name="userLastName" ng-model="formData.lastname" placeholder="Last Name"  required>
+      		</label>
+          </ion-item>
+          <ion-item class="item-input">
+
+              <label class="item item-input item-floating-label">
+                 <ion-radio ng-model="formData.male" ng-value="'A'" name="group"> <i class="icon ion-man" ></i></ion-radio>
+              </label>
+              <label class="item item-input item-floating-label">
+                 <ion-radio ng-model="formData.female" ng-value="'B'" name="group"> <i class="icon ion-woman" ></i></ion-radio>
+              </label>
+             <label class="item item-input item-floating-label">
+                 <ion-radio ng-model="formData.transgender" ng-value="'C'" name="group"> <i class="icon ion-transgender"></i></ion-radio>
+              </label>
+
+                </ion-item>
+          <ion-item class="item-input">
+          <label class="item item-input item-floating-label">
+      		<span class="input-label">  MobileNo</span>
+      		<input type="number" name="mobnum" ng-model="formData.mobilenumber" placeholder= "Mobile Number"  ng-minlength="10" ng-maxlength="10" ng-pattern="isMobilePhone()" required>
+      		</label>
+        </ion-item>
+          <ion-item class="item-input">
+        		<label class="item item-input item-floating-label" >
+        			<span class="input-label">  Email Id</span>
+        		<input type="email" name="emailid" ng-model="formData.emailadd" placeholder= "Email Id" ng-pattern="validator.isEmail()"  required>
+        		</label>
+        	</ion-item>
+          <ion-item class="item-input">
+            <label class="item item-input item-floating-label" >
+              <span class="input-label">  Age</span>
+            <input type="number" name="age" ng-model="formData.age" placeholder= "age" ng-pattern="validator.isEmail()"  required>
+            </label>
+          </ion-item>
+              <ion-item class="item-input">
+        <label class="item item-input item-floating-label">
+                   <span >Date Of Birth</span>
+          <input type="text" ng-model="formData.dataofbirth" placeholder="Date of Birth" ng-click="openDatePicker()" formatted-date format="medium" readonly>
+        </label>
+      </ion-item>
+    </div>
+      <div class="pull-center">
+          <button class="button button-assertive" >Add</button>
+      </div>
+
+
+        </form>
+
+    </ion-content>
+  </ion-modal-view>
+ </script>
+</ion-view>

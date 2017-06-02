@@ -12,15 +12,17 @@
     <ion-tab title="My Health" icon="fa fa-file-text" href="#/notified/myhealth" nav-direction="forward">
       <ion-nav-view name="my-health"></ion-nav-view>
     </ion-tab>
-
-    <ion-tab title="Doctor" icon="fa fa-user-md " href="#/notified/doctortab" nav-direction="forward" ng-if="showDoctorsTab" >
+<ion-tab title="Doctor" icon="fa fa-user-md " href="#/notified/doctortab" nav-direction="forward" ng-if="showDoctorsTab" >
       <ion-nav-view name="doctor-tab"></ion-nav-view>
     </ion-tab>
-     <ion-tab title="" icon="fa fa-commenting-o" href="#/notified/healthtips" nav-ditection="forward">
+    
+     <ion-tab title="" icon="fa fa-lightbulb-o" href="#/notified/healthtips"  nav-ditection="forward">
+         
         <ion-nav-view name="health-tips"></ion-nav-view>
     </ion-tab>
     <ion-tab title="" icon="fa fa-file-o" href="#/notified/screening" nav-ditection="forward">
        <ion-nav-view name="screening-tab"></ion-nav-view>
    </ion-tab>
+   
       </ion-tabs>
 </ion-view>

@@ -215,7 +215,7 @@
 				}
 			};
 		    
-		    var swipeGesture = $ionicGesture.on('swipeleft', onSwipeLeft, elm).on('swiperight', onSwipeRight);
+		    var swipeGesture = $ionicGesture.on('swipeleft', onSwipeLeft, elm).on('swiperight', onSwipeRight,elm);
 		    scope.$on('$destroy', function() {
 		        $ionicGesture.off(swipeGesture, 'swipeleft', onSwipeLeft);
 		        $ionicGesture.off(swipeGesture, 'swiperight', onSwipeRight);

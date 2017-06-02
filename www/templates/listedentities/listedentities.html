@@ -1,8 +1,8 @@
-<ion-view view-title="" name="listed-entities-view">
+<ion-view view-title="" name="listed-entities-view" cache-view="true">
     <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click = "toggleLeftSideMenu()">
-            <i class="icon ion-navicon " menu-toggle = "left" ></i>
-        </button>
+       <a href="#/menu/"> <button class="button button-clear">
+            <i class="icon ion-home" menu-toggle = "left" ></i>
+           </button></a>
     </ion-nav-buttons>
 
         <ion-nav-buttons side="right">
@@ -23,15 +23,18 @@
         <button class="button button-clear" ng-click="createEvent(event)">
             <i class="ion-android-alarm-clock icon-btn-customize"></i>
   </button>
-         <button class="button button-clear" ng-click="selectImageSource()">
-                <i class=" ion-camera icon-btn-customize"></i>
-         </button>
+         
 
         <!--button class="button button-clear" on-touch="openPopover($event)">
                  <i class="ion-android-more-vertical icon-btn-customize"></i>
          </button-->
 </ion-nav-buttons>
+   
             <ion-content scroll-sista="header" class="has-header" has-bouncing="false" overflow-scroll="true">
+    
+ 
+
+                
                 <ion-refresher pulling-text="Pull To Refresh" on-refresh="reload()"
                      refreshing-icon="ion-loading-b"
                     ></ion-refresher>
@@ -46,8 +49,9 @@
                         <i class="icon ion-arrow-right-b assertive"></i>
                        </a>
             </ion-item>
-      </ion-list>
+      </ion-list> 
   </ion-content>
+       
                 <script id="my-modal3.html" type="text/ng-template">
     <ion-modal-view>
         <ion-header-bar class=" bar bar-positive">

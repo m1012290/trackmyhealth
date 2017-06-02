@@ -51,10 +51,10 @@
 <script src="lib/pdfmake/build/vfs_fonts.js"></script>
 <script src="lib/pdfjs-dist/build/pdf.js"></script>
 <script src="lib/angular-pdf/dist/angular-pdf.js"></script>
-      <script src="lib/angularjs-slider-master/dist/rzslider.min.js"></script>
+<script src="lib/angularjs-slider-master/dist/rzslider.min.js"></script>
 <script src="lib/ionic-modal-select-master/dist/ionic-modal-select.js"></script>
-      <script src="lib/ionic/js/Chart.js-master/Chart.min.js"></script>
-      <script src="lib/ionic/js/angular-chart.js-master/dist/angular-chart.min.js"></script>
+<script src="lib/ionic/js/Chart.js-master/Chart.min.js"></script>
+<script src="lib/ionic/js/angular-chart.js-master/dist/angular-chart.min.js"></script>
             <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
     <script src="lib/ion-datetime-picker/release/ion-datetime-picker.min.js"></script>
@@ -74,7 +74,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
  <body ng-controller="AppCtrl" ng-app="tracmyhealthapp">
-       <ion-side-menus>
+       <!--ion-side-menus>
          <ion-side-menu-content>
               <ion-nav-bar class="bar-assertive" align-title="left" >
                 <ion-nav-back-button class="button-clear">
@@ -93,8 +93,7 @@
  <a menu-close href="#/patientprfl">
     <span  class="circle-span img_crcl_span"><img  ng-src="{{croppedimage}}" class="img_circle" />
      </span>
-     <!-- <button class="button button-icon icon ion-ios-camera icon-left camera_icon_css" ng-click="selectImages()"></button> -->
-
+     
 </a>
       <br><br>
             <ion-item style="color:#fff; margin-left:20px; margin-right:20px;padding-top: 43px;" >
@@ -107,9 +106,7 @@
           <ion-item menu-close href="#/menu/">
          Home page
         </ion-item>
-          <!--ion-item menu-close href="#/recententry">
-          Recent entry
-        </ion-item-->
+        
           <ion-item menu-close href="#/patientimages">
           Uploaded photos
         </ion-item>
@@ -119,6 +116,9 @@
         <ion-item menu-close href="#/about">
           About
         </ion-item>
+     <ion-item menu-close href="#/family">
+         Family Details
+     </ion-item>
 <ion-item menu-close on-tap="closePopover()" ng-click="showConfirm()" href="#/logout">
          Logout
         </ion-item>
@@ -132,8 +132,15 @@
 
 
 
-</ion-side-menus>
-    <!--ion-nav-view></ion-nav-view-->
+</ion-side-menus-->
+     <ion-nav-bar class="bar-assertive" align-title="left" >
+<!--
+          <ion-nav-back-button class="button-clear">
+              <i class="ion-android-arrow-back icon-btn-customize"></i>
+          </ion-nav-back-button>
+-->
+    </ion-nav-bar>
+    <ion-nav-view></ion-nav-view>
  </body>
  <script id="documentpic.html" type="text/ng-template">
    <ion-modal-view>
