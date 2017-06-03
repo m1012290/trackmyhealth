@@ -502,7 +502,7 @@ $scope.onimagecrop = function(resultimage){
     var trueOrigin = cordova.file.dataDirectory + imageName;
     return trueOrigin;
   };
-  $scope.selectImageSource = function(){
+    $scope.selectImageSource = function(){
     $scope.hideSheet = $ionicActionSheet.show({
       buttons: [
         { text: 'Take a photo' },
@@ -512,11 +512,19 @@ $scope.onimagecrop = function(resultimage){
       titleText: 'Add Photos',
       cancelText: 'Cancel',
       buttonClicked: function(index) {
-        $scope.takeImage(index);
-      }
+            if(index==2)
+            {
+                $state.go('patientimages');
+            }
+          else{
+              $scope.takeImage(index);
+          }
+   }
     });
   };
+    
   $scope.takeImage = function(type){
+     
     $scope.hideSheet();
     $scope.source;
     if(type === 0){
@@ -525,9 +533,8 @@ $scope.onimagecrop = function(resultimage){
     if(type === 1){
       $scope.source = Camera.PictureSourceType.SAVEDPHOTOALBUM;
     }
-      if(type === 2){
-      $state.go('patientimages');
-    }
+      
+      
     $scope.data = {
       "filename" : "",
       "tag" : "",
@@ -1957,19 +1964,26 @@ $scope.fetchmyhealth();
 
         });
 
+    
 
         $scope.enableTimeLine = function(details){
-            return ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== '' && $scope.appliedfilters.allergiesFilter != false && $scope.appliedfilters.allergiesFilter != null && $scope.appliedfilters.allergiesFilter != '' && $scope.appliedfilters.allergiesFilter != 0)
-                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && $scope.appliedfilters.weightFilter != false && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != null && $scope.appliedfilters.weightFilter != 0 )
-                          || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && $scope.appliedfilters.bloodpressureFilter != false && $scope.appliedfilters.bloodpressureFilter != null && $scope.appliedfilters.bloodpressureFilter != '' && $scope.appliedfilters.bloodpressureFilter != 0)
-                          || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && details.vitalslistforday.medication !== null && $scope.appliedfilters.medicationFilter != false)
-                          || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && details.vitalslistforday.vaccination !== null && $scope.appliedfilters.vaccinationFilter != false)
-                          || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
-                          || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
-                          || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && $scope.appliedfilters.bloodsugarFilter != false)
- || (details.vitalslistforday.yogaactivity &&  $scope.appliedfilters.selectedyoga !== false )
+            return ((details.vitalslistforday.allergies && details.vitalslistforday.allergies !== null &&details.vitalslistforday.allergies !== ''&&details.vitalslistforday.allergies !== 0 && $scope.appliedfilters.allergiesFilter != false && $scope.appliedfilters.allergiesFilter != null && $scope.appliedfilters.allergiesFilter != '' && $scope.appliedfilters.allergiesFilter != 0)
+                          || (details.vitalslistforday.weight && details.vitalslistforday.weight !== '' && details.vitalslistforday.weight !== 0 && details.vitalslistforday.weight !== null && $scope.appliedfilters.weightFilter != false && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != '' && $scope.appliedfilters.weightFilter != null && $scope.appliedfilters.weightFilter != 0 )
+                          || (details.vitalslistforday.bloodpressure && details.vitalslistforday.bloodpressure !== '' && details.vitalslistforday.bloodpressure !== null && details.vitalslistforday.bloodpressure !== 0 && $scope.appliedfilters.bloodpressureFilter != false && $scope.appliedfilters.bloodpressureFilter != null && $scope.appliedfilters.bloodpressureFilter != '' && $scope.appliedfilters.bloodpressureFilter != 0)
+                          || (details.vitalslistforday.medication && details.vitalslistforday.medication !== '' && details.vitalslistforday.medication !== null && $scope.appliedfilters.medicationFilter != false && $scope.appliedfilters.medicationFilter != null && $scope.appliedfilters.medicationFilter != '' && $scope.appliedfilters.medicationFilter != 0)
+                          || (details.vitalslistforday.vaccination && details.vitalslistforday.vaccination !== '' && details.vitalslistforday.vaccination !== null && $scope.appliedfilters.vaccinationFilter != false && $scope.appliedfilters.vaccinationFilter != null && $scope.appliedfilters.vaccinationFilter != '' && $scope.appliedfilters.vaccinationFilter != 0)
+                          || (details.vitalslistforday.fbs && details.vitalslistforday.fbs !== ''
+                              && details.vitalslistforday.fbs !== null && details.vitalslistforday.fbs !== 0 && $scope.appliedfilters.bloodsugarFilter != false && $scope.appliedfilters.bloodsugarFilter != null && $scope.appliedfilters.bloodsugarFilter != '' && $scope.appliedfilters.bloodsugarFilter != 0)
+                          || (details.vitalslistforday.rbs && details.vitalslistforday.rbs !== ''   && details.vitalslistforday.rbs !== null && details.vitalslistforday.rbs !== 0 && $scope.appliedfilters.bloodsugarFilter != false && $scope.appliedfilters.bloodsugarFilter != null  && $scope.appliedfilters.bloodsugarFilter != 0 && $scope.appliedfilters.bloodsugarFilter != '')
+                          || (details.vitalslistforday.ppbs && details.vitalslistforday.ppbs !== '' && details.vitalslistforday.ppbs !== null && details.vitalslistforday.ppbs !== 0 && $scope.appliedfilters.bloodsugarFilter != false && $scope.appliedfilters.bloodsugarFilter != null && $scope.appliedfilters.bloodsugarFilter != 0 && $scope.appliedfilters.bloodsugarFilter != '')
+ || (details.vitalslistforday.yogaactivity && details.vitalslistforday.yogaactivity !== null && details.vitalslistforday.yogaactivity !== 0 && details.vitalslistforday.yogaactivity !== '' &&  $scope.appliedfilters.selectedyoga !== false &&  $scope.appliedfilters.selectedyoga !== null &&  $scope.appliedfilters.selectedyoga !== '' &&  $scope.appliedfilters.selectedyoga !== 0 )
                           );
         };
+    
+   
+ 
+    
+    
         // 1 week blood sugar graph
       $scope.weekbs = function(){
         $scope.labels = [];
@@ -3497,7 +3511,7 @@ $scope.docfetch();
       $rootScope.showToast('Logout failed, Please try again later !!', null, 'bottom');
   });
 }])
-.controller('MenuCtrl', ['$scope','$ionicSideMenuDelegate','$ionicHistory','loginservice', function($scope,$ionicSideMenuDelegate, $ionicHistory, loginservice){
+.controller('MenuCtrl', ['$scope','$state','$ionicSideMenuDelegate','$ionicHistory','loginservice', function($scope,$state,$ionicSideMenuDelegate, $ionicHistory, loginservice){
   $scope.$on("$ionicView.beforeEnter",function(event, data){
       $ionicHistory.nextViewOptions({
             disableBack: true
@@ -3514,7 +3528,8 @@ $scope.docfetch();
    $scope.toggleLeftSideMenu = function() {
       $ionicSideMenuDelegate.toggleLeft();
    };
-
+ 
+    
 }])
 .controller('ImagesProfileCtrl', ['$scope','$rootScope','$stateParams','$ionicModal','$state','DBA','$ionicFilterBar','imagesservicedb','$ionicHistory','orderByFilter',function($scope ,$rootScope,$stateParams,$ionicModal,$state,DBA,$ionicFilterBar, imagesservicedb, $ionicHistory, orderBy){
     $scope.openImagesModal = function(index) {
