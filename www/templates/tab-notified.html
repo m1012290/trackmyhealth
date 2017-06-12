@@ -1,6 +1,11 @@
 <ion-view>
-<ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
+<ion-tabs tabs-swipable class="tabs-striped tabs-top tabs-background-light tabs-color-assertive"  ng-model="checked" >
 
+    
+  <ion-tab title="" class="firsttab" ng-hide="checked" href="#/menu/"  nav-direction="forward" hidden="true">
+  <ion-nav-view name="menu"></ion-nav-view>
+    </ion-tab>  
+ 
     <ion-tab title="Hospitals" icon="fa fa-hospital-o"  href="#/notified/listedentities" nav-direction="forward" >
       <ion-nav-view name="listed-entities"></ion-nav-view>
     </ion-tab>
